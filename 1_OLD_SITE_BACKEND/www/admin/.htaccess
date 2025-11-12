@@ -1,0 +1,4 @@
+#RewriteEngine off
+RewriteEngine on
+RewriteBase /masterkom/admin/
+DirectoryIndex login.php
