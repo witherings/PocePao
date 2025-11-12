@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertReservationSchema, insertGalleryImageSchema, insertOrderSchema, insertOrderItemSchema } from "@shared/schema";
 import { notificationService } from "./notifications";
+import { registerAdminRoutes } from "./admin-routes";
 import multer from "multer";
 import path from "path";
 import { promises as fs } from "fs";
@@ -237,6 +238,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to create order" });
     }
   });
+
+  // Register admin routes
+  registerAdminRoutes(app);
 
   const httpServer = createServer(app);
 

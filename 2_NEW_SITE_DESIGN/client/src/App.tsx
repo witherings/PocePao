@@ -11,6 +11,8 @@ import Menu from "@/pages/Menu";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Reservierung from "@/pages/Reservierung";
+import AdminLogin from "@/pages/AdminLogin";
+import AdminDashboard from "@/pages/AdminDashboard";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -19,6 +21,18 @@ function Router() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
+  const isAdminRoute = location.startsWith("/admin");
+
+  if (isAdminRoute) {
+    return (
+      <Switch>
+        <Route path="/admin/login" component={AdminLogin} />
+        <Route path="/admin/dashboard" component={AdminDashboard} />
+        <Route component={NotFound} />
+      </Switch>
+    );
+  }
 
   return (
     <Switch>
@@ -33,15 +47,18 @@ function Router() {
 }
 
 function App() {
+  const [location] = useLocation();
+  const isAdminRoute = location.startsWith("/admin");
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <div className="min-h-screen flex flex-col">
-          <Header />
+          {!isAdminRoute && <Header />}
           <main className="flex-1">
             <Router />
           </main>
-          <Footer />
+          {!isAdminRoute && <Footer />}
         </div>
         <Toaster />
       </TooltipProvider>
