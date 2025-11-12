@@ -21,266 +21,24 @@ import {
   orders as ordersTable,
   orderItems as orderItemsTable
 } from "@shared/schema";
-// import { db } from "./db";  // Commented out since we're using MemStorage
+import { db } from "./db";
 import { eq, asc, desc } from "drizzle-orm";
-import { randomUUID } from "crypto";
-import { categories as seedCategories, createMenuItems } from "./data/menu";
-import { createIngredients } from "./data/ingredients";
-
-// In-memory storage for when DATABASE_URL is not set
-class MemStorage implements IStorage {
-  private categories: Map<string, Category>;
-  private menuItems: Map<string, MenuItem>;
-  private reservations: Map<string, Reservation>;
-  private galleryImages: Map<string, GalleryImage>;
-  private ingredients: Map<string, Ingredient>;
-  private orders: Map<string, Order>;
-  private orderItems: Map<string, OrderItem>;
-
-  constructor() {
-    this.categories = new Map();
-    this.menuItems = new Map();
-    this.reservations = new Map();
-    this.galleryImages = new Map();
-    this.ingredients = new Map();
-    this.orders = new Map();
-    this.orderItems = new Map();
-    this.initializeData();
-  }
-
-  private initializeData() {
-    const createdCategories = seedCategories.map(cat => this.createCategorySync(cat));
-    
-    const categoryIds = {
-      customBowls: createdCategories[0].id,
-      bowls: createdCategories[1].id,
-      wraps: createdCategories[2].id,
-      appetizers: createdCategories[3].id,
-      desserts: createdCategories[4].id,
-      drinks: createdCategories[5].id,
-    };
-
-    const menuItemsData = createMenuItems(categoryIds);
-    menuItemsData.forEach(item => this.createMenuItemSync(item));
-    
-    const ingredientsData = createIngredients();
-    ingredientsData.forEach((ing: InsertIngredient) => this.createIngredientSync(ing));
-  }
-
-  private createCategorySync(category: InsertCategory): Category {
-    const id = randomUUID();
-    const cat: Category = { ...category, id, icon: category.icon ?? "🥗", order: category.order ?? 0 };
-    this.categories.set(id, cat);
-    return cat;
-  }
-
-  private createMenuItemSync(menuItem: InsertMenuItem): MenuItem {
-    const id = randomUUID();
-    const item: MenuItem = { 
-      ...menuItem, 
-      id,
-      available: menuItem.available ?? 1,
-      popular: menuItem.popular ?? 0,
-      priceSmall: menuItem.priceSmall ?? null,
-      priceLarge: menuItem.priceLarge ?? null,
-      protein: menuItem.protein ?? null,
-      marinade: menuItem.marinade ?? null,
-      ingredients: menuItem.ingredients ?? null,
-      sauce: menuItem.sauce ?? null,
-      toppings: menuItem.toppings ?? null,
-      allergens: menuItem.allergens ?? null,
-      hasSizeOptions: menuItem.hasSizeOptions ?? 0,
-      isCustomBowl: menuItem.isCustomBowl ?? 0,
-    };
-    this.menuItems.set(id, item);
-    return item;
-  }
-
-  private createIngredientSync(ingredient: InsertIngredient): Ingredient {
-    const id = randomUUID();
-    const ing: Ingredient = {
-      ...ingredient,
-      id,
-      description: ingredient.description ?? null,
-      descriptionDE: ingredient.descriptionDE ?? null,
-      price: ingredient.price ?? null,
-      available: ingredient.available ?? 1,
-      order: ingredient.order ?? 0,
-    };
-    this.ingredients.set(id, ing);
-    return ing;
-  }
-
-  async getAllCategories(): Promise<Category[]> {
-    return Array.from(this.categories.values()).sort((a, b) => a.order - b.order);
-  }
-
-  async getCategoryById(id: string): Promise<Category | undefined> {
-    return this.categories.get(id);
-  }
-
-  async createCategory(category: InsertCategory): Promise<Category> {
-    const id = randomUUID();
-    const cat: Category = { ...category, id, icon: category.icon ?? "🥗", order: category.order ?? 0 };
-    this.categories.set(id, cat);
-    return cat;
-  }
-
-  async getAllMenuItems(): Promise<MenuItem[]> {
-    return Array.from(this.menuItems.values());
-  }
-
-  async getMenuItemById(id: string): Promise<MenuItem | undefined> {
-    return this.menuItems.get(id);
-  }
-
-  async getMenuItemsByCategory(categoryId: string): Promise<MenuItem[]> {
-    return Array.from(this.menuItems.values()).filter(
-      (item) => item.categoryId === categoryId
-    );
-  }
-
-  async createMenuItem(menuItem: InsertMenuItem): Promise<MenuItem> {
-    const id = randomUUID();
-    const item: MenuItem = { 
-      ...menuItem, 
-      id,
-      available: menuItem.available ?? 1,
-      popular: menuItem.popular ?? 0,
-      priceSmall: menuItem.priceSmall ?? null,
-      priceLarge: menuItem.priceLarge ?? null,
-      protein: menuItem.protein ?? null,
-      marinade: menuItem.marinade ?? null,
-      ingredients: menuItem.ingredients ?? null,
-      sauce: menuItem.sauce ?? null,
-      toppings: menuItem.toppings ?? null,
-      allergens: menuItem.allergens ?? null,
-      hasSizeOptions: menuItem.hasSizeOptions ?? 0,
-      isCustomBowl: menuItem.isCustomBowl ?? 0,
-    };
-    this.menuItems.set(id, item);
-    return item;
-  }
-
-  async getAllReservations(): Promise<Reservation[]> {
-    return Array.from(this.reservations.values());
-  }
-
-  async getReservationById(id: string): Promise<Reservation | undefined> {
-    return this.reservations.get(id);
-  }
-
-  async createReservation(reservation: InsertReservation): Promise<Reservation> {
-    const id = randomUUID();
-    const res: Reservation = { ...reservation, id };
-    this.reservations.set(id, res);
-    return res;
-  }
-
-  async getAllGalleryImages(): Promise<GalleryImage[]> {
-    return Array.from(this.galleryImages.values()).sort((a, b) => 
-      new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
-    );
-  }
-
-  async getGalleryImageById(id: string): Promise<GalleryImage | undefined> {
-    return this.galleryImages.get(id);
-  }
-
-  async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {
-    const id = randomUUID();
-    const img: GalleryImage = { ...image, id, uploadedAt: new Date().toISOString() };
-    this.galleryImages.set(id, img);
-    return img;
-  }
-
-  async deleteGalleryImage(id: string): Promise<boolean> {
-    return this.galleryImages.delete(id);
-  }
-
-  async getAllIngredients(): Promise<Ingredient[]> {
-    return Array.from(this.ingredients.values()).sort((a, b) => a.order - b.order);
-  }
-
-  async getIngredientById(id: string): Promise<Ingredient | undefined> {
-    return this.ingredients.get(id);
-  }
-
-  async getIngredientsByType(type: string): Promise<Ingredient[]> {
-    return Array.from(this.ingredients.values())
-      .filter(ing => ing.type === type && ing.available === 1)
-      .sort((a, b) => a.order - b.order);
-  }
-
-  async createIngredient(ingredient: InsertIngredient): Promise<Ingredient> {
-    const id = randomUUID();
-    const ing: Ingredient = {
-      ...ingredient,
-      id,
-      description: ingredient.description ?? null,
-      descriptionDE: ingredient.descriptionDE ?? null,
-      price: ingredient.price ?? null,
-      available: ingredient.available ?? 1,
-      order: ingredient.order ?? 0,
-    };
-    this.ingredients.set(id, ing);
-    return ing;
-  }
-
-  async getAllOrders(): Promise<Order[]> {
-    return Array.from(this.orders.values()).sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-  }
-
-  async getOrderById(id: string): Promise<Order | undefined> {
-    return this.orders.get(id);
-  }
-
-  async createOrder(order: InsertOrder): Promise<Order> {
-    const id = randomUUID();
-    const ord: Order = {
-      ...order,
-      id,
-      pickupTime: order.pickupTime ?? null,
-      tableNumber: order.tableNumber ?? null,
-      comment: order.comment ?? null,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-    };
-    this.orders.set(id, ord);
-    return ord;
-  }
-
-  async getOrderItemsByOrderId(orderId: string): Promise<OrderItem[]> {
-    return Array.from(this.orderItems.values()).filter(item => item.orderId === orderId);
-  }
-
-  async createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem> {
-    const id = randomUUID();
-    const item: OrderItem = {
-      ...orderItem,
-      id,
-      menuItemId: orderItem.menuItemId ?? null,
-      size: orderItem.size ?? null,
-      customization: orderItem.customization ?? null,
-    };
-    this.orderItems.set(id, item);
-    return item;
-  }
-}
 
 export interface IStorage {
   // Categories
   getAllCategories(): Promise<Category[]>;
   getCategoryById(id: string): Promise<Category | undefined>;
   createCategory(category: InsertCategory): Promise<Category>;
+  updateCategory(id: string, category: Partial<InsertCategory>): Promise<Category | undefined>;
+  deleteCategory(id: string): Promise<boolean>;
   
   // Menu Items
   getAllMenuItems(): Promise<MenuItem[]>;
   getMenuItemById(id: string): Promise<MenuItem | undefined>;
   getMenuItemsByCategory(categoryId: string): Promise<MenuItem[]>;
   createMenuItem(menuItem: InsertMenuItem): Promise<MenuItem>;
+  updateMenuItem(id: string, menuItem: Partial<InsertMenuItem>): Promise<MenuItem | undefined>;
+  deleteMenuItem(id: string): Promise<boolean>;
 
   // Reservations
   getAllReservations(): Promise<Reservation[]>;
@@ -298,6 +56,8 @@ export interface IStorage {
   getIngredientById(id: string): Promise<Ingredient | undefined>;
   getIngredientsByType(type: string): Promise<Ingredient[]>;
   createIngredient(ingredient: InsertIngredient): Promise<Ingredient>;
+  updateIngredient(id: string, ingredient: Partial<InsertIngredient>): Promise<Ingredient | undefined>;
+  deleteIngredient(id: string): Promise<boolean>;
 
   // Orders
   getAllOrders(): Promise<Order[]>;
@@ -305,40 +65,201 @@ export interface IStorage {
   createOrder(order: InsertOrder): Promise<Order>;
   getOrderItemsByOrderId(orderId: string): Promise<OrderItem[]>;
   createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem>;
+  updateOrderStatus(id: string, status: string): Promise<Order | undefined>;
 }
 
-// DatabaseStorage stub - not used in this project
 class DatabaseStorage implements IStorage {
-  private notAvailable(): never {
-    throw new Error('DatabaseStorage is not available - using MemStorage');
+  // Categories
+  async getAllCategories(): Promise<Category[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select().from(categoriesTable).orderBy(asc(categoriesTable.order));
   }
 
-  async getAllCategories(): Promise<Category[]> { return this.notAvailable(); }
-  async getCategoryById(_id: string): Promise<Category | undefined> { return this.notAvailable(); }
-  async createCategory(_category: InsertCategory): Promise<Category> { return this.notAvailable(); }
-  async getAllMenuItems(): Promise<MenuItem[]> { return this.notAvailable(); }
-  async getMenuItemById(_id: string): Promise<MenuItem | undefined> { return this.notAvailable(); }
-  async getMenuItemsByCategory(_categoryId: string): Promise<MenuItem[]> { return this.notAvailable(); }
-  async createMenuItem(_menuItem: InsertMenuItem): Promise<MenuItem> { return this.notAvailable(); }
-  async getAllReservations(): Promise<Reservation[]> { return this.notAvailable(); }
-  async getReservationById(_id: string): Promise<Reservation | undefined> { return this.notAvailable(); }
-  async createReservation(_reservation: InsertReservation): Promise<Reservation> { return this.notAvailable(); }
-  async getAllGalleryImages(): Promise<GalleryImage[]> { return this.notAvailable(); }
-  async getGalleryImageById(_id: string): Promise<GalleryImage | undefined> { return this.notAvailable(); }
-  async createGalleryImage(_image: InsertGalleryImage): Promise<GalleryImage> { return this.notAvailable(); }
-  async deleteGalleryImage(_id: string): Promise<boolean> { return this.notAvailable(); }
-  async getAllIngredients(): Promise<Ingredient[]> { return this.notAvailable(); }
-  async getIngredientById(_id: string): Promise<Ingredient | undefined> { return this.notAvailable(); }
-  async getIngredientsByType(_type: string): Promise<Ingredient[]> { return this.notAvailable(); }
-  async createIngredient(_ingredient: InsertIngredient): Promise<Ingredient> { return this.notAvailable(); }
-  async getAllOrders(): Promise<Order[]> { return this.notAvailable(); }
-  async getOrderById(_id: string): Promise<Order | undefined> { return this.notAvailable(); }
-  async createOrder(_order: InsertOrder): Promise<Order> { return this.notAvailable(); }
-  async getOrderItemsByOrderId(_orderId: string): Promise<OrderItem[]> { return this.notAvailable(); }
-  async createOrderItem(_orderItem: InsertOrderItem): Promise<OrderItem> { return this.notAvailable(); }
+  async getCategoryById(id: string): Promise<Category | undefined> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.select().from(categoriesTable).where(eq(categoriesTable.id, id));
+    return results[0];
+  }
+
+  async createCategory(category: InsertCategory): Promise<Category> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.insert(categoriesTable).values(category).returning();
+    return results[0];
+  }
+
+  async updateCategory(id: string, category: Partial<InsertCategory>): Promise<Category | undefined> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.update(categoriesTable)
+      .set(category)
+      .where(eq(categoriesTable.id, id))
+      .returning();
+    return results[0];
+  }
+
+  async deleteCategory(id: string): Promise<boolean> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.delete(categoriesTable).where(eq(categoriesTable.id, id)).returning();
+    return results.length > 0;
+  }
+
+  // Menu Items
+  async getAllMenuItems(): Promise<MenuItem[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select().from(menuItemsTable);
+  }
+
+  async getMenuItemById(id: string): Promise<MenuItem | undefined> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.select().from(menuItemsTable).where(eq(menuItemsTable.id, id));
+    return results[0];
+  }
+
+  async getMenuItemsByCategory(categoryId: string): Promise<MenuItem[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select().from(menuItemsTable).where(eq(menuItemsTable.categoryId, categoryId));
+  }
+
+  async createMenuItem(menuItem: InsertMenuItem): Promise<MenuItem> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.insert(menuItemsTable).values(menuItem).returning();
+    return results[0];
+  }
+
+  async updateMenuItem(id: string, menuItem: Partial<InsertMenuItem>): Promise<MenuItem | undefined> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.update(menuItemsTable)
+      .set(menuItem)
+      .where(eq(menuItemsTable.id, id))
+      .returning();
+    return results[0];
+  }
+
+  async deleteMenuItem(id: string): Promise<boolean> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.delete(menuItemsTable).where(eq(menuItemsTable.id, id)).returning();
+    return results.length > 0;
+  }
+
+  // Reservations
+  async getAllReservations(): Promise<Reservation[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select().from(reservationsTable);
+  }
+
+  async getReservationById(id: string): Promise<Reservation | undefined> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.select().from(reservationsTable).where(eq(reservationsTable.id, id));
+    return results[0];
+  }
+
+  async createReservation(reservation: InsertReservation): Promise<Reservation> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.insert(reservationsTable).values(reservation).returning();
+    return results[0];
+  }
+
+  // Gallery Images
+  async getAllGalleryImages(): Promise<GalleryImage[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select().from(galleryImagesTable).orderBy(desc(galleryImagesTable.uploadedAt));
+  }
+
+  async getGalleryImageById(id: string): Promise<GalleryImage | undefined> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.select().from(galleryImagesTable).where(eq(galleryImagesTable.id, id));
+    return results[0];
+  }
+
+  async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.insert(galleryImagesTable).values(image).returning();
+    return results[0];
+  }
+
+  async deleteGalleryImage(id: string): Promise<boolean> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.delete(galleryImagesTable).where(eq(galleryImagesTable.id, id)).returning();
+    return results.length > 0;
+  }
+
+  // Ingredients
+  async getAllIngredients(): Promise<Ingredient[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select().from(ingredientsTable).orderBy(asc(ingredientsTable.order));
+  }
+
+  async getIngredientById(id: string): Promise<Ingredient | undefined> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.select().from(ingredientsTable).where(eq(ingredientsTable.id, id));
+    return results[0];
+  }
+
+  async getIngredientsByType(type: string): Promise<Ingredient[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select()
+      .from(ingredientsTable)
+      .where(eq(ingredientsTable.type, type))
+      .orderBy(asc(ingredientsTable.order));
+  }
+
+  async createIngredient(ingredient: InsertIngredient): Promise<Ingredient> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.insert(ingredientsTable).values(ingredient).returning();
+    return results[0];
+  }
+
+  async updateIngredient(id: string, ingredient: Partial<InsertIngredient>): Promise<Ingredient | undefined> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.update(ingredientsTable)
+      .set(ingredient)
+      .where(eq(ingredientsTable.id, id))
+      .returning();
+    return results[0];
+  }
+
+  async deleteIngredient(id: string): Promise<boolean> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.delete(ingredientsTable).where(eq(ingredientsTable.id, id)).returning();
+    return results.length > 0;
+  }
+
+  // Orders
+  async getAllOrders(): Promise<Order[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select().from(ordersTable).orderBy(desc(ordersTable.createdAt));
+  }
+
+  async getOrderById(id: string): Promise<Order | undefined> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.select().from(ordersTable).where(eq(ordersTable.id, id));
+    return results[0];
+  }
+
+  async createOrder(order: InsertOrder): Promise<Order> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.insert(ordersTable).values(order).returning();
+    return results[0];
+  }
+
+  async getOrderItemsByOrderId(orderId: string): Promise<OrderItem[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select().from(orderItemsTable).where(eq(orderItemsTable.orderId, orderId));
+  }
+
+  async createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.insert(orderItemsTable).values(orderItem).returning();
+    return results[0];
+  }
+
+  async updateOrderStatus(id: string, status: string): Promise<Order | undefined> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.update(ordersTable)
+      .set({ status })
+      .where(eq(ordersTable.id, id))
+      .returning();
+    return results[0];
+  }
 }
 
-// Use MemStorage for this project
-export const storage: IStorage = new MemStorage();
-
-// MemStorage initializes data in constructor - no seeding needed
+export const storage: IStorage = new DatabaseStorage();

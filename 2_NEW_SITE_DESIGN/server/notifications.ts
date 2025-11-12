@@ -1,111 +1,102 @@
-import type { Order, Reservation } from "@shared/schema";
+import type { Order, Reservation, OrderItem } from "@shared/schema";
 
 interface NotificationService {
-  sendOrderNotification(order: Order, items: any[]): Promise<void>;
+  sendOrderNotification(order: Order, items: OrderItem[]): Promise<void>;
   sendReservationNotification(reservation: Reservation): Promise<void>;
 }
 
-class EmailNotificationService implements NotificationService {
-  private restaurantEmail: string;
+class TelegramNotificationService implements NotificationService {
+  private botToken: string;
+  private chatId: string;
 
   constructor() {
-    this.restaurantEmail = process.env.RESTAURANT_EMAIL || "pokepao@example.com";
+    this.botToken = process.env.TELEGRAM_BOT_TOKEN || "";
+    this.chatId = process.env.TELEGRAM_CHAT_ID || "";
   }
 
-  async sendOrderNotification(order: Order, items: any[]): Promise<void> {
+  private async sendTelegramMessage(message: string): Promise<void> {
+    if (!this.botToken || !this.chatId) {
+      console.log("\n⚠️  Telegram не настроен. Добавьте TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID в секреты.");
+      console.log("=== TELEGRAM УВЕДОМЛЕНИЕ (не отправлено) ===");
+      console.log(message);
+      console.log("============================================\n");
+      return;
+    }
+
+    try {
+      const url = `https://api.telegram.org/bot${this.botToken}/sendMessage`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: this.chatId,
+          text: message,
+          parse_mode: "HTML",
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(`Telegram API error: ${error}`);
+      }
+
+      console.log("✅ Telegram уведомление отправлено успешно!");
+    } catch (error) {
+      console.error("❌ Ошибка отправки Telegram уведомления:", error);
+      throw error;
+    }
+  }
+
+  async sendOrderNotification(order: Order, items: OrderItem[]): Promise<void> {
     const itemsList = items
-      .map((item) => `${item.quantity}x ${item.nameDE} - €${item.price}`)
+      .map((item) => `  • ${item.quantity}x ${item.nameDE} - €${item.price}`)
       .join("\n");
 
+    const serviceTypeText = order.serviceType === "pickup" 
+      ? "🥡 <b>Самовывоз</b>" 
+      : "🍽 <b>В ресторане</b>";
+
+    const additionalInfo = order.serviceType === "pickup" 
+      ? `⏰ <b>Время самовывоза:</b> ${order.pickupTime}` 
+      : `🪑 <b>Столик №:</b> ${order.tableNumber}`;
+
     const message = `
-🍱 НОВЫЙ ЗАКАЗ!
+🍱 <b>НОВЫЙ ЗАКАЗ!</b>
 
-Тип: ${order.serviceType === "pickup" ? "Самовывоз" : "В ресторане"}
-Имя: ${order.name}
-Телефон: ${order.phone}
-${order.serviceType === "pickup" ? `Время самовывоза: ${order.pickupTime}` : `Столик: ${order.tableNumber}`}
+${serviceTypeText}
+👤 <b>Имя:</b> ${order.name}
+📞 <b>Телефон:</b> ${order.phone}
+${additionalInfo}
 
-Заказ:
+📝 <b>Заказ:</b>
 ${itemsList}
 
-Сумма: €${order.total}
-${order.comment ? `\nКомментарий: ${order.comment}` : ""}
+💰 <b>Сумма:</b> €${order.total}
+${order.comment ? `\n💬 <b>Комментарий:</b> ${order.comment}` : ""}
 
-Статус: ${order.status}
-Время заказа: ${new Date(order.createdAt).toLocaleString("de-DE")}
+📅 <b>Время заказа:</b> ${new Date(order.createdAt).toLocaleString("de-DE")}
     `.trim();
 
-    console.log("\n=== EMAIL УВЕДОМЛЕНИЕ ===");
-    console.log(`To: ${this.restaurantEmail}`);
-    console.log(`Subject: Новый заказ от ${order.name}`);
-    console.log(message);
-    console.log("=========================\n");
-
-    // Если настроен SENDGRID_API_KEY, отправляем реальное email
-    if (process.env.SENDGRID_API_KEY) {
-      try {
-        // Динамический импорт SendGrid только если API key существует
-        const sgMail = await import("@sendgrid/mail");
-        sgMail.default.setApiKey(process.env.SENDGRID_API_KEY);
-
-        await sgMail.default.send({
-          to: this.restaurantEmail,
-          from: process.env.SENDGRID_FROM_EMAIL || this.restaurantEmail,
-          subject: `🍱 Новый заказ от ${order.name}`,
-          text: message,
-          html: message.replace(/\n/g, "<br>"),
-        });
-
-        console.log("✅ Email успешно отправлен!");
-      } catch (error) {
-        console.error("❌ Ошибка отправки email:", error);
-      }
-    } else {
-      console.log("ℹ️  SendGrid не настроен. Email не отправлен (только лог).");
-    }
+    await this.sendTelegramMessage(message);
   }
 
   async sendReservationNotification(reservation: Reservation): Promise<void> {
     const message = `
-🪑 НОВОЕ БРОНИРОВАНИЕ СТОЛИКА!
+🪑 <b>НОВОЕ БРОНИРОВАНИЕ СТОЛИКА!</b>
 
-Имя: ${reservation.name}
-Телефон: ${reservation.phone}
-Дата: ${reservation.date}
-Время: ${reservation.time}
-Количество гостей: ${reservation.guests}
+👤 <b>Имя:</b> ${reservation.name}
+📞 <b>Телефон:</b> ${reservation.phone}
+📅 <b>Дата:</b> ${reservation.date}
+⏰ <b>Время:</b> ${reservation.time}
+👥 <b>Количество гостей:</b> ${reservation.guests}
 
-Время бронирования: ${new Date().toLocaleString("de-DE")}
+📅 <b>Время бронирования:</b> ${new Date().toLocaleString("de-DE")}
     `.trim();
 
-    console.log("\n=== EMAIL УВЕДОМЛЕНИЕ ===");
-    console.log(`To: ${this.restaurantEmail}`);
-    console.log(`Subject: Новое бронирование от ${reservation.name}`);
-    console.log(message);
-    console.log("=========================\n");
-
-    // Если настроен SENDGRID_API_KEY, отправляем реальное email
-    if (process.env.SENDGRID_API_KEY) {
-      try {
-        const sgMail = await import("@sendgrid/mail");
-        sgMail.default.setApiKey(process.env.SENDGRID_API_KEY);
-
-        await sgMail.default.send({
-          to: this.restaurantEmail,
-          from: process.env.SENDGRID_FROM_EMAIL || this.restaurantEmail,
-          subject: `🪑 Новое бронирование от ${reservation.name}`,
-          text: message,
-          html: message.replace(/\n/g, "<br>"),
-        });
-
-        console.log("✅ Email успешно отправлен!");
-      } catch (error) {
-        console.error("❌ Ошибка отправки email:", error);
-      }
-    } else {
-      console.log("ℹ️  SendGrid не настроен. Email не отправлен (только лог).");
-    }
+    await this.sendTelegramMessage(message);
   }
 }
 
-export const notificationService = new EmailNotificationService();
+export const notificationService = new TelegramNotificationService();
