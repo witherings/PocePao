@@ -8,6 +8,7 @@ export const categories = pgTable("categories", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
   nameDE: text("name_de").notNull(),
+  icon: text("icon").notNull().default("🥗"),
   order: integer("order").notNull().default(0),
 });
 

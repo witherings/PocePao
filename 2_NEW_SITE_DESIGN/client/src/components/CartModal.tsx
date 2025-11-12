@@ -8,8 +8,9 @@ import { useCartStore } from "@/lib/cartStore";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import type { Ingredient } from "@shared/schema";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface CartModalProps {
   isOpen: boolean;
@@ -27,8 +28,13 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
   const [pickupTime, setPickupTime] = useState("");
   const [comment, setComment] = useState("");
   const { toast } = useToast();
+  
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const modalRef = useRef<HTMLDivElement>(null);
 
-  // Fetch all ingredients to display names
+  useBodyScrollLock(isOpen);
+
   const { data: ingredients = [] } = useQuery<Ingredient[]>({
     queryKey: ['/api/ingredients'],
   });
@@ -100,41 +106,68 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
     createOrderMutation.mutate(orderData);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 150) {
+      return;
+    }
+    if (touchStart - touchEnd < -150) {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    if (!isOpen) {
+      setShowCheckout(false);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 animate-fade-in">
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
         data-testid="backdrop-cart-modal"
       />
 
-      {/* Modal */}
-      <div className="relative bg-background rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="font-poppins text-2xl md:text-3xl font-bold text-ocean flex items-center gap-2" data-testid="text-cart-title">
-            <ShoppingBag className="w-7 h-7" />
+      <div 
+        ref={modalRef}
+        className="relative bg-background rounded-t-3xl sm:rounded-2xl shadow-2xl w-full sm:max-w-2xl max-h-[85dvh] overflow-hidden flex flex-col touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div className="sm:hidden w-12 h-1 bg-muted-foreground/30 rounded-full mx-auto mt-3 mb-2" />
+        
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b">
+          <h2 className="font-poppins text-xl sm:text-2xl md:text-3xl font-bold text-ocean flex items-center gap-2" data-testid="text-cart-title">
+            <ShoppingBag className="w-6 h-6 sm:w-7 sm:h-7" />
             Ihr Warenkorb
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-accent rounded-full transition-colors"
+            className="p-2 sm:p-2.5 hover:bg-accent rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             data-testid="button-close-cart"
             aria-label="Close cart"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
           {items.length === 0 ? (
-            <div className="text-center py-12" data-testid="empty-cart">
-              <ShoppingBag className="w-20 h-20 mx-auto mb-4 text-muted-foreground/30" />
-              <p className="font-poppins text-xl text-muted-foreground mb-2">
+            <div className="text-center py-8 sm:py-12" data-testid="empty-cart">
+              <ShoppingBag className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 text-muted-foreground/30" />
+              <p className="font-poppins text-lg sm:text-xl text-muted-foreground mb-2">
                 Dein Warenkorb ist leer
               </p>
               <p className="font-lato text-sm text-muted-foreground">
@@ -142,21 +175,21 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex gap-4 p-4 bg-card rounded-lg border border-card-border"
+                  className="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-card rounded-lg border border-card-border"
                   data-testid={`cart-item-${item.id}`}
                 >
                   <img
                     src={item.image}
                     alt={item.nameDE}
-                    className="w-20 h-20 object-cover rounded-md flex-shrink-0"
+                    className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md flex-shrink-0"
                     data-testid={`img-cart-item-${item.id}`}
                   />
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-poppins font-bold text-foreground mb-1" data-testid={`text-cart-item-name-${item.id}`}>
+                    <h3 className="font-poppins font-bold text-sm sm:text-base text-foreground mb-1" data-testid={`text-cart-item-name-${item.id}`}>
                       {item.nameDE}
                     </h3>
                     {item.size && (
@@ -165,43 +198,42 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                       </p>
                     )}
                     
-                    {/* Customization details */}
                     {item.customization && (
-                      <div className="mt-2 space-y-1 text-xs">
+                      <div className="mt-1.5 sm:mt-2 space-y-1 text-xs">
                         {item.customization.base && (
-                          <div className="flex items-center gap-1">
-                            <span className="font-semibold text-muted-foreground">Base:</span>
-                            <Badge variant="outline" className="text-xs h-5">{getIngredientName(item.customization.base)}</Badge>
+                          <div className="flex items-center gap-1 flex-wrap">
+                            <span className="font-semibold text-muted-foreground text-[10px] sm:text-xs">Base:</span>
+                            <Badge variant="outline" className="text-[10px] sm:text-xs h-4 sm:h-5">{getIngredientName(item.customization.base)}</Badge>
                           </div>
                         )}
                         {item.customization.marinade && (
-                          <div className="flex items-center gap-1">
-                            <span className="font-semibold text-muted-foreground">Marinade:</span>
-                            <Badge variant="outline" className="text-xs h-5">{getIngredientName(item.customization.marinade)}</Badge>
+                          <div className="flex items-center gap-1 flex-wrap">
+                            <span className="font-semibold text-muted-foreground text-[10px] sm:text-xs">Marinade:</span>
+                            <Badge variant="outline" className="text-[10px] sm:text-xs h-4 sm:h-5">{getIngredientName(item.customization.marinade)}</Badge>
                           </div>
                         )}
                         {item.customization.freshIngredients && item.customization.freshIngredients.length > 0 && (
                           <div className="flex items-start gap-1">
-                            <span className="font-semibold text-muted-foreground whitespace-nowrap">Zutaten:</span>
+                            <span className="font-semibold text-muted-foreground whitespace-nowrap text-[10px] sm:text-xs">Zutaten:</span>
                             <div className="flex flex-wrap gap-1">
                               {item.customization.freshIngredients.map((ing, idx) => (
-                                <Badge key={idx} variant="outline" className="text-xs h-5">{getIngredientName(ing)}</Badge>
+                                <Badge key={idx} variant="outline" className="text-[10px] sm:text-xs h-4 sm:h-5">{getIngredientName(ing)}</Badge>
                               ))}
                             </div>
                           </div>
                         )}
                         {item.customization.sauce && (
-                          <div className="flex items-center gap-1">
-                            <span className="font-semibold text-muted-foreground">Sauce:</span>
-                            <Badge variant="outline" className="text-xs h-5">{getIngredientName(item.customization.sauce)}</Badge>
+                          <div className="flex items-center gap-1 flex-wrap">
+                            <span className="font-semibold text-muted-foreground text-[10px] sm:text-xs">Sauce:</span>
+                            <Badge variant="outline" className="text-[10px] sm:text-xs h-4 sm:h-5">{getIngredientName(item.customization.sauce)}</Badge>
                           </div>
                         )}
                         {item.customization.toppings && item.customization.toppings.length > 0 && (
                           <div className="flex items-start gap-1">
-                            <span className="font-semibold text-muted-foreground whitespace-nowrap">Toppings:</span>
+                            <span className="font-semibold text-muted-foreground whitespace-nowrap text-[10px] sm:text-xs">Toppings:</span>
                             <div className="flex flex-wrap gap-1">
                               {item.customization.toppings.map((topping, idx) => (
-                                <Badge key={idx} variant="outline" className="text-xs h-5">{getIngredientName(topping)}</Badge>
+                                <Badge key={idx} variant="outline" className="text-[10px] sm:text-xs h-4 sm:h-5">{getIngredientName(topping)}</Badge>
                               ))}
                             </div>
                           </div>
@@ -209,16 +241,16 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                       </div>
                     )}
                     
-                    <p className="font-poppins text-lg font-bold text-ocean mt-2" data-testid={`text-cart-item-price-${item.id}`}>
+                    <p className="font-poppins text-base sm:text-lg font-bold text-ocean mt-1.5 sm:mt-2" data-testid={`text-cart-item-price-${item.id}`}>
                       €{item.price}
                     </p>
                   </div>
-                  <div className="flex flex-col items-end justify-between">
+                  <div className="flex flex-col items-end justify-between gap-2">
                     <div className="flex gap-1">
                       {item.customization && onEditItem && (
                         <button
                           onClick={() => onEditItem(item.id)}
-                          className="p-1 hover:bg-ocean/10 text-ocean rounded transition-colors"
+                          className="p-2 sm:p-2.5 hover:bg-ocean/10 text-ocean rounded transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                           data-testid={`button-edit-${item.id}`}
                           aria-label="Edit item"
                         >
@@ -227,32 +259,32 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                       )}
                       <button
                         onClick={() => removeItem(item.id)}
-                        className="p-1 hover:bg-destructive/10 text-destructive rounded transition-colors"
+                        className="p-2 sm:p-2.5 hover:bg-destructive/10 text-destructive rounded transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                         data-testid={`button-remove-${item.id}`}
                         aria-label="Remove item"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 sm:gap-2">
                       <button
                         onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                        className="p-1 hover:bg-accent rounded transition-colors"
+                        className="p-2 sm:p-2.5 hover:bg-accent rounded transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center bg-muted"
                         data-testid={`button-decrease-${item.id}`}
                         aria-label="Decrease quantity"
                       >
-                        <Minus className="w-4 h-4" />
+                        <Minus className="w-5 h-5" />
                       </button>
-                      <span className="font-bold w-8 text-center" data-testid={`text-quantity-${item.id}`}>
+                      <span className="font-bold w-8 sm:w-10 text-center text-base sm:text-lg" data-testid={`text-quantity-${item.id}`}>
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="p-1 hover:bg-accent rounded transition-colors"
+                        className="p-2 sm:p-2.5 hover:bg-accent rounded transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center bg-muted"
                         data-testid={`button-increase-${item.id}`}
                         aria-label="Increase quantity"
                       >
-                        <Plus className="w-4 h-4" />
+                        <Plus className="w-5 h-5" />
                       </button>
                     </div>
                   </div>
@@ -262,29 +294,29 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
           )}
         </div>
 
-        {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t p-6 space-y-4">
+          <div className="border-t p-4 sm:p-6 space-y-3 sm:space-y-4 bg-background sticky bottom-0">
             {!showCheckout ? (
               <>
                 <div className="flex items-center justify-between">
-                  <span className="font-poppins text-xl font-bold text-foreground">Gesamt:</span>
-                  <span className="font-poppins text-2xl font-bold text-ocean" data-testid="text-cart-total">
+                  <span className="font-poppins text-lg sm:text-xl font-bold text-foreground">Gesamt:</span>
+                  <span className="font-poppins text-xl sm:text-2xl font-bold text-ocean" data-testid="text-cart-total">
                     €{getTotal().toFixed(2)}
                   </span>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-2 sm:gap-3">
                   <Button
                     onClick={clearCart}
                     variant="outline"
-                    className="flex-1 font-poppins font-bold"
+                    className="flex-1 font-poppins font-bold min-h-[48px] sm:min-h-[44px]"
                     data-testid="button-clear-cart"
                   >
-                    Warenkorb leeren
+                    <span className="hidden sm:inline">Warenkorb leeren</span>
+                    <span className="sm:hidden">Leeren</span>
                   </Button>
                   <Button
                     onClick={() => setShowCheckout(true)}
-                    className="flex-1 bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold"
+                    className="flex-1 bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold min-h-[48px] sm:min-h-[44px]"
                     data-testid="button-checkout"
                   >
                     Zur Kasse
@@ -293,29 +325,28 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
               </>
             ) : (
               <>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-poppins text-xl font-bold text-foreground">Bestellung abschließen</span>
-                  <span className="font-poppins text-2xl font-bold text-ocean" data-testid="text-checkout-total">
+                <div className="flex items-center justify-between mb-2 sm:mb-4">
+                  <span className="font-poppins text-base sm:text-xl font-bold text-foreground">Bestellung abschließen</span>
+                  <span className="font-poppins text-lg sm:text-2xl font-bold text-ocean" data-testid="text-checkout-total">
                     €{getTotal().toFixed(2)}
                   </span>
                 </div>
                 
-                {/* Order Type Selection */}
-                <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
                   <button
                     onClick={() => setServiceType("pickup")}
-                    className={`p-4 rounded-lg border-2 transition-all ${
+                    className={`p-3 sm:p-4 rounded-lg border-2 transition-all min-h-[60px] ${
                       serviceType === "pickup"
                         ? "border-ocean bg-ocean/10 shadow-lg"
                         : "border-gray-200 hover:border-gray-300"
                     }`}
                     data-testid="button-order-type-pickup"
                   >
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-1 sm:gap-2">
                       {serviceType === "pickup" && (
-                        <Check className="w-5 h-5 text-ocean" />
+                        <Check className="w-4 h-4 sm:w-5 sm:h-5 text-ocean" />
                       )}
-                      <span className="font-poppins font-semibold text-center">
+                      <span className="font-poppins font-semibold text-center text-xs sm:text-base">
                         Zum Mitnehmen
                       </span>
                     </div>
@@ -323,58 +354,57 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                   
                   <button
                     onClick={() => setServiceType("dinein")}
-                    className={`p-4 rounded-lg border-2 transition-all ${
+                    className={`p-3 sm:p-4 rounded-lg border-2 transition-all min-h-[60px] ${
                       serviceType === "dinein"
                         ? "border-ocean bg-ocean/10 shadow-lg"
                         : "border-gray-200 hover:border-gray-300"
                     }`}
                     data-testid="button-order-type-dinein"
                   >
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-1 sm:gap-2">
                       {serviceType === "dinein" && (
-                        <Check className="w-5 h-5 text-ocean" />
+                        <Check className="w-4 h-4 sm:w-5 sm:h-5 text-ocean" />
                       )}
-                      <span className="font-poppins font-semibold text-center">
+                      <span className="font-poppins font-semibold text-center text-xs sm:text-base">
                         Im Restaurant essen
                       </span>
                     </div>
                   </button>
                 </div>
 
-                {/* Customer Information Form */}
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div>
-                    <Label htmlFor="customer-name" className="font-poppins font-semibold">Name *</Label>
+                    <Label htmlFor="customer-name" className="font-poppins font-semibold text-sm">Name *</Label>
                     <Input
                       id="customer-name"
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
                       placeholder="Ihr Name"
-                      className="mt-1"
+                      className="mt-1 min-h-[48px]"
                       data-testid="input-customer-name"
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="customer-phone" className="font-poppins font-semibold">Telefonnummer *</Label>
+                    <Label htmlFor="customer-phone" className="font-poppins font-semibold text-sm">Telefonnummer *</Label>
                     <Input
                       id="customer-phone"
                       type="tel"
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       placeholder="Ihre Telefonnummer"
-                      className="mt-1"
+                      className="mt-1 min-h-[48px]"
                       data-testid="input-customer-phone"
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="table-or-time" className="font-poppins font-semibold">
+                    <Label htmlFor="table-or-time" className="font-poppins font-semibold text-sm">
                       {serviceType === "pickup" ? "Abholzeit *" : "Tischnummer *"}
                     </Label>
                     {serviceType === "pickup" ? (
                       <Select value={pickupTime} onValueChange={setPickupTime}>
-                        <SelectTrigger className="mt-1" data-testid="select-pickup-time">
+                        <SelectTrigger className="mt-1 min-h-[48px]" data-testid="select-pickup-time">
                           <SelectValue placeholder="Wähle deine Abholzeit" />
                         </SelectTrigger>
                         <SelectContent>
@@ -393,7 +423,7 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                       </Select>
                     ) : (
                       <Select value={tableNumber} onValueChange={setTableNumber}>
-                        <SelectTrigger className="mt-1" data-testid="select-table-number">
+                        <SelectTrigger className="mt-1 min-h-[48px]" data-testid="select-table-number">
                           <SelectValue placeholder="Wähle deinen Tisch" />
                         </SelectTrigger>
                         <SelectContent>
@@ -408,23 +438,23 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                   </div>
                   
                   <div>
-                    <Label htmlFor="comment" className="font-poppins font-semibold">Kommentar (optional)</Label>
+                    <Label htmlFor="comment" className="font-poppins font-semibold text-sm">Kommentar (optional)</Label>
                     <Input
                       id="comment"
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
-                      placeholder="Besondere Wünsche oder Anmerkungen"
-                      className="mt-1"
+                      placeholder="Besondere Wünsche"
+                      className="mt-1 min-h-[48px]"
                       data-testid="input-comment"
                     />
                   </div>
                 </div>
                 
-                <div className="flex gap-3 mt-4">
+                <div className="flex gap-2 sm:gap-3 mt-3 sm:mt-4">
                   <Button
                     onClick={() => setShowCheckout(false)}
                     variant="outline"
-                    className="flex-1 font-poppins font-bold"
+                    className="flex-1 font-poppins font-bold min-h-[48px] sm:min-h-[44px]"
                     data-testid="button-back-to-cart"
                   >
                     Zurück
@@ -432,7 +462,7 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                   <Button
                     onClick={handleCheckout}
                     disabled={createOrderMutation.isPending}
-                    className="flex-1 bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold"
+                    className="flex-1 bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold min-h-[48px] sm:min-h-[44px]"
                     data-testid="button-confirm-order"
                   >
                     {createOrderMutation.isPending ? "Wird bearbeitet..." : "Bestellung aufgeben"}

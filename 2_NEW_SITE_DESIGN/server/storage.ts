@@ -69,7 +69,7 @@ class MemStorage implements IStorage {
 
   private createCategorySync(category: InsertCategory): Category {
     const id = randomUUID();
-    const cat: Category = { ...category, id, order: category.order ?? 0 };
+    const cat: Category = { ...category, id, icon: category.icon ?? "🥗", order: category.order ?? 0 };
     this.categories.set(id, cat);
     return cat;
   }
@@ -121,7 +121,7 @@ class MemStorage implements IStorage {
 
   async createCategory(category: InsertCategory): Promise<Category> {
     const id = randomUUID();
-    const cat: Category = { ...category, id, order: category.order ?? 0 };
+    const cat: Category = { ...category, id, icon: category.icon ?? "🥗", order: category.order ?? 0 };
     this.categories.set(id, cat);
     return cat;
   }
@@ -242,6 +242,8 @@ class MemStorage implements IStorage {
     const ord: Order = {
       ...order,
       id,
+      pickupTime: order.pickupTime ?? null,
+      tableNumber: order.tableNumber ?? null,
       comment: order.comment ?? null,
       status: 'pending',
       createdAt: new Date().toISOString(),

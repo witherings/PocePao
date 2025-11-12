@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus } from "lucide-react";
 import type { MenuItem } from "@shared/schema";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 interface MenuItemDialogProps {
   item: MenuItem | null;
@@ -14,11 +15,21 @@ interface MenuItemDialogProps {
 
 export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemDialogProps) {
   const [selectedSize, setSelectedSize] = useState<"klein" | "standard">("standard");
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useBodyScrollLock(isOpen);
 
   // Reset to default size when dialog opens or item changes
   useEffect(() => {
-    if (isOpen && item?.hasSizeOptions === 1) {
-      setSelectedSize("standard");
+    if (isOpen) {
+      // Scroll to top when dialog opens
+      setTimeout(() => {
+        contentRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+      }, 0);
+      
+      if (item?.hasSizeOptions === 1) {
+        setSelectedSize("standard");
+      }
     }
   }, [item, isOpen]);
 
@@ -38,7 +49,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" data-testid="dialog-menu-item">
+      <DialogContent ref={contentRef} className="max-w-2xl max-h-[85dvh] overflow-y-auto p-4 sm:p-6 overscroll-contain border border-gray-300 dark:border-gray-600 shadow-2xl" style={{ WebkitOverflowScrolling: 'touch' }} data-testid="dialog-menu-item">
         <DialogHeader>
           <DialogTitle className="font-poppins text-2xl" data-testid="text-dialog-title">
             {item.nameDE}
@@ -48,9 +59,9 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Image */}
-          <div className="relative aspect-video rounded-lg overflow-hidden">
+          <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
             <img
               src={item.image}
               alt={item.nameDE}
@@ -80,11 +91,11 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
           {item.hasSizeOptions === 1 && (
             <div>
               <h4 className="font-poppins font-semibold text-sm mb-3 text-foreground">Größe wählen</h4>
-              <div className="flex gap-3">
+              <div className="flex gap-2 sm:gap-3">
                 <Button
                   variant={selectedSize === "klein" ? "default" : "outline"}
                   onClick={() => setSelectedSize("klein")}
-                  className={`flex-1 font-poppins font-semibold ${
+                  className={`flex-1 font-poppins font-semibold min-h-[56px] ${
                     selectedSize === "klein" 
                       ? "bg-ocean hover:bg-ocean/90 text-white" 
                       : ""
@@ -92,16 +103,16 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                   data-testid="button-size-klein"
                 >
                   <div className="text-center">
-                    <div>Klein</div>
+                    <div className="text-sm sm:text-base">Klein</div>
                     {item.priceSmall && (
-                      <div className="text-sm font-normal">€{item.priceSmall}</div>
+                      <div className="text-xs sm:text-sm font-normal">€{item.priceSmall}</div>
                     )}
                   </div>
                 </Button>
                 <Button
                   variant={selectedSize === "standard" ? "default" : "outline"}
                   onClick={() => setSelectedSize("standard")}
-                  className={`flex-1 font-poppins font-semibold ${
+                  className={`flex-1 font-poppins font-semibold min-h-[56px] ${
                     selectedSize === "standard" 
                       ? "bg-ocean hover:bg-ocean/90 text-white" 
                       : ""
@@ -109,9 +120,9 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                   data-testid="button-size-standard"
                 >
                   <div className="text-center">
-                    <div>Standard</div>
+                    <div className="text-sm sm:text-base">Standard</div>
                     {item.priceLarge && (
-                      <div className="text-sm font-normal">€{item.priceLarge}</div>
+                      <div className="text-xs sm:text-sm font-normal">€{item.priceLarge}</div>
                     )}
                   </div>
                 </Button>
@@ -196,9 +207,9 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
           )}
 
           {/* Price & Add to Cart */}
-          <div className="flex items-center justify-between pt-4 border-t">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-4 border-t">
             <div>
-              <span className="font-poppins text-3xl font-bold text-ocean" data-testid="text-dialog-price">
+              <span className="font-poppins text-2xl sm:text-3xl font-bold text-ocean" data-testid="text-dialog-price">
                 €{getDisplayPrice()}
               </span>
             </div>
@@ -208,7 +219,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 onClose();
               }}
               disabled={item.available === 0}
-              className="bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full px-6 sm:px-8 min-h-[52px] sm:min-h-[56px] text-base sm:text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               data-testid="button-dialog-add-to-cart"
             >
               <Plus className="w-5 h-5 mr-2" />

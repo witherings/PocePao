@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -22,6 +23,8 @@ export function Gallery3D() {
   const [fullscreenImageIndex, setFullscreenImageIndex] = useState(0);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  useBodyScrollLock(isFullscreenOpen);
 
   const { data: uploadedImages = [] } = useQuery<GalleryImage[]>({
     queryKey: ["/api/gallery"],
@@ -133,17 +136,17 @@ export function Gallery3D() {
   };
 
   return (
-    <div className="py-16 md:py-24 bg-muted">
+    <div className="py-8 md:py-12 bg-muted">
       <div className="container mx-auto px-6">
         <h2 className="font-poppins text-3xl md:text-4xl font-bold text-ocean mb-4 text-center" data-testid="text-gallery-title">
           Unsere Galerie
         </h2>
-        <p className="text-center text-muted-foreground mb-12 font-lato" data-testid="text-gallery-subtitle">
+        <p className="text-center text-muted-foreground mb-6 font-lato" data-testid="text-gallery-subtitle">
           Entdecken Sie unseren einladenden Raum
         </p>
 
         {/* 3D Carousel */}
-        <div className="mb-8">
+        <div className="mb-4">
           <div 
             className="perspective-1000 h-[400px] md:h-[500px] relative overflow-hidden cursor-grab active:cursor-grabbing"
             onMouseDown={handleMouseDown}
@@ -198,7 +201,7 @@ export function Gallery3D() {
           </div>
 
           {/* Navigation Buttons - Under Gallery */}
-          <div className="flex items-center justify-center gap-4 mt-8">
+          <div className="flex items-center justify-center gap-4 mt-4">
             <Button
               onClick={prevSlide}
               variant="outline"
@@ -226,7 +229,7 @@ export function Gallery3D() {
 
       {/* Fullscreen Dialog */}
       <Dialog open={isFullscreenOpen} onOpenChange={setIsFullscreenOpen}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none">
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-4 border-white/20 shadow-2xl ring-2 ring-white/10">
           <DialogTitle className="sr-only">
             {allImages[fullscreenImageIndex]?.filename || 'Bild'}
           </DialogTitle>

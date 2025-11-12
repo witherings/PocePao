@@ -67,18 +67,18 @@ export function ReservationForm() {
   };
 
   return (
-    <Card className="p-6 md:p-8 max-w-2xl mx-auto">
-      <div className="mb-6">
-        <p className="text-sm text-ocean font-poppins font-semibold mb-2" data-testid="text-reservation-subtitle">
+    <Card className="p-4 md:p-8 max-w-2xl mx-auto">
+      <div className="mb-4 md:mb-6">
+        <p className="text-xs md:text-sm text-ocean font-poppins font-semibold mb-1 md:mb-2" data-testid="text-reservation-subtitle">
           Reservierungsformular
         </p>
-        <h2 className="font-poppins text-2xl md:text-3xl font-bold text-foreground mb-2" data-testid="text-reservation-title">
-          Herzlich Willkommen! Reservieren Sie jetzt Ihren Tisch und genießen Sie eine schöne Zeit bei uns.
+        <h2 className="font-poppins text-lg md:text-3xl font-bold text-foreground mb-1 md:mb-2" data-testid="text-reservation-title">
+          Herzlich Willkommen! Reservieren Sie jetzt Ihren Tisch.
         </h2>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 md:space-y-6">
           <FormField
             control={form.control}
             name="name"
@@ -97,7 +97,7 @@ export function ReservationForm() {
             )}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
             <FormField
               control={form.control}
               name="guests"
@@ -137,7 +137,7 @@ export function ReservationForm() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
             <FormField
               control={form.control}
               name="date"
@@ -177,7 +177,7 @@ export function ReservationForm() {
 
           <Button
             type="submit"
-            className="w-full bg-ocean hover:bg-ocean-dark font-poppins font-bold text-lg py-6"
+            className="w-full bg-ocean hover:bg-ocean-dark font-poppins font-bold text-base md:text-lg py-5 md:py-6"
             disabled={mutation.isPending}
             data-testid="button-submit-reservation"
           >

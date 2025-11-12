@@ -21,17 +21,17 @@ export default function Contact() {
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-6">
           {/* Contact Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            <Card className="p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1" data-testid="card-phone">
-              <div className="flex items-start gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-12 sm:mb-16">
+            <Card className="p-4 sm:p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1" data-testid="card-phone">
+              <div className="flex items-start gap-3 sm:gap-4">
                 <div className="bg-ocean/10 p-3 rounded-full flex-shrink-0">
-                  <Phone className="w-6 h-6 text-ocean" />
+                  <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-ocean" />
                 </div>
-                <div>
-                  <h3 className="font-poppins font-bold text-lg text-ocean mb-2">Telefon</h3>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-poppins font-bold text-base sm:text-lg text-ocean mb-1 sm:mb-2">Telefon</h3>
                   <a
                     href="tel:04036939098"
-                    className="font-lato text-muted-foreground hover:text-ocean transition-colors"
+                    className="font-lato text-sm sm:text-base text-muted-foreground hover:text-ocean transition-colors inline-flex items-center min-h-[48px]"
                     data-testid="link-phone"
                   >
                     040 36939098
@@ -40,14 +40,14 @@ export default function Contact() {
               </div>
             </Card>
 
-            <Card className="p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1" data-testid="card-address">
-              <div className="flex items-start gap-4">
+            <Card className="p-4 sm:p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1" data-testid="card-address">
+              <div className="flex items-start gap-3 sm:gap-4">
                 <div className="bg-ocean/10 p-3 rounded-full flex-shrink-0">
-                  <MapPin className="w-6 h-6 text-ocean" />
+                  <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-ocean" />
                 </div>
-                <div>
-                  <h3 className="font-poppins font-bold text-lg text-ocean mb-2">Adresse</h3>
-                  <p className="font-lato text-muted-foreground" data-testid="text-address">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-poppins font-bold text-base sm:text-lg text-ocean mb-1 sm:mb-2">Adresse</h3>
+                  <p className="font-lato text-sm sm:text-base text-muted-foreground" data-testid="text-address">
                     Fuhlsbüttler Straße 328<br />
                     Hamburg
                   </p>
@@ -55,14 +55,14 @@ export default function Contact() {
               </div>
             </Card>
 
-            <Card className="p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1" data-testid="card-hours">
-              <div className="flex items-start gap-4">
+            <Card className="p-4 sm:p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1" data-testid="card-hours">
+              <div className="flex items-start gap-3 sm:gap-4">
                 <div className="bg-ocean/10 p-3 rounded-full flex-shrink-0">
-                  <Clock className="w-6 h-6 text-ocean" />
+                  <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-ocean" />
                 </div>
-                <div>
-                  <h3 className="font-poppins font-bold text-lg text-ocean mb-2">Öffnungszeiten</h3>
-                  <div className="font-lato text-muted-foreground space-y-1" data-testid="text-hours">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-poppins font-bold text-base sm:text-lg text-ocean mb-1 sm:mb-2">Öffnungszeiten</h3>
+                  <div className="font-lato text-sm sm:text-base text-muted-foreground space-y-1" data-testid="text-hours">
                     <p>Mo-So: 11:15 - 21:00</p>
                   </div>
                 </div>
@@ -75,7 +75,7 @@ export default function Contact() {
             <h2 className="font-poppins text-3xl md:text-4xl font-bold text-ocean mb-8 text-center" data-testid="text-map-title">
               So findest du uns
             </h2>
-            <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] md:h-[500px]">
+            <div className="rounded-2xl overflow-hidden shadow-2xl h-[250px] md:h-[500px]">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2368.0789244563674!2d10.006686176819165!3d53.60771095646801!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b18f1b7f8e8e8d%3A0x1234567890abcdef!2sFuhlsb%C3%BCttler%20Stra%C3%9Fe%20328%2C%20Hamburg!5e0!3m2!1sde!2sde!4v1234567890123!5m2!1sde!2sde"
                 width="100%"
@@ -99,9 +99,9 @@ export default function Contact() {
               Echte Bewertungen von echten Genießern.
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="md:grid md:grid-cols-3 md:gap-6 mb-8 flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 md:pb-0 scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0">
               {/* Review 1 */}
-              <Card className="p-6" data-testid="card-review-1">
+              <Card className="p-6 flex-shrink-0 w-[85%] md:w-auto snap-center" data-testid="card-review-1">
                 <div className="flex gap-1 mb-3">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star key={star} className="w-5 h-5 fill-sunset text-sunset" />
@@ -114,7 +114,7 @@ export default function Contact() {
               </Card>
 
               {/* Review 2 */}
-              <Card className="p-6" data-testid="card-review-2">
+              <Card className="p-6 flex-shrink-0 w-[85%] md:w-auto snap-center" data-testid="card-review-2">
                 <div className="flex gap-1 mb-3">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star key={star} className="w-5 h-5 fill-sunset text-sunset" />
@@ -127,7 +127,7 @@ export default function Contact() {
               </Card>
 
               {/* Review 3 */}
-              <Card className="p-6" data-testid="card-review-3">
+              <Card className="p-6 flex-shrink-0 w-[85%] md:w-auto snap-center" data-testid="card-review-3">
                 <div className="flex gap-1 mb-3">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star key={star} className="w-5 h-5 fill-sunset text-sunset" />
@@ -144,7 +144,7 @@ export default function Contact() {
               <Button
                 asChild
                 variant="outline"
-                className="font-poppins font-bold rounded-full px-8 py-6 border-2 border-ocean text-ocean hover:bg-ocean hover:text-white"
+                className="font-poppins font-bold rounded-full px-6 sm:px-8 min-h-[52px] sm:min-h-[56px] border-2 border-ocean text-ocean hover:bg-ocean hover:text-white w-full sm:w-auto"
                 data-testid="button-more-reviews"
               >
                 <a 
@@ -159,25 +159,21 @@ export default function Contact() {
           </div>
 
           {/* How to Reach Us */}
-          <div className="bg-muted rounded-2xl p-8 md:p-12">
-            <h2 className="font-poppins text-2xl md:text-3xl font-bold text-ocean mb-6 text-center" data-testid="text-directions-title">
+          <div className="bg-muted rounded-2xl p-4 md:p-8 lg:p-12">
+            <h2 className="font-poppins text-xl md:text-2xl lg:text-3xl font-bold text-ocean mb-4 md:mb-6 text-center" data-testid="text-directions-title">
               Anfahrt
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-4xl mx-auto">
               <div data-testid="directions-public">
-                <h3 className="font-poppins font-bold text-xl text-ocean mb-3">Öffentliche Verkehrsmittel</h3>
-                <p className="font-lato text-muted-foreground">
-                  U-Bahn: U1 bis Ohlsdorf<br />
-                  Bus: Linie 23, 26, 179<br />
-                  Nur 5 Minuten Fußweg von der Station
+                <h3 className="font-poppins font-bold text-base md:text-xl text-ocean mb-2 md:mb-3">Öffentliche Verkehrsmittel</h3>
+                <p className="font-lato text-sm md:text-base text-muted-foreground">
+                  U1 bis Ohlsdorf • Bus 23, 26, 179
                 </p>
               </div>
               <div data-testid="directions-car">
-                <h3 className="font-poppins font-bold text-xl text-ocean mb-3">Mit dem Auto</h3>
-                <p className="font-lato text-muted-foreground">
-                  Parkplätze in der Nähe verfügbar<br />
-                  Gut erreichbar über die A7<br />
-                  Kostenlose Parkplätze in den Seitenstraßen
+                <h3 className="font-poppins font-bold text-base md:text-xl text-ocean mb-2 md:mb-3">Mit dem Auto</h3>
+                <p className="font-lato text-sm md:text-base text-muted-foreground">
+                  Parkplätze verfügbar • Gut erreichbar über A7
                 </p>
               </div>
             </div>

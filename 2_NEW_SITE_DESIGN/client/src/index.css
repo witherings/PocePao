@@ -310,4 +310,14 @@
   .animate-pulse-once {
     animation: pulse-once 0.6s ease-out;
   }
+
+  /* Hide scrollbar for horizontal scrolling */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }

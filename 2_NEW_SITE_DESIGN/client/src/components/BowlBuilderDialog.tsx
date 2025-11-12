@@ -8,6 +8,8 @@ import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useCartStore } from "@/lib/cartStore";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface BowlBuilderDialogProps {
   item: MenuItem | null;
@@ -34,6 +36,7 @@ const STEP_CONFIG = {
 export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingCartItemId }: BowlBuilderDialogProps) {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [selectedSize, setSelectedSize] = useState<"klein" | "standard">("standard");
+  const [showMobileSummary, setShowMobileSummary] = useState(false);
   const [selections, setSelections] = useState<CustomBowlSelection>({
     protein: undefined,
     base: undefined,
@@ -48,7 +51,10 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
   });
   const isMobile = useIsMobile();
   const contentRef = useRef<HTMLDivElement>(null);
+  const nextButtonRef = useRef<HTMLButtonElement>(null);
   const { items: cartItems } = useCartStore();
+
+  useBodyScrollLock(isOpen);
 
   // Fetch ingredients
   const { data: ingredients = [] } = useQuery<Ingredient[]>({
@@ -65,6 +71,11 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
   // Reset when dialog opens or item changes
   useEffect(() => {
     if (isOpen && item) {
+      // Scroll to top when dialog opens
+      setTimeout(() => {
+        contentRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+      }, 0);
+
       // If editing, load existing data from cart
       if (editingCartItemId) {
         const cartItem = cartItems.find(i => i.id === editingCartItemId);
@@ -93,6 +104,34 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       });
     }
   }, [item, isOpen, editingCartItemId, cartItems]);
+
+  // Auto-scroll to next button when max ingredients reached
+  useEffect(() => {
+    if (isOpen) {
+      const currentType = STEPS[currentStep];
+      // Check if step is complete
+      const stepComplete = (() => {
+        if (currentType === "protein" || currentType === "base" || currentType === "marinade" || currentType === "sauce") {
+          return !!selections[currentType];
+        } else if (currentType === "fresh") {
+          return selections.freshIngredients?.length === 4;
+        } else if (currentType === "topping") {
+          return selections.toppings?.length === 3;
+        }
+        return false;
+      })();
+
+      // Only auto-scroll for steps with multiple selections
+      if (stepComplete && (currentType === "fresh" || currentType === "topping")) {
+        setTimeout(() => {
+          nextButtonRef.current?.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center'
+          });
+        }, 300);
+      }
+    }
+  }, [selections, isOpen, currentStep]);
 
   if (!item) return null;
 
@@ -127,6 +166,13 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
     
     if (current === "protein" || current === "base" || current === "marinade" || current === "sauce") {
       setSelections(prev => ({ ...prev, [current]: ingredientId }));
+      // Scroll to next button after selection
+      setTimeout(() => {
+        nextButtonRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center'
+        });
+      }, 300);
     } else if (current === "fresh") {
       setSelections(prev => {
         const current = prev.freshIngredients || [];
@@ -183,14 +229,18 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
   const handleNext = () => {
     if (currentStep < STEPS.length - 1 && isStepComplete()) {
       setCurrentStep(prev => prev + 1);
-      contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
     }
   };
 
   const handlePrev = () => {
     if (currentStep > 0) {
       setCurrentStep(prev => prev - 1);
-      contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
     }
   };
 
@@ -280,8 +330,8 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[90vh]" data-testid="dialog-bowl-builder">
-        <div ref={contentRef} className="overflow-y-auto max-h-[calc(90vh-80px)]">
+      <DialogContent hideCloseButton={true} className="max-w-6xl max-h-[85dvh] p-4 sm:p-6 border border-gray-300 dark:border-gray-600 shadow-2xl" data-testid="dialog-bowl-builder">
+        <div ref={contentRef} className="overflow-y-auto max-h-[calc(85dvh-80px)] overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
         <DialogHeader>
           <DialogTitle className="font-poppins text-2xl" data-testid="text-builder-title">
             {item.nameDE}
@@ -297,9 +347,9 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
           </DialogDescription>
         </DialogHeader>
 
-        <div className={`${isMobile ? '' : 'grid grid-cols-3 gap-6'}`}>
+        <div className={`${isMobile ? '' : 'grid grid-cols-7 gap-6'}`}>
           {/* Main Content */}
-          <div className={`space-y-6 ${isMobile ? '' : 'col-span-2'}`}>
+          <div className={`space-y-6 ${isMobile ? '' : 'col-span-5'}`}>
           {/* Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm font-poppins text-muted-foreground">
@@ -313,11 +363,11 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
           {currentStep === 0 && item.hasSizeOptions === 1 && (
             <div>
               <h4 className="font-poppins font-semibold text-sm mb-3 text-foreground">Größe wählen</h4>
-              <div className="flex gap-3">
+              <div className="flex gap-2 sm:gap-3">
                 <Button
                   variant={selectedSize === "klein" ? "default" : "outline"}
                   onClick={() => setSelectedSize("klein")}
-                  className={`flex-1 font-poppins font-semibold ${
+                  className={`flex-1 font-poppins font-semibold min-h-[56px] sm:min-h-[60px] ${
                     selectedSize === "klein" 
                       ? "bg-ocean hover:bg-ocean/90 text-white" 
                       : ""
@@ -325,14 +375,14 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                   data-testid="button-size-klein"
                 >
                   <div className="text-center">
-                    <div>Klein</div>
-                    <div className="text-sm font-normal">{getSizeButtonText("klein")}</div>
+                    <div className="text-sm sm:text-base">Klein</div>
+                    <div className="text-xs sm:text-sm font-normal">{getSizeButtonText("klein")}</div>
                   </div>
                 </Button>
                 <Button
                   variant={selectedSize === "standard" ? "default" : "outline"}
                   onClick={() => setSelectedSize("standard")}
-                  className={`flex-1 font-poppins font-semibold ${
+                  className={`flex-1 font-poppins font-semibold min-h-[56px] sm:min-h-[60px] ${
                     selectedSize === "standard" 
                       ? "bg-ocean hover:bg-ocean/90 text-white" 
                       : ""
@@ -340,8 +390,8 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                   data-testid="button-size-standard"
                 >
                   <div className="text-center">
-                    <div>Standard</div>
-                    <div className="text-sm font-normal">{getSizeButtonText("standard")}</div>
+                    <div className="text-sm sm:text-base">Standard</div>
+                    <div className="text-xs sm:text-sm font-normal">{getSizeButtonText("standard")}</div>
                   </div>
                 </Button>
               </div>
@@ -534,8 +584,15 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
           {/* Ingredient Selection Grid (for non-extras steps) */}
           {currentStepType !== "extras" && (
             <>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {currentIngredients.map((ingredient) => {
+              <motion.div 
+                key={currentStepType}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+              >
+              {currentIngredients.map((ingredient, index) => {
                 const selected = isSelected(ingredient.id);
                 return (
                   <div
@@ -598,49 +655,63 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                   </div>
                 );
               })}
-              </div>
+              </motion.div>
 
             </>
           )}
 
           {/* Navigation */}
-          <div className="flex items-center justify-between pt-4 border-t">
-            <Button
-              onClick={handlePrev}
-              disabled={currentStep === 0}
-              variant="outline"
-              className="font-poppins"
-              data-testid="button-prev"
-            >
-              <ChevronLeft className="w-4 h-4 mr-2" />
-              Zurück
-            </Button>
+          <div className="flex items-center justify-between pt-4 border-t gap-2">
+            {currentStep === 0 ? (
+              <Button
+                onClick={onClose}
+                variant="outline"
+                className="font-poppins min-h-[48px] sm:min-h-[44px] min-w-[80px] text-sm sm:text-base"
+                data-testid="button-close"
+              >
+                <span>Schließen</span>
+              </Button>
+            ) : (
+              <Button
+                onClick={handlePrev}
+                variant="outline"
+                className="font-poppins min-h-[48px] sm:min-h-[44px] min-w-[80px] text-sm sm:text-base"
+                data-testid="button-prev"
+              >
+                <ChevronLeft className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Zurück</span>
+              </Button>
+            )}
 
-            <div className="flex items-center gap-2">
-              <span className="font-poppins text-2xl font-bold text-ocean" data-testid="text-builder-price">
+            <div className="flex items-center gap-1 sm:gap-2">
+              <span className="font-poppins text-lg sm:text-2xl font-bold text-ocean" data-testid="text-builder-price">
                 €{getDisplayPrice()}
               </span>
             </div>
 
             {currentStep < STEPS.length - 1 ? (
               <Button
+                ref={nextButtonRef}
                 onClick={handleNext}
                 disabled={!isStepComplete()}
-                className="bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold"
+                className="bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold min-h-[48px] sm:min-h-[44px] min-w-[80px] text-sm sm:text-base"
                 data-testid="button-next"
               >
-                Weiter
-                <ChevronRight className="w-4 h-4 ml-2" />
+                <span className="hidden sm:inline">Weiter</span>
+                <span className="sm:hidden">Weiter</span>
+                <ChevronRight className="w-4 h-4 sm:ml-2" />
               </Button>
             ) : (
               <Button
+                ref={nextButtonRef}
                 onClick={handleComplete}
                 disabled={!isStepComplete()}
-                className="bg-green-500 hover:bg-green-600 text-white font-poppins font-bold px-8 shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
+                className="bg-green-500 hover:bg-green-600 text-white font-poppins font-bold px-4 sm:px-8 shadow-lg min-h-[48px] sm:min-h-[44px] text-sm sm:text-base"
                 data-testid="button-complete"
               >
-                In den Warenkorb
-                <Check className="w-4 h-4 ml-2" />
+                <span className="hidden sm:inline">In den Warenkorb</span>
+                <span className="sm:hidden">Hinzufügen</span>
+                <Check className="w-4 h-4 ml-1 sm:ml-2" />
               </Button>
             )}
           </div>
@@ -652,11 +723,108 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
             {(currentStepType === "protein" || currentStepType === "base" || currentStepType === "marinade" || currentStepType === "sauce") && 
               !isStepComplete() && "Bitte wähle eine Option"}
           </p>
+
+          {/* Mobile Collapsible Summary */}
+          {isMobile && (
+            <div className="mt-6 border-t pt-4">
+              <Button
+                onClick={() => setShowMobileSummary(!showMobileSummary)}
+                variant="outline"
+                className="w-full font-poppins font-semibold"
+                data-testid="button-toggle-summary"
+              >
+                {showMobileSummary ? "Auswahl verbergen" : "Deine Auswahl anzeigen"}
+                <ChevronRight className={`w-4 h-4 ml-2 transition-transform ${showMobileSummary ? 'rotate-90' : ''}`} />
+              </Button>
+              
+              <AnimatePresence>
+                {showMobileSummary && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="space-y-3 pt-4">
+                      {/* Size */}
+                      <div>
+                        <p className="font-semibold text-sm text-muted-foreground mb-1">Größe:</p>
+                        <Badge variant="outline">{selectedSize === "klein" ? "Klein" : "Standard"}</Badge>
+                      </div>
+
+                      {/* Protein */}
+                      {selections.protein && (
+                        <div>
+                          <p className="font-semibold text-sm text-muted-foreground mb-1">Protein:</p>
+                          <Badge variant="outline">{getIngredientName(selections.protein)}</Badge>
+                        </div>
+                      )}
+
+                      {/* Base */}
+                      {selections.base && (
+                        <div>
+                          <p className="font-semibold text-sm text-muted-foreground mb-1">Base:</p>
+                          <Badge variant="outline">{getIngredientName(selections.base)}</Badge>
+                        </div>
+                      )}
+
+                      {/* Marinade */}
+                      {selections.marinade && (
+                        <div>
+                          <p className="font-semibold text-sm text-muted-foreground mb-1">Marinade:</p>
+                          <Badge variant="outline">{getIngredientName(selections.marinade)}</Badge>
+                        </div>
+                      )}
+
+                      {/* Fresh Ingredients */}
+                      {selections.freshIngredients && selections.freshIngredients.length > 0 && (
+                        <div>
+                          <p className="font-semibold text-sm text-muted-foreground mb-1">Zutaten:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {selections.freshIngredients.map((ing, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs">{getIngredientName(ing)}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Sauce */}
+                      {selections.sauce && (
+                        <div>
+                          <p className="font-semibold text-sm text-muted-foreground mb-1">Sauce:</p>
+                          <Badge variant="outline">{getIngredientName(selections.sauce)}</Badge>
+                        </div>
+                      )}
+
+                      {/* Toppings */}
+                      {selections.toppings && selections.toppings.length > 0 && (
+                        <div>
+                          <p className="font-semibold text-sm text-muted-foreground mb-1">Toppings:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {selections.toppings.map((topping, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs">{getIngredientName(topping)}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Price */}
+                      <div className="pt-3 border-t">
+                        <p className="font-semibold text-sm text-muted-foreground mb-1">Gesamtpreis:</p>
+                        <p className="font-poppins text-2xl font-bold text-ocean">€{getDisplayPrice()}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
           </div>
 
           {/* Summary Sidebar (Desktop only) */}
           {!isMobile && (
-            <div className="col-span-1 border-l pl-6 space-y-4">
+            <div className="col-span-2 border-l pl-6 space-y-4">
               <h3 className="font-poppins font-bold text-lg text-foreground">Deine Auswahl</h3>
               
               {/* Size */}

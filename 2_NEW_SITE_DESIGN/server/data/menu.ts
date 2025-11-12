@@ -5,31 +5,37 @@ export const categories = [
   {
     name: "Custom Bowls",
     nameDE: "Wunsch Bowls",
+    icon: "⭐",
     order: 0,
   },
   {
     name: "Poke Bowls",
     nameDE: "Poke Bowls",
+    icon: "🥗",
     order: 1,
   },
   {
     name: "Wraps",
     nameDE: "Wraps",
+    icon: "🌯",
     order: 2,
   },
   {
     name: "Appetizers",
     nameDE: "Vorspeisen",
+    icon: "🥟",
     order: 3,
   },
   {
     name: "Desserts",
     nameDE: "Desserts",
+    icon: "🍰",
     order: 4,
   },
   {
     name: "Drinks",
     nameDE: "Getränke",
+    icon: "🥤",
     order: 5,
   },
 ] as const satisfies InsertCategory[];
