@@ -1,0 +1,91 @@
+2025-11-12T08:25:54.271381983Z ==> Cloning from https://github.com/witherings/PocePao
+2025-11-12T08:25:56.745112047Z ==> Checking out commit 3a19deb56d89a854f487a8eba8e7ab4969a1253e in branch main
+2025-11-12T08:26:02.354089316Z ==> Using Node.js version 22.16.0 (default)
+2025-11-12T08:26:02.378442173Z ==> Docs on specifying a Node.js version: https://render.com/docs/node-version
+2025-11-12T08:26:04.375325138Z ==> Running build command 'npm install; npm run build'...
+2025-11-12T08:26:12.612197072Z 
+2025-11-12T08:26:12.612229123Z added 510 packages, and audited 511 packages in 8s
+2025-11-12T08:26:12.612234434Z 
+2025-11-12T08:26:12.612239984Z 66 packages are looking for funding
+2025-11-12T08:26:12.612244664Z   run `npm fund` for details
+2025-11-12T08:26:12.637573232Z 
+2025-11-12T08:26:12.637593933Z 8 vulnerabilities (3 low, 5 moderate)
+2025-11-12T08:26:12.637598044Z 
+2025-11-12T08:26:12.637602144Z To address issues that do not require attention, run:
+2025-11-12T08:26:12.637605894Z   npm audit fix
+2025-11-12T08:26:12.637609444Z 
+2025-11-12T08:26:12.637613124Z To address all issues (including breaking changes), run:
+2025-11-12T08:26:12.637617294Z   npm audit fix --force
+2025-11-12T08:26:12.637620815Z 
+2025-11-12T08:26:12.637625075Z Run `npm audit` for details.
+2025-11-12T08:26:12.818879686Z 
+2025-11-12T08:26:12.818904158Z > rest-express@1.0.0 build
+2025-11-12T08:26:12.818910478Z > drizzle-kit push && vite build
+2025-11-12T08:26:12.818914508Z 
+2025-11-12T08:26:12.984032186Z No config path provided, using default 'drizzle.config.ts'
+2025-11-12T08:26:12.984329662Z Reading config file '/opt/render/project/src/drizzle.config.ts'
+2025-11-12T08:26:13.574169834Z Using 'pg' driver for database querying
+2025-11-12T08:26:13.779248138Z [⣷] Pulling schema from database...
+2025-11-12T08:26:13.805775727Z [✓] Pulling schema from database...
+2025-11-12T08:26:14.009575665Z [✓] Changes applied
+2025-11-12T08:26:14.21423898Z vite v5.4.20 building for production...
+2025-11-12T08:26:14.265113864Z transforming...
+2025-11-12T08:26:14.503102727Z Browserslist: browsers data (caniuse-lite) is 13 months old. Please run:
+2025-11-12T08:26:14.503120639Z   npx update-browserslist-db@latest
+2025-11-12T08:26:14.503125819Z   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+2025-11-12T08:26:15.366993626Z 
+2025-11-12T08:26:15.367021928Z A PostCSS plugin did not pass the `from` option to `postcss.parse`. This may cause imported assets to be incorrectly transformed. If you've recently added a PostCSS plugin that raised this warning, please contact the package author to fix the issue.
+2025-11-12T08:26:18.882587849Z ✓ 2089 modules transformed.
+2025-11-12T08:26:19.332672501Z rendering chunks...
+2025-11-12T08:26:19.344022324Z computing gzip size...
+2025-11-12T08:26:19.362473472Z ../dist/public/index.html                   0.95 kB │ gzip:   0.52 kB
+2025-11-12T08:26:19.362557336Z ../dist/public/assets/index-CTMtclsd.css   93.06 kB │ gzip:  15.22 kB
+2025-11-12T08:26:19.362659672Z ../dist/public/assets/index-pxsYuasj.js   664.07 kB │ gzip: 204.76 kB
+2025-11-12T08:26:19.362705404Z 
+2025-11-12T08:26:19.362711684Z (!) Some chunks are larger than 500 kB after minification. Consider:
+2025-11-12T08:26:19.362728745Z - Using dynamic import() to code-split the application
+2025-11-12T08:26:19.362732695Z - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+2025-11-12T08:26:19.362735055Z - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+2025-11-12T08:26:19.362901144Z ✓ built in 5.13s
+2025-11-12T08:26:38.401587278Z ==> Uploading build...
+2025-11-12T08:26:50.5534818Z ==> Uploaded in 9.1s. Compression took 3.0s
+2025-11-12T08:26:50.61273327Z ==> Build successful 🎉
+2025-11-12T08:26:56.7796695Z ==> Deploying...
+2025-11-12T08:27:28.953536327Z ==> Running 'npm run start'
+2025-11-12T08:27:29.959346637Z 
+2025-11-12T08:27:29.959373217Z > rest-express@1.0.0 start
+2025-11-12T08:27:29.959379347Z > NODE_ENV=production tsx server/index.ts
+2025-11-12T08:27:29.959382507Z 
+2025-11-12T08:27:51.858131946Z Warning: connect.session() MemoryStore is not
+2025-11-12T08:27:51.858161806Z designed for a production environment, as it will leak
+2025-11-12T08:27:51.858166816Z memory, and will not scale past a single process.
+2025-11-12T08:27:52.15803685Z /opt/render/project/src/server/vite.ts:74
+2025-11-12T08:27:52.158053481Z     throw new Error(
+2025-11-12T08:27:52.158058901Z           ^
+2025-11-12T08:27:52.158063091Z 
+2025-11-12T08:27:52.158067521Z 
+2025-11-12T08:27:52.158072201Z Error: Could not find the build directory: /opt/render/project/src/server/public, make sure to build the client first
+2025-11-12T08:27:52.158077791Z     at serveStatic (/opt/render/project/src/server/vite.ts:74:11)
+2025-11-12T08:27:52.158082142Z     at initializeApp (/opt/render/project/src/server/index.ts:84:5)
+2025-11-12T08:27:52.158086352Z 
+2025-11-12T08:27:52.158090482Z Node.js v22.16.0
+2025-11-12T08:27:55.04915987Z ==> Exited with status 1
+2025-11-12T08:27:55.19507908Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
+2025-11-12T08:27:58.926310831Z ==> Running 'npm run start'
+2025-11-12T08:27:59.928438958Z 
+2025-11-12T08:27:59.928459938Z > rest-express@1.0.0 start
+2025-11-12T08:27:59.928465368Z > NODE_ENV=production tsx server/index.ts
+2025-11-12T08:27:59.928467778Z 
+2025-11-12T08:28:22.022880762Z Warning: connect.session() MemoryStore is not
+2025-11-12T08:28:22.022910273Z designed for a production environment, as it will leak
+2025-11-12T08:28:22.022915403Z memory, and will not scale past a single process.
+2025-11-12T08:28:22.4205563Z /opt/render/project/src/server/vite.ts:74
+2025-11-12T08:28:22.42057594Z     throw new Error(
+2025-11-12T08:28:22.420580711Z           ^
+2025-11-12T08:28:22.420585171Z 
+2025-11-12T08:28:22.420588811Z 
+2025-11-12T08:28:22.420594561Z Error: Could not find the build directory: /opt/render/project/src/server/public, make sure to build the client first
+2025-11-12T08:28:22.420600951Z     at serveStatic (/opt/render/project/src/server/vite.ts:74:11)
+2025-11-12T08:28:22.420606021Z     at initializeApp (/opt/render/project/src/server/index.ts:84:5)
+2025-11-12T08:28:22.420609851Z 
+2025-11-12T08:28:22.420614151Z Node.js v22.16.0

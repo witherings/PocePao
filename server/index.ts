@@ -1,17 +1,30 @@
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import { passport } from "./auth";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { pool } from "./db";
 import path from "path";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Session store configuration
+const PgStore = connectPgSimple(session);
+const sessionStore = process.env.DATABASE_URL && pool
+  ? new PgStore({
+      pool: pool,
+      tableName: 'session',
+      createTableIfMissing: true,
+    })
+  : undefined;
+
 // Session middleware
 app.use(
   session({
+    store: sessionStore,
     secret: process.env.SESSION_SECRET || "pokepao-secret-key-change-in-production",
     resave: false,
     saveUninitialized: false,
