@@ -10,6 +10,9 @@ import type { AdminUser } from "@shared/schema";
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
+      if (!db) {
+        return done(new Error("Database not initialized"));
+      }
       const users = await db.select().from(adminUsers).where(eq(adminUsers.username, username));
 
       if (users.length === 0) {
@@ -38,6 +41,9 @@ passport.serializeUser((user: any, done) => {
 // Deserialize user from session
 passport.deserializeUser(async (id: string, done) => {
   try {
+    if (!db) {
+      return done(new Error("Database not initialized"));
+    }
     const users = await db.select().from(adminUsers).where(eq(adminUsers.id, id));
     if (users.length === 0) {
       return done(null, false);
