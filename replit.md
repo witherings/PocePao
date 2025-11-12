@@ -1,63 +1,24 @@
-# PokePao Poke Bowl Café - Replit Project
+# PokePao Poke Bowl Café - Production Ready
 
 ## Overview
-This repository contains a poke bowl restaurant website project with two main components:
-1. **1_OLD_SITE_BACKEND** - Legacy PHP-based backend (not currently in use)
-2. **2_NEW_SITE_DESIGN** - Modern full-stack React + Express application (active project)
-
-The active application is a modern e-commerce platform for PokePao, a Hawaiian poke bowl restaurant in Hamburg, Germany. It enables customers to browse the menu, manage their cart, make reservations, and learn about the restaurant.
+This is a modern full-stack e-commerce platform for PokePao, a Hawaiian poke bowl restaurant in Hamburg, Germany. The application enables customers to browse the menu, manage their cart, make reservations, and learn about the restaurant.
 
 ## Project Structure
+The project is now cleaned and ready for production deployment on Render.com or similar platforms.
 
-### Active Application: 2_NEW_SITE_DESIGN
-The main application is located in the `2_NEW_SITE_DESIGN` directory. This is a full-stack TypeScript application with:
-- **Frontend**: React 18 with Vite, Wouter for routing, Tailwind CSS
-- **Backend**: Express.js with RESTful API
-- **Database**: PostgreSQL (via Neon) with fallback to in-memory storage
-- **ORM**: Drizzle ORM
-
-All development and deployment commands must be run from within the `2_NEW_SITE_DESIGN` directory.
-
-## Development Setup
-
-### Prerequisites
-- Node.js 20 (already configured via Replit modules)
-- PostgreSQL (optional - app has in-memory fallback)
-
-### Running the Application
-The application is configured to run automatically via Replit workflows:
-- **Workflow Name**: "Start application"
-- **Command**: `cd 2_NEW_SITE_DESIGN && npm run dev`
-- **Port**: 5000 (webview enabled)
-
-The server runs on `0.0.0.0:5000` and is configured to allow all hosts for Replit's proxy.
-
-### Manual Commands
-From the root directory:
-```bash
-cd 2_NEW_SITE_DESIGN
-npm install          # Install dependencies
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
 ```
-
-## Deployment
-
-The project is configured for Replit Autoscale deployment:
-- **Build**: `cd 2_NEW_SITE_DESIGN && npm run build`
-- **Run**: `cd 2_NEW_SITE_DESIGN && npm run start`
-- **Deployment Type**: Autoscale (stateless web application)
-
-### Environment Variables
-The application uses the following environment variables:
-- `DATABASE_URL` - PostgreSQL connection string (Neon serverless)
-- `PORT` - Server port (defaults to 5000)
-- `TELEGRAM_BOT_TOKEN` - Telegram bot token for notifications
-- `TELEGRAM_CHAT_ID` - Telegram chat ID for restaurant notifications
-- `ADMIN_USER` - Admin username (default: admin)
-- `ADMIN_PASS` - Admin password (bcrypt hashed in database)
-- `SESSION_SECRET` - Secret key for session encryption
+/
+├── client/          # React frontend source code
+├── server/          # Express backend source code
+├── shared/          # Shared TypeScript types and schemas
+├── api/             # API route definitions
+├── public/          # Static assets
+├── migrations/      # Drizzle database migrations
+├── package.json     # Dependencies and scripts
+├── tsconfig.json    # TypeScript configuration
+├── vite.config.ts   # Vite build configuration
+└── drizzle.config.ts # Database ORM configuration
+```
 
 ## Technical Stack
 
@@ -74,15 +35,111 @@ The application uses the following environment variables:
 - Express.js on Node.js
 - TypeScript
 - RESTful API design
-- In-memory storage (MemStorage) with PostgreSQL support
+- PostgreSQL via Neon serverless
 - Drizzle ORM
-- Session management support
+- Passport.js authentication
+- express-session with CSRF protection
 
 ### Data Storage
-- **Primary**: PostgreSQL via Neon serverless (active)
+- **Primary**: PostgreSQL via Neon serverless
 - **ORM**: Drizzle ORM with type-safe queries
 - **Cart Data**: Client-side localStorage via Zustand
-- **Sessions**: express-session with CSRF protection (sameSite=strict)
+- **Sessions**: express-session with sameSite=strict cookies
+
+## Scripts
+
+### Development
+```bash
+npm run dev          # Start development server (port 5000)
+npm run check        # TypeScript type checking
+```
+
+### Database
+```bash
+npm run db:push      # Push schema changes to database
+npm run db:seed      # Seed database with menu items
+npm run db:create-admin # Create admin user (requires ADMIN_PASSWORD env var)
+```
+
+### Production
+```bash
+npm run build        # Build for production (pushes schema + builds frontend)
+npm run start        # Start production server
+```
+
+## Environment Variables
+
+Required for production deployment:
+
+1. **DATABASE_URL** (required)
+   - PostgreSQL connection string
+   - Example: `postgresql://user:password@host:5432/database`
+   - Get from Neon, Railway, or other PostgreSQL provider
+
+2. **SESSION_SECRET** (required)
+   - Secret key for session encryption
+   - Generate a random string (min 32 characters)
+   - Example: `openssl rand -base64 32`
+
+3. **ADMIN_USERNAME** (optional, default: "admin")
+   - Username for the first admin user
+   - Used only when running `npm run db:create-admin`
+
+4. **ADMIN_PASSWORD** (required for admin creation)
+   - Password for the first admin user
+   - Required when running `npm run db:create-admin`
+   - After creation, this can be removed from env vars
+
+5. **TELEGRAM_BOT_TOKEN** (optional)
+   - Telegram bot token for notifications
+   - Get from @BotFather on Telegram
+
+6. **TELEGRAM_CHAT_ID** (optional)
+   - Telegram chat ID for restaurant notifications
+   - Get from @userinfobot on Telegram
+
+7. **NODE_ENV** (auto-set by Render)
+   - Set to "production" in production
+   - Render sets this automatically
+
+8. **PORT** (auto-set by Render)
+   - Server port
+   - Render sets this automatically (usually 10000)
+
+## Deployment on Render.com
+
+### Step 1: Create Web Service
+1. Connect your GitHub repository to Render
+2. Create a new **Web Service**
+3. Set the following:
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm run start`
+   - **Environment**: Node
+
+### Step 2: Configure Environment Variables
+Add all required environment variables in Render dashboard:
+- DATABASE_URL (from your PostgreSQL provider)
+- SESSION_SECRET (generate with `openssl rand -base64 32`)
+- TELEGRAM_BOT_TOKEN (optional)
+- TELEGRAM_CHAT_ID (optional)
+
+### Step 3: Set up PostgreSQL Database
+1. Create a PostgreSQL database (Neon, Render, Railway, etc.)
+2. Copy the connection string to DATABASE_URL
+3. The build script will automatically push schema to database
+
+### Step 4: Create Admin User
+After first deployment:
+1. Go to Render dashboard → Shell
+2. Run: `ADMIN_PASSWORD=your_secure_password npm run db:create-admin`
+3. Save credentials securely
+4. (Optional) Remove ADMIN_PASSWORD from environment variables
+
+### Step 5: Seed Database (Optional)
+To populate the database with initial menu items:
+```bash
+npm run db:seed
+```
 
 ## API Endpoints
 
@@ -98,7 +155,7 @@ The application uses the following environment variables:
 - `POST /api/orders` - Create new order (sends Telegram notification)
 
 ### Protected Admin Endpoints (require authentication)
-- `POST /api/admin/login` - Admin login with Passport.js
+- `POST /api/admin/login` - Admin login
 - `POST /api/admin/logout` - Admin logout
 - `GET /api/admin/me` - Check auth status
 - `GET /api/admin/categories` - Get all categories
@@ -118,33 +175,11 @@ The application uses the following environment variables:
 - `GET /api/admin/gallery` - Get all gallery images
 - `DELETE /api/admin/gallery/:id` - Delete gallery image
 
-## Legacy Backend (1_OLD_SITE_BACKEND)
-This directory contains an old PHP-based administrative backend that is not currently active or integrated with the new React application. It's preserved for reference but is not used in the current setup.
-
-## Recent Changes
-- **November 12, 2025**: Major migration completed
-  - Migrated from PHP/MySQL to TypeScript/Next.js/PostgreSQL
-  - Database seeded with 6 categories, 48 menu items, 53 ingredients
-  - Replaced email notifications with Telegram bot notifications
-  - Implemented admin panel with Passport.js authentication
-  - Added protected CRUD API endpoints for menu management
-  - Frontend components (Menu, Reservations, Cart) connected to PostgreSQL
-  - CSRF protection via sameSite=strict cookies
-  - Created admin UI: login page and dashboard
-- Initial Replit environment setup completed
-- Node.js 20 and PostgreSQL modules configured
-- Workflow configured for automatic dev server startup on port 5000
-- Deployment configuration set for Autoscale deployment
-- Vite configured with `allowedHosts: true` for Replit proxy compatibility
-
-## User Preferences
-None recorded yet.
-
 ## Admin Panel
 
 ### Access
 - URL: `/admin/login`
-- Default credentials: `admin` / (set via ADMIN_PASS env variable)
+- Use credentials created with `db:create-admin` script
 - Session-based authentication with Passport.js
 
 ### Features
@@ -157,7 +192,7 @@ None recorded yet.
 
 ## Notifications
 
-The application sends notifications to Telegram instead of email:
+The application sends notifications to Telegram:
 - **New orders**: Customer name, phone, items, total, pickup/dine-in details
 - **New reservations**: Customer name, guests, date, time, phone
 
@@ -175,8 +210,19 @@ The PostgreSQL database contains the following tables:
 - `gallery_images` - Restaurant gallery photos
 - `admin_users` - Admin panel users with bcrypt hashed passwords
 
+## Recent Changes
+- **November 12, 2025**: Production cleanup completed
+  - Moved all files to project root for clean deployment
+  - Removed legacy folders and Replit-specific files
+  - Updated build scripts for Render deployment
+  - Added admin user creation script
+  - Configured .gitignore for production
+  - Added bcryptjs dependency for password hashing
+  - Ready for deployment on Render.com or similar platforms
+
 ## Notes
 - The application uses PostgreSQL via Neon serverless
 - All static assets and images are served from the Express server
 - The Vite dev server is configured in middleware mode with HMR support
 - Database migrations are managed via Drizzle ORM (`npm run db:push`)
+- Admin users must be created via CLI script after first deployment
