@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X, Phone } from "lucide-react";
 import { FaWhatsapp, FaInstagram, FaTiktok } from "react-icons/fa";
@@ -7,18 +7,6 @@ import { Button } from "@/components/ui/button";
 export function Header() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Close mobile menu on scroll
-  useEffect(() => {
-    if (!mobileMenuOpen) return;
-    
-    const handleScroll = () => {
-      setMobileMenuOpen(false);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [mobileMenuOpen]);
 
   const navItems = [
     { href: "/", label: "Startseite" },
