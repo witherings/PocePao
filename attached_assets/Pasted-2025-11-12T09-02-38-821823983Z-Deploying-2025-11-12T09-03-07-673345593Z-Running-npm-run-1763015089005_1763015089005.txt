@@ -1,0 +1,107 @@
+2025-11-12T09:02:38.821823983Z ==> Deploying...
+2025-11-12T09:03:07.673345593Z ==> Running 'npm run db:seed && ADMIN_PASSWORD=mk509918 npm run db:create-admin'
+2025-11-12T09:03:08.861303766Z 
+2025-11-12T09:03:08.861339337Z > rest-express@1.0.0 db:seed
+2025-11-12T09:03:08.861344257Z > tsx server/seed.ts
+2025-11-12T09:03:08.861346657Z 
+2025-11-12T09:03:20.563149181Z 🌱 Starting database seeding...
+2025-11-12T09:03:20.563197852Z 
+2025-11-12T09:03:20.563308185Z 🗑️  Clearing existing data...
+2025-11-12T09:03:20.86387955Z ❌ Error seeding database: ErrorEvent {
+2025-11-12T09:03:20.86389888Z   [Symbol(kTarget)]: WebSocket {
+2025-11-12T09:03:20.86390387Z     _events: [Object: null prototype] {
+2025-11-12T09:03:20.8639096Z       error: [Function],
+2025-11-12T09:03:20.86391374Z       message: [Function],
+2025-11-12T09:03:20.86391741Z       close: [Function],
+2025-11-12T09:03:20.86392096Z       open: [Function]
+2025-11-12T09:03:20.86392469Z     },
+2025-11-12T09:03:20.86392872Z     _eventsCount: 4,
+2025-11-12T09:03:20.863932371Z     _maxListeners: undefined,
+2025-11-12T09:03:20.863939281Z     _binaryType: 'arraybuffer',
+2025-11-12T09:03:20.863943061Z     _closeCode: 1006,
+2025-11-12T09:03:20.863946761Z     _closeFrameReceived: false,
+2025-11-12T09:03:20.863950381Z     _closeFrameSent: false,
+2025-11-12T09:03:20.863953951Z     _closeMessage: <Buffer >,
+2025-11-12T09:03:20.863958111Z     _closeTimer: null,
+2025-11-12T09:03:20.863962191Z     _errorEmitted: true,
+2025-11-12T09:03:20.863966071Z     _extensions: {},
+2025-11-12T09:03:20.863970051Z     _paused: false,
+2025-11-12T09:03:20.863973591Z     _protocol: '',
+2025-11-12T09:03:20.863977161Z     _readyState: 3,
+2025-11-12T09:03:20.863980781Z     _receiver: null,
+2025-11-12T09:03:20.863984341Z     _sender: null,
+2025-11-12T09:03:20.863987952Z     _socket: null,
+2025-11-12T09:03:20.863991542Z     _bufferedAmount: 0,
+2025-11-12T09:03:20.863997402Z     _isServer: false,
+2025-11-12T09:03:20.864001172Z     _redirects: 0,
+2025-11-12T09:03:20.864004812Z     _autoPong: true,
+2025-11-12T09:03:20.864008492Z     _url: 'wss://dpg-d4a48ber433s73ed9hd0-a/v2',
+2025-11-12T09:03:20.864012222Z     _req: null,
+2025-11-12T09:03:20.864015892Z     [Symbol(shapeMode)]: false,
+2025-11-12T09:03:20.864019902Z     [Symbol(kCapture)]: false
+2025-11-12T09:03:20.864023502Z   },
+2025-11-12T09:03:20.864027172Z   [Symbol(kType)]: 'error',
+2025-11-12T09:03:20.864031673Z   [Symbol(kError)]: Error: connect ECONNREFUSED 10.218.48.109:443
+2025-11-12T09:03:20.864035333Z       at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1636:16) {
+2025-11-12T09:03:20.864039063Z     errno: -111,
+2025-11-12T09:03:20.864042673Z     code: 'ECONNREFUSED',
+2025-11-12T09:03:20.864046633Z     syscall: 'connect',
+2025-11-12T09:03:20.864051123Z     address: '10.218.48.109',
+2025-11-12T09:03:20.864055373Z     port: 443
+2025-11-12T09:03:20.864059423Z   },
+2025-11-12T09:03:20.864063853Z   [Symbol(kMessage)]: 'connect ECONNREFUSED 10.218.48.109:443'
+2025-11-12T09:03:20.864067653Z }
+2025-11-12T09:03:27.37842684Z ==> Exited with status 1
+2025-11-12T09:03:27.522726Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
+2025-11-12T09:03:32.217060274Z ==> Running 'npm run db:seed && ADMIN_PASSWORD=mk509918 npm run db:create-admin'
+2025-11-12T09:03:33.225292624Z 
+2025-11-12T09:03:33.225317765Z > rest-express@1.0.0 db:seed
+2025-11-12T09:03:33.225322305Z > tsx server/seed.ts
+2025-11-12T09:03:33.225324665Z 
+2025-11-12T09:03:43.608121868Z 🌱 Starting database seeding...
+2025-11-12T09:03:43.608144139Z 
+2025-11-12T09:03:43.608307842Z 🗑️  Clearing existing data...
+2025-11-12T09:03:43.918256505Z ❌ Error seeding database: ErrorEvent {
+2025-11-12T09:03:43.918280015Z   [Symbol(kTarget)]: WebSocket {
+2025-11-12T09:03:43.918284635Z     _events: [Object: null prototype] {
+2025-11-12T09:03:43.918289105Z       error: [Function],
+2025-11-12T09:03:43.918293225Z       message: [Function],
+2025-11-12T09:03:43.918297226Z       close: [Function],
+2025-11-12T09:03:43.918301546Z       open: [Function]
+2025-11-12T09:03:43.918305776Z     },
+2025-11-12T09:03:43.918309716Z     _eventsCount: 4,
+2025-11-12T09:03:43.918313756Z     _maxListeners: undefined,
+2025-11-12T09:03:43.918317686Z     _binaryType: 'arraybuffer',
+2025-11-12T09:03:43.918321666Z     _closeCode: 1006,
+2025-11-12T09:03:43.918325526Z     _closeFrameReceived: false,
+2025-11-12T09:03:43.918329576Z     _closeFrameSent: false,
+2025-11-12T09:03:43.918333386Z     _closeMessage: <Buffer >,
+2025-11-12T09:03:43.918337176Z     _closeTimer: null,
+2025-11-12T09:03:43.918340766Z     _errorEmitted: true,
+2025-11-12T09:03:43.918344417Z     _extensions: {},
+2025-11-12T09:03:43.918348287Z     _paused: false,
+2025-11-12T09:03:43.918352717Z     _protocol: '',
+2025-11-12T09:03:43.918356637Z     _readyState: 3,
+2025-11-12T09:03:43.918360597Z     _receiver: null,
+2025-11-12T09:03:43.918364297Z     _sender: null,
+2025-11-12T09:03:43.918368647Z     _socket: null,
+2025-11-12T09:03:43.918372517Z     _bufferedAmount: 0,
+2025-11-12T09:03:43.918376287Z     _isServer: false,
+2025-11-12T09:03:43.918380187Z     _redirects: 0,
+2025-11-12T09:03:43.918384027Z     _autoPong: true,
+2025-11-12T09:03:43.918388118Z     _url: 'wss://dpg-d4a48ber433s73ed9hd0-a/v2',
+2025-11-12T09:03:43.918392258Z     _req: null,
+2025-11-12T09:03:43.918396158Z     [Symbol(shapeMode)]: false,
+2025-11-12T09:03:43.918400208Z     [Symbol(kCapture)]: false
+2025-11-12T09:03:43.918403958Z   },
+2025-11-12T09:03:43.918408148Z   [Symbol(kType)]: 'error',
+2025-11-12T09:03:43.918412708Z   [Symbol(kError)]: Error: connect ECONNREFUSED 10.218.48.109:443
+2025-11-12T09:03:43.918416738Z       at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1636:16) {
+2025-11-12T09:03:43.918421078Z     errno: -111,
+2025-11-12T09:03:43.918425228Z     code: 'ECONNREFUSED',
+2025-11-12T09:03:43.918429798Z     syscall: 'connect',
+2025-11-12T09:03:43.918434458Z     address: '10.218.48.109',
+2025-11-12T09:03:43.918438879Z     port: 443
+2025-11-12T09:03:43.918443199Z   },
+2025-11-12T09:03:43.918447949Z   [Symbol(kMessage)]: 'connect ECONNREFUSED 10.218.48.109:443'
+2025-11-12T09:03:43.918452249Z }

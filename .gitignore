@@ -1,0 +1,21 @@
+node_modules
+dist
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+.vercel
+.env
+.env.local
+
+# Replit
+.replit
+replit.nix
+.cache
+.local
+.upm
+.config
+
+# IDE
+.vscode
+.idea

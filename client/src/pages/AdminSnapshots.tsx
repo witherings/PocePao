@@ -1,0 +1,296 @@
+import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { 
+  Save, 
+  Rocket, 
+  Trash2, 
+  Clock,
+  CheckCircle,
+  FileText
+} from "lucide-react";
+import { format } from "date-fns";
+
+interface Snapshot {
+  id: string;
+  name: string;
+  description: string | null;
+  isPublished: number;
+  publishedAt: string | null;
+  createdAt: string;
+}
+
+export default function AdminSnapshots() {
+  const { toast } = useToast();
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [newSnapshotName, setNewSnapshotName] = useState("");
+  const [newSnapshotDescription, setNewSnapshotDescription] = useState("");
+
+  // Fetch all snapshots
+  const { data: snapshots, isLoading } = useQuery<Snapshot[]>({
+    queryKey: ["/api/admin/snapshots"],
+  });
+
+  // Fetch published snapshot
+  const { data: publishedInfo } = useQuery({
+    queryKey: ["/api/admin/snapshots/published"],
+  });
+
+  // Create snapshot mutation
+  const createMutation = useMutation({
+    mutationFn: async (data: { name: string; description: string }) => {
+      return await apiRequest("POST", "/api/admin/snapshots", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/snapshots"] });
+      toast({
+        title: "Snapshot erstellt",
+        description: "Ihr Snapshot wurde erfolgreich gespeichert",
+      });
+      setIsCreateDialogOpen(false);
+      setNewSnapshotName("");
+      setNewSnapshotDescription("");
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Fehler",
+        description: error.message || "Snapshot konnte nicht erstellt werden",
+      });
+    },
+  });
+
+  // Publish snapshot mutation
+  const publishMutation = useMutation({
+    mutationFn: async (snapshotId: string) => {
+      return await apiRequest("POST", `/api/admin/snapshots/${snapshotId}/publish`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/snapshots"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/snapshots/published"] });
+      toast({
+        title: "Veröffentlicht!",
+        description: "Snapshot ist jetzt live",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Fehler",
+        description: error.message || "Snapshot konnte nicht veröffentlicht werden",
+      });
+    },
+  });
+
+  // Delete snapshot mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (snapshotId: string) => {
+      return await apiRequest("DELETE", `/api/admin/snapshots/${snapshotId}`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/snapshots"] });
+      toast({
+        title: "Gelöscht",
+        description: "Snapshot wurde gelöscht",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Fehler",
+        description: error.message || "Snapshot konnte nicht gelöscht werden",
+      });
+    },
+  });
+
+  const handleCreateSnapshot = () => {
+    if (!newSnapshotName.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Fehler",
+        description: "Bitte geben Sie einen Namen ein",
+      });
+      return;
+    }
+    createMutation.mutate({
+      name: newSnapshotName,
+      description: newSnapshotDescription,
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ocean mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Laden...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const currentPublishedId = (publishedInfo as any)?.currentSnapshotId;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8">
+      <div className="container mx-auto max-w-6xl">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="font-poppins text-4xl font-bold text-foreground mb-2">
+              Content Snapshots
+            </h1>
+            <p className="text-muted-foreground font-lato">
+              Erstellen und verwalten Sie Content-Versionen ("Save Game")
+            </p>
+          </div>
+          <Button onClick={() => setIsCreateDialogOpen(true)} size="lg">
+            <Save className="w-5 h-5 mr-2" />
+            Neuer Snapshot
+          </Button>
+        </div>
+
+        {snapshots && snapshots.length === 0 ? (
+          <Card className="p-12 text-center">
+            <FileText className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="font-poppins text-xl font-semibold mb-2">
+              Keine Snapshots vorhanden
+            </h3>
+            <p className="text-muted-foreground mb-6">
+              Erstellen Sie Ihren ersten Content-Snapshot
+            </p>
+            <Button onClick={() => setIsCreateDialogOpen(true)}>
+              <Save className="w-4 h-4 mr-2" />
+              Snapshot erstellen
+            </Button>
+          </Card>
+        ) : (
+          <div className="grid gap-6">
+            {snapshots?.map((snapshot) => {
+              const isPublished = snapshot.id === currentPublishedId;
+              
+              return (
+                <Card key={snapshot.id} className={`p-6 ${isPublished ? 'border-green-500 border-2' : ''}`}>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="font-poppins text-2xl font-bold text-foreground">
+                          {snapshot.name}
+                        </h3>
+                        {isPublished && (
+                          <span className="inline-flex items-center px-3 py-1 bg-green-500 text-white rounded-full text-sm font-semibold">
+                            <CheckCircle className="w-4 h-4 mr-1" />
+                            Live
+                          </span>
+                        )}
+                      </div>
+                      {snapshot.description && (
+                        <p className="text-muted-foreground mb-4 font-lato">
+                          {snapshot.description}
+                        </p>
+                      )}
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-4 h-4" />
+                          Erstellt: {format(new Date(snapshot.createdAt), "dd.MM.yyyy HH:mm")}
+                        </div>
+                        {snapshot.publishedAt && (
+                          <div className="flex items-center gap-1">
+                            <Rocket className="w-4 h-4" />
+                            Veröffentlicht: {format(new Date(snapshot.publishedAt), "dd.MM.yyyy HH:mm")}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      {!isPublished && (
+                        <Button
+                          onClick={() => publishMutation.mutate(snapshot.id)}
+                          disabled={publishMutation.isPending}
+                          variant="default"
+                        >
+                          <Rocket className="w-4 h-4 mr-2" />
+                          Live schalten
+                        </Button>
+                      )}
+                      {!isPublished && (
+                        <Button
+                          onClick={() => {
+                            if (confirm("Snapshot wirklich löschen?")) {
+                              deleteMutation.mutate(snapshot.id);
+                            }
+                          }}
+                          disabled={deleteMutation.isPending}
+                          variant="destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+
+        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Neuer Snapshot</DialogTitle>
+              <DialogDescription>
+                Erstellen Sie einen neuen Snapshot des aktuellen Contents
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="name">Name *</Label>
+                <Input
+                  id="name"
+                  placeholder="z.B. Sommer-Menü 2025"
+                  value={newSnapshotName}
+                  onChange={(e) => setNewSnapshotName(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="description">Beschreibung</Label>
+                <Textarea
+                  id="description"
+                  placeholder="Optional: Beschreibung dieser Version"
+                  value={newSnapshotDescription}
+                  onChange={(e) => setNewSnapshotDescription(e.target.value)}
+                  rows={3}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                Abbrechen
+              </Button>
+              <Button 
+                onClick={handleCreateSnapshot}
+                disabled={createMutation.isPending}
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {createMutation.isPending ? "Speichern..." : "Snapshot erstellen"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
+  );
+}

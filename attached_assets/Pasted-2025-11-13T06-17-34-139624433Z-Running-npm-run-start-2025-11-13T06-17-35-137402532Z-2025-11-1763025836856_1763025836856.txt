@@ -1,0 +1,81 @@
+2025-11-13T06:17:34.139624433Z ==> Running 'npm run start'
+2025-11-13T06:17:35.137402532Z 
+2025-11-13T06:17:35.137434012Z > rest-express@1.0.0 start
+2025-11-13T06:17:35.137438632Z > NODE_ENV=production tsx server/index.ts
+2025-11-13T06:17:35.137440933Z 
+2025-11-13T06:17:58.328891142Z 6:17:58 AM [express] serving on port 10000
+2025-11-13T06:18:03.029328786Z 6:18:03 AM [express] GET /api/gallery 500 in 244ms :: {"error":"Failed to fetch gallery images"}
+2025-11-13T06:18:07.334632861Z 6:18:07 AM [express] GET /api/categories 500 in 7ms :: {"error":"Failed to fetch categories"}
+2025-11-13T06:18:07.335755163Z 6:18:07 AM [express] GET /api/menu-items 500 in 4ms :: {"error":"Failed to fetch menu items"}
+2025-11-13T06:18:07.338742563Z 6:18:07 AM [express] GET /api/ingredients 500 in 2ms :: {"error":"Failed to fetch ingredients"}
+2025-11-13T06:18:10.496189941Z 6:18:10 AM [express] GET /api/ingredients 500 in 8ms :: {"error":"Failed to fetch ingredients"}
+2025-11-13T06:18:10.497273622Z 6:18:10 AM [express] GET /api/categories 500 in 4ms :: {"error":"Failed to fetch categories"}
+2025-11-13T06:18:10.50065802Z 6:18:10 AM [express] GET /api/menu-items 500 in 3ms :: {"error":"Failed to fetch menu items"}
+2025-11-13T06:18:11.056554942Z 6:18:11 AM [express] GET /api/gallery 500 in 5ms :: {"error":"Failed to fetch gallery images"}
+2025-11-13T06:18:17.7009218Z 6:18:17 AM [express] GET /api/categories 500 in 6ms :: {"error":"Failed to fetch categories"}
+2025-11-13T06:18:17.702080553Z 6:18:17 AM [express] GET /api/ingredients 500 in 4ms :: {"error":"Failed to fetch ingredients"}
+2025-11-13T06:18:17.705059023Z 6:18:17 AM [express] GET /api/menu-items 500 in 2ms :: {"error":"Failed to fetch menu items"}
+2025-11-13T06:19:58.797495176Z 6:19:58 AM [express] GET /api/ingredients 500 in 5ms :: {"error":"Failed to fetch ingredients"}
+2025-11-13T06:19:58.798348323Z 6:19:58 AM [express] GET /api/categories 500 in 3ms :: {"error":"Failed to fetch categories"}
+2025-11-13T06:19:58.829778795Z 6:19:58 AM [express] GET /api/menu-items 500 in 26ms :: {"error":"Failed to fetch menu items"}
+2025-11-13T06:25:41.405783712Z ==> Deploying...
+2025-11-13T06:25:51.789500441Z ==> Running 'npm run start'
+2025-11-13T06:25:52.997561549Z 
+2025-11-13T06:25:52.997585429Z > rest-express@1.0.0 start
+2025-11-13T06:25:52.997590979Z > NODE_ENV=production tsx server/index.ts
+2025-11-13T06:25:52.997593199Z 
+2025-11-13T06:26:15.499182532Z 6:26:15 AM [express] serving on port 10000
+2025-11-13T06:26:23.191210347Z ==> Available at your primary URL https://pocepao.onrender.com
+2025-11-13T06:26:23.376362162Z ==> 
+2025-11-13T06:26:23.558572606Z ==> ///////////////////////////////////////////////////////////
+2025-11-13T06:31:23.87969572Z ==> Detected service running on port 10000
+2025-11-13T06:31:24.235238421Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2025-11-13T09:04:21.252686542Z ==> Deploying...
+2025-11-13T09:19:54.085523577Z ==> No open ports detected, continuing to scan...
+2025-11-13T09:19:54.645413996Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2025-11-13T09:19:55.148076206Z ==> Timed Out
+2025-11-13T09:19:55.294546173Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
+2025-11-13T09:20:00.104356002Z ==> Running 'npm run start'
+2025-11-13T09:20:01.120770372Z 
+2025-11-13T09:20:01.120794383Z > rest-express@1.0.0 start
+2025-11-13T09:20:01.120798803Z > NODE_ENV=production tsx server/index.ts
+2025-11-13T09:20:01.120801053Z 
+2025-11-13T09:20:22.29843027Z ==> Running 'npm run start'
+2025-11-13T09:20:23.307911808Z 
+2025-11-13T09:20:23.307940108Z > rest-express@1.0.0 start
+2025-11-13T09:20:23.307948199Z > NODE_ENV=production tsx server/index.ts
+2025-11-13T09:20:23.307950899Z 
+2025-11-13T09:20:25.119142613Z 9:20:25 AM [express] serving on port 10000
+2025-11-13T09:20:48.099100575Z 9:20:47 AM [express] serving on port 10000
+2025-11-13T09:21:14.131748901Z ==> Deploying...
+2025-11-13T09:21:38.617530848Z ==> Running 'npm run start'
+2025-11-13T09:21:39.626432438Z 
+2025-11-13T09:21:39.626450208Z > rest-express@1.0.0 start
+2025-11-13T09:21:39.626454968Z > NODE_ENV=production tsx server/index.ts
+2025-11-13T09:21:39.626457988Z 
+2025-11-13T09:22:02.717051153Z 
+2025-11-13T09:22:02.717074833Z 🔍 Checking database initialization status...
+2025-11-13T09:22:03.020648702Z ❌ Error during database initialization: ErrorEvent {
+2025-11-13T09:22:03.020676793Z   type: 'error',
+2025-11-13T09:22:03.020680433Z   defaultPrevented: false,
+2025-11-13T09:22:03.020683323Z   cancelable: false,
+2025-11-13T09:22:03.020685663Z   timeStamp: 22505.036539
+2025-11-13T09:22:03.020687933Z }
+2025-11-13T09:22:03.020690913Z    Server will continue, but database may not be properly initialized.
+2025-11-13T09:22:03.020693303Z    Check DATABASE_URL and database connection settings.
+2025-11-13T09:22:03.511337807Z 9:22:03 AM [express] serving on port 10000
+2025-11-13T09:22:05.209019369Z ==> Your service is live 🎉
+2025-11-13T09:22:05.390139583Z ==> 
+2025-11-13T09:22:05.578459757Z ==> ///////////////////////////////////////////////////////////
+2025-11-13T09:22:05.762159071Z ==> 
+2025-11-13T09:22:05.934025536Z ==> Available at your primary URL https://pocepao.onrender.com
+2025-11-13T09:22:06.110541121Z ==> 
+2025-11-13T09:22:06.280742316Z ==> ///////////////////////////////////////////////////////////
+2025-11-13T09:23:44.356548678Z 9:23:44 AM [express] GET /api/gallery 500 in 8ms :: {"error":"Failed to fetch gallery images"}
+2025-11-13T09:23:45.375967764Z 9:23:45 AM [express] GET /api/menu-items 500 in 5ms :: {"error":"Failed to fetch menu items"}
+2025-11-13T09:23:45.377200295Z 9:23:45 AM [express] GET /api/categories 500 in 3ms :: {"error":"Failed to fetch categories"}
+2025-11-13T09:23:45.414700486Z 9:23:45 AM [express] GET /api/ingredients 500 in 20ms :: {"error":"Failed to fetch ingredients"}
+2025-11-13T09:23:46.516260783Z 9:23:46 AM [express] GET /api/gallery 500 in 3ms :: {"error":"Failed to fetch gallery images"}
+2025-11-13T09:23:46.792170428Z 9:23:46 AM [express] GET /api/ingredients 500 in 4ms :: {"error":"Failed to fetch ingredients"}
+2025-11-13T09:23:46.81254631Z 9:23:46 AM [express] GET /api/menu-items 500 in 8ms :: {"error":"Failed to fetch menu items"}
+2025-11-13T09:23:46.813918914Z 9:23:46 AM [express] GET /api/categories 500 in 7ms :: {"error":"Failed to fetch categories"}
