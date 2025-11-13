@@ -7,9 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Save } from "lucide-react";
+import { Save, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useLocation } from "wouter";
 
 interface StaticContent {
   id: string;
@@ -24,6 +25,7 @@ interface StaticContent {
 export function AdminContent() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
   const [selectedPage, setSelectedPage] = useState<"about" | "contact">("about");
   const [selectedLocale, setSelectedLocale] = useState<"de" | "ru">("de");
 
@@ -82,6 +84,14 @@ export function AdminContent() {
   return (
     <div className="container mx-auto p-6">
       <div className="mb-6">
+        <Button 
+          variant="ghost" 
+          onClick={() => setLocation("/admin/dashboard")}
+          className="mb-4 -ml-2"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Zurück zum Dashboard
+        </Button>
         <h1 className="text-3xl font-bold mb-2">Статические страницы</h1>
         <p className="text-gray-600">Редактирование About и Contact страниц</p>
       </div>

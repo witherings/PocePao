@@ -3,8 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Trash2, Upload, ImageIcon } from "lucide-react";
+import { Trash2, Upload, ImageIcon, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "wouter";
 
 interface GalleryImage {
   id: number;
@@ -19,6 +20,7 @@ export function AdminGallery() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
 
   const { data: images = [], isLoading, isError, error } = useQuery<GalleryImage[]>({
     queryKey: ["/api/gallery"],
@@ -114,6 +116,14 @@ export function AdminGallery() {
   return (
     <div className="container mx-auto p-6">
       <div className="mb-6">
+        <Button 
+          variant="ghost" 
+          onClick={() => setLocation("/admin/dashboard")}
+          className="mb-4 -ml-2"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Zurück zum Dashboard
+        </Button>
         <h1 className="text-3xl font-bold mb-2">Галерея</h1>
         <p className="text-gray-600">Управление изображениями галереи</p>
       </div>

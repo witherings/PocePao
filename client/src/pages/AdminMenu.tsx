@@ -9,9 +9,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Trash2, Edit, Plus } from "lucide-react";
+import { Trash2, Edit, Plus, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useLocation } from "wouter";
 
 interface Category {
   id: number;
@@ -37,6 +38,7 @@ interface MenuItem {
 export function AdminMenu() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
   
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [editingMenuItem, setEditingMenuItem] = useState<MenuItem | null>(null);
@@ -161,6 +163,14 @@ export function AdminMenu() {
   return (
     <div className="container mx-auto p-6">
       <div className="mb-6">
+        <Button 
+          variant="ghost" 
+          onClick={() => setLocation("/admin/dashboard")}
+          className="mb-4 -ml-2"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Zurück zum Dashboard
+        </Button>
         <h1 className="text-3xl font-bold mb-2">Меню</h1>
         <p className="text-gray-600">Управление категориями и блюдами</p>
       </div>
