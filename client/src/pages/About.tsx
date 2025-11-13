@@ -1,17 +1,36 @@
 import { Heart, Users, Award, Leaf } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
 
 export default function About() {
+  const { data: content } = useQuery({
+    queryKey: ["/api/static-content", "about", { locale: "de" }],
+    queryFn: async () => {
+      const response = await fetch("/api/static-content/about?locale=de");
+      if (!response.ok) return null;
+      return response.json();
+    },
+  });
+
+  const title = content?.title || "Über Uns";
+  const subtitle = content?.subtitle || "Unsere Geschichte und Leidenschaft";
+  const image = content?.image || "/images/vitamins-bowl.png";
+  const paragraphs = content?.content?.split('\n\n').filter((p: string) => p.trim()) || [
+    "Bei PokePao bringen wir die authentische hawaiianische Poke Bowl-Kultur nach Hamburg. Unsere Reise begann mit der Leidenschaft für frische, gesunde und unglaublich leckere Bowls.",
+    "Jede Bowl wird mit Liebe und Sorgfalt zubereitet. Wir verwenden nur die frischesten Zutaten und folgen traditionellen Rezepten, die wir mit modernen Geschmacksnoten verfeinern.",
+    "Heute sind wir stolz darauf, als eine der besten Poke Bowl Restaurants in Deutschland anerkannt zu sein. Aber für uns zählt vor allem eins: dass jeder Gast mit einem Lächeln unser Restaurant verlässt."
+  ];
+
   return (
     <div>
       {/* Breadcrumb / Page Header */}
       <div className="bg-gradient-to-r from-ocean to-ocean-dark text-white py-16">
         <div className="container mx-auto px-6 text-center">
           <h1 className="font-poppins text-4xl md:text-5xl font-bold mb-4" data-testid="text-page-title">
-            Über Uns
+            {title}
           </h1>
           <p className="font-lato text-lg md:text-xl opacity-90" data-testid="text-page-subtitle">
-            Unsere Geschichte und Leidenschaft
+            {subtitle}
           </p>
         </div>
       </div>
@@ -22,7 +41,7 @@ export default function About() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
             <div>
               <img
-                src="/images/vitamins-bowl.png"
+                src={image}
                 alt="Fresh Poke Bowl"
                 loading="lazy"
                 className="rounded-2xl shadow-2xl w-full h-auto"
@@ -34,15 +53,11 @@ export default function About() {
                 Unsere Geschichte
               </h2>
               <div className="space-y-4 font-lato text-muted-foreground">
-                <p data-testid="text-story-p1">
-                  Bei PokePao bringen wir die authentische hawaiianische Poke Bowl-Kultur nach Hamburg. Unsere Reise begann mit der Leidenschaft für frische, gesunde und unglaublich leckere Bowls.
-                </p>
-                <p data-testid="text-story-p2">
-                  Jede Bowl wird mit Liebe und Sorgfalt zubereitet. Wir verwenden nur die frischesten Zutaten und folgen traditionellen Rezepten, die wir mit modernen Geschmacksnoten verfeinern.
-                </p>
-                <p data-testid="text-story-p3">
-                  Heute sind wir stolz darauf, als eine der besten Poke Bowl Restaurants in Deutschland anerkannt zu sein. Aber für uns zählt vor allem eins: dass jeder Gast mit einem Lächeln unser Restaurant verlässt.
-                </p>
+                {paragraphs.map((p: string, idx: number) => (
+                  <p key={idx} data-testid={`text-story-p${idx + 1}`}>
+                    {p}
+                  </p>
+                ))}
               </div>
             </div>
           </div>

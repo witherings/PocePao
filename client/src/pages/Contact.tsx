@@ -1,18 +1,49 @@
 import { Phone, MapPin, Clock, Star } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Contact() {
+  const { data: content } = useQuery({
+    queryKey: ["/api/static-content", "contact", { locale: "de" }],
+    queryFn: async () => {
+      const response = await fetch("/api/static-content/contact?locale=de");
+      if (!response.ok) return null;
+      return response.json();
+    },
+  });
+
+  const parseContactData = (content: any) => {
+    try {
+      const data = typeof content === 'string' ? JSON.parse(content) : content;
+      return {
+        phone: data.phone || "040 36939098",
+        address: data.address || "Fuhlsbüttler Straße 328, Hamburg",
+        hours: data.hours || "Mo-So: 11:15 - 21:00"
+      };
+    } catch {
+      return {
+        phone: "040 36939098",
+        address: "Fuhlsbüttler Straße 328, Hamburg",
+        hours: "Mo-So: 11:15 - 21:00"
+      };
+    }
+  };
+
+  const title = content?.title || "Kontakt";
+  const subtitle = content?.subtitle || "Wir freuen uns auf deinen Besuch!";
+  const contactData = parseContactData(content?.content);
+
   return (
     <div>
       {/* Breadcrumb / Page Header */}
       <div className="bg-gradient-to-r from-ocean to-ocean-dark text-white py-16">
         <div className="container mx-auto px-6 text-center">
           <h1 className="font-poppins text-4xl md:text-5xl font-bold mb-4" data-testid="text-page-title">
-            Kontakt
+            {title}
           </h1>
           <p className="font-lato text-lg md:text-xl opacity-90" data-testid="text-page-subtitle">
-            Wir freuen uns auf deinen Besuch!
+            {subtitle}
           </p>
         </div>
       </div>
@@ -30,11 +61,11 @@ export default function Contact() {
                 <div className="min-w-0 flex-1">
                   <h3 className="font-poppins font-bold text-base sm:text-lg text-ocean mb-1 sm:mb-2">Telefon</h3>
                   <a
-                    href="tel:04036939098"
+                    href={`tel:${contactData.phone.replace(/\s/g, '')}`}
                     className="font-lato text-sm sm:text-base text-muted-foreground hover:text-ocean transition-colors inline-flex items-center min-h-[48px]"
                     data-testid="link-phone"
                   >
-                    040 36939098
+                    {contactData.phone}
                   </a>
                 </div>
               </div>
@@ -47,9 +78,8 @@ export default function Contact() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <h3 className="font-poppins font-bold text-base sm:text-lg text-ocean mb-1 sm:mb-2">Adresse</h3>
-                  <p className="font-lato text-sm sm:text-base text-muted-foreground" data-testid="text-address">
-                    Fuhlsbüttler Straße 328<br />
-                    Hamburg
+                  <p className="font-lato text-sm sm:text-base text-muted-foreground whitespace-pre-line" data-testid="text-address">
+                    {contactData.address}
                   </p>
                 </div>
               </div>
@@ -63,7 +93,7 @@ export default function Contact() {
                 <div className="min-w-0 flex-1">
                   <h3 className="font-poppins font-bold text-base sm:text-lg text-ocean mb-1 sm:mb-2">Öffnungszeiten</h3>
                   <div className="font-lato text-sm sm:text-base text-muted-foreground space-y-1" data-testid="text-hours">
-                    <p>Mo-So: 11:15 - 21:00</p>
+                    <p>{contactData.hours}</p>
                   </div>
                 </div>
               </div>
