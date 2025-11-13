@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Save, ArrowLeft, Upload } from "lucide-react";
+import { Save, ArrowLeft, Upload, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
@@ -14,6 +14,9 @@ export function AdminAbout() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const { data: content, isLoading } = useQuery({
     queryKey: ["/api/static-content", "about", { locale: "de" }],
@@ -27,6 +30,23 @@ export function AdminAbout() {
     },
   });
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+  };
+
   const saveMutation = useMutation({
     mutationFn: async (data: { title: string; subtitle: string; content: string; image: string }) => {
       return await apiRequest("PUT", "/api/static-content/about", {
@@ -39,18 +59,54 @@ export function AdminAbout() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/static-content"] });
+      setSelectedImage(null);
+      setImagePreview(null);
       toast({ title: "✅ Изменения сохранены" });
     },
   });
 
-  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    
+    let imageUrl = content?.image || "/images/vitamins-bowl.png";
+
+    // Upload image if selected
+    if (selectedImage) {
+      setIsUploading(true);
+      try {
+        const uploadFormData = new FormData();
+        uploadFormData.append("image", selectedImage);
+
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          credentials: "include",
+          body: uploadFormData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to upload image");
+        }
+
+        const result = await response.json();
+        imageUrl = result.url;
+      } catch (error) {
+        toast({ 
+          title: "❌ Ошибка загрузки изображения", 
+          variant: "destructive" 
+        });
+        setIsUploading(false);
+        return;
+      } finally {
+        setIsUploading(false);
+      }
+    }
+
     saveMutation.mutate({
       title: formData.get("title") as string,
       subtitle: formData.get("subtitle") as string || "",
       content: formData.get("content") as string,
-      image: formData.get("image") as string || "/images/vitamins-bowl.png",
+      image: imageUrl,
     });
   };
 
@@ -113,18 +169,68 @@ export function AdminAbout() {
 
                 <div>
                   <Label htmlFor="image" className="text-lg font-semibold mb-2 block">
-                    Фото (URL)
+                    Фото
                   </Label>
-                  <Input
-                    id="image"
-                    name="image"
-                    defaultValue={content?.image || "/images/vitamins-bowl.png"}
-                    className="text-base h-12 bg-white font-mono text-sm"
-                    placeholder="/images/vitamins-bowl.png"
-                  />
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Текущее фото: {content?.image || "/images/vitamins-bowl.png"}
-                  </p>
+                  
+                  {/* Image Preview */}
+                  <div className="mb-4">
+                    {imagePreview ? (
+                      <div className="relative inline-block">
+                        <img 
+                          src={imagePreview} 
+                          alt="Preview" 
+                          className="w-full max-w-md h-48 object-cover rounded-lg border-2 border-gray-200"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute top-2 right-2"
+                          onClick={handleRemoveImage}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ) : content?.image ? (
+                      <div>
+                        <img 
+                          src={content.image} 
+                          alt="Current" 
+                          className="w-full max-w-md h-48 object-cover rounded-lg border-2 border-gray-200 mb-2"
+                        />
+                        <p className="text-sm text-muted-foreground">
+                          Текущее фото
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="w-full max-w-md h-48 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                        <p className="text-gray-400">Нет изображения</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* File Input */}
+                  <div className="flex items-center gap-4">
+                    <Input
+                      id="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      className="hidden"
+                    />
+                    <Label
+                      htmlFor="image"
+                      className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    >
+                      <Upload className="w-4 h-4" />
+                      {selectedImage ? "Изменить фото" : "Загрузить фото"}
+                    </Label>
+                    {selectedImage && (
+                      <span className="text-sm text-muted-foreground">
+                        {selectedImage.name}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -151,11 +257,11 @@ Heute sind wir stolz darauf, als eine der besten Poke Bowl Restaurants in Deutsc
                 <Button 
                   type="submit" 
                   size="lg"
-                  disabled={saveMutation.isPending}
+                  disabled={saveMutation.isPending || isUploading}
                   className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-lg h-14"
                 >
                   <Save className="w-5 h-5 mr-2" />
-                  {saveMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
+                  {isUploading ? "Загрузка фото..." : saveMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
                 </Button>
               </form>
             </CardContent>

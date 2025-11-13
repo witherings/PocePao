@@ -179,6 +179,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // General image upload endpoint
+  app.post("/api/upload", upload.single("image"), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
+
+      res.status(200).json({
+        url: `/uploads/${req.file.filename}`,
+        filename: req.file.originalname,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to upload image" });
+    }
+  });
+
   // Gallery Images
   app.get("/api/gallery", async (req, res) => {
     try {
