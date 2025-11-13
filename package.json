@@ -5,12 +5,13 @@
   "license": "MIT",
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
-    "build": "drizzle-kit push && vite build",
+    "build": "vite build",
     "start": "NODE_ENV=production tsx server/index.ts",
     "check": "tsc",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx server/seed.ts",
-    "db:create-admin": "tsx server/create-admin.ts"
+    "db:create-admin": "tsx server/create-admin.ts",
+    "render:setup": "npm run db:push && npm run db:seed && npm run db:create-admin"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

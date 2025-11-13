@@ -25,12 +25,16 @@ async function seed() {
   try {
     console.log("🌱 Starting database seeding...\n");
 
-    // Clear existing data (in reverse order of dependencies)
-    console.log("🗑️  Clearing existing data...");
-    await db.delete(menuItemsTable);
-    await db.delete(ingredientsTable);
-    await db.delete(categoriesTable);
-    console.log("✅ Existing data cleared\n");
+    // Check if data already exists (production safety)
+    const existingCategories = await db.select().from(categoriesTable);
+    if (existingCategories.length > 0) {
+      console.log("⚠️  Database already has data. Skipping seed to preserve existing data.");
+      console.log(`   Found ${existingCategories.length} categories.`);
+      console.log("\n💡 To force re-seed, manually clear the database first.");
+      process.exit(0);
+    }
+
+    console.log("📝 Database is empty. Proceeding with seed...\n");
 
     // Seed categories
     console.log("📁 Seeding categories...");
