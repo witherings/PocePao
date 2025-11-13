@@ -8,8 +8,6 @@ import { Card } from "@/components/ui/card";
 import { 
   LayoutDashboard, 
   UtensilsCrossed, 
-  ShoppingCart, 
-  CalendarDays, 
   Images, 
   LogOut,
   Settings,
@@ -77,25 +75,18 @@ export default function AdminDashboard() {
       color: "bg-blue-500",
     },
     {
-      title: "Bestellungen",
-      description: "Kundenbestellungen ansehen",
-      icon: ShoppingCart,
-      href: "/admin/orders",
-      color: "bg-green-500",
-    },
-    {
-      title: "Reservierungen",
-      description: "Tischreservierungen verwalten",
-      icon: CalendarDays,
-      href: "/admin/reservations",
-      color: "bg-purple-500",
-    },
-    {
       title: "Galerie",
       description: "Bilder hochladen und verwalten",
       icon: Images,
       href: "/admin/gallery",
       color: "bg-orange-500",
+    },
+    {
+      title: "Statische Seiten",
+      description: "About und Contact bearbeiten",
+      icon: Settings,
+      href: "/admin/content",
+      color: "bg-purple-500",
     },
   ];
 
@@ -151,10 +142,10 @@ export default function AdminDashboard() {
                   Menü bearbeiten
                 </Button>
               </Link>
-              <Link href="/admin/orders">
+              <Link href="/admin/gallery">
                 <Button variant="outline" className="w-full justify-start">
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  Neue Bestellungen
+                  <Images className="w-4 h-4 mr-2" />
+                  Galerie
                 </Button>
               </Link>
               <Link href="/">
