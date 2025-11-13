@@ -219,7 +219,8 @@ export const staticContent = pgTable("static_content", {
   locale: text("locale").notNull().default("de"), // de, ru
   title: text("title"),
   subtitle: text("subtitle"),
-  content: text("content").notNull(), // JSON string: { hero: {...}, sections: [...] }
+  content: text("content").notNull(), // JSON string or plain text
+  image: text("image"), // For About page hero image
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 

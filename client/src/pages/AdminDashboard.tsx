@@ -82,11 +82,18 @@ export default function AdminDashboard() {
       color: "bg-orange-500",
     },
     {
-      title: "Statische Seiten",
-      description: "About und Contact bearbeiten",
+      title: "Про нас",
+      description: "About Seite bearbeiten",
       icon: Settings,
-      href: "/admin/content",
+      href: "/admin/about",
       color: "bg-purple-500",
+    },
+    {
+      title: "Контакты",
+      description: "Contact Seite bearbeiten",
+      icon: Settings,
+      href: "/admin/contact",
+      color: "bg-green-500",
     },
   ];
 
@@ -112,17 +119,17 @@ export default function AdminDashboard() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {menuItems.map((item) => (
             <Link key={item.href} href={item.href}>
-              <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer group">
-                <div className={`inline-flex items-center justify-center w-12 h-12 ${item.color} rounded-lg mb-4 group-hover:scale-110 transition-transform`}>
-                  <item.icon className="w-6 h-6 text-white" />
+              <Card className="p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer group border-2 hover:border-ocean/50">
+                <div className={`inline-flex items-center justify-center w-16 h-16 ${item.color} rounded-xl mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
+                  <item.icon className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-poppins text-xl font-bold text-foreground mb-2">
+                <h3 className="font-poppins text-2xl font-bold text-foreground mb-3 group-hover:text-ocean transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-sm text-muted-foreground font-lato">
+                <p className="text-base text-muted-foreground font-lato leading-relaxed">
                   {item.description}
                 </p>
               </Card>
@@ -130,32 +137,13 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        <div className="mt-8">
-          <Card className="p-6">
-            <h2 className="font-poppins text-2xl font-bold text-foreground mb-4">
-              Schnellzugriff
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Link href="/admin/menu">
-                <Button variant="outline" className="w-full justify-start">
-                  <UtensilsCrossed className="w-4 h-4 mr-2" />
-                  Menü bearbeiten
-                </Button>
-              </Link>
-              <Link href="/admin/gallery">
-                <Button variant="outline" className="w-full justify-start">
-                  <Images className="w-4 h-4 mr-2" />
-                  Galerie
-                </Button>
-              </Link>
-              <Link href="/">
-                <Button variant="outline" className="w-full justify-start">
-                  <LayoutDashboard className="w-4 h-4 mr-2" />
-                  Zur Website
-                </Button>
-              </Link>
-            </div>
-          </Card>
+        <div className="mt-8 flex justify-center">
+          <Link href="/">
+            <Button size="lg" variant="outline" className="font-semibold">
+              <LayoutDashboard className="w-5 h-5 mr-2" />
+              Zur Website
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

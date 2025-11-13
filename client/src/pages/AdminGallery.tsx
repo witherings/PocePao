@@ -128,43 +128,73 @@ export function AdminGallery() {
         <p className="text-gray-600">Управление изображениями галереи</p>
       </div>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Загрузить изображение</CardTitle>
+      <Card className="mb-8 border-2">
+        <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
+          <CardTitle className="text-2xl font-poppins">Загрузить изображение</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex gap-4 items-start">
-            <div className="flex-1 space-y-4">
-              <Input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFileSelect}
-              />
-              {selectedFile && (
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-600">
-                    Выбран файл: {selectedFile.name}
-                  </p>
-                  {previewUrl && (
-                    <div className="border rounded-lg overflow-hidden bg-gray-100">
-                      <img
-                        src={previewUrl}
-                        alt="Preview"
-                        className="w-full h-48 object-contain"
-                      />
-                    </div>
-                  )}
+        <CardContent className="pt-6">
+          <div className="space-y-6">
+            <Input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="hidden"
+              id="file-upload"
+            />
+            
+            {selectedFile && previewUrl ? (
+              <div className="space-y-4">
+                <div className="border-2 border-dashed rounded-xl overflow-hidden bg-gray-50 p-4">
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="w-full h-64 object-contain rounded-lg"
+                  />
                 </div>
-              )}
-            </div>
-            <Button
-              onClick={handleUpload}
-              disabled={!selectedFile || uploadMutation.isPending}
-            >
-              <Upload className="mr-2 h-4 w-4" />
-              {uploadMutation.isPending ? "Загрузка..." : "Загрузить"}
-            </Button>
+                <p className="text-center text-sm text-gray-600 font-medium">
+                  Выбран файл: {selectedFile.name}
+                </p>
+                <div className="flex gap-4">
+                  <Button
+                    onClick={() => {
+                      setSelectedFile(null);
+                      setPreviewUrl(null);
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = '';
+                      }
+                    }}
+                    variant="outline"
+                    className="flex-1"
+                    size="lg"
+                  >
+                    Отменить
+                  </Button>
+                  <Button
+                    onClick={handleUpload}
+                    disabled={uploadMutation.isPending}
+                    className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                    size="lg"
+                  >
+                    <Upload className="mr-2 h-5 w-5" />
+                    {uploadMutation.isPending ? "Загрузка..." : "Загрузить"}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <label
+                htmlFor="file-upload"
+                className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-12 cursor-pointer hover:border-ocean hover:bg-ocean/5 transition-all"
+              >
+                <ImageIcon className="w-16 h-16 text-gray-400 mb-4" />
+                <p className="text-lg font-semibold text-gray-700 mb-2">
+                  Выбрать файл
+                </p>
+                <p className="text-sm text-gray-500">
+                  Нажмите чтобы выбрать изображение
+                </p>
+              </label>
+            )}
           </div>
         </CardContent>
       </Card>
