@@ -37,7 +37,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     },
   });
 
-  // Get all categories
+  // Categories CRUD
   app.get("/api/categories", async (req, res) => {
     try {
       const categories = await storage.getAllCategories();
@@ -47,7 +47,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get all menu items
+  app.post("/api/categories", async (req, res) => {
+    try {
+      const category = await storage.createCategory(req.body);
+      res.status(201).json(category);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to create category" });
+    }
+  });
+
+  app.put("/api/categories/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const category = await storage.updateCategory(id, req.body);
+      if (!category) {
+        return res.status(404).json({ error: "Category not found" });
+      }
+      res.json(category);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to update category" });
+    }
+  });
+
+  app.delete("/api/categories/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await storage.deleteCategory(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Category not found" });
+      }
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to delete category" });
+    }
+  });
+
+  // Menu Items CRUD
   app.get("/api/menu-items", async (req, res) => {
     try {
       const menuItems = await storage.getAllMenuItems();
@@ -57,7 +92,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get menu items by category
   app.get("/api/menu-items/category/:categoryId", async (req, res) => {
     try {
       const { categoryId } = req.params;
@@ -68,7 +102,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get single menu item
   app.get("/api/menu-items/:id", async (req, res) => {
     try {
       const { id } = req.params;
@@ -81,6 +114,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(menuItem);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch menu item" });
+    }
+  });
+
+  app.post("/api/menu-items", async (req, res) => {
+    try {
+      const menuItem = await storage.createMenuItem(req.body);
+      res.status(201).json(menuItem);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to create menu item" });
+    }
+  });
+
+  app.put("/api/menu-items/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const menuItem = await storage.updateMenuItem(id, req.body);
+      if (!menuItem) {
+        return res.status(404).json({ error: "Menu item not found" });
+      }
+      res.json(menuItem);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to update menu item" });
+    }
+  });
+
+  app.delete("/api/menu-items/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await storage.deleteMenuItem(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Menu item not found" });
+      }
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to delete menu item" });
     }
   });
 
@@ -155,6 +223,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ error: "Failed to delete image" });
+    }
+  });
+
+  // Static Content (for About, Contact pages)
+  app.get("/api/static-content", async (req, res) => {
+    try {
+      const contents = await storage.getAllStaticContent();
+      res.json(contents);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch static content" });
+    }
+  });
+
+  app.get("/api/static-content/:page", async (req, res) => {
+    try {
+      const { page } = req.params;
+      const locale = (req.query.locale as string) || 'de';
+      const content = await storage.getStaticContentByPage(page, locale);
+      
+      if (!content) {
+        return res.status(404).json({ error: "Content not found" });
+      }
+      
+      res.json(content);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch static content" });
+    }
+  });
+
+  app.put("/api/static-content/:page", async (req, res) => {
+    try {
+      const { page } = req.params;
+      const contentData = { ...req.body, page };
+      const content = await storage.upsertStaticContent(contentData);
+      res.json(content);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to save static content" });
+    }
+  });
+
+  app.delete("/api/static-content/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await storage.deleteStaticContent(id);
+      
+      if (!deleted) {
+        return res.status(404).json({ error: "Content not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to delete static content" });
     }
   });
 

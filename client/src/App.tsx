@@ -14,6 +14,9 @@ import Reservierung from "@/pages/Reservierung";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminSnapshots from "@/pages/AdminSnapshots";
+import { AdminGallery } from "@/pages/AdminGallery";
+import { AdminMenu } from "@/pages/AdminMenu";
+import { AdminContent } from "@/pages/AdminContent";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -31,6 +34,9 @@ function Router() {
         <Route path="/admin/login" component={AdminLogin} />
         <Route path="/admin/dashboard" component={AdminDashboard} />
         <Route path="/admin/snapshots" component={AdminSnapshots} />
+        <Route path="/admin/gallery" component={AdminGallery} />
+        <Route path="/admin/menu" component={AdminMenu} />
+        <Route path="/admin/content" component={AdminContent} />
         <Route component={NotFound} />
       </Switch>
     );

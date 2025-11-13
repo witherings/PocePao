@@ -212,6 +212,28 @@ export const insertGalleryImageSchema = createInsertSchema(galleryImages).omit({
 export type GalleryImage = typeof galleryImages.$inferSelect;
 export type InsertGalleryImage = z.infer<typeof insertGalleryImageSchema>;
 
+// Static Content (for About, Contact pages)
+export const staticContent = pgTable("static_content", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  page: text("page").notNull(), // "about" or "contact"
+  locale: text("locale").notNull().default("de"), // de, ru
+  title: text("title"),
+  subtitle: text("subtitle"),
+  content: text("content").notNull(), // JSON string: { hero: {...}, sections: [...] }
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// Unique constraint on page + locale
+export const staticContentPageLocaleIndex = sql`CREATE UNIQUE INDEX IF NOT EXISTS static_content_page_locale_idx ON static_content(page, locale)`;
+
+export const insertStaticContentSchema = createInsertSchema(staticContent).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export type StaticContent = typeof staticContent.$inferSelect;
+export type InsertStaticContent = z.infer<typeof insertStaticContentSchema>;
+
 // Admin Users
 export const adminUsers = pgTable("admin_users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

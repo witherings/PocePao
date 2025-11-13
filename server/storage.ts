@@ -13,16 +13,19 @@ import {
   type InsertOrder,
   type OrderItem,
   type InsertOrderItem,
+  type StaticContent,
+  type InsertStaticContent,
   categories as categoriesTable,
   menuItems as menuItemsTable,
   reservations as reservationsTable,
   galleryImages as galleryImagesTable,
   ingredients as ingredientsTable,
   orders as ordersTable,
-  orderItems as orderItemsTable
+  orderItems as orderItemsTable,
+  staticContent as staticContentTable
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, asc, desc } from "drizzle-orm";
+import { eq, asc, desc, and } from "drizzle-orm";
 
 export interface IStorage {
   // Categories
@@ -66,6 +69,12 @@ export interface IStorage {
   getOrderItemsByOrderId(orderId: string): Promise<OrderItem[]>;
   createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem>;
   updateOrderStatus(id: string, status: string): Promise<Order | undefined>;
+
+  // Static Content
+  getAllStaticContent(): Promise<StaticContent[]>;
+  getStaticContentByPage(page: string, locale?: string): Promise<StaticContent | undefined>;
+  upsertStaticContent(content: InsertStaticContent): Promise<StaticContent>;
+  deleteStaticContent(id: string): Promise<boolean>;
 }
 
 class DatabaseStorage implements IStorage {
@@ -259,6 +268,51 @@ class DatabaseStorage implements IStorage {
       .where(eq(ordersTable.id, id))
       .returning();
     return results[0];
+  }
+
+  // Static Content
+  async getAllStaticContent(): Promise<StaticContent[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select().from(staticContentTable);
+  }
+
+  async getStaticContentByPage(page: string, locale: string = 'de'): Promise<StaticContent | undefined> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.select()
+      .from(staticContentTable)
+      .where(and(
+        eq(staticContentTable.page, page),
+        eq(staticContentTable.locale, locale)
+      ));
+    return results[0];
+  }
+
+  async upsertStaticContent(content: InsertStaticContent): Promise<StaticContent> {
+    if (!db) throw new Error("Database not initialized");
+    
+    // Check if content exists
+    const existing = await this.getStaticContentByPage(content.page, content.locale || 'de');
+    
+    if (existing) {
+      // Update existing
+      const results = await db.update(staticContentTable)
+        .set({ ...content, updatedAt: new Date() })
+        .where(eq(staticContentTable.id, existing.id))
+        .returning();
+      return results[0];
+    } else {
+      // Insert new
+      const results = await db.insert(staticContentTable).values(content).returning();
+      return results[0];
+    }
+  }
+
+  async deleteStaticContent(id: string): Promise<boolean> {
+    if (!db) throw new Error("Database not initialized");
+    const results = await db.delete(staticContentTable)
+      .where(eq(staticContentTable.id, id))
+      .returning();
+    return results.length > 0;
   }
 }
 
