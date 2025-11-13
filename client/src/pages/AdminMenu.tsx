@@ -15,7 +15,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
 interface Category {
-  id: number;
+  id: string;
   name: string;
   nameDE: string | null;
   icon: string | null;
@@ -23,13 +23,13 @@ interface Category {
 }
 
 interface MenuItem {
-  id: number;
+  id: string;
   name: string;
   nameDE: string | null;
   description: string | null;
   descriptionDE: string | null;
   price: string;
-  categoryId: number;
+  categoryId: string;
   available: number;
   popular: number;
   image: string | null;
@@ -69,7 +69,7 @@ export function AdminMenu() {
   });
 
   const updateCategoryMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: Partial<Category> }) => {
+    mutationFn: async ({ id, data }: { id: string; data: Partial<Category> }) => {
       return await apiRequest("PUT", `/api/categories/${id}`, data);
     },
     onSuccess: () => {
@@ -88,7 +88,7 @@ export function AdminMenu() {
   });
 
   const deleteCategoryMutation = useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: string) => {
       return await apiRequest("DELETE", `/api/categories/${id}`, {});
     },
     onSuccess: () => {
@@ -119,7 +119,7 @@ export function AdminMenu() {
   });
 
   const updateMenuItemMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: Partial<MenuItem> }) => {
+    mutationFn: async ({ id, data }: { id: string; data: Partial<MenuItem> }) => {
       return await apiRequest("PUT", `/api/menu-items/${id}`, data);
     },
     onSuccess: () => {
@@ -140,7 +140,7 @@ export function AdminMenu() {
   });
 
   const deleteMenuItemMutation = useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: string) => {
       return await apiRequest("DELETE", `/api/menu-items/${id}`, {});
     },
     onSuccess: () => {
@@ -230,7 +230,7 @@ export function AdminMenu() {
       description: description,
       descriptionDE: description,
       price: formData.get("price") as string,
-      categoryId: parseInt(formData.get("categoryId") as string),
+      categoryId: formData.get("categoryId") as string,
       available: formData.get("available") === "on" ? 1 : 0,
       popular: formData.get("popular") === "on" ? 1 : 0,
       image: imageUrl,
@@ -419,7 +419,7 @@ export function AdminMenu() {
                         <Label htmlFor="categoryId">Категория</Label>
                         <Select
                           name="categoryId"
-                          defaultValue={editingMenuItem?.categoryId.toString()}
+                          defaultValue={editingMenuItem?.categoryId}
                           required
                         >
                           <SelectTrigger className="text-base">
@@ -427,7 +427,7 @@ export function AdminMenu() {
                           </SelectTrigger>
                           <SelectContent>
                             {categories.map((cat) => (
-                              <SelectItem key={cat.id} value={cat.id.toString()}>
+                              <SelectItem key={cat.id} value={cat.id}>
                                 {cat.icon} {cat.nameDE || cat.name}
                               </SelectItem>
                             ))}
