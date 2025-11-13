@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Trash2, Edit, Plus, ArrowLeft } from "lucide-react";
+import { Trash2, Edit, Plus, ArrowLeft, Upload, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
@@ -44,6 +44,9 @@ export function AdminMenu() {
   const [editingMenuItem, setEditingMenuItem] = useState<MenuItem | null>(null);
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);
   const [showMenuItemDialog, setShowMenuItemDialog] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -75,6 +78,13 @@ export function AdminMenu() {
       setEditingCategory(null);
       toast({ title: "Категория обновлена" });
     },
+    onError: (error: any) => {
+      toast({ 
+        title: "Ошибка", 
+        description: error.message || "Не удалось обновить категорию",
+        variant: "destructive" 
+      });
+    },
   });
 
   const deleteCategoryMutation = useMutation({
@@ -95,7 +105,16 @@ export function AdminMenu() {
       queryClient.invalidateQueries({ queryKey: ["/api/menu-items"] });
       setShowMenuItemDialog(false);
       setEditingMenuItem(null);
+      setSelectedImage(null);
+      setImagePreview(null);
       toast({ title: "Блюдо создано" });
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Ошибка", 
+        description: error.message || "Не удалось создать блюдо",
+        variant: "destructive" 
+      });
     },
   });
 
@@ -107,7 +126,16 @@ export function AdminMenu() {
       queryClient.invalidateQueries({ queryKey: ["/api/menu-items"] });
       setShowMenuItemDialog(false);
       setEditingMenuItem(null);
+      setSelectedImage(null);
+      setImagePreview(null);
       toast({ title: "Блюдо обновлено" });
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Ошибка", 
+        description: error.message || "Не удалось обновить блюдо",
+        variant: "destructive" 
+      });
     },
   });
 
@@ -121,12 +149,30 @@ export function AdminMenu() {
     },
   });
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+  };
+
   const handleSaveCategory = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
     const data = {
-      name: formData.get("name") as string,
-      nameDE: formData.get("nameDE") as string || null,
+      name: name,
+      nameDE: name,
       icon: formData.get("icon") as string || null,
       order: parseInt(formData.get("order") as string) || 0,
     };
@@ -138,19 +184,56 @@ export function AdminMenu() {
     }
   };
 
-  const handleSaveMenuItem = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSaveMenuItem = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    
+    let imageUrl = editingMenuItem?.image || null;
+
+    // Upload image if selected
+    if (selectedImage) {
+      setIsUploading(true);
+      try {
+        const uploadFormData = new FormData();
+        uploadFormData.append("image", selectedImage);
+
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          credentials: "include",
+          body: uploadFormData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to upload image");
+        }
+
+        const result = await response.json();
+        imageUrl = result.url;
+      } catch (error) {
+        toast({ 
+          title: "❌ Ошибка загрузки изображения", 
+          variant: "destructive" 
+        });
+        setIsUploading(false);
+        return;
+      } finally {
+        setIsUploading(false);
+      }
+    }
+
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string || "";
+    
     const data = {
-      name: formData.get("name") as string,
-      nameDE: formData.get("nameDE") as string || null,
-      description: formData.get("description") as string || null,
-      descriptionDE: formData.get("descriptionDE") as string || null,
+      name: name,
+      nameDE: name,
+      description: description,
+      descriptionDE: description,
       price: formData.get("price") as string,
       categoryId: parseInt(formData.get("categoryId") as string),
       available: formData.get("available") === "on" ? 1 : 0,
       popular: formData.get("popular") === "on" ? 1 : 0,
-      image: formData.get("image") as string || null,
+      image: imageUrl,
     };
 
     if (editingMenuItem) {
@@ -158,6 +241,9 @@ export function AdminMenu() {
     } else {
       createMenuItemMutation.mutate(data);
     }
+    
+    setSelectedImage(null);
+    setImagePreview(null);
   };
 
   return (
@@ -200,20 +286,12 @@ export function AdminMenu() {
                   </DialogHeader>
                   <form onSubmit={handleSaveCategory} className="space-y-4">
                     <div>
-                      <Label htmlFor="name">Название (RU)</Label>
+                      <Label htmlFor="name">Название</Label>
                       <Input
                         id="name"
                         name="name"
-                        defaultValue={editingCategory?.name}
+                        defaultValue={editingCategory?.nameDE || editingCategory?.name}
                         required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="nameDE">Название (DE)</Label>
-                      <Input
-                        id="nameDE"
-                        name="nameDE"
-                        defaultValue={editingCategory?.nameDE || ""}
                       />
                     </div>
                     <div>
@@ -251,10 +329,7 @@ export function AdminMenu() {
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{category.icon}</span>
                       <div>
-                        <p className="font-medium">{category.name}</p>
-                        {category.nameDE && (
-                          <p className="text-sm text-gray-500">{category.nameDE}</p>
-                        )}
+                        <p className="font-medium">{category.nameDE || category.name}</p>
                       </div>
                     </div>
                     <div className="flex gap-2">
@@ -289,64 +364,55 @@ export function AdminMenu() {
               <CardTitle>Блюда ({menuItems.length})</CardTitle>
               <Dialog open={showMenuItemDialog} onOpenChange={setShowMenuItemDialog}>
                 <DialogTrigger asChild>
-                  <Button onClick={() => setEditingMenuItem(null)}>
+                  <Button onClick={() => {
+                    setEditingMenuItem(null);
+                    setSelectedImage(null);
+                    setImagePreview(null);
+                  }}>
                     <Plus className="mr-2 h-4 w-4" />
                     Добавить блюдо
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>
                       {editingMenuItem ? "Редактировать блюдо" : "Новое блюдо"}
                     </DialogTitle>
                   </DialogHeader>
-                  <form onSubmit={handleSaveMenuItem} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="item-name">Название (RU)</Label>
-                        <Input
-                          id="item-name"
-                          name="name"
-                          defaultValue={editingMenuItem?.name}
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="item-nameDE">Название (DE)</Label>
-                        <Input
-                          id="item-nameDE"
-                          name="nameDE"
-                          defaultValue={editingMenuItem?.nameDE || ""}
-                        />
-                      </div>
+                  <form onSubmit={handleSaveMenuItem} className="space-y-6">
+                    <div>
+                      <Label htmlFor="item-name">Название</Label>
+                      <Input
+                        id="item-name"
+                        name="name"
+                        defaultValue={editingMenuItem?.nameDE || editingMenuItem?.name}
+                        required
+                        className="text-base"
+                      />
                     </div>
 
                     <div>
-                      <Label htmlFor="description">Описание (RU)</Label>
+                      <Label htmlFor="description">Описание</Label>
                       <Textarea
                         id="description"
                         name="description"
-                        defaultValue={editingMenuItem?.description || ""}
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="descriptionDE">Описание (DE)</Label>
-                      <Textarea
-                        id="descriptionDE"
-                        name="descriptionDE"
-                        defaultValue={editingMenuItem?.descriptionDE || ""}
+                        rows={4}
+                        defaultValue={editingMenuItem?.descriptionDE || editingMenuItem?.description || ""}
+                        className="text-base"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="price">Цена</Label>
+                        <Label htmlFor="price">Цена (€)</Label>
                         <Input
                           id="price"
                           name="price"
+                          type="number"
+                          step="0.01"
                           defaultValue={editingMenuItem?.price}
                           required
+                          className="text-base"
                         />
                       </div>
                       <div>
@@ -356,13 +422,13 @@ export function AdminMenu() {
                           defaultValue={editingMenuItem?.categoryId.toString()}
                           required
                         >
-                          <SelectTrigger>
+                          <SelectTrigger className="text-base">
                             <SelectValue placeholder="Выберите категорию" />
                           </SelectTrigger>
                           <SelectContent>
                             {categories.map((cat) => (
                               <SelectItem key={cat.id} value={cat.id.toString()}>
-                                {cat.icon} {cat.name}
+                                {cat.icon} {cat.nameDE || cat.name}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -371,15 +437,70 @@ export function AdminMenu() {
                     </div>
 
                     <div>
-                      <Label htmlFor="image">URL изображения</Label>
-                      <Input
-                        id="image"
-                        name="image"
-                        defaultValue={editingMenuItem?.image || ""}
-                      />
+                      <Label className="mb-3 block">Фото блюда</Label>
+                      
+                      {/* Image Preview */}
+                      <div className="mb-4">
+                        {imagePreview ? (
+                          <div className="relative inline-block">
+                            <img 
+                              src={imagePreview} 
+                              alt="Preview" 
+                              className="w-64 h-48 object-cover rounded-lg border-2 border-gray-200"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              className="absolute top-2 right-2"
+                              onClick={handleRemoveImage}
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        ) : editingMenuItem?.image ? (
+                          <div>
+                            <img 
+                              src={editingMenuItem.image} 
+                              alt="Current" 
+                              className="w-64 h-48 object-cover rounded-lg border-2 border-gray-200 mb-2"
+                            />
+                            <p className="text-sm text-muted-foreground">
+                              Текущее фото
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="w-64 h-48 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                            <p className="text-gray-400">Нет изображения</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* File Input */}
+                      <div className="flex items-center gap-4">
+                        <Input
+                          id="item-image"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageSelect}
+                          className="hidden"
+                        />
+                        <Label
+                          htmlFor="item-image"
+                          className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                        >
+                          <Upload className="w-4 h-4" />
+                          {selectedImage ? "Изменить фото" : "Загрузить фото"}
+                        </Label>
+                        {selectedImage && (
+                          <span className="text-sm text-muted-foreground">
+                            {selectedImage.name}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
-                    <div className="flex gap-4">
+                    <div className="flex gap-6">
                       <div className="flex items-center space-x-2">
                         <Switch
                           id="available"
@@ -398,8 +519,12 @@ export function AdminMenu() {
                       </div>
                     </div>
 
-                    <Button type="submit" className="w-full">
-                      Сохранить
+                    <Button 
+                      type="submit" 
+                      className="w-full"
+                      disabled={isUploading}
+                    >
+                      {isUploading ? "Загрузка фото..." : "Сохранить"}
                     </Button>
                   </form>
                 </DialogContent>
@@ -452,6 +577,8 @@ export function AdminMenu() {
                           size="sm"
                           onClick={() => {
                             setEditingMenuItem(item);
+                            setSelectedImage(null);
+                            setImagePreview(null);
                             setShowMenuItemDialog(true);
                           }}
                         >
