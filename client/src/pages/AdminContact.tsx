@@ -53,12 +53,16 @@ export function AdminContact() {
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const phone = formData.get("phone") as string;
+    const address = formData.get("address") as string;
+    const hours = formData.get("hours") as string;
     saveMutation.mutate({
       title: formData.get("title") as string,
       subtitle: formData.get("subtitle") as string || "",
-      phone: formData.get("phone") as string,
-      address: formData.get("address") as string,
-      hours: formData.get("hours") as string,
+      content: JSON.stringify({ phone, address, hours }),
+      phone,
+      address,
+      hours,
     });
   };
 
@@ -77,10 +81,10 @@ export function AdminContact() {
         </Button>
 
         <h1 className="font-poppins text-4xl font-bold text-foreground mb-2">
-          Контакты (Contact)
+          Kontakt bearbeiten
         </h1>
         <p className="text-muted-foreground font-lato mb-8">
-          Редактирование контактной информации
+          Verwalten Sie Ihre Kontaktinformationen
         </p>
 
         {isLoading ? (
@@ -91,13 +95,13 @@ export function AdminContact() {
         ) : (
           <Card className="border-2">
             <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
-              <CardTitle className="text-2xl font-poppins">Контактные данные</CardTitle>
+              <CardTitle className="text-2xl font-poppins">Kontaktdaten</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
               <form onSubmit={handleSave} className="space-y-6">
                 <div>
                   <Label htmlFor="title" className="text-lg font-semibold mb-2 block">
-                    Заголовок
+                    Titel
                   </Label>
                   <Input
                     id="title"
@@ -110,7 +114,7 @@ export function AdminContact() {
 
                 <div>
                   <Label htmlFor="subtitle" className="text-lg font-semibold mb-2 block">
-                    Подзаголовок
+                    Untertitel (optional)
                   </Label>
                   <Input
                     id="subtitle"
@@ -123,7 +127,7 @@ export function AdminContact() {
 
                 <div>
                   <Label htmlFor="phone" className="text-lg font-semibold mb-2 block">
-                    Телефон
+                    Telefon
                   </Label>
                   <Input
                     id="phone"
@@ -136,7 +140,7 @@ export function AdminContact() {
 
                 <div>
                   <Label htmlFor="address" className="text-lg font-semibold mb-2 block">
-                    Адрес
+                    Adresse
                   </Label>
                   <Textarea
                     id="address"
@@ -150,7 +154,7 @@ export function AdminContact() {
 
                 <div>
                   <Label htmlFor="hours" className="text-lg font-semibold mb-2 block">
-                    Часы работы
+                    Öffnungszeiten
                   </Label>
                   <Input
                     id="hours"
@@ -168,7 +172,7 @@ export function AdminContact() {
                   className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-lg h-14"
                 >
                   <Save className="w-5 h-5 mr-2" />
-                  {saveMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
+                  {saveMutation.isPending ? "Speichern..." : "Änderungen speichern"}
                 </Button>
               </form>
             </CardContent>

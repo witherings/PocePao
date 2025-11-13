@@ -17,10 +17,9 @@ import {
 } from "@/components/ui/dialog";
 import { 
   Save, 
-  Rocket, 
+  RotateCcw, 
   Trash2, 
   Clock,
-  CheckCircle,
   FileText,
   ArrowLeft
 } from "lucide-react";
@@ -31,8 +30,6 @@ interface Snapshot {
   id: string;
   name: string;
   description: string | null;
-  isPublished: number;
-  publishedAt: string | null;
   createdAt: string;
 }
 
@@ -46,11 +43,6 @@ export default function AdminSnapshots() {
   // Fetch all snapshots
   const { data: snapshots, isLoading } = useQuery<Snapshot[]>({
     queryKey: ["/api/admin/snapshots"],
-  });
-
-  // Fetch published snapshot
-  const { data: publishedInfo } = useQuery({
-    queryKey: ["/api/admin/snapshots/published"],
   });
 
   // Create snapshot mutation
@@ -77,24 +69,26 @@ export default function AdminSnapshots() {
     },
   });
 
-  // Publish snapshot mutation
-  const publishMutation = useMutation({
+  // Restore snapshot mutation
+  const restoreMutation = useMutation({
     mutationFn: async (snapshotId: string) => {
-      return await apiRequest("POST", `/api/admin/snapshots/${snapshotId}/publish`, {});
+      return await apiRequest("POST", `/api/admin/snapshots/${snapshotId}/restore`, {});
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/snapshots"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/snapshots/published"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/menu-items"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/gallery"] });
       toast({
-        title: "Veröffentlicht!",
-        description: "Snapshot ist jetzt live",
+        title: "Wiederhergestellt!",
+        description: "Der Snapshot wurde erfolgreich wiederhergestellt",
       });
     },
     onError: (error: any) => {
       toast({
         variant: "destructive",
         title: "Fehler",
-        description: error.message || "Snapshot konnte nicht veröffentlicht werden",
+        description: error.message || "Snapshot konnte nicht wiederhergestellt werden",
       });
     },
   });
@@ -146,8 +140,6 @@ export default function AdminSnapshots() {
     );
   }
 
-  const currentPublishedId = (publishedInfo as any)?.currentSnapshotId;
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8">
       <div className="container mx-auto max-w-6xl">
@@ -166,7 +158,7 @@ export default function AdminSnapshots() {
                 Content Snapshots
               </h1>
               <p className="text-muted-foreground font-lato">
-                Erstellen und verwalten Sie Content-Versionen ("Save Game")
+                Speichern Sie den aktuellen Zustand der Website und stellen Sie ihn bei Bedarf wieder her
               </p>
             </div>
             <Button onClick={() => setIsCreateDialogOpen(true)} size="lg">
@@ -193,22 +185,14 @@ export default function AdminSnapshots() {
         ) : (
           <div className="grid gap-6">
             {snapshots?.map((snapshot) => {
-              const isPublished = snapshot.id === currentPublishedId;
-              
               return (
-                <Card key={snapshot.id} className={`p-6 ${isPublished ? 'border-green-500 border-2' : ''}`}>
+                <Card key={snapshot.id} className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="font-poppins text-2xl font-bold text-foreground">
                           {snapshot.name}
                         </h3>
-                        {isPublished && (
-                          <span className="inline-flex items-center px-3 py-1 bg-green-500 text-white rounded-full text-sm font-semibold">
-                            <CheckCircle className="w-4 h-4 mr-1" />
-                            Live
-                          </span>
-                        )}
                       </div>
                       {snapshot.description && (
                         <p className="text-muted-foreground mb-4 font-lato">
@@ -218,40 +202,34 @@ export default function AdminSnapshots() {
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <Clock className="w-4 h-4" />
-                          Erstellt: {format(new Date(snapshot.createdAt), "dd.MM.yyyy HH:mm")}
+                          Gespeichert: {format(new Date(snapshot.createdAt), "dd.MM.yyyy HH:mm")}
                         </div>
-                        {snapshot.publishedAt && (
-                          <div className="flex items-center gap-1">
-                            <Rocket className="w-4 h-4" />
-                            Veröffentlicht: {format(new Date(snapshot.publishedAt), "dd.MM.yyyy HH:mm")}
-                          </div>
-                        )}
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      {!isPublished && (
-                        <Button
-                          onClick={() => publishMutation.mutate(snapshot.id)}
-                          disabled={publishMutation.isPending}
-                          variant="default"
-                        >
-                          <Rocket className="w-4 h-4 mr-2" />
-                          Live schalten
-                        </Button>
-                      )}
-                      {!isPublished && (
-                        <Button
-                          onClick={() => {
-                            if (confirm("Snapshot wirklich löschen?")) {
-                              deleteMutation.mutate(snapshot.id);
-                            }
-                          }}
-                          disabled={deleteMutation.isPending}
-                          variant="destructive"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      )}
+                      <Button
+                        onClick={() => {
+                          if (confirm("Website zu diesem Snapshot zurücksetzen? Alle aktuellen Änderungen gehen verloren.")) {
+                            restoreMutation.mutate(snapshot.id);
+                          }
+                        }}
+                        disabled={restoreMutation.isPending}
+                        variant="default"
+                      >
+                        <RotateCcw className="w-4 h-4 mr-2" />
+                        Wiederherstellen
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          if (confirm("Snapshot wirklich löschen?")) {
+                            deleteMutation.mutate(snapshot.id);
+                          }
+                        }}
+                        disabled={deleteMutation.isPending}
+                        variant="destructive"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </div>
                   </div>
                 </Card>
@@ -265,7 +243,7 @@ export default function AdminSnapshots() {
             <DialogHeader>
               <DialogTitle>Neuer Snapshot</DialogTitle>
               <DialogDescription>
-                Erstellen Sie einen neuen Snapshot des aktuellen Contents
+                Speichern Sie den aktuellen Zustand Ihrer Website (Menü, Kategorien, Galerie)
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">

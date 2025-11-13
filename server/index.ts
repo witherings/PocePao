@@ -6,6 +6,7 @@ import { devBypassAuth } from "./dev-bypass";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { pool } from "./db";
+import { ensureAdminExists } from "./bootstrap";
 import path from "path";
 
 const app = express();
@@ -82,6 +83,8 @@ app.use((req, res, next) => {
 
 // Initialize app
 async function initializeApp() {
+  await ensureAdminExists();
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

@@ -9,8 +9,9 @@ export function Footer() {
         </p>
         <Link 
           href="/admin/login"
-          className="absolute bottom-4 right-4 text-gray-600 hover:text-gray-400 text-xs opacity-30 hover:opacity-60 transition-opacity"
-          title="Admin"
+          className="absolute bottom-4 right-4 text-gray-500 hover:text-gray-300 text-sm opacity-50 hover:opacity-100 transition-all duration-200"
+          title="Admin Panel"
+          aria-label="Admin Panel"
         >
           •
         </Link>

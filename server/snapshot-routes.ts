@@ -7,7 +7,6 @@ import {
   snapshotCategories,
   snapshotGalleryImages, 
   snapshotStaticContent,
-  publishedSnapshot,
   menuItems,
   categories,
   galleryImages,
@@ -33,29 +32,6 @@ export function registerSnapshotRoutes(app: Express) {
     } catch (error: any) {
       console.error("Error fetching snapshots:", error);
       res.status(500).json({ error: "Failed to fetch snapshots" });
-    }
-  });
-
-  // Get currently published snapshot info
-  app.get("/api/admin/snapshots/published", ensureAuthenticated, async (req, res) => {
-    try {
-      if (!db) {
-        return res.status(500).json({ error: "Database not initialized" });
-      }
-      
-      const published = await db
-        .select()
-        .from(publishedSnapshot)
-        .limit(1);
-      
-      if (published.length === 0) {
-        return res.json({ currentSnapshotId: null });
-      }
-      
-      res.json(published[0]);
-    } catch (error: any) {
-      console.error("Error fetching published snapshot:", error);
-      res.status(500).json({ error: "Failed to fetch published snapshot" });
     }
   });
 
@@ -157,9 +133,9 @@ export function registerSnapshotRoutes(app: Express) {
     }
   });
 
-  // Publish a snapshot (make it live - copies snapshot data to live tables)
+  // Restore a snapshot (restore live tables from snapshot data)
   // CRITICAL: Uses transaction to prevent data loss
-  app.post("/api/admin/snapshots/:id/publish", ensureAuthenticated, async (req, res) => {
+  app.post("/api/admin/snapshots/:id/restore", ensureAuthenticated, async (req, res) => {
     try {
       if (!db) {
         return res.status(500).json({ error: "Database not initialized" });
@@ -178,7 +154,7 @@ export function registerSnapshotRoutes(app: Express) {
         return res.status(404).json({ error: "Snapshot not found" });
       }
       
-      console.log(`Publishing snapshot ${snapshotId}...`);
+      console.log(`Restoring snapshot ${snapshotId}...`);
       
       // Load snapshot data BEFORE starting transaction to validate it exists
       const snapshotCats = await db
@@ -277,40 +253,13 @@ export function registerSnapshotRoutes(app: Express) {
           console.log("Restored gallery images");
         }
         
-        // STEP 5: Update snapshot flags
-        await tx.update(snapshots).set({ isPublished: 0 });
-        await tx
-          .update(snapshots)
-          .set({ 
-            isPublished: 1,
-            publishedAt: new Date(),
-          })
-          .where(eq(snapshots.id, snapshotId));
-        
-        // STEP 6: Update published snapshot pointer
-        const existingPublished = await tx.select().from(publishedSnapshot).limit(1);
-        
-        if (existingPublished.length > 0) {
-          await tx
-            .update(publishedSnapshot)
-            .set({ 
-              currentSnapshotId: snapshotId,
-              updatedAt: new Date(),
-            })
-            .where(eq(publishedSnapshot.id, 1));
-        } else {
-          await tx.insert(publishedSnapshot).values({
-            id: 1,
-            currentSnapshotId: snapshotId,
-          });
-        }
       });
       
-      console.log(`✅ Snapshot ${snapshotId} published successfully (transaction committed)`);
+      console.log(`✅ Snapshot ${snapshotId} restored successfully (transaction committed)`);
       res.json({ success: true, snapshotId });
     } catch (error: any) {
-      console.error("❌ Error publishing snapshot (transaction rolled back):", error);
-      res.status(500).json({ error: "Failed to publish snapshot: " + error.message });
+      console.error("❌ Error restoring snapshot (transaction rolled back):", error);
+      res.status(500).json({ error: "Failed to restore snapshot: " + error.message });
     }
   });
 
@@ -369,19 +318,6 @@ export function registerSnapshotRoutes(app: Express) {
       }
       
       const snapshotId = req.params.id;
-      
-      // Check if this is the published snapshot
-      const published = await db
-        .select()
-        .from(publishedSnapshot)
-        .where(eq(publishedSnapshot.currentSnapshotId, snapshotId))
-        .limit(1);
-      
-      if (published.length > 0) {
-        return res.status(400).json({ 
-          error: "Cannot delete published snapshot. Publish a different snapshot first." 
-        });
-      }
       
       // Delete snapshot (cascade will delete related items)
       await db
