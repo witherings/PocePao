@@ -21,9 +21,11 @@ import {
   Trash2, 
   Clock,
   CheckCircle,
-  FileText
+  FileText,
+  ArrowLeft
 } from "lucide-react";
 import { format } from "date-fns";
+import { useLocation } from "wouter";
 
 interface Snapshot {
   id: string;
@@ -36,6 +38,7 @@ interface Snapshot {
 
 export default function AdminSnapshots() {
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [newSnapshotName, setNewSnapshotName] = useState("");
   const [newSnapshotDescription, setNewSnapshotDescription] = useState("");
@@ -148,19 +151,29 @@ export default function AdminSnapshots() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8">
       <div className="container mx-auto max-w-6xl">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="font-poppins text-4xl font-bold text-foreground mb-2">
-              Content Snapshots
-            </h1>
-            <p className="text-muted-foreground font-lato">
-              Erstellen und verwalten Sie Content-Versionen ("Save Game")
-            </p>
-          </div>
-          <Button onClick={() => setIsCreateDialogOpen(true)} size="lg">
-            <Save className="w-5 h-5 mr-2" />
-            Neuer Snapshot
+        <div className="mb-8">
+          <Button 
+            variant="ghost" 
+            onClick={() => setLocation("/admin/dashboard")}
+            className="mb-4 -ml-2"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Zurück zum Dashboard
           </Button>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="font-poppins text-4xl font-bold text-foreground mb-2">
+                Content Snapshots
+              </h1>
+              <p className="text-muted-foreground font-lato">
+                Erstellen und verwalten Sie Content-Versionen ("Save Game")
+              </p>
+            </div>
+            <Button onClick={() => setIsCreateDialogOpen(true)} size="lg">
+              <Save className="w-5 h-5 mr-2" />
+              Neuer Snapshot
+            </Button>
+          </div>
         </div>
 
         {snapshots && snapshots.length === 0 ? (
