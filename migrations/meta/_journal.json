@@ -8,6 +8,20 @@
       "when": 1761682311209,
       "tag": "0000_demonic_titanium_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1763033917870,
+      "tag": "0001_flashy_fabian_cortez",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1763034199869,
+      "tag": "0002_broken_harrier",
+      "breakpoints": true
     }
   ]
 }

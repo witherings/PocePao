@@ -12,7 +12,8 @@ import {
   CalendarDays, 
   Images, 
   LogOut,
-  Settings
+  Settings,
+  Save
 } from "lucide-react";
 
 export default function AdminDashboard() {
@@ -61,6 +62,13 @@ export default function AdminDashboard() {
   }
 
   const menuItems = [
+    {
+      title: "Snapshots",
+      description: "Content-Versionen verwalten",
+      icon: Save,
+      href: "/admin/snapshots",
+      color: "bg-indigo-500",
+    },
     {
       title: "Menü verwalten",
       description: "Kategorien und Gerichte bearbeiten",

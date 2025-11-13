@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import { passport } from "./auth";
+import { devBypassAuth } from "./dev-bypass";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { pool } from "./db";
@@ -40,6 +41,11 @@ app.use(
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Dev mode: Auto-authenticate admin for easier testing
+if (process.env.NODE_ENV !== "production") {
+  app.use(devBypassAuth);
+}
 
 // Serve menu images from public/images
 app.use("/images", express.static("public/images"));

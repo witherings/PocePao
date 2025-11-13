@@ -227,3 +227,95 @@ export const insertAdminUserSchema = createInsertSchema(adminUsers).omit({
 
 export type AdminUser = typeof adminUsers.$inferSelect;
 export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;
+
+// ========== SNAPSHOT SYSTEM ==========
+
+// Content Snapshots (for versioning)
+export const snapshots = pgTable("snapshots", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(), // e.g., "Summer Menu 2025"
+  description: text("description"),
+  isPublished: integer("is_published").notNull().default(0), // 0 = draft, 1 = published
+  publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  createdBy: varchar("created_by").references(() => adminUsers.id),
+});
+
+export const insertSnapshotSchema = createInsertSchema(snapshots).omit({
+  id: true,
+  createdAt: true,
+  publishedAt: true,
+});
+
+export type Snapshot = typeof snapshots.$inferSelect;
+export type InsertSnapshot = z.infer<typeof insertSnapshotSchema>;
+
+// Snapshot Menu Items (copies of menu items in a snapshot)
+export const snapshotMenuItems = pgTable("snapshot_menu_items", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  snapshotId: varchar("snapshot_id").notNull().references(() => snapshots.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  nameDE: text("name_de").notNull(),
+  description: text("description").notNull(),
+  descriptionDE: text("description_de").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  priceSmall: decimal("price_small", { precision: 10, scale: 2 }),
+  priceLarge: decimal("price_large", { precision: 10, scale: 2 }),
+  image: text("image").notNull(),
+  categoryId: varchar("category_id").notNull(),
+  available: integer("available").notNull().default(1),
+  popular: integer("popular").notNull().default(0),
+  protein: text("protein"),
+  marinade: text("marinade"),
+  ingredients: text("ingredients").array(),
+  sauce: text("sauce"),
+  toppings: text("toppings").array(),
+  allergens: text("allergens").array(),
+  hasSizeOptions: integer("has_size_options").notNull().default(0),
+  isCustomBowl: integer("is_custom_bowl").notNull().default(0),
+});
+
+export type SnapshotMenuItem = typeof snapshotMenuItems.$inferSelect;
+
+// Snapshot Categories (copies of categories in a snapshot)
+export const snapshotCategories = pgTable("snapshot_categories", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  snapshotId: varchar("snapshot_id").notNull().references(() => snapshots.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  nameDE: text("name_de").notNull(),
+  icon: text("icon").notNull().default("🥗"),
+  order: integer("order").notNull().default(0),
+  originalCategoryId: varchar("original_category_id").notNull(), // Reference to original category ID
+});
+
+export type SnapshotCategory = typeof snapshotCategories.$inferSelect;
+
+// Snapshot Gallery Images (copies of gallery images in a snapshot)
+export const snapshotGalleryImages = pgTable("snapshot_gallery_images", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  snapshotId: varchar("snapshot_id").notNull().references(() => snapshots.id, { onDelete: "cascade" }),
+  url: text("url").notNull(),
+  filename: text("filename").notNull(),
+  caption: text("caption"),
+});
+
+export type SnapshotGalleryImage = typeof snapshotGalleryImages.$inferSelect;
+
+// Snapshot Static Content (for About, Contact pages)
+export const snapshotStaticContent = pgTable("snapshot_static_content", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  snapshotId: varchar("snapshot_id").notNull().references(() => snapshots.id, { onDelete: "cascade" }),
+  page: text("page").notNull(), // "about" or "contact"
+  content: text("content").notNull(), // JSON string with page content
+});
+
+export type SnapshotStaticContent = typeof snapshotStaticContent.$inferSelect;
+
+// Published Snapshot Pointer (single row table)
+export const publishedSnapshot = pgTable("published_snapshot", {
+  id: integer("id").primaryKey().default(1),
+  currentSnapshotId: varchar("current_snapshot_id").references(() => snapshots.id),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export type PublishedSnapshot = typeof publishedSnapshot.$inferSelect;
