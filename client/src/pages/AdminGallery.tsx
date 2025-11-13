@@ -61,14 +61,14 @@ export function AdminGallery() {
         fileInputRef.current.value = '';
       }
       toast({
-        title: "Успешно",
-        description: "Изображение загружено",
+        title: "Erfolgreich",
+        description: "Bild hochgeladen",
       });
     },
     onError: () => {
       toast({
-        title: "Ошибка",
-        description: "Не удалось загрузить изображение",
+        title: "Fehler",
+        description: "Bild konnte nicht hochgeladen werden",
         variant: "destructive",
       });
     },
@@ -88,14 +88,14 @@ export function AdminGallery() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/gallery"] });
       toast({
-        title: "Успешно",
-        description: "Изображение удалено",
+        title: "Erfolgreich",
+        description: "Bild gelöscht",
       });
     },
     onError: () => {
       toast({
-        title: "Ошибка",
-        description: "Не удалось удалить изображение",
+        title: "Fehler",
+        description: "Bild konnte nicht gelöscht werden",
         variant: "destructive",
       });
     },
@@ -124,13 +124,13 @@ export function AdminGallery() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Zurück zum Dashboard
         </Button>
-        <h1 className="text-3xl font-bold mb-2">Галерея</h1>
-        <p className="text-gray-600">Управление изображениями галереи</p>
+        <h1 className="text-3xl font-bold mb-2">Galerie</h1>
+        <p className="text-gray-600">Verwaltung der Galeriebilder</p>
       </div>
 
       <Card className="mb-8 border-2">
         <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
-          <CardTitle className="text-2xl font-poppins">Загрузить изображение</CardTitle>
+          <CardTitle className="text-2xl font-poppins">Bild hochladen</CardTitle>
         </CardHeader>
         <CardContent className="pt-6">
           <div className="space-y-6">
@@ -153,7 +153,7 @@ export function AdminGallery() {
                   />
                 </div>
                 <p className="text-center text-sm text-gray-600 font-medium">
-                  Выбран файл: {selectedFile.name}
+                  Datei ausgewählt: {selectedFile.name}
                 </p>
                 <div className="flex gap-4">
                   <Button
@@ -168,7 +168,7 @@ export function AdminGallery() {
                     className="flex-1"
                     size="lg"
                   >
-                    Отменить
+                    Abbrechen
                   </Button>
                   <Button
                     onClick={handleUpload}
@@ -177,7 +177,7 @@ export function AdminGallery() {
                     size="lg"
                   >
                     <Upload className="mr-2 h-5 w-5" />
-                    {uploadMutation.isPending ? "Загрузка..." : "Загрузить"}
+                    {uploadMutation.isPending ? "Hochladen..." : "Hochladen"}
                   </Button>
                 </div>
               </div>
@@ -188,10 +188,10 @@ export function AdminGallery() {
               >
                 <ImageIcon className="w-16 h-16 text-gray-400 mb-4" />
                 <p className="text-lg font-semibold text-gray-700 mb-2">
-                  Выбрать файл
+                  Datei auswählen
                 </p>
                 <p className="text-sm text-gray-500">
-                  Нажмите чтобы выбрать изображение
+                  Klicken Sie, um ein Bild auszuwählen
                 </p>
               </label>
             )}
@@ -202,27 +202,27 @@ export function AdminGallery() {
       <Card>
         <CardHeader>
           <CardTitle>
-            Изображения ({images.length})
+            Bilder ({images.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
             <div className="text-center py-12 text-gray-500">
-              Загрузка...
+              Lädt...
             </div>
           ) : isError ? (
             <div className="text-center py-12 text-red-500">
               <ImageIcon className="mx-auto h-12 w-12 mb-4 opacity-50" />
-              <p className="font-medium">Ошибка загрузки галереи</p>
+              <p className="font-medium">Fehler beim Laden der Galerie</p>
               <p className="text-sm mt-2">
-                {error instanceof Error ? error.message : "Попробуйте обновить страницу"}
+                {error instanceof Error ? error.message : "Versuchen Sie, die Seite zu aktualisieren"}
               </p>
             </div>
           ) : images.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
               <ImageIcon className="mx-auto h-12 w-12 mb-4 opacity-50" />
-              <p>Нет изображений в галерее</p>
-              <p className="text-sm mt-2">Загрузите первое изображение выше</p>
+              <p>Keine Bilder in der Galerie</p>
+              <p className="text-sm mt-2">Laden Sie das erste Bild oben hoch</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -245,7 +245,7 @@ export function AdminGallery() {
                       disabled={deleteMutation.isPending}
                     >
                       <Trash2 className="h-4 w-4 mr-2" />
-                      Удалить
+                      Löschen
                     </Button>
                   </div>
                   <div className="p-2 bg-white">
@@ -253,7 +253,7 @@ export function AdminGallery() {
                       {image.filename}
                     </p>
                     <p className="text-xs text-gray-400">
-                      {new Date(image.createdAt).toLocaleDateString('ru-RU')}
+                      {new Date(image.createdAt).toLocaleDateString('de-DE')}
                     </p>
                   </div>
                 </div>

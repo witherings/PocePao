@@ -61,7 +61,7 @@ export function AdminAbout() {
       queryClient.invalidateQueries({ queryKey: ["/api/static-content"] });
       setSelectedImage(null);
       setImagePreview(null);
-      toast({ title: "✅ Изменения сохранены" });
+      toast({ title: "✅ Änderungen gespeichert" });
     },
   });
 
@@ -92,7 +92,7 @@ export function AdminAbout() {
         imageUrl = result.url;
       } catch (error) {
         toast({ 
-          title: "❌ Ошибка загрузки изображения", 
+          title: "❌ Fehler beim Hochladen des Bildes", 
           variant: "destructive" 
         });
         setIsUploading(false);
@@ -123,27 +123,27 @@ export function AdminAbout() {
         </Button>
 
         <h1 className="font-poppins text-4xl font-bold text-foreground mb-2">
-          Про нас (About)
+          Über Uns
         </h1>
         <p className="text-muted-foreground font-lato mb-8">
-          Редактирование страницы "О нас"
+          Bearbeitung der "Über Uns"-Seite
         </p>
 
         {isLoading ? (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ocean mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Загрузка...</p>
+            <p className="text-muted-foreground">Lädt...</p>
           </div>
         ) : (
           <Card className="border-2">
             <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
-              <CardTitle className="text-2xl font-poppins">Контент страницы</CardTitle>
+              <CardTitle className="text-2xl font-poppins">Seiteninhalt</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
               <form onSubmit={handleSave} className="space-y-6">
                 <div>
                   <Label htmlFor="title" className="text-lg font-semibold mb-2 block">
-                    Заголовок
+                    Titel
                   </Label>
                   <Input
                     id="title"
@@ -156,7 +156,7 @@ export function AdminAbout() {
 
                 <div>
                   <Label htmlFor="subtitle" className="text-lg font-semibold mb-2 block">
-                    Подзаголовок
+                    Untertitel
                   </Label>
                   <Input
                     id="subtitle"
@@ -169,7 +169,7 @@ export function AdminAbout() {
 
                 <div>
                   <Label htmlFor="image" className="text-lg font-semibold mb-2 block">
-                    Фото
+                    Bild
                   </Label>
                   
                   {/* Image Preview */}
@@ -199,12 +199,12 @@ export function AdminAbout() {
                           className="w-full max-w-md h-48 object-cover rounded-lg border-2 border-gray-200 mb-2"
                         />
                         <p className="text-sm text-muted-foreground">
-                          Текущее фото
+                          Aktuelles Bild
                         </p>
                       </div>
                     ) : (
                       <div className="w-full max-w-md h-48 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
-                        <p className="text-gray-400">Нет изображения</p>
+                        <p className="text-gray-400">Kein Bild</p>
                       </div>
                     )}
                   </div>
@@ -223,7 +223,7 @@ export function AdminAbout() {
                       className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                     >
                       <Upload className="w-4 h-4" />
-                      {selectedImage ? "Изменить фото" : "Загрузить фото"}
+                      {selectedImage ? "Bild ändern" : "Bild hochladen"}
                     </Label>
                     {selectedImage && (
                       <span className="text-sm text-muted-foreground">
@@ -235,7 +235,7 @@ export function AdminAbout() {
 
                 <div>
                   <Label htmlFor="content" className="text-lg font-semibold mb-2 block">
-                    Текст страницы
+                    Seitentext
                   </Label>
                   <Textarea
                     id="content"
@@ -247,10 +247,10 @@ Jede Bowl wird mit Liebe und Sorgfalt zubereitet. Wir verwenden nur die frisches
 
 Heute sind wir stolz darauf, als eine der besten Poke Bowl Restaurants in Deutschland anerkannt zu sein. Aber für uns zählt vor allem eins: dass jeder Gast mit einem Lächeln unser Restaurant verlässt.`}
                     className="text-base leading-relaxed bg-white font-lato resize-none"
-                    placeholder="Текст страницы..."
+                    placeholder="Seitentext..."
                   />
                   <p className="text-sm text-muted-foreground mt-2">
-                    Введите текст обычным текстом, каждый абзац с новой строки
+                    Geben Sie Text in normaler Form ein, jeder Absatz in einer neuen Zeile
                   </p>
                 </div>
 
@@ -261,7 +261,7 @@ Heute sind wir stolz darauf, als eine der besten Poke Bowl Restaurants in Deutsc
                   className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-lg h-14"
                 >
                   <Save className="w-5 h-5 mr-2" />
-                  {isUploading ? "Загрузка фото..." : saveMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
+                  {isUploading ? "Bild wird hochgeladen..." : saveMutation.isPending ? "Speichern..." : "Änderungen speichern"}
                 </Button>
               </form>
             </CardContent>

@@ -60,12 +60,12 @@ export function AdminContent() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/static-content"] });
-      toast({ title: "Контент сохранен" });
+      toast({ title: "Inhalt gespeichert" });
     },
     onError: () => {
       toast({
-        title: "Ошибка",
-        description: "Не удалось сохранить контент",
+        title: "Fehler",
+        description: "Inhalt konnte nicht gespeichert werden",
         variant: "destructive",
       });
     },
@@ -92,22 +92,22 @@ export function AdminContent() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Zurück zum Dashboard
         </Button>
-        <h1 className="text-3xl font-bold mb-2">Статические страницы</h1>
-        <p className="text-gray-600">Редактирование About и Contact страниц</p>
+        <h1 className="text-3xl font-bold mb-2">Statische Seiten</h1>
+        <p className="text-gray-600">Bearbeitung der About- und Contact-Seiten</p>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Редактор контента</CardTitle>
+            <CardTitle>Content-Editor</CardTitle>
             <div className="flex gap-4">
               <Select value={selectedPage} onValueChange={(v) => setSelectedPage(v as "about" | "contact")}>
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="about">О нас (About)</SelectItem>
-                  <SelectItem value="contact">Контакты</SelectItem>
+                  <SelectItem value="about">Über Uns</SelectItem>
+                  <SelectItem value="contact">Kontakt</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -116,8 +116,8 @@ export function AdminContent() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="de">DE (Немецкий)</SelectItem>
-                  <SelectItem value="ru">RU (Русский)</SelectItem>
+                  <SelectItem value="de">DE (Deutsch)</SelectItem>
+                  <SelectItem value="ru">RU (Russisch)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -125,31 +125,31 @@ export function AdminContent() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <div className="text-center py-12 text-gray-500">Загрузка...</div>
+            <div className="text-center py-12 text-gray-500">Lädt...</div>
           ) : (
             <form onSubmit={handleSave} className="space-y-6">
               <div>
-                <Label htmlFor="title">Заголовок</Label>
+                <Label htmlFor="title">Titel</Label>
                 <Input
                   id="title"
                   name="title"
                   defaultValue={content?.title || ""}
-                  placeholder={`Заголовок для страницы ${selectedPage}`}
+                  placeholder={`Titel für ${selectedPage} Seite`}
                 />
               </div>
 
               <div>
-                <Label htmlFor="subtitle">Подзаголовок</Label>
+                <Label htmlFor="subtitle">Untertitel</Label>
                 <Input
                   id="subtitle"
                   name="subtitle"
                   defaultValue={content?.subtitle || ""}
-                  placeholder="Подзаголовок (опционально)"
+                  placeholder="Untertitel (optional)"
                 />
               </div>
 
               <div>
-                <Label htmlFor="content">Контент (JSON)</Label>
+                <Label htmlFor="content">Inhalt (JSON)</Label>
                 <Textarea
                   id="content"
                   name="content"
@@ -171,13 +171,13 @@ export function AdminContent() {
 
               {content?.updatedAt && (
                 <div className="text-sm text-gray-500">
-                  Последнее обновление: {new Date(content.updatedAt).toLocaleString('ru-RU')}
+                  Zuletzt aktualisiert: {new Date(content.updatedAt).toLocaleString('de-DE')}
                 </div>
               )}
 
               <Button type="submit" className="w-full" disabled={saveMutation.isPending}>
                 <Save className="mr-2 h-4 w-4" />
-                {saveMutation.isPending ? "Сохранение..." : "Сохранить"}
+                {saveMutation.isPending ? "Speichern..." : "Speichern"}
               </Button>
             </form>
           )}

@@ -64,7 +64,7 @@ export function AdminMenu() {
       queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
       setShowCategoryDialog(false);
       setEditingCategory(null);
-      toast({ title: "Категория создана" });
+      toast({ title: "Kategorie erstellt" });
     },
   });
 
@@ -76,12 +76,12 @@ export function AdminMenu() {
       queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
       setShowCategoryDialog(false);
       setEditingCategory(null);
-      toast({ title: "Категория обновлена" });
+      toast({ title: "Kategorie aktualisiert" });
     },
     onError: (error: any) => {
       toast({ 
-        title: "Ошибка", 
-        description: error.message || "Не удалось обновить категорию",
+        title: "Fehler", 
+        description: error.message || "Kategorie konnte nicht aktualisiert werden",
         variant: "destructive" 
       });
     },
@@ -93,7 +93,7 @@ export function AdminMenu() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
-      toast({ title: "Категория удалена" });
+      toast({ title: "Kategorie gelöscht" });
     },
   });
 
@@ -107,12 +107,12 @@ export function AdminMenu() {
       setEditingMenuItem(null);
       setSelectedImage(null);
       setImagePreview(null);
-      toast({ title: "Блюдо создано" });
+      toast({ title: "Gericht erstellt" });
     },
     onError: (error: any) => {
       toast({ 
-        title: "Ошибка", 
-        description: error.message || "Не удалось создать блюдо",
+        title: "Fehler", 
+        description: error.message || "Gericht konnte nicht erstellt werden",
         variant: "destructive" 
       });
     },
@@ -128,12 +128,12 @@ export function AdminMenu() {
       setEditingMenuItem(null);
       setSelectedImage(null);
       setImagePreview(null);
-      toast({ title: "Блюдо обновлено" });
+      toast({ title: "Gericht aktualisiert" });
     },
     onError: (error: any) => {
       toast({ 
-        title: "Ошибка", 
-        description: error.message || "Не удалось обновить блюдо",
+        title: "Fehler", 
+        description: error.message || "Gericht konnte nicht aktualisiert werden",
         variant: "destructive" 
       });
     },
@@ -145,7 +145,7 @@ export function AdminMenu() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/menu-items"] });
-      toast({ title: "Блюдо удалено" });
+      toast({ title: "Gericht gelöscht" });
     },
   });
 
@@ -211,7 +211,7 @@ export function AdminMenu() {
         imageUrl = result.url;
       } catch (error) {
         toast({ 
-          title: "❌ Ошибка загрузки изображения", 
+          title: "❌ Fehler beim Hochladen des Bildes", 
           variant: "destructive" 
         });
         setIsUploading(false);
@@ -257,36 +257,36 @@ export function AdminMenu() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Zurück zum Dashboard
         </Button>
-        <h1 className="text-3xl font-bold mb-2">Меню</h1>
-        <p className="text-gray-600">Управление категориями и блюдами</p>
+        <h1 className="text-3xl font-bold mb-2">Menü</h1>
+        <p className="text-gray-600">Verwaltung von Kategorien und Gerichten</p>
       </div>
 
       <Tabs defaultValue="categories" className="w-full">
         <TabsList className="mb-6">
-          <TabsTrigger value="categories">Категории</TabsTrigger>
-          <TabsTrigger value="items">Блюда</TabsTrigger>
+          <TabsTrigger value="categories">Kategorien</TabsTrigger>
+          <TabsTrigger value="items">Gerichte</TabsTrigger>
         </TabsList>
 
         <TabsContent value="categories">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Категории ({categories.length})</CardTitle>
+              <CardTitle>Kategorien ({categories.length})</CardTitle>
               <Dialog open={showCategoryDialog} onOpenChange={setShowCategoryDialog}>
                 <DialogTrigger asChild>
                   <Button onClick={() => setEditingCategory(null)}>
                     <Plus className="mr-2 h-4 w-4" />
-                    Добавить категорию
+                    Kategorie hinzufügen
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>
-                      {editingCategory ? "Редактировать категорию" : "Новая категория"}
+                      {editingCategory ? "Kategorie bearbeiten" : "Neue Kategorie"}
                     </DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleSaveCategory} className="space-y-4">
                     <div>
-                      <Label htmlFor="name">Название</Label>
+                      <Label htmlFor="name">Name</Label>
                       <Input
                         id="name"
                         name="name"
@@ -295,7 +295,7 @@ export function AdminMenu() {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="icon">Иконка</Label>
+                      <Label htmlFor="icon">Icon</Label>
                       <Input
                         id="icon"
                         name="icon"
@@ -304,7 +304,7 @@ export function AdminMenu() {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="order">Порядок</Label>
+                      <Label htmlFor="order">Reihenfolge</Label>
                       <Input
                         id="order"
                         name="order"
@@ -313,7 +313,7 @@ export function AdminMenu() {
                       />
                     </div>
                     <Button type="submit" className="w-full">
-                      Сохранить
+                      Speichern
                     </Button>
                   </form>
                 </DialogContent>
@@ -361,7 +361,7 @@ export function AdminMenu() {
         <TabsContent value="items">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Блюда ({menuItems.length})</CardTitle>
+              <CardTitle>Gerichte ({menuItems.length})</CardTitle>
               <Dialog open={showMenuItemDialog} onOpenChange={setShowMenuItemDialog}>
                 <DialogTrigger asChild>
                   <Button onClick={() => {
@@ -370,18 +370,18 @@ export function AdminMenu() {
                     setImagePreview(null);
                   }}>
                     <Plus className="mr-2 h-4 w-4" />
-                    Добавить блюдо
+                    Gericht hinzufügen
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>
-                      {editingMenuItem ? "Редактировать блюдо" : "Новое блюдо"}
+                      {editingMenuItem ? "Gericht bearbeiten" : "Neues Gericht"}
                     </DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleSaveMenuItem} className="space-y-6">
                     <div>
-                      <Label htmlFor="item-name">Название</Label>
+                      <Label htmlFor="item-name">Name</Label>
                       <Input
                         id="item-name"
                         name="name"
@@ -392,7 +392,7 @@ export function AdminMenu() {
                     </div>
 
                     <div>
-                      <Label htmlFor="description">Описание</Label>
+                      <Label htmlFor="description">Beschreibung</Label>
                       <Textarea
                         id="description"
                         name="description"
@@ -404,7 +404,7 @@ export function AdminMenu() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="price">Цена (€)</Label>
+                        <Label htmlFor="price">Preis (€)</Label>
                         <Input
                           id="price"
                           name="price"
@@ -416,14 +416,14 @@ export function AdminMenu() {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="categoryId">Категория</Label>
+                        <Label htmlFor="categoryId">Kategorie</Label>
                         <Select
                           name="categoryId"
                           defaultValue={editingMenuItem?.categoryId}
                           required
                         >
                           <SelectTrigger className="text-base">
-                            <SelectValue placeholder="Выберите категорию" />
+                            <SelectValue placeholder="Kategorie wählen" />
                           </SelectTrigger>
                           <SelectContent>
                             {categories.map((cat) => (
@@ -437,7 +437,7 @@ export function AdminMenu() {
                     </div>
 
                     <div>
-                      <Label className="mb-3 block">Фото блюда</Label>
+                      <Label className="mb-3 block">Foto des Gerichts</Label>
                       
                       {/* Image Preview */}
                       <div className="mb-4">
@@ -466,12 +466,12 @@ export function AdminMenu() {
                               className="w-64 h-48 object-cover rounded-lg border-2 border-gray-200 mb-2"
                             />
                             <p className="text-sm text-muted-foreground">
-                              Текущее фото
+                              Aktuelles Foto
                             </p>
                           </div>
                         ) : (
                           <div className="w-64 h-48 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
-                            <p className="text-gray-400">Нет изображения</p>
+                            <p className="text-gray-400">Kein Bild</p>
                           </div>
                         )}
                       </div>
@@ -490,7 +490,7 @@ export function AdminMenu() {
                           className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                         >
                           <Upload className="w-4 h-4" />
-                          {selectedImage ? "Изменить фото" : "Загрузить фото"}
+                          {selectedImage ? "Foto ändern" : "Foto hochladen"}
                         </Label>
                         {selectedImage && (
                           <span className="text-sm text-muted-foreground">
@@ -507,7 +507,7 @@ export function AdminMenu() {
                           name="available"
                           defaultChecked={editingMenuItem?.available === 1}
                         />
-                        <Label htmlFor="available">Доступно</Label>
+                        <Label htmlFor="available">Verfügbar</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Switch
@@ -515,7 +515,7 @@ export function AdminMenu() {
                           name="popular"
                           defaultChecked={editingMenuItem?.popular === 1}
                         />
-                        <Label htmlFor="popular">Популярное</Label>
+                        <Label htmlFor="popular">Beliebt</Label>
                       </div>
                     </div>
 
@@ -524,7 +524,7 @@ export function AdminMenu() {
                       className="w-full"
                       disabled={isUploading}
                     >
-                      {isUploading ? "Загрузка фото..." : "Сохранить"}
+                      {isUploading ? "Foto wird hochgeladen..." : "Speichern"}
                     </Button>
                   </form>
                 </DialogContent>
@@ -552,12 +552,12 @@ export function AdminMenu() {
                             <p className="font-medium">{item.name}</p>
                             {item.popular === 1 && (
                               <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                                Популярное
+                                Beliebt
                               </span>
                             )}
                             {item.available === 0 && (
                               <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
-                                Недоступно
+                                Nicht verfügbar
                               </span>
                             )}
                           </div>
