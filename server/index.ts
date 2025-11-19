@@ -10,6 +10,10 @@ import { ensureAdminExists } from "./bootstrap";
 import path from "path";
 
 const app = express();
+
+// Trust proxy for Railway load balancer (CRITICAL for session/auth)
+app.set("trust proxy", 1);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -100,38 +104,33 @@ async function initializeApp() {
   // doesn't interfere with the other routes
   if (app.get("env") === "development") {
     await setupVite(app, server);
-  } else if (!process.env.VERCEL) {
-    // Only serve static files when in production but NOT on Vercel
-    // Vercel handles static files separately
+  } else {
+    // Serve static files in production (Railway)
     serveStatic(app);
   }
 
   return server;
 }
 
-// Only run server in non-Vercel environments
-if (!process.env.VERCEL) {
-  initializeApp().then((server) => {
-    // ALWAYS serve the app on the port specified in the environment variable PORT
-    // Other ports are firewalled. Default to 5000 if not specified.
-    // this serves both the API and the client.
-    // It is the only port that is not firewalled.
-    const port = parseInt(process.env.PORT || '5000', 10);
-    // reusePort is not supported on some platforms (notably default Windows sockets)
-    // so only set it when the platform is not win32.
-    const listenOptions: any = {
-      port,
-      host: "0.0.0.0",
-    };
-    if (process.platform !== 'win32') {
-      listenOptions.reusePort = true;
-    }
+// Start the server (Railway deployment)
+initializeApp().then((server) => {
+  // ALWAYS serve the app on the port specified in the environment variable PORT
+  // Railway injects this automatically. Default to 5000 for local development.
+  const port = parseInt(process.env.PORT || '5000', 10);
+  // reusePort is not supported on some platforms (notably default Windows sockets)
+  // so only set it when the platform is not win32.
+  const listenOptions: any = {
+    port,
+    host: "0.0.0.0",
+  };
+  if (process.platform !== 'win32') {
+    listenOptions.reusePort = true;
+  }
 
-    server.listen(listenOptions, () => {
-      log(`serving on port ${port}`);
-    });
+  server.listen(listenOptions, () => {
+    log(`serving on port ${port}`);
   });
-}
+});
 
 // Export app for other modules
 export { app, initializeApp };

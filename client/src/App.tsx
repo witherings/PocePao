@@ -16,6 +16,7 @@ import AdminDashboard from "@/pages/AdminDashboard";
 import AdminSnapshots from "@/pages/AdminSnapshots";
 import { AdminGallery } from "@/pages/AdminGallery";
 import { AdminMenu } from "@/pages/AdminMenu";
+import { AdminReservations } from "@/pages/AdminReservations";
 import { AdminContent } from "@/pages/AdminContent";
 import { AdminAbout } from "@/pages/AdminAbout";
 import { AdminContact } from "@/pages/AdminContact";
@@ -39,6 +40,7 @@ function Router() {
         <Route path="/admin/snapshots" component={AdminSnapshots} />
         <Route path="/admin/gallery" component={AdminGallery} />
         <Route path="/admin/menu" component={AdminMenu} />
+        <Route path="/admin/reservations" component={AdminReservations} />
         <Route path="/admin/content" component={AdminContent} />
         <Route path="/admin/about" component={AdminAbout} />
         <Route path="/admin/contact" component={AdminContact} />

@@ -11,7 +11,8 @@ import {
   Images, 
   LogOut,
   Settings,
-  Save
+  Save,
+  Calendar
 } from "lucide-react";
 
 export default function AdminDashboard() {
@@ -80,6 +81,13 @@ export default function AdminDashboard() {
       icon: Images,
       href: "/admin/gallery",
       color: "bg-orange-500",
+    },
+    {
+      title: "Reservierungen",
+      description: "Tischreservierungen verwalten",
+      icon: Calendar,
+      href: "/admin/reservations",
+      color: "bg-rose-500",
     },
     {
       title: "Über Uns",

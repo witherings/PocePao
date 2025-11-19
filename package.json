@@ -11,7 +11,7 @@
     "db:push": "drizzle-kit push",
     "db:seed": "tsx server/seed.ts",
     "db:create-admin": "tsx server/create-admin.ts",
-    "render:setup": "npm run db:push && npm run db:seed && npm run db:create-admin"
+    "railway:setup": "npm run db:push && npm run db:seed && npm run db:create-admin"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

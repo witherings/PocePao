@@ -29,10 +29,14 @@ interface MenuItem {
   description: string | null;
   descriptionDE: string | null;
   price: string;
+  price_small?: string | null;
+  price_large?: string | null;
   categoryId: string;
   available: number;
   popular: number;
   image: string | null;
+  ingredients?: string[] | null;
+  allergens?: string[] | null;
 }
 
 export function AdminMenu() {
@@ -223,17 +227,25 @@ export function AdminMenu() {
 
     const name = formData.get("name") as string;
     const description = formData.get("description") as string || "";
+    const priceSmall = formData.get("priceSmall") as string;
+    const priceLarge = formData.get("priceLarge") as string;
+    const ingredientsStr = formData.get("ingredients") as string;
+    const allergensStr = formData.get("allergens") as string;
     
-    const data = {
+    const data: any = {
       name: name,
       nameDE: name,
       description: description,
       descriptionDE: description,
       price: formData.get("price") as string,
+      price_small: priceSmall || null,
+      price_large: priceLarge || null,
       categoryId: formData.get("categoryId") as string,
       available: formData.get("available") === "on" ? 1 : 0,
       popular: formData.get("popular") === "on" ? 1 : 0,
       image: imageUrl,
+      ingredients: ingredientsStr ? ingredientsStr.split(",").map(i => i.trim()).filter(Boolean) : null,
+      allergens: allergensStr ? allergensStr.split(",").map(a => a.trim()).filter(Boolean) : null,
     };
 
     if (editingMenuItem) {
@@ -404,7 +416,7 @@ export function AdminMenu() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="price">Preis (€)</Label>
+                        <Label htmlFor="price">Preis Standard (€)</Label>
                         <Input
                           id="price"
                           name="price"
@@ -434,6 +446,59 @@ export function AdminMenu() {
                           </SelectContent>
                         </Select>
                       </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="priceSmall">Preis Klein (€) - Optional</Label>
+                        <Input
+                          id="priceSmall"
+                          name="priceSmall"
+                          type="number"
+                          step="0.01"
+                          defaultValue={editingMenuItem?.price_small || ""}
+                          placeholder="z.B. 8.50"
+                          className="text-base"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="priceLarge">Preis Groß (€) - Optional</Label>
+                        <Input
+                          id="priceLarge"
+                          name="priceLarge"
+                          type="number"
+                          step="0.01"
+                          defaultValue={editingMenuItem?.price_large || ""}
+                          placeholder="z.B. 12.50"
+                          className="text-base"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="ingredients">Zutaten (kommagetrennt) - Optional</Label>
+                      <Textarea
+                        id="ingredients"
+                        name="ingredients"
+                        rows={2}
+                        defaultValue={editingMenuItem?.ingredients?.join(", ") || ""}
+                        placeholder="z.B. Lachs, Avocado, Edamame, Gurke"
+                        className="text-base"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Trennen Sie mehrere Zutaten mit Kommas</p>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="allergens">Allergene (kommagetrennt) - Optional</Label>
+                      <Textarea
+                        id="allergens"
+                        name="allergens"
+                        rows={2}
+                        defaultValue={editingMenuItem?.allergens?.join(", ") || ""}
+                        placeholder="z.B. Fisch, Soja, Sesam, Gluten"
+                        className="text-base"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Trennen Sie mehrere Allergene mit Kommas</p>
                     </div>
 
                     <div>
