@@ -1,0 +1,40 @@
+☢️ ULTIMATE MASTER-PROMPT V2 (Fixing DB Crashes & Final Polish)
+ROLE: Senior Full-Stack Architect. STATUS: The site is deployed on Render and the Admin Login works (Success!). CRITICAL ISSUE: The app crashes when trying to access specific features due to Database Mismatches.
+
+YOUR TASK: Fix the database schema inconsistencies, ensure all promised features are actually fully implemented, and prepare the code for a final "Force Push".
+
+1. 🚨 CRITICAL BUG: Snapshot Table Mismatch
+The Log: Error fetching snapshots: error: relation "snapshots" does not exist Context from Logs: It seems Drizzle created a table named published_snapshot, but your API code (snapshot-routes.ts) is trying to query a table named snapshots. ACTION:
+
+Audit shared/schema.ts vs server/snapshot-routes.ts: Ensure the table names match EXACTLY.
+
+Fix the Migration: Ensure drizzle-kit push will correctly create the missing table or rename the existing one.
+
+Verify Logic: Confirm that the "Snapshot" feature (Saving current state -> Publishing to live) actually writes to and reads from the correct table.
+
+2. 🍔 Menu & Gallery: Implementation Audit
+I suspect some features might be "half-implemented" in the code but missing in the Database. ACTION:
+
+Menu Variants: Check the menu_items schema. Does it really have columns/JSON for "Sizes" (Klein/Groß) and "Prices"? If not, add them now.
+
+Gallery: Check the gallery_images schema. Ensure the Admin Panel has a working UI to upload and delete these images, and that they render beautifully on the Homepage (no borders, large grid).
+
+Secret Dot: Confirm that the "Secret Dot" in the footer (for admin login) is implemented and linked correctly.
+
+Trust Proxy: DOUBLE CHECK that app.set("trust proxy", 1); is still in server/index.ts. Do not lose this fix!
+
+3. 🧠 Database Strategy: "Reset" or "Fix"?
+I am ready to DELETE and Re-create the Database on Render if necessary. QUESTION: Look at the code. Is the issue just that the DB is outdated? Or is the code fundamentally broken (wrong table names)? ACTION: Fix the code to be 100% consistent. Then, I will wipe the DB on Render. Ensure npm run db:push in the start command will cleanly recreate the entire perfect schema (Snapshots, Menu Variants, Gallery, Admin).
+
+4. 🧹 Final Cleanup & Polish
+Remove Garbage: Delete unused files in attached_assets, unused images in public, or old migration files that might confuse Drizzle.
+
+UI Polish: Ensure the Admin Panel input fields look modern and professional (as requested previously).
+
+DELIVERABLE:
+
+FIXED Codebase: Especially schema.ts and routes.
+
+Confirmation: Tell me explicitly: "I have fixed the table naming mismatch. After you push this code, please DELETE your database on Render to ensure a fresh start."
+
+I need a version that works flawlessly after a clean DB install.
