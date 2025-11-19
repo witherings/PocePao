@@ -1,8 +1,10 @@
-import { Pool } from 'pg';
+import pg from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from "@shared/schema";
 
-let pool: Pool | null = null;
+const { Pool } = pg;
+
+let pool: InstanceType<typeof Pool> | null = null;
 let db: ReturnType<typeof drizzle> | null = null;
 
 if (process.env.DATABASE_URL) {
