@@ -224,10 +224,11 @@ The PostgreSQL database contains the following tables:
 - `admin_users` - Admin panel users with bcrypt hashed passwords
 
 ## Recent Changes
-- **November 19, 2025**: Critical Render Free Tier Fix
+- **November 19, 2025**: Critical Render Free Tier Fix (ESM/CommonJS Compatibility)
   - **REMOVED**: @neondatabase/serverless and ws packages (caused port 443 WebSocket errors)
   - **ADDED**: Standard pg driver with SSL/TLS support for Render PostgreSQL
   - **FIXED**: Database connection to use standard TCP on port 5432 (not WebSockets)
+  - **FIXED**: ESM import for pg package using default import pattern (`import pg from 'pg'; const { Pool } = pg;`) to work with Node.js 22 native ESM loader
   - **IMPROVED**: Auto-detect SSL requirement (enabled for non-localhost connections)
   - **VERIFIED**: Idempotent scripts (seed.ts and create-admin.ts) safe for chained Start Command
   - **CONFIGURED**: Works perfectly on Render Free Tier with no shell access required
