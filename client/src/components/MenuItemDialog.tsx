@@ -6,8 +6,6 @@ import type { MenuItem } from "@shared/schema";
 import { useState, useEffect, useRef } from "react";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
-import ff_ from "@assets/ff).jpg";
-
 interface MenuItemDialogProps {
   item: MenuItem | null;
   isOpen: boolean;
@@ -39,11 +37,11 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
 
   // Calculate the displayed price based on selected size
   const getDisplayPrice = () => {
-    if (item.hasSizeOptions === 1) {
+    if (item.hasSizeOptions === 1 || item.priceSmall) {
       if (selectedSize === "klein" && item.priceSmall) {
         return item.priceSmall;
-      } else if (selectedSize === "standard" && item.priceLarge) {
-        return item.priceLarge;
+      } else if (selectedSize === "standard") {
+        return item.price;
       }
     }
     return item.price;
@@ -65,7 +63,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
           {/* Image */}
           <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
             <img
-              src={ff_}
+              src={item.image || "/images/default-dish.png"}
               alt={item.nameDE}
               loading="lazy"
               className="w-full h-full object-cover"
@@ -90,7 +88,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
           </p>
 
           {/* Size Selection */}
-          {item.hasSizeOptions === 1 && (
+          {(item.hasSizeOptions === 1 || item.priceSmall) && (
             <div>
               <h4 className="font-poppins font-semibold text-sm mb-3 text-foreground">Größe wählen</h4>
               <div className="flex gap-2 sm:gap-3">
@@ -123,8 +121,8 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 >
                   <div className="text-center">
                     <div className="text-sm sm:text-base">Standard</div>
-                    {item.priceLarge && (
-                      <div className="text-xs sm:text-sm font-normal">€{item.priceLarge}</div>
+                    {item.price && (
+                      <div className="text-xs sm:text-sm font-normal">€{item.price}</div>
                     )}
                   </div>
                 </Button>

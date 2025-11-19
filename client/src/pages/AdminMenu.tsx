@@ -243,6 +243,7 @@ export function AdminMenu() {
       descriptionDE: description,
       price: formData.get("price") as string,
       priceSmall: priceSmall || null,
+      hasSizeOptions: priceSmall ? 1 : 0,
       categoryId: formData.get("categoryId") as string,
       available: formData.get("available") === "on" ? 1 : 0,
       popular: formData.get("popular") === "on" ? 1 : 0,

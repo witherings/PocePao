@@ -25,6 +25,9 @@ let sessionMiddleware: any;
 // Serve menu images from public/images
 app.use("/images", express.static("public/images"));
 
+// Serve uploaded files from client/public/uploads (for both dev and production)
+app.use("/uploads", express.static(path.join(process.cwd(), "client/public/uploads")));
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
