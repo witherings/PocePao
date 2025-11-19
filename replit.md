@@ -230,6 +230,17 @@ The PostgreSQL database contains the following tables:
 - `admin_users` - Admin panel users with bcrypt hashed passwords
 
 ## Recent Changes
+- **November 19, 2025**: Railway Production Deployment Fix
+  - **FIXED**: Database connection error (ECONNREFUSED) on Railway paid tier
+  - **UPDATED**: server/db.ts with explicit SSL configuration for production (NODE_ENV === "production")
+  - **ADDED**: `railway:up` script for full deployment automation
+  - **VERIFIED**: All features production-ready:
+    - ✅ Admin variant pricing (price_small, price_large) in Menu Editor
+    - ✅ Gallery upload/delete system
+    - ✅ Secret admin access (hidden dot in footer)
+    - ✅ Snapshots publishing system
+  - **CREATED**: RAILWAY_DEPLOYMENT_FIXED.md with complete deployment guide
+
 - **November 19, 2025**: Railway Migration & Admin CMS Completion
   - **MIGRATED**: Platform from Render to Railway.app
   - **ADDED**: Trust proxy setting in server/index.ts (critical for Railway load balancer authentication)

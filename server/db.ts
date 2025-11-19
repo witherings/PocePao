@@ -8,11 +8,12 @@ let pool: InstanceType<typeof Pool> | null = null;
 let db: ReturnType<typeof drizzle> | null = null;
 
 if (process.env.DATABASE_URL) {
-  const useSSL = !process.env.DATABASE_URL.includes('localhost');
-  
+  // Railway requires SSL for production PostgreSQL connections
   pool = new Pool({ 
     connectionString: process.env.DATABASE_URL,
-    ssl: useSSL ? { rejectUnauthorized: false } : undefined
+    ssl: process.env.NODE_ENV === "production" 
+      ? { rejectUnauthorized: false } 
+      : undefined
   });
   
   db = drizzle(pool, { schema });
