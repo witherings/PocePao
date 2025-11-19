@@ -69,7 +69,7 @@ export function registerSnapshotRoutes(app: Express) {
         );
       }
       
-      // Copy current menu items
+      // Copy current menu items (capturing ALL fields for perfect fidelity)
       const currentMenuItems = await db.select().from(menuItems);
       if (currentMenuItems.length > 0) {
         await db.insert(snapshotMenuItems).values(
@@ -80,18 +80,18 @@ export function registerSnapshotRoutes(app: Express) {
             description: item.description,
             descriptionDE: item.descriptionDE,
             price: item.price,
-            priceSmall: item.priceSmall,
+            priceSmall: item.priceSmall, // CRITICAL: Klein price for dual pricing
             image: item.image,
             categoryId: item.categoryId,
             available: item.available,
             popular: item.popular,
             protein: item.protein,
             marinade: item.marinade,
-            ingredients: item.ingredients,
+            ingredients: item.ingredients, // Array - preserved as-is
             sauce: item.sauce,
-            toppings: item.toppings,
-            allergens: item.allergens,
-            hasSizeOptions: item.hasSizeOptions,
+            toppings: item.toppings, // Array - preserved as-is
+            allergens: item.allergens, // Array - preserved as-is
+            hasSizeOptions: item.hasSizeOptions, // CRITICAL: Flag for size selection
             isCustomBowl: item.isCustomBowl,
           }))
         );
@@ -239,7 +239,7 @@ export function registerSnapshotRoutes(app: Express) {
         );
         console.log("Restored categories");
         
-        // STEP 3: Copy menu items to live
+        // STEP 3: Copy menu items to live (restoring ALL fields with perfect fidelity)
         if (snapshotItems.length > 0) {
           await tx.insert(menuItems).values(
             snapshotItems.map((item: any) => ({
@@ -248,22 +248,22 @@ export function registerSnapshotRoutes(app: Express) {
               description: item.description,
               descriptionDE: item.descriptionDE,
               price: item.price,
-              priceSmall: item.priceSmall,
+              priceSmall: item.priceSmall, // CRITICAL: Klein price restored
               image: item.image,
               categoryId: item.categoryId,
               available: item.available,
               popular: item.popular,
               protein: item.protein,
               marinade: item.marinade,
-              ingredients: item.ingredients,
+              ingredients: item.ingredients, // Arrays restored as-is
               sauce: item.sauce,
-              toppings: item.toppings,
-              allergens: item.allergens,
-              hasSizeOptions: item.hasSizeOptions,
+              toppings: item.toppings, // Arrays restored as-is
+              allergens: item.allergens, // Arrays restored as-is
+              hasSizeOptions: item.hasSizeOptions, // CRITICAL: Size options flag restored
               isCustomBowl: item.isCustomBowl,
             }))
           );
-          console.log("Restored menu items");
+          console.log(`Restored ${snapshotItems.length} menu items with complete data`);
         }
         
         // STEP 4: Copy gallery to live (note: galleryImages schema doesn't have caption field in live table)
