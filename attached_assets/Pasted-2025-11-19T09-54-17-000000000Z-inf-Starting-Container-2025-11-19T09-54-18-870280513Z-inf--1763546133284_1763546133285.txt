@@ -1,0 +1,485 @@
+2025-11-19T09:54:17.000000000Z [inf]  Starting Container
+2025-11-19T09:54:18.870280513Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:54:18.870291133Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:54:18.870297974Z [inf]  
+2025-11-19T09:54:18.870301959Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:54:18.870305242Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:54:18.870311072Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:54:18.870312077Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:54:18.870318427Z [inf]  
+2025-11-19T09:54:18.870326828Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:18.870327303Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:18.870334085Z [inf]  
+2025-11-19T09:54:18.870340831Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:54:18.870347807Z [inf]  > drizzle-kit push
+2025-11-19T09:54:18.870356290Z [inf]  
+2025-11-19T09:54:18.870363591Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:54:18.870369606Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:54:18.870376165Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:54:18.903086050Z [err]  Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:18.903091059Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:18.903098048Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:18.903103059Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:54:18.903107666Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:54:18.903112559Z [err]    errno: -3008,
+2025-11-19T09:54:18.903117367Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:18.903122650Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:18.903127013Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:18.903133120Z [err]  }
+2025-11-19T09:54:19.027981124Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:19.045752729Z [inf]  
+2025-11-19T09:54:19.045759583Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:54:19.045765103Z [inf]  > tsx server/seed.ts
+2025-11-19T09:54:19.045770552Z [inf]  
+2025-11-19T09:54:20.012021597Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:54:20.012029006Z [inf]  
+2025-11-19T09:54:20.028143474Z [err]  ❌ Error seeding database: Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:20.028155529Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:20.028162621Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:20.028170653Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:54:20.028177509Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:54:20.028184065Z [err]    errno: -3008,
+2025-11-19T09:54:20.028189228Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:20.028193749Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:20.028198225Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:20.028202806Z [err]  }
+2025-11-19T09:54:22.048070642Z [inf]  
+2025-11-19T09:54:22.048078495Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:54:22.048266303Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:54:22.048292296Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:22.048298404Z [inf]  
+2025-11-19T09:54:22.048308879Z [inf]  
+2025-11-19T09:54:22.048315279Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:22.048325932Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:54:22.048372244Z [inf]  > drizzle-kit push
+2025-11-19T09:54:22.048378834Z [inf]  
+2025-11-19T09:54:22.048385442Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:54:22.048391442Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:54:22.181736796Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:54:22.387815346Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:54:22.894553564Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:54:22.894594727Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:54:22.894631967Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:54:22.894643760Z [err]  Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:22.894651486Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:22.894661522Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:22.894670488Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:54:22.894678696Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:54:22.894697183Z [err]    errno: -3008,
+2025-11-19T09:54:22.894705778Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:22.894724484Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:22.894732487Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:22.894743362Z [err]  }
+2025-11-19T09:54:22.908394303Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:22.936205701Z [inf]  
+2025-11-19T09:54:22.936211577Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:54:22.936217141Z [inf]  > tsx server/seed.ts
+2025-11-19T09:54:22.936222889Z [inf]  
+2025-11-19T09:54:23.898771232Z [err]  }
+2025-11-19T09:54:23.898838160Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:54:23.898845805Z [inf]  
+2025-11-19T09:54:23.898854529Z [err]  ❌ Error seeding database: Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:23.898854814Z [err]    errno: -3008,
+2025-11-19T09:54:23.898862790Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:23.898866893Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:23.898871937Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:23.898875749Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:23.898878937Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:23.898883639Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:54:23.898889311Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:54:25.227774861Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:25.262497681Z [inf]  
+2025-11-19T09:54:25.262505751Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:54:25.262512654Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:54:25.262518295Z [inf]  
+2025-11-19T09:54:25.389773563Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:25.423696607Z [inf]  
+2025-11-19T09:54:25.423713253Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:54:25.423725785Z [inf]  > drizzle-kit push
+2025-11-19T09:54:25.423732990Z [inf]  
+2025-11-19T09:54:25.931034303Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:54:25.931041054Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:54:25.964290077Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:54:26.185594809Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:54:26.308878687Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:54:26.948295867Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:54:26.948303152Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:54:26.948310530Z [err]  Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:26.948316525Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:26.948323047Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:26.948329723Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:54:26.948336448Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:54:26.948343863Z [err]    errno: -3008,
+2025-11-19T09:54:26.948351192Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:26.948358487Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:26.948366343Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:26.948374028Z [err]  }
+2025-11-19T09:54:26.948380800Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:26.948389137Z [inf]  
+2025-11-19T09:54:26.948396938Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:54:26.948403685Z [inf]  > tsx server/seed.ts
+2025-11-19T09:54:26.948411962Z [inf]  
+2025-11-19T09:54:28.020174136Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:28.020182717Z [err]  }
+2025-11-19T09:54:28.020184365Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:54:28.020189478Z [inf]  
+2025-11-19T09:54:28.020194998Z [err]  ❌ Error seeding database: Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:28.020197460Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:54:28.020201185Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:28.020203592Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:54:28.020206961Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:28.020211445Z [err]    errno: -3008,
+2025-11-19T09:54:28.020216338Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:28.020221492Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:29.261108553Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:29.283797098Z [inf]  
+2025-11-19T09:54:29.283804049Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:54:29.283808894Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:54:29.283815434Z [inf]  
+2025-11-19T09:54:29.380204315Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:29.410424122Z [inf]  
+2025-11-19T09:54:29.410433466Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:54:29.410440544Z [inf]  > drizzle-kit push
+2025-11-19T09:54:29.410447231Z [inf]  
+2025-11-19T09:54:29.902999937Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:54:29.903007816Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:54:29.937795882Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:54:30.145944063Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:54:30.261364609Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:54:30.385502039Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:54:30.950260691Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:54:30.950264316Z [err]  Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:30.950267950Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:30.950271524Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:30.950275723Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:54:30.950279266Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:54:30.950283696Z [err]    errno: -3008,
+2025-11-19T09:54:30.950289350Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:30.950293370Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:30.950297381Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:30.950300995Z [err]  }
+2025-11-19T09:54:30.950305300Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:30.950308967Z [inf]  
+2025-11-19T09:54:30.950316978Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:54:30.950322558Z [inf]  > tsx server/seed.ts
+2025-11-19T09:54:30.950326363Z [inf]  
+2025-11-19T09:54:31.987301797Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:54:31.987307878Z [inf]  
+2025-11-19T09:54:31.987314243Z [err]  ❌ Error seeding database: Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:31.987321355Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:31.987327352Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:31.987333092Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:54:31.987339726Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:54:31.987347390Z [err]    errno: -3008,
+2025-11-19T09:54:31.987356579Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:31.987362844Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:31.987369575Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:31.987375651Z [err]  }
+2025-11-19T09:54:32.955055039Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:54:32.955065546Z [inf]  > drizzle-kit push
+2025-11-19T09:54:32.955073940Z [inf]  
+2025-11-19T09:54:32.955104867Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:32.955113816Z [inf]  
+2025-11-19T09:54:32.955122210Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:54:32.955131691Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:54:32.955138091Z [inf]  
+2025-11-19T09:54:32.955144435Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:32.955152519Z [inf]  
+2025-11-19T09:54:32.968572432Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:54:32.968576643Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:54:33.377823526Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:54:33.979439058Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:54:33.979466481Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:54:33.979473465Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:54:34.020529998Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:54:34.073384135Z [err]  Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:34.073388664Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:34.073393099Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:34.073398895Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:54:34.073403379Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:54:34.073407418Z [err]    errno: -3008,
+2025-11-19T09:54:34.073411291Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:34.073415052Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:34.073418857Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:34.073423395Z [err]  }
+2025-11-19T09:54:34.186234741Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:34.204352914Z [inf]  
+2025-11-19T09:54:34.204358994Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:54:34.204363865Z [inf]  > tsx server/seed.ts
+2025-11-19T09:54:34.204368384Z [inf]  
+2025-11-19T09:54:35.120815497Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:54:35.120823329Z [inf]  
+2025-11-19T09:54:35.120829139Z [err]  ❌ Error seeding database: Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:35.120834050Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:35.120838783Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:35.120844473Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:54:35.120848613Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:54:35.120852607Z [err]    errno: -3008,
+2025-11-19T09:54:35.120857927Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:35.120862709Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:35.120867299Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:35.120871642Z [err]  }
+2025-11-19T09:54:36.384693456Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:36.403836937Z [inf]  
+2025-11-19T09:54:36.403849100Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:54:36.403855326Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:54:36.403863824Z [inf]  
+2025-11-19T09:54:36.938364715Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:36.938371203Z [inf]  
+2025-11-19T09:54:36.938376836Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:54:36.938382266Z [inf]  > drizzle-kit push
+2025-11-19T09:54:36.938389739Z [inf]  
+2025-11-19T09:54:36.938395782Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:54:36.938401371Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:54:37.038021969Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:54:37.234429757Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:54:37.365077645Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:54:37.480548634Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:54:37.969122816Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:54:37.969126416Z [err]  Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:37.969129876Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:37.969133447Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:37.969138741Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:54:37.969142570Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:54:37.969147110Z [err]    errno: -3008,
+2025-11-19T09:54:37.969150773Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:37.969154220Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:37.969157913Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:37.969161548Z [err]  }
+2025-11-19T09:54:37.969165830Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:37.969170215Z [inf]  
+2025-11-19T09:54:37.969174375Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:54:37.969178211Z [inf]  > tsx server/seed.ts
+2025-11-19T09:54:37.969181888Z [inf]  
+2025-11-19T09:54:38.459628581Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:54:38.459635400Z [inf]  
+2025-11-19T09:54:38.469786188Z [err]  ❌ Error seeding database: Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:38.469795889Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:38.469801476Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:38.469806144Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:54:38.469811400Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:54:38.469872507Z [err]    errno: -3008,
+2025-11-19T09:54:38.469878274Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:38.469883570Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:38.469888089Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:38.469892926Z [err]  }
+2025-11-19T09:54:39.987243911Z [inf]  
+2025-11-19T09:54:39.987255059Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:54:39.987263101Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:54:39.987270233Z [inf]  
+2025-11-19T09:54:39.987334679Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:40.075398628Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:40.110411328Z [inf]  
+2025-11-19T09:54:40.110419641Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:54:40.110425585Z [inf]  > drizzle-kit push
+2025-11-19T09:54:40.110432105Z [inf]  
+2025-11-19T09:54:40.261157717Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:54:40.261163706Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:54:40.977612198Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:54:40.977616312Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:54:40.977620749Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:54:41.082316772Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:54:41.211879042Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:54:41.261429587Z [err]  Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:41.261436243Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:41.261442635Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:41.261449857Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:54:41.261457736Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:54:41.261463612Z [err]    errno: -3008,
+2025-11-19T09:54:41.261469817Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:41.261475452Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:41.261482541Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:41.261488795Z [err]  }
+2025-11-19T09:54:41.370059910Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:41.393756607Z [inf]  
+2025-11-19T09:54:41.393763587Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:54:41.393768773Z [inf]  > tsx server/seed.ts
+2025-11-19T09:54:41.393773230Z [inf]  
+2025-11-19T09:54:42.175755370Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:54:42.175761401Z [inf]  
+2025-11-19T09:54:42.213984348Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:42.213995933Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:42.214001214Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:42.214005818Z [err]  }
+2025-11-19T09:54:42.214027742Z [err]  ❌ Error seeding database: Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:42.214031548Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:42.214035360Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:42.214039190Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:54:42.214043860Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:54:42.214048875Z [err]    errno: -3008,
+2025-11-19T09:54:43.966517701Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:43.966521921Z [inf]  
+2025-11-19T09:54:43.966526180Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:54:43.966530036Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:54:43.966534170Z [inf]  
+2025-11-19T09:54:43.966538403Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:43.966542805Z [inf]  
+2025-11-19T09:54:43.966547907Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:54:43.966557510Z [inf]  > drizzle-kit push
+2025-11-19T09:54:43.966561810Z [inf]  
+2025-11-19T09:54:43.966566081Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:54:43.966570456Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:54:44.237373139Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:54:44.441570443Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:54:45.026725010Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:54:45.026730472Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:54:45.026735607Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:54:45.026740586Z [err]  Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:45.026746079Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:45.026756717Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:45.026762170Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:54:45.026767401Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:54:45.026772703Z [err]    errno: -3008,
+2025-11-19T09:54:45.026777919Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:45.026783413Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:45.026789478Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:45.026795065Z [err]  }
+2025-11-19T09:54:45.026800261Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:45.026806083Z [inf]  
+2025-11-19T09:54:45.026812136Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:54:45.026818379Z [inf]  > tsx server/seed.ts
+2025-11-19T09:54:45.026823459Z [inf]  
+2025-11-19T09:54:46.100701234Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:54:46.100735361Z [inf]  
+2025-11-19T09:54:46.100749405Z [err]  ❌ Error seeding database: Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:46.100759597Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:46.100771028Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:46.100783422Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:54:46.100793955Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:54:46.100805735Z [err]    errno: -3008,
+2025-11-19T09:54:46.100816020Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:46.100825836Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:46.100837177Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:46.100846038Z [err]  }
+2025-11-19T09:54:47.027249736Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:47.027256497Z [inf]  
+2025-11-19T09:54:47.027261856Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:54:47.027267357Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:54:47.027272805Z [inf]  
+2025-11-19T09:54:47.109736253Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:47.140549055Z [inf]  
+2025-11-19T09:54:47.140553935Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:54:47.140560090Z [inf]  > drizzle-kit push
+2025-11-19T09:54:47.140564414Z [inf]  
+2025-11-19T09:54:47.304868752Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:54:47.304874281Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:54:48.010077877Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:54:48.010084027Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:54:48.010091727Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:54:48.127068138Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:54:48.253726566Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:54:48.297265964Z [err]  Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:48.297273960Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:48.297279985Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:48.297285632Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:54:48.297291196Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:54:48.297300982Z [err]    errno: -3008,
+2025-11-19T09:54:48.297306655Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:48.297312967Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:48.297318577Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:48.297323787Z [err]  }
+2025-11-19T09:54:48.408220800Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:48.423265110Z [inf]  
+2025-11-19T09:54:48.423271815Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:54:48.423276270Z [inf]  > tsx server/seed.ts
+2025-11-19T09:54:48.423283804Z [inf]  
+2025-11-19T09:54:49.212216441Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:54:49.212222366Z [inf]  
+2025-11-19T09:54:49.231050733Z [err]  ❌ Error seeding database: Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:49.231056892Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:49.231062692Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:49.231067958Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:54:49.231073667Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:54:49.231080985Z [err]    errno: -3008,
+2025-11-19T09:54:49.231086539Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:49.231091788Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:49.231097072Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:49.231102365Z [err]  }
+2025-11-19T09:54:51.035030917Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:51.035043063Z [inf]  
+2025-11-19T09:54:51.035049002Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:54:51.035054211Z [inf]  > drizzle-kit push
+2025-11-19T09:54:51.035060242Z [inf]  
+2025-11-19T09:54:51.035065728Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:54:51.035071933Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:54:51.035231411Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:51.035237517Z [inf]  
+2025-11-19T09:54:51.035243373Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:54:51.035248641Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:54:51.035254038Z [inf]  
+2025-11-19T09:54:51.263737110Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:54:51.487986425Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:54:52.163039138Z [err]  }
+2025-11-19T09:54:52.163048787Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:52.163055583Z [inf]  
+2025-11-19T09:54:52.163062017Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:54:52.163063901Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:52.163069842Z [inf]  > tsx server/seed.ts
+2025-11-19T09:54:52.163074117Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:52.163074349Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:52.163078791Z [inf]  
+2025-11-19T09:54:52.163083825Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:52.163090969Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:54:52.163100401Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:54:52.163109924Z [err]    errno: -3008,
+2025-11-19T09:54:52.163113183Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:54:52.163116655Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:52.163121993Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:54:52.163128063Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:54:52.163133703Z [err]  Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:53.087008816Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:54:53.087020534Z [inf]  
+2025-11-19T09:54:53.087028432Z [err]  ❌ Error seeding database: Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:53.087034358Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:53.087039269Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:53.087044269Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:54:53.087049220Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:54:53.087053742Z [err]    errno: -3008,
+2025-11-19T09:54:53.087058401Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:53.087063444Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:53.087068180Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:53.087077976Z [err]  }
+2025-11-19T09:54:54.058744143Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:54.086505078Z [inf]  
+2025-11-19T09:54:54.086513723Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:54:54.086519655Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:54:54.086528789Z [inf]  
+2025-11-19T09:54:54.178316521Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:54.193224846Z [inf]  
+2025-11-19T09:54:54.193230855Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:54:54.193235601Z [inf]  > drizzle-kit push
+2025-11-19T09:54:54.193239843Z [inf]  
+2025-11-19T09:54:54.389886372Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:54:54.389893076Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:54:55.019038173Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:54:55.024145930Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:54:55.144389968Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:54:55.265075391Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:54:55.406458991Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:54:55.452791838Z [err]  Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:55.452800634Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:55.452807332Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:55.452813353Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:54:55.452818450Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:54:55.452824799Z [err]    errno: -3008,
+2025-11-19T09:54:55.452830849Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:55.452837189Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:55.452844235Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:55.452849748Z [err]  }
+2025-11-19T09:54:55.571000969Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:54:55.958385317Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:54:55.958403235Z [inf]  > tsx server/seed.ts
+2025-11-19T09:54:55.958412085Z [inf]  
+2025-11-19T09:54:55.958448536Z [inf]  
+2025-11-19T09:54:56.577242812Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:54:56.577250209Z [inf]  
+2025-11-19T09:54:56.577257008Z [err]  ❌ Error seeding database: Error: getaddrinfo ENOTFOUND postgres.railway.internal
+2025-11-19T09:54:56.577263962Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:54:56.577270318Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:54:56.577276749Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:54:56.577283068Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:54:56.577290144Z [err]    errno: -3008,
+2025-11-19T09:54:56.577330230Z [err]    code: 'ENOTFOUND',
+2025-11-19T09:54:56.577339972Z [err]    syscall: 'getaddrinfo',
+2025-11-19T09:54:56.577346010Z [err]    hostname: 'postgres.railway.internal'
+2025-11-19T09:54:56.577353095Z [err]  }

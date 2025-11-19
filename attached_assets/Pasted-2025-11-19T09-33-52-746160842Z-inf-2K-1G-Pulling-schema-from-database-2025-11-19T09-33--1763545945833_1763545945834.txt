@@ -1,0 +1,1001 @@
+2025-11-19T09:33:52.746160842Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:33:52.894616241Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:33:52.999466608Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:33:53.130456250Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:33:53.260490997Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:33:53.390566374Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:33:53.514044573Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:33:53.726964264Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:33:53.775975116Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:33:53.907747305Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:33:54.030875523Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:33:54.153443810Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:33:54.281697412Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:33:54.410662011Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:33:54.722745238Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:33:54.722753618Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:33:54.805208239Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:33:54.929741259Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:33:55.050225943Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:33:55.183066334Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:33:55.308184654Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:33:55.439605932Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:33:55.718548904Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:33:55.718555730Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:33:55.824621670Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:33:55.950703337Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:33:56.077198554Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:33:56.209992796Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:33:56.333606802Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:33:56.462473684Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:33:56.692712498Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:33:56.722664604Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:33:56.846099657Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:33:56.977946237Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:33:57.109119079Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:33:57.228888892Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:33:57.357162012Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:33:57.486297953Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:33:57.822464196Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:33:57.822514695Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:33:57.870643598Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:33:58.005813334Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:33:58.130908235Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:33:58.258091905Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:33:58.383105702Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:33:58.514226462Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:33:58.717213903Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:33:58.767684728Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:33:58.896364946Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:33:59.025341440Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:33:59.154269433Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:33:59.283273297Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:33:59.416454209Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:33:59.743942941Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:33:59.743948041Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:33:59.796334035Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:33:59.930602364Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:00.057763172Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:00.181529374Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:00.311997313Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:00.437293169Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:00.741221317Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:00.741229904Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:00.824025446Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:00.950959251Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:01.082958018Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:01.208718076Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:01.338962667Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:01.464254184Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:01.737060796Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:01.737069732Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:01.848972823Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:01.977005890Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:02.105373469Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:02.234770406Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:02.364311717Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:02.490747296Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:02.764203862Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:02.764209819Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:02.881609479Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:03.002810120Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:03.130438058Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:03.260469738Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:03.394040744Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:03.513758799Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:03.739040529Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:03.773167158Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:03.898135431Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:04.032024758Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:04.154857836Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:04.285559913Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:04.415702412Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:04.739651832Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:04.739660158Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:04.806759987Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:04.926007174Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:05.055463746Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:05.186000177Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:05.314962501Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:05.441473924Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:05.695036787Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:05.695041961Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:05.825676834Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:05.952008919Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:06.079827197Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:06.207497252Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:06.338316875Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:06.463297816Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:06.755637365Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:06.755643185Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:06.853279890Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:06.978742607Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:07.104192746Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:07.233055527Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:07.372222980Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:07.492982554Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:07.785832276Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:07.785838442Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:07.875351807Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:08.002342547Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:08.130611968Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:08.260470353Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:08.392652694Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:08.515800181Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:08.764667005Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:08.771446296Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:08.903504439Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:09.027601400Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:09.156488757Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:09.289469256Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:09.413196806Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:09.540226937Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:09.749556679Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:09.798900224Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:09.930046994Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:10.057935506Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:10.181744363Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:10.310915843Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:10.440758354Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:10.740639825Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:10.740692240Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:10.823208029Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:10.950999193Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:11.086437204Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:11.206690914Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:11.339036149Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:11.463101067Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:11.710497980Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:11.718967891Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:11.849126373Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:11.979031561Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:12.105039509Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:12.241826750Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:12.365080259Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:12.490306948Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:12.770987874Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:12.771446769Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:12.882377668Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:13.008532192Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:13.130779478Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:13.259009014Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:13.389600762Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:13.518978972Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:13.761249060Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:13.772042166Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:13.900773414Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:14.028470046Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:14.157060146Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:14.285030130Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:14.417723699Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:14.542275085Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:14.748567875Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:14.798429482Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:14.928819464Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:15.054974350Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:15.185356003Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:15.312012093Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:15.441071626Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:15.771059077Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:15.771065482Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:15.824608807Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T09:34:15.951901735Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T09:34:16.084193049Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T09:34:16.209511572Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T09:34:16.336992473Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T09:34:16.466262339Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T09:34:16.768847833Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T09:34:16.768851862Z [err]  AggregateError [ETIMEDOUT]: 
+2025-11-19T09:34:16.768856015Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:16.768860374Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:16.768865601Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:34:16.768873047Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:34:16.768881052Z [err]    code: 'ETIMEDOUT',
+2025-11-19T09:34:16.768886469Z [err]    [errors]: [
+2025-11-19T09:34:16.768891780Z [err]      Error: connect ETIMEDOUT fd12:225a:dd0f:1:2000:7a:e01f:9be8:5432
+2025-11-19T09:34:16.768897340Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:16.768903167Z [err]          at Timeout.internalConnectMultipleTimeout (node:net:1737:38)
+2025-11-19T09:34:16.768908103Z [err]          at listOnTimeout (node:internal/timers:590:11)
+2025-11-19T09:34:16.768917265Z [err]          at process.processTimers (node:internal/timers:523:7) {
+2025-11-19T09:34:16.768922221Z [err]        errno: -110,
+2025-11-19T09:34:16.768926066Z [err]        code: 'ETIMEDOUT',
+2025-11-19T09:34:16.768930410Z [err]        syscall: 'connect',
+2025-11-19T09:34:16.768934353Z [err]        address: 'fd12:225a:dd0f:1:2000:7a:e01f:9be8',
+2025-11-19T09:34:16.768938934Z [err]        port: 5432
+2025-11-19T09:34:16.768942765Z [err]      },
+2025-11-19T09:34:16.768947111Z [err]      Error: connect ETIMEDOUT 10.159.155.232:5432
+2025-11-19T09:34:16.768951386Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:16.768955275Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:16.768959047Z [err]        errno: -110,
+2025-11-19T09:34:16.768963728Z [err]        code: 'ETIMEDOUT',
+2025-11-19T09:34:16.769686985Z [err]        syscall: 'connect',
+2025-11-19T09:34:16.769691834Z [err]        address: '10.159.155.232',
+2025-11-19T09:34:16.769695860Z [err]        port: 5432
+2025-11-19T09:34:16.769702588Z [err]      }
+2025-11-19T09:34:16.769733446Z [err]    ]
+2025-11-19T09:34:16.769738615Z [err]  }
+2025-11-19T09:34:16.819047959Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:16.834980114Z [inf]  
+2025-11-19T09:34:16.834985142Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:34:16.834991519Z [inf]  > tsx server/seed.ts
+2025-11-19T09:34:16.834996740Z [inf]  
+2025-11-19T09:34:17.746579812Z [err]  }
+2025-11-19T09:34:17.746592390Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:17.746592995Z [err]        errno: -111,
+2025-11-19T09:34:17.746599427Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:17.746603559Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:17.746607150Z [err]        syscall: 'connect',
+2025-11-19T09:34:17.746612350Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:17.746612834Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:17.746667717Z [err]        port: 5432
+2025-11-19T09:34:17.746673337Z [err]      }
+2025-11-19T09:34:17.746677715Z [err]    ]
+2025-11-19T09:34:17.746687766Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:17.746693663Z [err]    [errors]: [
+2025-11-19T09:34:17.746697791Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:17.746702581Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:17.746756508Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:34:17.746761126Z [inf]  
+2025-11-19T09:34:17.746765280Z [err]  ❌ Error seeding database: AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:17.746769250Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:17.746775656Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:17.746780044Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:34:17.746784010Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:34:17.746790419Z [err]        syscall: 'connect',
+2025-11-19T09:34:17.746795919Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:17.746800257Z [err]        errno: -111,
+2025-11-19T09:34:17.746804337Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:17.746815389Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:17.746819952Z [err]        port: 5432
+2025-11-19T09:34:17.746824417Z [err]      },
+2025-11-19T09:34:18.523941726Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:18.554443556Z [inf]  
+2025-11-19T09:34:18.554449264Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:34:18.554453798Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:34:18.554458456Z [inf]  
+2025-11-19T09:34:18.773995569Z [inf]  > drizzle-kit push
+2025-11-19T09:34:18.774005896Z [inf]  
+2025-11-19T09:34:18.774034911Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:18.774044171Z [inf]  
+2025-11-19T09:34:18.774051834Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:34:18.794174715Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:34:18.794179984Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:34:19.104431626Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:34:19.282353612Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:34:19.293819893Z [err]        port: 5432
+2025-11-19T09:34:19.293821152Z [err]        port: 5432
+2025-11-19T09:34:19.293823883Z [err]  AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:19.293829973Z [err]      }
+2025-11-19T09:34:19.293832542Z [err]      },
+2025-11-19T09:34:19.293833705Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:19.293839388Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:19.293840650Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:19.293842255Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:19.293844851Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:19.293850800Z [err]        syscall: 'connect',
+2025-11-19T09:34:19.293851112Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:19.293852224Z [err]    [errors]: [
+2025-11-19T09:34:19.293852377Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:34:19.293859521Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:19.293860625Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:19.293862004Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:34:19.293862160Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:19.293868805Z [err]        errno: -111,
+2025-11-19T09:34:19.293870648Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:19.293875257Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:19.293879675Z [err]        errno: -111,
+2025-11-19T09:34:19.293885524Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:19.293889713Z [err]        syscall: 'connect',
+2025-11-19T09:34:19.293893737Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:19.295080779Z [err]    ]
+2025-11-19T09:34:19.295085844Z [err]  }
+2025-11-19T09:34:19.393428862Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:19.414339454Z [inf]  
+2025-11-19T09:34:19.414347884Z [inf]  
+2025-11-19T09:34:19.414348642Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:34:19.414355426Z [inf]  > tsx server/seed.ts
+2025-11-19T09:34:20.042471397Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:34:20.042475398Z [inf]  
+2025-11-19T09:34:20.194756198Z [err]  ❌ Error seeding database: AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:20.194762123Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:20.194768044Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:20.194774509Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:34:20.194780892Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:34:20.194786718Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:20.194792721Z [err]    [errors]: [
+2025-11-19T09:34:20.194798585Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:20.194804341Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:20.194810240Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:20.194816035Z [err]        errno: -111,
+2025-11-19T09:34:20.194821681Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:20.194830708Z [err]        syscall: 'connect',
+2025-11-19T09:34:20.194836373Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:20.194842227Z [err]        port: 5432
+2025-11-19T09:34:20.194849294Z [err]      },
+2025-11-19T09:34:20.194854792Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:20.194860333Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:20.194865539Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:20.194871274Z [err]        errno: -111,
+2025-11-19T09:34:20.194879987Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:20.194886583Z [err]        syscall: 'connect',
+2025-11-19T09:34:20.194892611Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:20.194897958Z [err]        port: 5432
+2025-11-19T09:34:20.194903243Z [err]      }
+2025-11-19T09:34:20.197736293Z [err]    ]
+2025-11-19T09:34:20.197744172Z [err]  }
+2025-11-19T09:34:21.029078113Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:21.052762754Z [inf]  
+2025-11-19T09:34:21.052767482Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:34:21.052771793Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:34:21.052775586Z [inf]  
+2025-11-19T09:34:21.153220817Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:21.171173716Z [inf]  
+2025-11-19T09:34:21.171180183Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:34:21.171184512Z [inf]  > drizzle-kit push
+2025-11-19T09:34:21.171190702Z [inf]  
+2025-11-19T09:34:21.315961292Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:34:21.315965731Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:34:21.753538382Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:34:21.837688560Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:34:21.848434973Z [err]  AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:21.848439028Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:21.848444219Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:21.848447948Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:34:21.848451849Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:34:21.848456441Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:21.848461660Z [err]    [errors]: [
+2025-11-19T09:34:21.848466548Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:21.848471848Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:21.848477426Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:21.848482805Z [err]        errno: -111,
+2025-11-19T09:34:21.848488596Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:21.848493682Z [err]        syscall: 'connect',
+2025-11-19T09:34:21.848502732Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:21.848508298Z [err]        port: 5432
+2025-11-19T09:34:21.848512494Z [err]      },
+2025-11-19T09:34:21.848517199Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:21.848520955Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:21.848524875Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:21.848529642Z [err]        errno: -111,
+2025-11-19T09:34:21.848533382Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:21.848537127Z [err]        syscall: 'connect',
+2025-11-19T09:34:21.848541727Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:21.848546063Z [err]        port: 5432
+2025-11-19T09:34:21.848550084Z [err]      }
+2025-11-19T09:34:21.849441851Z [err]    ]
+2025-11-19T09:34:21.849451268Z [err]  }
+2025-11-19T09:34:21.946550797Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:21.978158333Z [inf]  
+2025-11-19T09:34:21.978162603Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:34:21.978166429Z [inf]  > tsx server/seed.ts
+2025-11-19T09:34:21.978170291Z [inf]  
+2025-11-19T09:34:22.579374162Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:34:22.579387718Z [inf]  
+2025-11-19T09:34:22.777743036Z [err]    ]
+2025-11-19T09:34:22.777751646Z [err]  }
+2025-11-19T09:34:22.777886207Z [err]  ❌ Error seeding database: AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:22.777889878Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:22.777894926Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:22.777899320Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:34:22.777903064Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:34:22.777906992Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:22.777910824Z [err]    [errors]: [
+2025-11-19T09:34:22.777914583Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:22.777918689Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:22.777922750Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:22.777926703Z [err]        errno: -111,
+2025-11-19T09:34:22.777930926Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:22.777935416Z [err]        syscall: 'connect',
+2025-11-19T09:34:22.777939453Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:22.777943384Z [err]        port: 5432
+2025-11-19T09:34:22.777947047Z [err]      },
+2025-11-19T09:34:22.777951629Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:22.777955772Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:22.777959557Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:22.777963954Z [err]        errno: -111,
+2025-11-19T09:34:22.777967974Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:22.777971623Z [err]        syscall: 'connect',
+2025-11-19T09:34:22.777976144Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:22.777979906Z [err]        port: 5432
+2025-11-19T09:34:22.777983724Z [err]      }
+2025-11-19T09:34:23.544149437Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:23.560513373Z [inf]  
+2025-11-19T09:34:23.560517711Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:34:23.560521786Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:34:23.560526135Z [inf]  
+2025-11-19T09:34:23.761825361Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:23.761834183Z [inf]  
+2025-11-19T09:34:23.761841594Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:34:23.761846887Z [inf]  > drizzle-kit push
+2025-11-19T09:34:23.761851549Z [inf]  
+2025-11-19T09:34:23.813600747Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:34:23.813607122Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:34:24.119451313Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:34:24.297809139Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:34:24.310013241Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:24.310024046Z [err]        port: 5432
+2025-11-19T09:34:24.310031108Z [err]      },
+2025-11-19T09:34:24.310037233Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:24.310043362Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:24.310050278Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:24.310056430Z [err]        errno: -111,
+2025-11-19T09:34:24.310063017Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:24.310069249Z [err]        syscall: 'connect',
+2025-11-19T09:34:24.310076540Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:24.310082758Z [err]        port: 5432
+2025-11-19T09:34:24.310088292Z [err]      }
+2025-11-19T09:34:24.310119366Z [err]  AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:24.310126206Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:24.310132562Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:24.310138829Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:34:24.310145023Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:34:24.310152329Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:24.310158887Z [err]    [errors]: [
+2025-11-19T09:34:24.310165788Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:24.310171631Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:24.310177480Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:24.310184070Z [err]        errno: -111,
+2025-11-19T09:34:24.310190479Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:24.310197167Z [err]        syscall: 'connect',
+2025-11-19T09:34:24.312055780Z [err]    ]
+2025-11-19T09:34:24.312062269Z [err]  }
+2025-11-19T09:34:24.415864376Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:24.431690260Z [inf]  
+2025-11-19T09:34:24.431694912Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:34:24.431699289Z [inf]  > tsx server/seed.ts
+2025-11-19T09:34:24.431703615Z [inf]  
+2025-11-19T09:34:25.113637956Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:34:25.113644591Z [inf]  
+2025-11-19T09:34:25.266858347Z [err]        errno: -111,
+2025-11-19T09:34:25.266869977Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:25.266878355Z [err]        syscall: 'connect',
+2025-11-19T09:34:25.266881815Z [err]  ❌ Error seeding database: AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:25.266887018Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:25.266887339Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:25.266893661Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:25.266895615Z [err]        port: 5432
+2025-11-19T09:34:25.266899529Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:34:25.266903982Z [err]      }
+2025-11-19T09:34:25.266905617Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:34:25.266910008Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:25.266914938Z [err]    [errors]: [
+2025-11-19T09:34:25.266918819Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:25.266923003Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:25.266927952Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:25.266932778Z [err]        errno: -111,
+2025-11-19T09:34:25.266936626Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:25.266940456Z [err]        syscall: 'connect',
+2025-11-19T09:34:25.266945062Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:25.266948800Z [err]        port: 5432
+2025-11-19T09:34:25.266952382Z [err]      },
+2025-11-19T09:34:25.266955960Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:25.266959885Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:25.266963707Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:25.267768060Z [err]    ]
+2025-11-19T09:34:25.267772601Z [err]  }
+2025-11-19T09:34:26.149552826Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:26.172964015Z [inf]  
+2025-11-19T09:34:26.172969607Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:34:26.172973951Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:34:26.172978302Z [inf]  
+2025-11-19T09:34:26.256480901Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:26.283048089Z [inf]  
+2025-11-19T09:34:26.283055093Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:34:26.283061957Z [inf]  > drizzle-kit push
+2025-11-19T09:34:26.283068014Z [inf]  
+2025-11-19T09:34:26.427570591Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:34:26.427574981Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:34:26.827442875Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:34:26.976593693Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:34:26.991301090Z [err]        syscall: 'connect',
+2025-11-19T09:34:26.991309476Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:26.991314030Z [err]        port: 5432
+2025-11-19T09:34:26.991318366Z [err]      }
+2025-11-19T09:34:26.991360656Z [err]  AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:26.991364574Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:26.991370339Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:26.991374770Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:34:26.991378893Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:34:26.991383253Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:26.991387059Z [err]    [errors]: [
+2025-11-19T09:34:26.991391049Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:26.991394981Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:26.991399031Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:26.991404370Z [err]        errno: -111,
+2025-11-19T09:34:26.991408832Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:26.991412836Z [err]        syscall: 'connect',
+2025-11-19T09:34:26.991416904Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:26.991420612Z [err]        port: 5432
+2025-11-19T09:34:26.991424516Z [err]      },
+2025-11-19T09:34:26.991428620Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:26.991432463Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:26.991436563Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:26.991440559Z [err]        errno: -111,
+2025-11-19T09:34:26.991444504Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:26.992067872Z [err]    ]
+2025-11-19T09:34:26.992072393Z [err]  }
+2025-11-19T09:34:27.091153476Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:27.117466206Z [inf]  
+2025-11-19T09:34:27.117475327Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:34:27.117482947Z [inf]  > tsx server/seed.ts
+2025-11-19T09:34:27.117487958Z [inf]  
+2025-11-19T09:34:27.805255999Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:34:27.805262509Z [inf]  
+2025-11-19T09:34:27.958863577Z [err]  ❌ Error seeding database: AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:27.958871893Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:27.958873720Z [err]        port: 5432
+2025-11-19T09:34:27.958875533Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:27.958882788Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:27.958885487Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:27.958885637Z [err]      }
+2025-11-19T09:34:27.958888371Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:27.958892143Z [err]        errno: -111,
+2025-11-19T09:34:27.958896621Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:34:27.958901038Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:27.958901159Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:27.958905941Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:34:27.958910019Z [err]        syscall: 'connect',
+2025-11-19T09:34:27.958911499Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:27.958913757Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:27.958919718Z [err]        errno: -111,
+2025-11-19T09:34:27.958919799Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:27.958921485Z [err]    [errors]: [
+2025-11-19T09:34:27.958926513Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:27.958931948Z [err]        syscall: 'connect',
+2025-11-19T09:34:27.958936648Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:27.958947329Z [err]        port: 5432
+2025-11-19T09:34:27.958951751Z [err]      },
+2025-11-19T09:34:27.958956759Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:27.960736378Z [err]    ]
+2025-11-19T09:34:27.960740315Z [err]  }
+2025-11-19T09:34:28.800715962Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:28.822169508Z [inf]  
+2025-11-19T09:34:28.822176433Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:34:28.822182342Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:34:28.822188768Z [inf]  
+2025-11-19T09:34:28.913166523Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:28.940667616Z [inf]  
+2025-11-19T09:34:28.940672469Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:34:28.940676676Z [inf]  > drizzle-kit push
+2025-11-19T09:34:28.940680701Z [inf]  
+2025-11-19T09:34:29.083139786Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:34:29.083144220Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:34:29.457662238Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:34:29.755015652Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:34:29.755019501Z [err]  AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:29.755023250Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:29.755026919Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:29.755030947Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:34:29.755034694Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:34:29.755038270Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:29.755042601Z [err]    [errors]: [
+2025-11-19T09:34:29.755046846Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:29.755050875Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:29.755054749Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:29.755058508Z [err]        errno: -111,
+2025-11-19T09:34:29.755062163Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:29.755066500Z [err]        syscall: 'connect',
+2025-11-19T09:34:29.755070313Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:29.755412157Z [err]        port: 5432
+2025-11-19T09:34:29.755416108Z [err]      },
+2025-11-19T09:34:29.755419915Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:29.755423445Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:29.755427022Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:29.755430538Z [err]        errno: -111,
+2025-11-19T09:34:29.755433894Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:29.755437388Z [err]        syscall: 'connect',
+2025-11-19T09:34:29.755440853Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:29.755444967Z [err]        port: 5432
+2025-11-19T09:34:29.755498891Z [err]      }
+2025-11-19T09:34:29.755502519Z [err]    ]
+2025-11-19T09:34:29.755506172Z [err]  }
+2025-11-19T09:34:29.755509780Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:29.768583589Z [inf]  
+2025-11-19T09:34:29.768591443Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:34:29.768598762Z [inf]  > tsx server/seed.ts
+2025-11-19T09:34:29.768604631Z [inf]  
+2025-11-19T09:34:30.450825828Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:34:30.450835837Z [inf]  
+2025-11-19T09:34:30.756712562Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:30.756723374Z [err]        syscall: 'connect',
+2025-11-19T09:34:30.756731245Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:30.756737011Z [err]        port: 5432
+2025-11-19T09:34:30.756742938Z [err]      }
+2025-11-19T09:34:30.756935798Z [err]  ❌ Error seeding database: AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:30.756942922Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:30.756950875Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:30.756958004Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:34:30.756965953Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:34:30.756972425Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:30.756978892Z [err]    [errors]: [
+2025-11-19T09:34:30.756984979Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:30.756991409Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:30.756997899Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:30.757004179Z [err]        errno: -111,
+2025-11-19T09:34:30.757010609Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:30.757022089Z [err]        syscall: 'connect',
+2025-11-19T09:34:30.757028957Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:30.757033077Z [err]    ]
+2025-11-19T09:34:30.757036937Z [err]        port: 5432
+2025-11-19T09:34:30.757038237Z [err]  }
+2025-11-19T09:34:30.757044130Z [err]      },
+2025-11-19T09:34:30.757049253Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:30.757054075Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:30.757059633Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:30.757064794Z [err]        errno: -111,
+2025-11-19T09:34:31.427801110Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:31.449882002Z [inf]  
+2025-11-19T09:34:31.449885816Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:34:31.449889234Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:34:31.449892542Z [inf]  
+2025-11-19T09:34:31.533139791Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:31.558446522Z [inf]  
+2025-11-19T09:34:31.558484980Z [inf]  
+2025-11-19T09:34:31.558493145Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:34:31.558499864Z [inf]  > drizzle-kit push
+2025-11-19T09:34:31.785165566Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:34:31.785172240Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:34:32.011747611Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:34:32.201553852Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:34:32.215019976Z [err]  AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:32.215035567Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:32.215044181Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:32.215051669Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:34:32.215058450Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:34:32.215066585Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:32.215075522Z [err]    [errors]: [
+2025-11-19T09:34:32.215085305Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:32.215093625Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:32.215101119Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:32.215110894Z [err]        errno: -111,
+2025-11-19T09:34:32.215119802Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:32.215127894Z [err]        syscall: 'connect',
+2025-11-19T09:34:32.215139713Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:32.215147345Z [err]        port: 5432
+2025-11-19T09:34:32.215154688Z [err]      },
+2025-11-19T09:34:32.215162457Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:32.215170466Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:32.215177937Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:32.215183902Z [err]        errno: -111,
+2025-11-19T09:34:32.215190796Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:32.215197997Z [err]        syscall: 'connect',
+2025-11-19T09:34:32.215204684Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:32.215211623Z [err]        port: 5432
+2025-11-19T09:34:32.215218224Z [err]      }
+2025-11-19T09:34:32.216736924Z [err]    ]
+2025-11-19T09:34:32.216743559Z [err]  }
+2025-11-19T09:34:32.319046636Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:32.336471340Z [inf]  
+2025-11-19T09:34:32.336475353Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:34:32.336479561Z [inf]  > tsx server/seed.ts
+2025-11-19T09:34:32.336484163Z [inf]  
+2025-11-19T09:34:33.052870443Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:34:33.052878477Z [inf]  
+2025-11-19T09:34:33.221985878Z [err]      }
+2025-11-19T09:34:33.221994705Z [err]  ❌ Error seeding database: AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:33.222001861Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:33.222006610Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:33.222012164Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:34:33.222016749Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:34:33.222021730Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:33.222025746Z [err]    [errors]: [
+2025-11-19T09:34:33.222029542Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:33.222035276Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:33.222039664Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:33.222043590Z [err]        errno: -111,
+2025-11-19T09:34:33.222047578Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:33.222051535Z [err]        syscall: 'connect',
+2025-11-19T09:34:33.222055653Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:33.222060196Z [err]        port: 5432
+2025-11-19T09:34:33.222064275Z [err]      },
+2025-11-19T09:34:33.222068208Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:33.222072222Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:33.222076470Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:33.222080776Z [err]        errno: -111,
+2025-11-19T09:34:33.222084604Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:33.222088308Z [err]        syscall: 'connect',
+2025-11-19T09:34:33.222091968Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:33.222096211Z [err]        port: 5432
+2025-11-19T09:34:33.222925643Z [err]    ]
+2025-11-19T09:34:33.222929865Z [err]  }
+2025-11-19T09:34:34.020270721Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:34.041592172Z [inf]  
+2025-11-19T09:34:34.041596410Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:34:34.041600685Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:34:34.041605080Z [inf]  
+2025-11-19T09:34:34.124634341Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:34.147295514Z [inf]  
+2025-11-19T09:34:34.147300478Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:34:34.147304759Z [inf]  > drizzle-kit push
+2025-11-19T09:34:34.147309044Z [inf]  
+2025-11-19T09:34:34.296851832Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:34:34.296859409Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:34:34.837515884Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:34:34.837521752Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:34:34.843940718Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:34:34.843947426Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:34.843947733Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:34:34.843952914Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:34.843959534Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:34.843959738Z [err]    [errors]: [
+2025-11-19T09:34:34.843964884Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:34.843971220Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:34.843973627Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:34.843980138Z [err]        errno: -111,
+2025-11-19T09:34:34.843981477Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:34.843988490Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:34.843989736Z [err]        errno: -111,
+2025-11-19T09:34:34.843992429Z [err]  AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:34.843997769Z [err]        syscall: 'connect',
+2025-11-19T09:34:34.843998980Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:34.844001350Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:34.844006769Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:34.844007354Z [err]        syscall: 'connect',
+2025-11-19T09:34:34.844009961Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:34.844015994Z [err]        port: 5432
+2025-11-19T09:34:34.844016139Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:34.844023587Z [err]        port: 5432
+2025-11-19T09:34:34.844024658Z [err]      }
+2025-11-19T09:34:34.844028763Z [err]      },
+2025-11-19T09:34:34.845570094Z [err]    ]
+2025-11-19T09:34:34.845581146Z [err]  }
+2025-11-19T09:34:34.962201379Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:34.985594499Z [inf]  
+2025-11-19T09:34:34.985599380Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:34:34.985603925Z [inf]  > tsx server/seed.ts
+2025-11-19T09:34:34.985610191Z [inf]  
+2025-11-19T09:34:35.790906350Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:34:35.790918915Z [inf]  
+2025-11-19T09:34:35.820076595Z [err]        errno: -111,
+2025-11-19T09:34:35.820082764Z [err]  ❌ Error seeding database: AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:35.820085444Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:35.820090800Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:35.820091568Z [err]        syscall: 'connect',
+2025-11-19T09:34:35.820096300Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:35.820098101Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:35.820102692Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:34:35.820104149Z [err]        port: 5432
+2025-11-19T09:34:35.820109291Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:34:35.820110576Z [err]      }
+2025-11-19T09:34:35.820114725Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:35.820119001Z [err]    [errors]: [
+2025-11-19T09:34:35.820123266Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:35.820126830Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:35.820131049Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:35.820135234Z [err]        errno: -111,
+2025-11-19T09:34:35.820139469Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:35.820144149Z [err]        syscall: 'connect',
+2025-11-19T09:34:35.820148279Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:35.820152827Z [err]        port: 5432
+2025-11-19T09:34:35.820156712Z [err]      },
+2025-11-19T09:34:35.820161340Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:35.820165287Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:35.820169889Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:35.822334677Z [err]    ]
+2025-11-19T09:34:35.822339571Z [err]  }
+2025-11-19T09:34:36.830155873Z [inf]  
+2025-11-19T09:34:36.830165703Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:34:36.830171421Z [inf]  > drizzle-kit push
+2025-11-19T09:34:36.830177555Z [inf]  
+2025-11-19T09:34:36.830195614Z [inf]  
+2025-11-19T09:34:36.830205203Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:34:36.830211449Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:34:36.830217267Z [inf]  
+2025-11-19T09:34:36.830222608Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:36.830247101Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:36.906602688Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:34:36.906607047Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:34:37.253239853Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:34:37.469115414Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:34:37.481818392Z [err]      },
+2025-11-19T09:34:37.481825087Z [err]  AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:37.481830511Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:37.481831504Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:37.481836096Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:37.481840976Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:34:37.481845220Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:37.481846933Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:34:37.481850907Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:37.481854277Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:37.481856402Z [err]        errno: -111,
+2025-11-19T09:34:37.481859883Z [err]    [errors]: [
+2025-11-19T09:34:37.481862700Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:37.481865252Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:37.481871569Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:37.481871761Z [err]        syscall: 'connect',
+2025-11-19T09:34:37.481877206Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:37.481881573Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:37.481882882Z [err]        port: 5432
+2025-11-19T09:34:37.481887610Z [err]        errno: -111,
+2025-11-19T09:34:37.481888854Z [err]      }
+2025-11-19T09:34:37.481893642Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:37.481897533Z [err]        syscall: 'connect',
+2025-11-19T09:34:37.481901798Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:37.481906104Z [err]        port: 5432
+2025-11-19T09:34:37.483011879Z [err]    ]
+2025-11-19T09:34:37.483016062Z [err]  }
+2025-11-19T09:34:37.587453256Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:37.822822199Z [inf]  
+2025-11-19T09:34:37.822828945Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:34:37.822835467Z [inf]  > tsx server/seed.ts
+2025-11-19T09:34:37.822843454Z [inf]  
+2025-11-19T09:34:38.222274312Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:34:38.222280237Z [inf]  
+2025-11-19T09:34:38.375419054Z [err]      }
+2025-11-19T09:34:38.375430333Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:38.375442066Z [err]        syscall: 'connect',
+2025-11-19T09:34:38.375451143Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:38.375458228Z [err]        port: 5432
+2025-11-19T09:34:38.375464579Z [err]      },
+2025-11-19T09:34:38.375473555Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:38.375479665Z [err]  ❌ Error seeding database: AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:38.375481688Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:38.375487372Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:38.375489486Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:38.375493973Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:38.375498022Z [err]        errno: -111,
+2025-11-19T09:34:38.375501832Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:34:38.375506001Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:38.375510056Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:34:38.375517331Z [err]        syscall: 'connect',
+2025-11-19T09:34:38.375518377Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:38.375525573Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:38.375526190Z [err]    [errors]: [
+2025-11-19T09:34:38.375535604Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:38.375537177Z [err]        port: 5432
+2025-11-19T09:34:38.375542112Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:38.375547440Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:38.375552614Z [err]        errno: -111,
+2025-11-19T09:34:38.376126267Z [err]    ]
+2025-11-19T09:34:38.376131028Z [err]  }
+2025-11-19T09:34:39.219564292Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:39.230797381Z [inf]  
+2025-11-19T09:34:39.230803999Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:34:39.230809751Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:34:39.230814637Z [inf]  
+2025-11-19T09:34:39.308962647Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:39.333160100Z [inf]  
+2025-11-19T09:34:39.333165887Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:34:39.333169720Z [inf]  > drizzle-kit push
+2025-11-19T09:34:39.333175788Z [inf]  
+2025-11-19T09:34:39.484919798Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:34:39.484923564Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:34:39.822959467Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:34:40.034105049Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:34:40.046635351Z [err]        errno: -111,
+2025-11-19T09:34:40.046639852Z [err]  AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:40.046644608Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:40.046647365Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:40.046651008Z [err]        syscall: 'connect',
+2025-11-19T09:34:40.046653538Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:40.046657697Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:40.046659389Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:34:40.046663801Z [err]        port: 5432
+2025-11-19T09:34:40.046665070Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:34:40.046671384Z [err]      },
+2025-11-19T09:34:40.046671722Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:40.046677411Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:40.046677499Z [err]    [errors]: [
+2025-11-19T09:34:40.046682275Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:40.046685862Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:40.046687929Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:40.046691129Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:40.046694332Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:40.046696653Z [err]        errno: -111,
+2025-11-19T09:34:40.046701107Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:40.046705585Z [err]        syscall: 'connect',
+2025-11-19T09:34:40.046711133Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:40.046717039Z [err]        port: 5432
+2025-11-19T09:34:40.046721302Z [err]      }
+2025-11-19T09:34:40.048060960Z [err]    ]
+2025-11-19T09:34:40.048066641Z [err]  }
+2025-11-19T09:34:40.153672074Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:40.177161903Z [inf]  
+2025-11-19T09:34:40.177168340Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:34:40.177172513Z [inf]  > tsx server/seed.ts
+2025-11-19T09:34:40.177177020Z [inf]  
+2025-11-19T09:34:40.855960142Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:34:40.855965197Z [inf]  
+2025-11-19T09:34:41.014245125Z [err]        errno: -111,
+2025-11-19T09:34:41.014250223Z [err]  ❌ Error seeding database: AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:41.014254478Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:41.014260856Z [err]        syscall: 'connect',
+2025-11-19T09:34:41.014267121Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:41.014269212Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:41.014277028Z [err]        port: 5432
+2025-11-19T09:34:41.014278500Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:41.014285311Z [err]      },
+2025-11-19T09:34:41.014290034Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:34:41.014293033Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:41.014299568Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:34:41.014299580Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:41.014308397Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:41.014309098Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:41.014317622Z [err]        errno: -111,
+2025-11-19T09:34:41.014319749Z [err]    [errors]: [
+2025-11-19T09:34:41.014326553Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:41.014328830Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:41.014332678Z [err]        syscall: 'connect',
+2025-11-19T09:34:41.014338423Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:41.014339562Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:41.014347466Z [err]        port: 5432
+2025-11-19T09:34:41.014349691Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:41.014353827Z [err]      }
+2025-11-19T09:34:41.014839105Z [err]    ]
+2025-11-19T09:34:41.014843599Z [err]  }
+2025-11-19T09:34:41.800785567Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:41.819067395Z [inf]  
+2025-11-19T09:34:41.819076394Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T09:34:41.819081035Z [inf]  > npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T09:34:41.819085465Z [inf]  
+2025-11-19T09:34:41.905429944Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:41.931019861Z [inf]  
+2025-11-19T09:34:41.931026998Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T09:34:41.931031519Z [inf]  > drizzle-kit push
+2025-11-19T09:34:41.931036138Z [inf]  
+2025-11-19T09:34:42.071113882Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T09:34:42.071118432Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T09:34:42.412664975Z [inf]  Using 'pg' driver for database querying
+2025-11-19T09:34:42.605135730Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T09:34:42.841378913Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:42.841387922Z [err]        port: 5432
+2025-11-19T09:34:42.841394524Z [err]      }
+2025-11-19T09:34:42.841423228Z [err]  AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:42.841430150Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:42.841432951Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:42.841438121Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:42.841440936Z [err]        errno: -111,
+2025-11-19T09:34:42.841447533Z [err]      at async Object.query (/app/node_modules/drizzle-kit/bin.cjs:80622:26)
+2025-11-19T09:34:42.841448129Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:42.841455048Z [err]      at async fromDatabase2 (/app/node_modules/drizzle-kit/bin.cjs:19276:25) {
+2025-11-19T09:34:42.841455135Z [err]        syscall: 'connect',
+2025-11-19T09:34:42.841464327Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:42.841465243Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:42.841474555Z [err]    [errors]: [
+2025-11-19T09:34:42.841474767Z [err]      },
+2025-11-19T09:34:42.841478137Z [err]        port: 5432
+2025-11-19T09:34:42.841483976Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:42.841493929Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:42.841495104Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:42.841503808Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:42.841511292Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:42.841516679Z [err]        errno: -111,
+2025-11-19T09:34:42.841521261Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:42.841528074Z [err]        syscall: 'connect',
+2025-11-19T09:34:42.842201356Z [err]    ]
+2025-11-19T09:34:42.842205464Z [err]  }
+2025-11-19T09:34:42.842209626Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T09:34:42.842214426Z [inf]  
+2025-11-19T09:34:42.842218724Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T09:34:42.842223144Z [inf]  > tsx server/seed.ts
+2025-11-19T09:34:42.842227767Z [inf]  
+2025-11-19T09:34:43.428273483Z [inf]  🌱 Starting database seeding...
+2025-11-19T09:34:43.428281017Z [inf]  
+2025-11-19T09:34:43.581187007Z [err]        address: '10.213.83.90',
+2025-11-19T09:34:43.581193603Z [err]        port: 5432
+2025-11-19T09:34:43.581197825Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:43.581200323Z [err]      }
+2025-11-19T09:34:43.581204903Z [err]        errno: -111,
+2025-11-19T09:34:43.581205463Z [err]        errno: -111,
+2025-11-19T09:34:43.581211309Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:43.581211500Z [err]        code: 'ECONNREFUSED',
+2025-11-19T09:34:43.581216948Z [err]        syscall: 'connect',
+2025-11-19T09:34:43.581220672Z [err]        syscall: 'connect',
+2025-11-19T09:34:43.581222949Z [err]        address: 'fd12:225a:dd0f:1:1000:74:955:535a',
+2025-11-19T09:34:43.581229501Z [err]        port: 5432
+2025-11-19T09:34:43.581235086Z [err]      },
+2025-11-19T09:34:43.581240550Z [err]  ❌ Error seeding database: AggregateError [ECONNREFUSED]: 
+2025-11-19T09:34:43.581240788Z [err]      Error: connect ECONNREFUSED 10.213.83.90:5432
+2025-11-19T09:34:43.581246750Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:43.581248052Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-19T09:34:43.581252190Z [err]          at afterConnectMultiple (node:net:1708:16) {
+2025-11-19T09:34:43.581256986Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-19T09:34:43.581262420Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-19T09:34:43.581270698Z [err]      at async seed (/app/server/seed.ts:24:32) {
+2025-11-19T09:34:43.581279639Z [err]    code: 'ECONNREFUSED',
+2025-11-19T09:34:43.581297341Z [err]    [errors]: [
+2025-11-19T09:34:43.581303064Z [err]      Error: connect ECONNREFUSED fd12:225a:dd0f:1:1000:74:955:535a:5432
+2025-11-19T09:34:43.581308555Z [err]          at createConnectionError (node:net:1678:14)
+2025-11-19T09:34:43.582588330Z [err]    ]
+2025-11-19T09:34:43.582592276Z [err]  }
+2025-11-19T09:38:31.000000000Z [inf]  Stopping Container
