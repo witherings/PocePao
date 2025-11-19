@@ -40,26 +40,38 @@ Without this volume, all uploaded images will be lost when the container restart
 
 ### Telegram Notifications (Optional)
 
-#### Option 1: Single Bot for Everything (Simplest)
-Use the same Telegram bot for both orders and reservations:
+#### Recommended Configuration: One Bot, Two Chat IDs
+Use a single Telegram bot that sends notifications to different chats:
+```bash
+# Bot token (shared for both orders and reservations)
+TELEGRAM_BOT_TOKEN=7874332998:AAEjVN5tyT5QtvAtrNQv296Xd3h95snX1oE
+
+# Orders go to this chat
+TELEGRAM_ORDER_CHAT_ID=7925907174
+
+# Reservations go to this chat
+TELEGRAM_RESERVATION_CHAT_ID=1637641074
+```
+
+This is the cleanest setup - one bot, but orders and reservations arrive in different Telegram chats/accounts.
+
+#### Alternative Configurations
+
+**Option A: Single Chat for Everything**
 ```bash
 TELEGRAM_BOT_TOKEN=your-bot-token-here
 TELEGRAM_CHAT_ID=your-chat-id-here
 ```
 
-#### Option 2: Separate Bots (Advanced)
-Send orders to one Telegram account and reservations to another:
+**Option B: Separate Bots (Advanced)**
 ```bash
-# For orders (goes to one Telegram account/channel)
 TELEGRAM_ORDER_BOT_TOKEN=order-bot-token
 TELEGRAM_ORDER_CHAT_ID=order-chat-id
-
-# For reservations (goes to another Telegram account/channel)
 TELEGRAM_RESERVATION_BOT_TOKEN=reservation-bot-token
 TELEGRAM_RESERVATION_CHAT_ID=reservation-chat-id
 ```
 
-**Note**: If you use Option 2, both sets of tokens must be configured. The system will fall back to `TELEGRAM_BOT_TOKEN` if the specific tokens are not found.
+**Note**: The system uses intelligent fallback logic - it will use specific tokens first, then fall back to shared `TELEGRAM_BOT_TOKEN` if specific ones aren't set.
 
 ## Deployment Steps
 
