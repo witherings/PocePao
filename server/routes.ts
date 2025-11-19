@@ -230,10 +230,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/gallery/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const deleted = await storage.deleteGalleryImage(id);
+      const deletedImage = await storage.deleteGalleryImage(id);
       
-      if (!deleted) {
+      if (!deletedImage) {
         return res.status(404).json({ error: "Image not found" });
+      }
+
+      // Delete the file from disk if it exists
+      if (deletedImage.url.startsWith('/images/') || deletedImage.url.startsWith('/uploads/')) {
+        const filePath = path.join(process.cwd(), 'public', deletedImage.url);
+        try {
+          await fs.unlink(filePath);
+          console.log(`🗑️ Deleted file: ${filePath}`);
+        } catch (err) {
+          console.warn(`⚠️ Could not delete file ${filePath}:`, err);
+        }
       }
       
       res.status(204).send();

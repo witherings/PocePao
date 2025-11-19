@@ -237,7 +237,23 @@ export function registerAdminRoutes(app: Express) {
   app.delete("/api/admin/gallery/:id", ensureAuthenticated, async (req, res) => {
     try {
       const { id } = req.params;
-      await storage.deleteGalleryImage(id);
+      const deletedImage = await storage.deleteGalleryImage(id);
+      
+      if (!deletedImage) {
+        return res.status(404).json({ error: "Image not found" });
+      }
+
+      // Delete the file from disk if it exists
+      if (deletedImage.url.startsWith('/images/') || deletedImage.url.startsWith('/uploads/')) {
+        const filePath = require('path').join(process.cwd(), 'public', deletedImage.url);
+        try {
+          await require('fs').promises.unlink(filePath);
+          console.log(`🗑️ Deleted file: ${filePath}`);
+        } catch (err) {
+          console.warn(`⚠️ Could not delete file ${filePath}:`, err);
+        }
+      }
+
       res.json({ success: true });
     } catch (error: any) {
       res.status(400).json({ error: error.message || "Failed to delete gallery image" });

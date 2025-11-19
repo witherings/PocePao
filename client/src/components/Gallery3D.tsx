@@ -8,12 +8,6 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
 import { type GalleryImage } from "@shared/schema";
 
-const defaultImages = [
-  { id: "default-1", url: "/images/gallery-1.png", filename: "Store Interior 1" },
-  { id: "default-2", url: "/images/gallery-2.png", filename: "Store Interior 2" },
-  { id: "default-3", url: "/images/gallery-3.png", filename: "Store View" },
-];
-
 export function Gallery3D() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -26,11 +20,9 @@ export function Gallery3D() {
 
   useBodyScrollLock(isFullscreenOpen);
 
-  const { data: uploadedImages = [] } = useQuery<GalleryImage[]>({
+  const { data: allImages = [] } = useQuery<GalleryImage[]>({
     queryKey: ["/api/gallery"],
   });
-
-  const allImages = [...defaultImages, ...uploadedImages];
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -180,18 +172,6 @@ export function Gallery3D() {
                             <ZoomIn className="w-6 h-6" />
                           </div>
                         </div>
-                      )}
-                      {!image.id.startsWith('default-') && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteMutation.mutate(image.id);
-                          }}
-                          className="absolute top-2 right-2 bg-destructive text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                          data-testid={`button-delete-${image.id}`}
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
                       )}
                     </Card>
                   </div>

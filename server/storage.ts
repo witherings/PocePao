@@ -53,7 +53,7 @@ export interface IStorage {
   getAllGalleryImages(): Promise<GalleryImage[]>;
   getGalleryImageById(id: string): Promise<GalleryImage | undefined>;
   createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage>;
-  deleteGalleryImage(id: string): Promise<boolean>;
+  deleteGalleryImage(id: string): Promise<GalleryImage | null>;
 
   // Ingredients
   getAllIngredients(): Promise<Ingredient[]>;
@@ -192,10 +192,10 @@ class DatabaseStorage implements IStorage {
     return results[0];
   }
 
-  async deleteGalleryImage(id: string): Promise<boolean> {
+  async deleteGalleryImage(id: string): Promise<GalleryImage | null> {
     const db = await getDb();
     const results = await db.delete(galleryImagesTable).where(eq(galleryImagesTable.id, id)).returning();
-    return results.length > 0;
+    return results.length > 0 ? results[0] : null;
   }
 
   // Ingredients
