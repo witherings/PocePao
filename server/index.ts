@@ -22,11 +22,6 @@ let sessionMiddleware: any;
 
 // Passport middleware - will be configured after session middleware
 
-// Dev mode: Auto-authenticate admin for easier testing
-if (process.env.NODE_ENV !== "production") {
-  app.use(devBypassAuth);
-}
-
 // Serve menu images from public/images
 app.use("/images", express.static("public/images"));
 
@@ -91,6 +86,11 @@ async function initializeApp() {
   app.use(sessionMiddleware);
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // Dev mode: Auto-authenticate admin for easier testing (after session is initialized)
+  if (process.env.NODE_ENV !== "production") {
+    app.use(devBypassAuth);
+  }
 
   await ensureAdminExists();
   
