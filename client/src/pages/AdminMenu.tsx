@@ -42,6 +42,19 @@ interface MenuItem {
   toppings?: string[] | null;
 }
 
+interface Ingredient {
+  id: string;
+  name: string;
+  nameDE: string | null;
+  type: string;
+  description: string | null;
+  descriptionDE: string | null;
+  image: string | null;
+  price: string | null;
+  order: number;
+  available: number;
+}
+
 export function AdminMenu() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -49,8 +62,10 @@ export function AdminMenu() {
   
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [editingMenuItem, setEditingMenuItem] = useState<MenuItem | null>(null);
+  const [editingIngredient, setEditingIngredient] = useState<Ingredient | null>(null);
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);
   const [showMenuItemDialog, setShowMenuItemDialog] = useState(false);
+  const [showIngredientDialog, setShowIngredientDialog] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -62,6 +77,10 @@ export function AdminMenu() {
 
   const { data: menuItems = [] } = useQuery<MenuItem[]>({
     queryKey: ["/api/menu-items"],
+  });
+
+  const { data: ingredients = [] } = useQuery<Ingredient[]>({
+    queryKey: ["/api/ingredients"],
   });
 
   const createCategoryMutation = useMutation({
@@ -154,6 +173,58 @@ export function AdminMenu() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/menu-items"] });
       toast({ title: "Gericht gelöscht" });
+    },
+  });
+
+  const createIngredientMutation = useMutation({
+    mutationFn: async (data: Partial<Ingredient>) => {
+      return await apiRequest("POST", "/api/ingredients", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/ingredients"] });
+      setShowIngredientDialog(false);
+      setEditingIngredient(null);
+      setSelectedImage(null);
+      setImagePreview(null);
+      toast({ title: "Zutat erstellt" });
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Fehler", 
+        description: error.message || "Zutat konnte nicht erstellt werden",
+        variant: "destructive" 
+      });
+    },
+  });
+
+  const updateIngredientMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<Ingredient> }) => {
+      return await apiRequest("PUT", `/api/ingredients/${id}`, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/ingredients"] });
+      setShowIngredientDialog(false);
+      setEditingIngredient(null);
+      setSelectedImage(null);
+      setImagePreview(null);
+      toast({ title: "Zutat aktualisiert" });
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Fehler", 
+        description: error.message || "Zutat konnte nicht aktualisiert werden",
+        variant: "destructive" 
+      });
+    },
+  });
+
+  const deleteIngredientMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await apiRequest("DELETE", `/api/ingredients/${id}`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/ingredients"] });
+      toast({ title: "Zutat gelöscht" });
     },
   });
 
@@ -266,6 +337,69 @@ export function AdminMenu() {
     setImagePreview(null);
   };
 
+  const handleSaveIngredient = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    let imageUrl = editingIngredient?.image || null;
+
+    // Upload image if selected
+    if (selectedImage) {
+      setIsUploading(true);
+      try {
+        const uploadFormData = new FormData();
+        uploadFormData.append("image", selectedImage);
+
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          credentials: "include",
+          body: uploadFormData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to upload image");
+        }
+
+        const result = await response.json();
+        imageUrl = result.url;
+      } catch (error) {
+        toast({ 
+          title: "❌ Fehler beim Hochladen des Bildes", 
+          variant: "destructive" 
+        });
+        setIsUploading(false);
+        return;
+      } finally {
+        setIsUploading(false);
+      }
+    }
+
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string || "";
+    const price = formData.get("price") as string;
+    
+    const data: any = {
+      name: name,
+      nameDE: name,
+      description: description,
+      descriptionDE: description,
+      type: formData.get("type") as string,
+      image: imageUrl,
+      price: price || null,
+      order: parseInt(formData.get("order") as string) || 0,
+      available: formData.get("available") === "on" ? 1 : 0,
+    };
+
+    if (editingIngredient) {
+      updateIngredientMutation.mutate({ id: editingIngredient.id, data });
+    } else {
+      createIngredientMutation.mutate(data);
+    }
+    
+    setSelectedImage(null);
+    setImagePreview(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="container mx-auto p-6 md:p-8">
@@ -286,6 +420,7 @@ export function AdminMenu() {
         <TabsList className="mb-8 p-1.5 bg-white shadow-sm">
           <TabsTrigger value="categories" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Kategorien</TabsTrigger>
           <TabsTrigger value="items" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Gerichte</TabsTrigger>
+          <TabsTrigger value="ingredients" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Zutaten</TabsTrigger>
         </TabsList>
 
         <TabsContent value="categories">
@@ -651,66 +786,365 @@ export function AdminMenu() {
               </Dialog>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="space-y-3">
-                {menuItems.map((item) => {
-                  const category = categories.find((c) => c.id === item.categoryId);
-                  return (
-                    <div
-                      key={item.id}
-                      className="flex items-center justify-between p-5 border-2 rounded-xl hover:border-ocean/30 hover:bg-ocean/5 transition-all duration-200 shadow-sm"
-                    >
-                      <div className="flex items-center gap-3 flex-1">
-                        {item.image && (
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-12 h-12 object-cover rounded"
-                          />
-                        )}
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium">{item.name}</p>
-                            {item.popular === 1 && (
-                              <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                                Beliebt
-                              </span>
-                            )}
-                            {item.available === 0 && (
-                              <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
-                                Nicht verfügbar
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-sm text-gray-500">
-                            {category?.name} • {item.price}€
-                          </p>
-                          {item.description && (
-                            <p className="text-sm text-gray-600 mt-1 line-clamp-2">
-                              {item.description}
+              <div className="space-y-6">
+                {categories
+                  .sort((a, b) => a.order - b.order)
+                  .map((category) => {
+                    const categoryItems = menuItems.filter(
+                      (item) => item.categoryId === category.id
+                    );
+                    
+                    if (categoryItems.length === 0) return null;
+                    
+                    return (
+                      <div key={category.id} className="space-y-3">
+                        <div className="flex items-center gap-3 py-3 px-4 bg-gradient-to-r from-ocean/10 to-transparent rounded-lg border-l-4 border-ocean">
+                          <span className="text-3xl">{category.icon}</span>
+                          <div>
+                            <h3 className="font-poppins text-xl font-bold text-ocean">
+                              {category.nameDE || category.name}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                              {categoryItems.length} {categoryItems.length === 1 ? 'Gericht' : 'Gerichte'}
                             </p>
-                          )}
+                          </div>
+                        </div>
+                        
+                        {categoryItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center justify-between p-5 border-2 rounded-xl hover:border-ocean/30 hover:bg-ocean/5 transition-all duration-200 shadow-sm ml-4"
+                          >
+                            <div className="flex items-center gap-3 flex-1">
+                              {item.image && (
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  className="w-12 h-12 object-cover rounded"
+                                />
+                              )}
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2">
+                                  <p className="font-medium">{item.nameDE || item.name}</p>
+                                  {item.popular === 1 && (
+                                    <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                                      Beliebt
+                                    </span>
+                                  )}
+                                  {item.available === 0 && (
+                                    <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
+                                      Nicht verfügbar
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-sm text-gray-500">
+                                  {item.price}€
+                                  {item.priceSmall && ` (Klein: ${item.priceSmall}€)`}
+                                </p>
+                                {item.descriptionDE && (
+                                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                                    {item.descriptionDE}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setEditingMenuItem(item);
+                                  setSelectedImage(null);
+                                  setImagePreview(null);
+                                  setShowMenuItemDialog(true);
+                                }}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => deleteMenuItemMutation.mutate(item.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="ingredients">
+          <Card className="border-2 shadow-lg">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Zutaten ({ingredients.length})</CardTitle>
+              <Dialog open={showIngredientDialog} onOpenChange={setShowIngredientDialog}>
+                <DialogTrigger asChild>
+                  <Button onClick={() => {
+                    setEditingIngredient(null);
+                    setSelectedImage(null);
+                    setImagePreview(null);
+                  }}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Zutat hinzufügen
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>
+                      {editingIngredient ? "Zutat bearbeiten" : "Neue Zutat"}
+                    </DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleSaveIngredient} className="space-y-5">
+                    <div className="grid grid-cols-2 gap-5">
+                      <div>
+                        <Label htmlFor="ing-name" className="text-base font-semibold mb-2">Name</Label>
+                        <Input
+                          id="ing-name"
+                          name="name"
+                          defaultValue={editingIngredient?.nameDE || editingIngredient?.name}
+                          required
+                          className="h-12 text-base px-4"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="ing-type" className="text-base font-semibold mb-2">Typ *</Label>
+                        <Select
+                          name="type"
+                          defaultValue={editingIngredient?.type}
+                          required
+                        >
+                          <SelectTrigger className="h-12 text-base px-4">
+                            <SelectValue placeholder="Typ wählen" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="protein" className="text-base">Protein</SelectItem>
+                            <SelectItem value="base" className="text-base">Base</SelectItem>
+                            <SelectItem value="marinade" className="text-base">Marinade</SelectItem>
+                            <SelectItem value="fresh" className="text-base">Frische Zutat</SelectItem>
+                            <SelectItem value="sauce" className="text-base">Sauce</SelectItem>
+                            <SelectItem value="topping" className="text-base">Topping</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="ing-description" className="text-base font-semibold mb-2">Beschreibung</Label>
+                      <Textarea
+                        id="ing-description"
+                        name="description"
+                        rows={3}
+                        defaultValue={editingIngredient?.descriptionDE || editingIngredient?.description || ""}
+                        className="text-base px-4 py-3"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-5">
+                      <div>
+                        <Label htmlFor="ing-price" className="text-base font-semibold mb-2">Preis (€) - Optional</Label>
+                        <Input
+                          id="ing-price"
+                          name="price"
+                          type="number"
+                          step="0.01"
+                          defaultValue={editingIngredient?.price || ""}
+                          placeholder="Nur für Proteine"
+                          className="h-12 text-base px-4"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="ing-order" className="text-base font-semibold mb-2">Reihenfolge</Label>
+                        <Input
+                          id="ing-order"
+                          name="order"
+                          type="number"
+                          defaultValue={editingIngredient?.order || 0}
+                          className="h-12 text-base px-4"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label className="mb-3 block">Foto der Zutat</Label>
+                      
+                      <div className="mb-4">
+                        {imagePreview ? (
+                          <div className="relative inline-block">
+                            <img 
+                              src={imagePreview} 
+                              alt="Preview" 
+                              className="w-48 h-48 object-cover rounded-lg border-2 border-gray-200"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              className="absolute top-2 right-2"
+                              onClick={handleRemoveImage}
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        ) : editingIngredient?.image ? (
+                          <div>
+                            <img 
+                              src={editingIngredient.image} 
+                              alt="Current" 
+                              className="w-48 h-48 object-cover rounded-lg border-2 border-gray-200 mb-2"
+                            />
+                            <p className="text-sm text-muted-foreground">
+                              Aktuelles Foto
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="w-48 h-48 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                            <p className="text-gray-400">Kein Bild</p>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <Input
+                          id="ing-image"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageSelect}
+                          className="hidden"
+                        />
+                        <Label
+                          htmlFor="ing-image"
+                          className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                        >
+                          <Upload className="w-4 h-4" />
+                          {selectedImage ? "Foto ändern" : "Foto hochladen"}
+                        </Label>
+                        {selectedImage && (
+                          <span className="text-sm text-muted-foreground">
+                            {selectedImage.name}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="ing-available"
+                        name="available"
+                        defaultChecked={editingIngredient?.available === 1}
+                      />
+                      <Label htmlFor="ing-available">Verfügbar</Label>
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      className="w-full h-12 text-base font-semibold bg-ocean hover:bg-ocean/90"
+                      disabled={isUploading}
+                    >
+                      {isUploading ? "Foto wird hochgeladen..." : "Speichern"}
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-6">
+                {["protein", "base", "marinade", "fresh", "sauce", "topping"].map((type) => {
+                  const typeIngredients = ingredients.filter(ing => ing.type === type).sort((a, b) => a.order - b.order);
+                  
+                  if (typeIngredients.length === 0) return null;
+                  
+                  const typeNames: Record<string, string> = {
+                    protein: "🍗 Proteine",
+                    base: "🍚 Bases",
+                    marinade: "🧂 Marinaden",
+                    fresh: "🥬 Frische Zutaten",
+                    sauce: "🥫 Saucen",
+                    topping: "✨ Toppings"
+                  };
+                  
+                  return (
+                    <div key={type} className="space-y-3">
+                      <div className="flex items-center gap-3 py-3 px-4 bg-gradient-to-r from-sunset/10 to-transparent rounded-lg border-l-4 border-sunset">
+                        <div>
+                          <h3 className="font-poppins text-lg font-bold text-sunset">
+                            {typeNames[type]}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {typeIngredients.length} {typeIngredients.length === 1 ? 'Zutat' : 'Zutaten'}
+                          </p>
                         </div>
                       </div>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setEditingMenuItem(item);
-                            setSelectedImage(null);
-                            setImagePreview(null);
-                            setShowMenuItemDialog(true);
-                          }}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => deleteMenuItemMutation.mutate(item.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                      
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-4">
+                        {typeIngredients.map((ingredient) => (
+                          <div
+                            key={ingredient.id}
+                            className="relative border-2 rounded-lg overflow-hidden hover:border-sunset/30 hover:shadow-lg transition-all"
+                          >
+                            <div className="aspect-square relative bg-gray-100">
+                              {ingredient.image ? (
+                                <img
+                                  src={ingredient.image}
+                                  alt={ingredient.nameDE || ingredient.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                  Kein Bild
+                                </div>
+                              )}
+                              {ingredient.available === 0 && (
+                                <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                                  Nicht verfügbar
+                                </div>
+                              )}
+                            </div>
+                            <div className="p-3 bg-white">
+                              <p className="font-poppins font-semibold text-sm truncate">
+                                {ingredient.nameDE || ingredient.name}
+                              </p>
+                              {ingredient.price && (
+                                <p className="text-xs text-sunset font-bold mt-1">
+                                  €{ingredient.price}
+                                </p>
+                              )}
+                              {ingredient.descriptionDE && (
+                                <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                                  {ingredient.descriptionDE}
+                                </p>
+                              )}
+                              <div className="flex gap-1 mt-3">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex-1"
+                                  onClick={() => {
+                                    setEditingIngredient(ingredient);
+                                    setSelectedImage(null);
+                                    setImagePreview(null);
+                                    setShowIngredientDialog(true);
+                                  }}
+                                >
+                                  <Edit className="h-3 w-3" />
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  className="flex-1"
+                                  onClick={() => deleteIngredientMutation.mutate(ingredient.id)}
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   );

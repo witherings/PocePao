@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus } from "lucide-react";
+import { Plus, ChevronLeft } from "lucide-react";
 import type { MenuItem } from "@shared/schema";
 import { useState, useEffect, useRef } from "react";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
@@ -213,18 +213,29 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 €{getDisplayPrice()}
               </span>
             </div>
-            <Button
-              onClick={() => {
-                onAddToCart(item, item.hasSizeOptions === 1 ? selectedSize : undefined);
-                onClose();
-              }}
-              disabled={item.available === 0}
-              className="w-full sm:w-auto bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full px-6 sm:px-8 min-h-[52px] sm:min-h-[56px] text-base sm:text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              data-testid="button-dialog-add-to-cart"
-            >
-              <Plus className="w-5 h-5 mr-2" />
-              Hinzufügen
-            </Button>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Button
+                onClick={onClose}
+                variant="outline"
+                className="flex-1 sm:flex-initial bg-red-500 hover:bg-red-600 text-white border-red-500 font-poppins font-bold rounded-full px-4 sm:px-6 min-h-[52px] sm:min-h-[56px] text-base sm:text-lg shadow-lg hover:shadow-xl transition-all"
+                data-testid="button-dialog-back"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                <span className="hidden sm:inline ml-1">Zurück</span>
+              </Button>
+              <Button
+                onClick={() => {
+                  onAddToCart(item, item.hasSizeOptions === 1 ? selectedSize : undefined);
+                  onClose();
+                }}
+                disabled={item.available === 0}
+                className="flex-1 sm:flex-initial bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full px-6 sm:px-8 min-h-[52px] sm:min-h-[56px] text-base sm:text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                data-testid="button-dialog-add-to-cart"
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                Hinzufügen
+              </Button>
+            </div>
           </div>
 
           {item.available === 0 && (
