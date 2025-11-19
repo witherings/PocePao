@@ -114,7 +114,7 @@ class DatabaseStorage implements IStorage {
   // Menu Items
   async getAllMenuItems(): Promise<MenuItem[]> {
     const db = await getDb();
-    return await db.select().from(menuItemsTable);
+    return await db.select().from(menuItemsTable).orderBy(asc(menuItemsTable.id));
   }
 
   async getMenuItemById(id: string): Promise<MenuItem | undefined> {
@@ -125,7 +125,7 @@ class DatabaseStorage implements IStorage {
 
   async getMenuItemsByCategory(categoryId: string): Promise<MenuItem[]> {
     const db = await getDb();
-    return await db.select().from(menuItemsTable).where(eq(menuItemsTable.categoryId, categoryId));
+    return await db.select().from(menuItemsTable).where(eq(menuItemsTable.categoryId, categoryId)).orderBy(asc(menuItemsTable.id));
   }
 
   async createMenuItem(menuItem: InsertMenuItem): Promise<MenuItem> {

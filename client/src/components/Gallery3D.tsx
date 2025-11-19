@@ -136,19 +136,19 @@ export function Gallery3D() {
   };
 
   return (
-    <div className="py-8 md:py-12 bg-muted">
+    <div className="py-12 md:py-16 bg-muted">
       <div className="container mx-auto px-6">
-        <h2 className="font-poppins text-3xl md:text-4xl font-bold text-ocean mb-4 text-center" data-testid="text-gallery-title">
+        <h2 className="font-poppins text-3xl md:text-5xl font-bold text-ocean mb-4 text-center" data-testid="text-gallery-title">
           Unsere Galerie
         </h2>
-        <p className="text-center text-muted-foreground mb-6 font-lato" data-testid="text-gallery-subtitle">
+        <p className="text-center text-lg text-muted-foreground mb-10 font-lato" data-testid="text-gallery-subtitle">
           Entdecken Sie unseren einladenden Raum
         </p>
 
         {/* 3D Carousel */}
-        <div className="mb-4">
+        <div className="mb-6">
           <div 
-            className="perspective-1000 h-[400px] md:h-[500px] relative overflow-hidden cursor-grab active:cursor-grabbing"
+            className="perspective-1000 h-[320px] md:h-[550px] lg:h-[650px] relative overflow-hidden cursor-grab active:cursor-grabbing"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -160,7 +160,7 @@ export function Gallery3D() {
                 return (
                   <div
                     key={image.id}
-                    className="absolute w-[280px] md:w-[400px] h-[200px] md:h-[300px] transition-all duration-700 ease-out"
+                    className="absolute w-[320px] md:w-[550px] lg:w-[700px] h-[240px] md:h-[400px] lg:h-[500px] transition-all duration-700 ease-out"
                     style={getImageStyle(index)}
                     data-testid={`gallery-image-${index}`}
                   >
@@ -201,24 +201,24 @@ export function Gallery3D() {
           </div>
 
           {/* Navigation Buttons - Under Gallery */}
-          <div className="flex items-center justify-center gap-4 mt-4">
+          <div className="flex items-center justify-center gap-6 mt-6">
             <Button
               onClick={prevSlide}
               variant="outline"
               size="icon"
-              className="rounded-full"
+              className="rounded-full w-12 h-12 hover:bg-ocean hover:text-white hover:border-ocean transition-all"
               data-testid="button-prev"
             >
               <ChevronLeft className="w-6 h-6" />
             </Button>
-            <span className="font-poppins text-sm text-muted-foreground">
+            <span className="font-poppins text-base md:text-lg font-semibold text-muted-foreground">
               {currentIndex + 1} / {allImages.length}
             </span>
             <Button
               onClick={nextSlide}
               variant="outline"
               size="icon"
-              className="rounded-full"
+              className="rounded-full w-12 h-12 hover:bg-ocean hover:text-white hover:border-ocean transition-all"
               data-testid="button-next"
             >
               <ChevronRight className="w-6 h-6" />

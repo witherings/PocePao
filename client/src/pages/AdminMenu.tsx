@@ -259,28 +259,29 @@ export function AdminMenu() {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="mb-6">
-        <Button 
-          variant="ghost" 
-          onClick={() => setLocation("/admin/dashboard")}
-          className="mb-4 -ml-2"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Zurück zum Dashboard
-        </Button>
-        <h1 className="text-3xl font-bold mb-2">Menü</h1>
-        <p className="text-gray-600">Verwaltung von Kategorien und Gerichten</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="container mx-auto p-6 md:p-8">
+        <div className="mb-8">
+          <Button 
+            variant="ghost" 
+            onClick={() => setLocation("/admin/dashboard")}
+            className="mb-6 -ml-2 hover:bg-ocean/10"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Zurück zum Dashboard
+          </Button>
+          <h1 className="font-poppins text-4xl font-bold mb-3 text-foreground">Menü</h1>
+          <p className="font-lato text-lg text-muted-foreground">Verwaltung von Kategorien und Gerichten</p>
+        </div>
 
       <Tabs defaultValue="categories" className="w-full">
-        <TabsList className="mb-6">
-          <TabsTrigger value="categories">Kategorien</TabsTrigger>
-          <TabsTrigger value="items">Gerichte</TabsTrigger>
+        <TabsList className="mb-8 p-1.5 bg-white shadow-sm">
+          <TabsTrigger value="categories" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Kategorien</TabsTrigger>
+          <TabsTrigger value="items" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Gerichte</TabsTrigger>
         </TabsList>
 
         <TabsContent value="categories">
-          <Card>
+          <Card className="border-2 shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Kategorien ({categories.length})</CardTitle>
               <Dialog open={showCategoryDialog} onOpenChange={setShowCategoryDialog}>
@@ -296,47 +297,50 @@ export function AdminMenu() {
                       {editingCategory ? "Kategorie bearbeiten" : "Neue Kategorie"}
                     </DialogTitle>
                   </DialogHeader>
-                  <form onSubmit={handleSaveCategory} className="space-y-4">
+                  <form onSubmit={handleSaveCategory} className="space-y-5">
                     <div>
-                      <Label htmlFor="name">Name</Label>
+                      <Label htmlFor="name" className="text-base font-semibold mb-2">Name</Label>
                       <Input
                         id="name"
                         name="name"
                         defaultValue={editingCategory?.nameDE || editingCategory?.name}
                         required
+                        className="h-12 text-base px-4"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="icon">Icon</Label>
+                      <Label htmlFor="icon" className="text-base font-semibold mb-2">Icon</Label>
                       <Input
                         id="icon"
                         name="icon"
                         placeholder="🍜"
                         defaultValue={editingCategory?.icon || ""}
+                        className="h-12 text-base px-4"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="order">Reihenfolge</Label>
+                      <Label htmlFor="order" className="text-base font-semibold mb-2">Reihenfolge</Label>
                       <Input
                         id="order"
                         name="order"
                         type="number"
                         defaultValue={editingCategory?.order || 0}
+                        className="h-12 text-base px-4"
                       />
                     </div>
-                    <Button type="submit" className="w-full">
+                    <Button type="submit" className="w-full h-12 text-base font-semibold bg-ocean hover:bg-ocean/90">
                       Speichern
                     </Button>
                   </form>
                 </DialogContent>
               </Dialog>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
+            <CardContent className="p-6">
+              <div className="space-y-3">
                 {categories.map((category) => (
                   <div
                     key={category.id}
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
+                    className="flex items-center justify-between p-5 border-2 rounded-xl hover:border-ocean/30 hover:bg-ocean/5 transition-all duration-200 shadow-sm"
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{category.icon}</span>
@@ -371,7 +375,7 @@ export function AdminMenu() {
         </TabsContent>
 
         <TabsContent value="items">
-          <Card>
+          <Card className="border-2 shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Gerichte ({menuItems.length})</CardTitle>
               <Dialog open={showMenuItemDialog} onOpenChange={setShowMenuItemDialog}>
@@ -393,30 +397,30 @@ export function AdminMenu() {
                   </DialogHeader>
                   <form onSubmit={handleSaveMenuItem} className="space-y-6">
                     <div>
-                      <Label htmlFor="item-name">Name</Label>
+                      <Label htmlFor="item-name" className="text-base font-semibold mb-2">Name</Label>
                       <Input
                         id="item-name"
                         name="name"
                         defaultValue={editingMenuItem?.nameDE || editingMenuItem?.name}
                         required
-                        className="text-base"
+                        className="h-12 text-base px-4"
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="description">Beschreibung</Label>
+                      <Label htmlFor="description" className="text-base font-semibold mb-2">Beschreibung</Label>
                       <Textarea
                         id="description"
                         name="description"
                         rows={4}
                         defaultValue={editingMenuItem?.descriptionDE || editingMenuItem?.description || ""}
-                        className="text-base"
+                        className="text-base px-4 py-3"
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-5">
                       <div>
-                        <Label htmlFor="price">Preis Standard (€)</Label>
+                        <Label htmlFor="price" className="text-base font-semibold mb-2">Preis Standard (€)</Label>
                         <Input
                           id="price"
                           name="price"
@@ -424,22 +428,22 @@ export function AdminMenu() {
                           step="0.01"
                           defaultValue={editingMenuItem?.price}
                           required
-                          className="text-base"
+                          className="h-12 text-base px-4"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="categoryId">Kategorie</Label>
+                        <Label htmlFor="categoryId" className="text-base font-semibold mb-2">Kategorie</Label>
                         <Select
                           name="categoryId"
                           defaultValue={editingMenuItem?.categoryId}
                           required
                         >
-                          <SelectTrigger className="text-base">
+                          <SelectTrigger className="h-12 text-base px-4">
                             <SelectValue placeholder="Kategorie wählen" />
                           </SelectTrigger>
                           <SelectContent>
                             {categories.map((cat) => (
-                              <SelectItem key={cat.id} value={cat.id}>
+                              <SelectItem key={cat.id} value={cat.id} className="text-base">
                                 {cat.icon} {cat.nameDE || cat.name}
                               </SelectItem>
                             ))}
@@ -448,9 +452,9 @@ export function AdminMenu() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-5">
                       <div>
-                        <Label htmlFor="priceSmall">Preis Klein (€) - Optional</Label>
+                        <Label htmlFor="priceSmall" className="text-base font-semibold mb-2">Preis Klein (€) - Optional</Label>
                         <Input
                           id="priceSmall"
                           name="priceSmall"
@@ -458,11 +462,12 @@ export function AdminMenu() {
                           step="0.01"
                           defaultValue={editingMenuItem?.price_small || ""}
                           placeholder="z.B. 8.50"
-                          className="text-base"
+                          className="h-12 text-base px-4"
                         />
+                        <p className="text-xs text-muted-foreground mt-1.5">Leer lassen, wenn nicht verwendet</p>
                       </div>
                       <div>
-                        <Label htmlFor="priceLarge">Preis Groß (€) - Optional</Label>
+                        <Label htmlFor="priceLarge" className="text-base font-semibold mb-2">Preis Mittel (€) - Optional</Label>
                         <Input
                           id="priceLarge"
                           name="priceLarge"
@@ -470,35 +475,36 @@ export function AdminMenu() {
                           step="0.01"
                           defaultValue={editingMenuItem?.price_large || ""}
                           placeholder="z.B. 12.50"
-                          className="text-base"
+                          className="h-12 text-base px-4"
                         />
+                        <p className="text-xs text-muted-foreground mt-1.5">Leer lassen, wenn nicht verwendet</p>
                       </div>
                     </div>
 
                     <div>
-                      <Label htmlFor="ingredients">Zutaten (kommagetrennt) - Optional</Label>
+                      <Label htmlFor="ingredients" className="text-base font-semibold mb-2">Zutaten (kommagetrennt) - Optional</Label>
                       <Textarea
                         id="ingredients"
                         name="ingredients"
                         rows={2}
                         defaultValue={editingMenuItem?.ingredients?.join(", ") || ""}
                         placeholder="z.B. Lachs, Avocado, Edamame, Gurke"
-                        className="text-base"
+                        className="text-base px-4 py-3"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Trennen Sie mehrere Zutaten mit Kommas</p>
+                      <p className="text-xs text-muted-foreground mt-1.5">Trennen Sie mehrere Zutaten mit Kommas</p>
                     </div>
 
                     <div>
-                      <Label htmlFor="allergens">Allergene (kommagetrennt) - Optional</Label>
+                      <Label htmlFor="allergens" className="text-base font-semibold mb-2">Allergene (kommagetrennt) - Optional</Label>
                       <Textarea
                         id="allergens"
                         name="allergens"
                         rows={2}
                         defaultValue={editingMenuItem?.allergens?.join(", ") || ""}
                         placeholder="z.B. Fisch, Soja, Sesam, Gluten"
-                        className="text-base"
+                        className="text-base px-4 py-3"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Trennen Sie mehrere Allergene mit Kommas</p>
+                      <p className="text-xs text-muted-foreground mt-1.5">Trennen Sie mehrere Allergene mit Kommas</p>
                     </div>
 
                     <div>
@@ -586,7 +592,7 @@ export function AdminMenu() {
 
                     <Button 
                       type="submit" 
-                      className="w-full"
+                      className="w-full h-12 text-base font-semibold bg-ocean hover:bg-ocean/90"
                       disabled={isUploading}
                     >
                       {isUploading ? "Foto wird hochgeladen..." : "Speichern"}
@@ -595,14 +601,14 @@ export function AdminMenu() {
                 </DialogContent>
               </Dialog>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
+            <CardContent className="p-6">
+              <div className="space-y-3">
                 {menuItems.map((item) => {
                   const category = categories.find((c) => c.id === item.categoryId);
                   return (
                     <div
                       key={item.id}
-                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
+                      className="flex items-center justify-between p-5 border-2 rounded-xl hover:border-ocean/30 hover:bg-ocean/5 transition-all duration-200 shadow-sm"
                     >
                       <div className="flex items-center gap-3 flex-1">
                         {item.image && (
@@ -665,6 +671,7 @@ export function AdminMenu() {
           </Card>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 }
