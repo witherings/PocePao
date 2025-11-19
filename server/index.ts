@@ -87,10 +87,9 @@ async function initializeApp() {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // Dev mode: Auto-authenticate admin for easier testing (after session is initialized)
-  if (process.env.NODE_ENV !== "production") {
-    app.use(devBypassAuth);
-  }
+  // Replit Dev mode: Auto-authenticate admin for easier testing (after session is initialized)
+  // Only active when REPLIT_DEV_DOMAIN is set (Replit development environment)
+  app.use(devBypassAuth);
 
   await ensureAdminExists();
   

@@ -2,8 +2,16 @@ import type { Request, Response, NextFunction } from "express";
 import { getDb } from "./db";
 import { adminUsers } from "@shared/schema";
 
+/**
+ * Auto-authentication middleware for Replit development environment only
+ * Uses REPLIT_DEV_DOMAIN to detect Replit dev environment (not available on Railway or in Replit deployments)
+ */
 export async function devBypassAuth(req: Request, res: Response, next: NextFunction) {
-  if (process.env.NODE_ENV === "production") {
+  // Only enable auto-auth in Replit development environment
+  // REPLIT_DEV_DOMAIN exists only in Replit dev, not in Railway or Replit deployments
+  const isReplitDev = !!process.env.REPLIT_DEV_DOMAIN;
+  
+  if (!isReplitDev) {
     return next();
   }
 
@@ -19,15 +27,15 @@ export async function devBypassAuth(req: Request, res: Response, next: NextFunct
             console.log("Dev bypass auth failed:", err);
             return next();
           }
-          console.log("🔓 Dev mode: Auto-authenticated as", devUser.username);
+          console.log("🔓 Replit Dev: Auto-authenticated as", devUser.username);
           next();
         });
       } else {
-        console.log("⚠️ Dev mode: No admin users found in database");
+        console.log("⚠️ Replit Dev: No admin users found in database");
         next();
       }
     } catch (err) {
-      console.log("Dev bypass auth error:", err);
+      console.log("Replit dev bypass auth error:", err);
       next();
     }
   } else {

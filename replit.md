@@ -52,6 +52,14 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 
 ### Recent Changes
 
+- **November 19, 2025**: Replit-Specific Auto-Authentication - COMPLETED
+  - **MODIFIED**: Dev bypass authentication to use `REPLIT_DEV_DOMAIN` environment variable
+  - **BENEFIT**: Auto-login to admin panel works **only** on Replit development environment
+  - **SAFETY**: Does NOT interfere with Railway or other deployments (no websocket issues)
+  - **DETECTION**: Uses Replit-specific env var that exists only in dev mode, not in deployments
+  - **FILES UPDATED**: server/dev-bypass.ts, server/index.ts
+  - **STATUS**: Admin panel accessible without login on Replit dev environment only
+
 - **November 19, 2025**: Visual & UX Enhancements - COMPLETED
   - **ADDED**: Custom favicon to client/public/favicon.png with proper HTML link tag
   - **REDESIGNED**: Admin panel with modern styling:
