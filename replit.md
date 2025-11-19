@@ -52,6 +52,15 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 
 ### Recent Changes
 
+- **November 19, 2025**: Gallery Page Added
+  - **CREATED**: Public gallery page at `/gallery` route
+  - **FIXED**: 404 error when accessing gallery - added Gallery.tsx component
+  - **ENHANCED**: Beautiful hero section with gradient background
+  - **FILES UPDATED**: 
+    - client/src/pages/Gallery.tsx (new page)
+    - client/src/App.tsx (added route)
+  - **STATUS**: Gallery accessible from navigation and direct URL
+
 - **November 19, 2025**: Railway Production Fixes - CRITICAL
   - **FIXED**: Image upload serving on Railway with persistent storage
     - Changed upload directory from `client/public/uploads` to persistent location
