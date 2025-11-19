@@ -1,0 +1,51 @@
+🚂 ULTIMATE MIGRATION PROMPT: Destination Railway.app
+ROLE: You are the Lead Full-Stack Architect. MISSION: We are migrating this project ("PocePao") from Render/Vercel to Railway.app. GOAL: A flawless, production-ready deployment with a fully functional CMS.
+
+CURRENT STATUS: The project is a React + Express app with Drizzle/PostgreSQL.
+
+1. 🌍 PLATFORM MIGRATION (Railway.app)
+We are moving to Railway. Please adapt the codebase accordingly:
+
+Cleanup: Remove ANY dependency or configuration related to @neondatabase/serverless, vercel, or render. We want a clean Node.js environment.
+
+Database Driver: Railway provides a standard PostgreSQL database. Ensure server/db.ts uses ONLY the standard pg driver (TCP port 5432) with SSL enabled (ssl: { rejectUnauthorized: false } is usually required for production).
+
+Port Handling: Ensure server/index.ts listens on process.env.PORT (Railway injects this automatically) and falls back to 5000 locally.
+
+Startup Strategy: Since we need migrations to run before the app starts, ensure the package.json scripts allow us to run: npm run db:push && npm run db:seed && npm run db:create-admin && npm run start.
+
+2. 📋 FEATURE COMPLETION & FIXES (The Client Promises)
+You must verify and implement these specific features promised to the client. Do not assume they are done. Check the code.
+
+A. 🔒 Session Fix (Critical):
+
+Trust Proxy: Even on Railway, we are behind a load balancer. You MUST ensure app.set("trust proxy", 1); is present in server/index.ts right after const app = express();. Without this, admin login will fail.
+
+B. 🍔 Advanced Menu Editor (UI Check):
+
+Problem: The database schema has price_small / price_large, but the Admin UI might be missing the inputs.
+
+Task: Update AdminMenu.tsx (or the edit modal). You MUST add input fields for these sizes. The admin needs to set different prices for different sizes.
+
+Task: Ensure Ingredients and Allergens are fully editable in the UI.
+
+C. 🖼️ Gallery System:
+
+Task: Ensure the Admin Panel has a working UI to Upload and Delete images (gallery_images table).
+
+Frontend: Make the Gallery on the Homepage (Home.tsx) look premium (larger grid, no borders), fetching these dynamic images from the DB.
+
+D. 🍽️ Reservations:
+
+Task: Create/Verify an "AdminReservations" page to view table bookings (Name, Date, Phone, Guests). If it's missing, build it.
+
+E. 🕵️ Secret Access:
+
+Task: Add a hidden/subtle "dot" or icon in the absolute bottom-right of the Footer. Clicking it must navigate to /admin/login.
+
+3. 🧹 CLEANUP & STRUCTURE
+Remove Garbage: Delete any unused files in attached_assets or public/images (e.g., AI-generated placeholders we don't use).
+
+Stability: Ensure db:seed and db:create-admin are idempotent (they should check if data exists before writing, so they don't crash on re-deployment).
+
+DELIVERABLE: Provide the fully updated codebase. I will push this to GitHub and deploy to Railway. Confirm: "I have adapted the code for Railway, fixed the Trust Proxy, and ensured the Admin UI for Menu Sizes and Reservations is fully implemented."
