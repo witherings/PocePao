@@ -6,6 +6,8 @@ import type { MenuItem } from "@shared/schema";
 import { useState, useEffect, useRef } from "react";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
+import ff_ from "@assets/ff).jpg";
+
 interface MenuItemDialogProps {
   item: MenuItem | null;
   isOpen: boolean;
@@ -63,7 +65,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
           {/* Image */}
           <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
             <img
-              src={item.image}
+              src={ff_}
               alt={item.nameDE}
               loading="lazy"
               className="w-full h-full object-cover"
