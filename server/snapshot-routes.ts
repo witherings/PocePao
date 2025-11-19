@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { ensureAuthenticated } from "./auth";
-import { db } from "./db";
+import { getDb } from "./db";
 import { 
   snapshots, 
   snapshotMenuItems,
@@ -10,7 +10,10 @@ import {
   menuItems,
   categories,
   galleryImages,
-  insertSnapshotSchema
+  insertSnapshotSchema,
+  type Category,
+  type MenuItem,
+  type GalleryImage,
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
@@ -19,9 +22,7 @@ export function registerSnapshotRoutes(app: Express) {
   // Get all snapshots
   app.get("/api/admin/snapshots", ensureAuthenticated, async (req, res) => {
     try {
-      if (!db) {
-        return res.status(500).json({ error: "Database not initialized" });
-      }
+      const db = await getDb();
       
       const allSnapshots = await db
         .select()
@@ -38,9 +39,7 @@ export function registerSnapshotRoutes(app: Express) {
   // Create new snapshot (save current state)
   app.post("/api/admin/snapshots", ensureAuthenticated, async (req, res) => {
     try {
-      if (!db) {
-        return res.status(500).json({ error: "Database not initialized" });
-      }
+      const db = await getDb();
       
       const data = insertSnapshotSchema.parse(req.body);
       const user = req.user as any;
@@ -59,7 +58,7 @@ export function registerSnapshotRoutes(app: Express) {
       const currentCategories = await db.select().from(categories);
       if (currentCategories.length > 0) {
         await db.insert(snapshotCategories).values(
-          currentCategories.map(cat => ({
+          currentCategories.map((cat: Category) => ({
             snapshotId: snapshot.id,
             name: cat.name,
             nameDE: cat.nameDE,
@@ -74,7 +73,7 @@ export function registerSnapshotRoutes(app: Express) {
       const currentMenuItems = await db.select().from(menuItems);
       if (currentMenuItems.length > 0) {
         await db.insert(snapshotMenuItems).values(
-          currentMenuItems.map(item => ({
+          currentMenuItems.map((item: MenuItem) => ({
             snapshotId: snapshot.id,
             name: item.name,
             nameDE: item.nameDE,
@@ -103,7 +102,7 @@ export function registerSnapshotRoutes(app: Express) {
       const currentGalleryImages = await db.select().from(galleryImages);
       if (currentGalleryImages.length > 0) {
         await db.insert(snapshotGalleryImages).values(
-          currentGalleryImages.map(img => ({
+          currentGalleryImages.map((img: GalleryImage) => ({
             snapshotId: snapshot.id,
             url: img.url,
             filename: img.filename,
@@ -137,9 +136,7 @@ export function registerSnapshotRoutes(app: Express) {
   // CRITICAL: Uses transaction to prevent data loss
   app.post("/api/admin/snapshots/:id/restore", ensureAuthenticated, async (req, res) => {
     try {
-      if (!db) {
-        return res.status(500).json({ error: "Database not initialized" });
-      }
+      const db = await getDb();
       
       const snapshotId = req.params.id;
       
@@ -180,12 +177,12 @@ export function registerSnapshotRoutes(app: Express) {
       }
       
       // Validate all menu items reference existing categories in this snapshot
-      const categoryIds = new Set(snapshotCats.map(cat => cat.originalCategoryId));
-      const invalidItems = snapshotItems.filter(item => !categoryIds.has(item.categoryId));
+      const categoryIds = new Set(snapshotCats.map((cat: any) => cat.originalCategoryId));
+      const invalidItems = snapshotItems.filter((item: any) => !categoryIds.has(item.categoryId));
       
       if (invalidItems.length > 0) {
         console.error(`Found ${invalidItems.length} menu items with invalid category references:`, 
-          invalidItems.map(item => ({ name: item.name, categoryId: item.categoryId }))
+          invalidItems.map((item: any) => ({ name: item.name, categoryId: item.categoryId }))
         );
         return res.status(400).json({ 
           error: `Snapshot contains ${invalidItems.length} menu items with invalid category references - cannot publish corrupted snapshot` 
@@ -195,7 +192,7 @@ export function registerSnapshotRoutes(app: Express) {
       console.log("✓ Snapshot validation passed - all references are valid")
       
       // Execute publish in a TRANSACTION - all-or-nothing atomicity
-      await db.transaction(async (tx) => {
+      await db.transaction(async (tx: any) => {
         // STEP 1: Delete all current live data
         await tx.delete(menuItems);
         await tx.delete(categories);
@@ -204,7 +201,7 @@ export function registerSnapshotRoutes(app: Express) {
         
         // STEP 2: Copy categories to live (preserving original IDs)
         await tx.insert(categories).values(
-          snapshotCats.map(cat => ({
+          snapshotCats.map((cat: any) => ({
             id: cat.originalCategoryId, // Use original ID to maintain references
             name: cat.name,
             nameDE: cat.nameDE,
@@ -217,7 +214,7 @@ export function registerSnapshotRoutes(app: Express) {
         // STEP 3: Copy menu items to live
         if (snapshotItems.length > 0) {
           await tx.insert(menuItems).values(
-            snapshotItems.map(item => ({
+            snapshotItems.map((item: any) => ({
               name: item.name,
               nameDE: item.nameDE,
               description: item.description,
@@ -245,7 +242,7 @@ export function registerSnapshotRoutes(app: Express) {
         // STEP 4: Copy gallery to live (note: galleryImages schema doesn't have caption field in live table)
         if (snapshotGallery.length > 0) {
           await tx.insert(galleryImages).values(
-            snapshotGallery.map(img => ({
+            snapshotGallery.map((img: any) => ({
               url: img.url,
               filename: img.filename,
             }))
@@ -266,9 +263,7 @@ export function registerSnapshotRoutes(app: Express) {
   // Get snapshot details with all content
   app.get("/api/admin/snapshots/:id", ensureAuthenticated, async (req, res) => {
     try {
-      if (!db) {
-        return res.status(500).json({ error: "Database not initialized" });
-      }
+      const db = await getDb();
       
       const snapshotId = req.params.id;
       
@@ -313,9 +308,7 @@ export function registerSnapshotRoutes(app: Express) {
   // Delete a snapshot
   app.delete("/api/admin/snapshots/:id", ensureAuthenticated, async (req, res) => {
     try {
-      if (!db) {
-        return res.status(500).json({ error: "Database not initialized" });
-      }
+      const db = await getDb();
       
       const snapshotId = req.params.id;
       

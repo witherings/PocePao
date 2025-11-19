@@ -5,7 +5,7 @@ import { passport } from "./auth";
 import { devBypassAuth } from "./dev-bypass";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { pool } from "./db";
+import { getPool } from "./db";
 import { ensureAdminExists } from "./bootstrap";
 import path from "path";
 
@@ -17,35 +17,10 @@ app.set("trust proxy", 1);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Session store configuration
-const PgStore = connectPgSimple(session);
-const sessionStore = process.env.DATABASE_URL && pool
-  ? new PgStore({
-      pool: pool,
-      tableName: 'session',
-      createTableIfMissing: true,
-    })
-  : undefined;
+// Session middleware - will be configured after database connection
+let sessionMiddleware: any;
 
-// Session middleware
-app.use(
-  session({
-    store: sessionStore,
-    secret: process.env.SESSION_SECRET || "pokepao-secret-key-change-in-production",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      sameSite: "strict", // CSRF protection
-    },
-  })
-);
-
-// Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
+// Passport middleware - will be configured after session middleware
 
 // Dev mode: Auto-authenticate admin for easier testing
 if (process.env.NODE_ENV !== "production") {
@@ -87,6 +62,36 @@ app.use((req, res, next) => {
 
 // Initialize app
 async function initializeApp() {
+  // Initialize database connection first
+  const pool = await getPool();
+  
+  // Setup session store with database connection
+  const PgStore = connectPgSimple(session);
+  const sessionStore = process.env.DATABASE_URL && pool
+    ? new PgStore({
+        pool: pool,
+        tableName: 'session',
+        createTableIfMissing: true,
+      })
+    : undefined;
+
+  sessionMiddleware = session({
+    store: sessionStore,
+    secret: process.env.SESSION_SECRET || "pokepao-secret-key-change-in-production",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: "strict", // CSRF protection
+    },
+  });
+
+  app.use(sessionMiddleware);
+  app.use(passport.initialize());
+  app.use(passport.session());
+
   await ensureAdminExists();
   
   const server = await registerRoutes(app);

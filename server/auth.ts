@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
-import { db } from "./db";
+import { getDb } from "./db";
 import { adminUsers } from "@shared/schema";
 import { eq } from "drizzle-orm";
 import type { AdminUser } from "@shared/schema";
@@ -10,9 +10,7 @@ import type { AdminUser } from "@shared/schema";
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      if (!db) {
-        return done(new Error("Database not initialized"));
-      }
+      const db = await getDb();
       const users = await db.select().from(adminUsers).where(eq(adminUsers.username, username));
 
       if (users.length === 0) {
@@ -41,9 +39,7 @@ passport.serializeUser((user: any, done) => {
 // Deserialize user from session
 passport.deserializeUser(async (id: string, done) => {
   try {
-    if (!db) {
-      return done(new Error("Database not initialized"));
-    }
+    const db = await getDb();
     const users = await db.select().from(adminUsers).where(eq(adminUsers.id, id));
     if (users.length === 0) {
       return done(null, false);

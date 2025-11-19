@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { db } from "./db";
+import { getDb } from "./db";
 import { adminUsers } from "@shared/schema";
 
 export function devBypassAuth(req: Request, res: Response, next: NextFunction) {
@@ -8,12 +8,7 @@ export function devBypassAuth(req: Request, res: Response, next: NextFunction) {
   }
 
   if (!req.isAuthenticated() && req.path.startsWith("/api/admin/")) {
-    if (!db) {
-      console.log("⚠️ Dev mode: Database not initialized");
-      return next();
-    }
-    
-    db.select().from(adminUsers).limit(1).then((users) => {
+    getDb().then(db => db.select().from(adminUsers).limit(1)).then((users) => {
       if (users.length > 0) {
         const devUser = users[0];
         req.login(devUser, (err) => {

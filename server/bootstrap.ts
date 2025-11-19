@@ -1,4 +1,4 @@
-import { db } from "./db";
+import { getDb } from "./db";
 import { adminUsers } from "@shared/schema";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
@@ -7,12 +7,8 @@ const FIXED_ADMIN_USERNAME = "admin";
 const FIXED_ADMIN_PASSWORD = "mk509918";
 
 export async function ensureAdminExists() {
-  if (!db) {
-    console.warn("⚠️  Database not initialized - skipping admin creation");
-    return;
-  }
-
   try {
+    const db = await getDb();
     const existingAdmins = await db
       .select()
       .from(adminUsers)

@@ -1,4 +1,4 @@
-import { db } from "./db";
+import { getDb } from "./db";
 import { categories as seedCategories, createMenuItems } from "./data/menu";
 import { createIngredients } from "./data/ingredients";
 import { 
@@ -13,14 +13,10 @@ async function seed() {
     process.exit(1);
   }
 
-  if (!db) {
-    console.error("❌ Database connection not initialized.");
-    process.exit(1);
-  }
-
   try {
     console.log("🌱 Starting database seeding...\n");
 
+    const db = await getDb();
     const existingCategories = await db.select().from(categoriesTable);
     if (existingCategories.length > 0) {
       console.log("⚠️  Database already has data. Skipping seed to preserve existing data.");

@@ -1,15 +1,10 @@
-import { db } from "./db";
+import { getDb } from "./db";
 import { adminUsers } from "@shared/schema";
 import bcrypt from 'bcryptjs';
 
 async function createAdmin() {
   if (!process.env.DATABASE_URL) {
     console.error("❌ DATABASE_URL not set. Make sure the database is provisioned.");
-    process.exit(1);
-  }
-
-  if (!db) {
-    console.error("❌ Database connection not initialized.");
     process.exit(1);
   }
 
@@ -25,6 +20,7 @@ async function createAdmin() {
   try {
     console.log("🔐 Creating admin user...\n");
 
+    const db = await getDb();
     const existingAdmins = await db.select().from(adminUsers);
     
     if (existingAdmins.length > 0) {
