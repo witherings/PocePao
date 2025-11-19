@@ -47,6 +47,7 @@ export interface IStorage {
   getAllReservations(): Promise<Reservation[]>;
   getReservationById(id: string): Promise<Reservation | undefined>;
   createReservation(reservation: InsertReservation): Promise<Reservation>;
+  deleteReservation(id: string): Promise<boolean>;
 
   // Gallery Images
   getAllGalleryImages(): Promise<GalleryImage[]>;
@@ -165,6 +166,12 @@ class DatabaseStorage implements IStorage {
     const db = await getDb();
     const results = await db.insert(reservationsTable).values(reservation).returning();
     return results[0];
+  }
+
+  async deleteReservation(id: string): Promise<boolean> {
+    const db = await getDb();
+    const results = await db.delete(reservationsTable).where(eq(reservationsTable.id, id)).returning();
+    return results.length > 0;
   }
 
   // Gallery Images

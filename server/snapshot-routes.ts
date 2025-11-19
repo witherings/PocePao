@@ -111,19 +111,39 @@ export function registerSnapshotRoutes(app: Express) {
         );
       }
       
-      // Store static content (placeholder - you can expand this later)
-      await db.insert(snapshotStaticContent).values([
-        {
-          snapshotId: snapshot.id,
-          page: "about",
-          content: JSON.stringify({ text: "", heroImage: "" }),
-        },
-        {
-          snapshotId: snapshot.id,
-          page: "contact",
-          content: JSON.stringify({ address: "", phone: "", hours: "" }),
-        },
-      ]);
+      // Store static content from actual database
+      const { staticContent } = await import("@shared/schema");
+      const currentStaticContent = await db.select().from(staticContent);
+      
+      if (currentStaticContent.length > 0) {
+        await db.insert(snapshotStaticContent).values(
+          currentStaticContent.map((content: any) => ({
+            snapshotId: snapshot.id,
+            page: content.page,
+            content: JSON.stringify({
+              locale: content.locale,
+              title: content.title,
+              subtitle: content.subtitle,
+              content: content.content,
+              image: content.image,
+            }),
+          }))
+        );
+      } else {
+        // Fallback to empty if no static content exists
+        await db.insert(snapshotStaticContent).values([
+          {
+            snapshotId: snapshot.id,
+            page: "about",
+            content: JSON.stringify({ locale: "de", title: "", subtitle: "", content: "", image: "" }),
+          },
+          {
+            snapshotId: snapshot.id,
+            page: "contact",
+            content: JSON.stringify({ locale: "de", title: "", subtitle: "", content: "", image: "" }),
+          },
+        ]);
+      }
       
       res.json(snapshot);
     } catch (error: any) {
@@ -169,7 +189,12 @@ export function registerSnapshotRoutes(app: Express) {
         .from(snapshotGalleryImages)
         .where(eq(snapshotGalleryImages.snapshotId, snapshotId));
       
-      console.log(`Loaded snapshot data: ${snapshotCats.length} categories, ${snapshotItems.length} items, ${snapshotGallery.length} gallery images`);
+      const snapshotStatic = await db
+        .select()
+        .from(snapshotStaticContent)
+        .where(eq(snapshotStaticContent.snapshotId, snapshotId));
+      
+      console.log(`Loaded snapshot data: ${snapshotCats.length} categories, ${snapshotItems.length} items, ${snapshotGallery.length} gallery images, ${snapshotStatic.length} static pages`);
       
       // CRITICAL VALIDATION: Ensure snapshot data integrity BEFORE transaction
       if (snapshotCats.length === 0) {
@@ -193,10 +218,13 @@ export function registerSnapshotRoutes(app: Express) {
       
       // Execute publish in a TRANSACTION - all-or-nothing atomicity
       await db.transaction(async (tx: any) => {
+        const { staticContent } = await import("@shared/schema");
+        
         // STEP 1: Delete all current live data
         await tx.delete(menuItems);
         await tx.delete(categories);
         await tx.delete(galleryImages);
+        await tx.delete(staticContent);
         console.log("Cleared live tables (in transaction)");
         
         // STEP 2: Copy categories to live (preserving original IDs)
@@ -248,6 +276,22 @@ export function registerSnapshotRoutes(app: Express) {
             }))
           );
           console.log("Restored gallery images");
+        }
+        
+        // STEP 5: Restore static content (About/Contact pages)
+        if (snapshotStatic.length > 0) {
+          for (const staticItem of snapshotStatic) {
+            const parsedContent = JSON.parse(staticItem.content);
+            await tx.insert(staticContent).values({
+              page: staticItem.page,
+              locale: parsedContent.locale || 'de',
+              title: parsedContent.title || null,
+              subtitle: parsedContent.subtitle || null,
+              content: parsedContent.content || '',
+              image: parsedContent.image || null,
+            });
+          }
+          console.log("Restored static content");
         }
         
       });

@@ -207,6 +207,22 @@ export function registerAdminRoutes(app: Express) {
     }
   });
 
+  // Delete reservation
+  app.delete("/api/admin/reservations/:id", ensureAuthenticated, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await storage.deleteReservation(id);
+      
+      if (!deleted) {
+        return res.status(404).json({ error: "Reservation not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to delete reservation" });
+    }
+  });
+
   // Get all gallery images
   app.get("/api/admin/gallery", ensureAuthenticated, async (req, res) => {
     try {

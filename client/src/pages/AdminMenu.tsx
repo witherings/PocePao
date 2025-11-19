@@ -29,14 +29,18 @@ interface MenuItem {
   description: string | null;
   descriptionDE: string | null;
   price: string;
-  price_small?: string | null;
-  price_large?: string | null;
+  priceSmall?: string | null;
+  priceLarge?: string | null;
   categoryId: string;
   available: number;
   popular: number;
   image: string | null;
   ingredients?: string[] | null;
   allergens?: string[] | null;
+  protein?: string | null;
+  marinade?: string | null;
+  sauce?: string | null;
+  toppings?: string[] | null;
 }
 
 export function AdminMenu() {
@@ -51,6 +55,7 @@ export function AdminMenu() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -231,6 +236,7 @@ export function AdminMenu() {
     const priceLarge = formData.get("priceLarge") as string;
     const ingredientsStr = formData.get("ingredients") as string;
     const allergensStr = formData.get("allergens") as string;
+    const toppingsStr = formData.get("toppings") as string;
     
     const data: any = {
       name: name,
@@ -238,14 +244,18 @@ export function AdminMenu() {
       description: description,
       descriptionDE: description,
       price: formData.get("price") as string,
-      price_small: priceSmall || null,
-      price_large: priceLarge || null,
+      priceSmall: priceSmall || null,
+      priceLarge: priceLarge || null,
       categoryId: formData.get("categoryId") as string,
       available: formData.get("available") === "on" ? 1 : 0,
       popular: formData.get("popular") === "on" ? 1 : 0,
       image: imageUrl,
       ingredients: ingredientsStr ? ingredientsStr.split(",").map(i => i.trim()).filter(Boolean) : null,
       allergens: allergensStr ? allergensStr.split(",").map(a => a.trim()).filter(Boolean) : null,
+      protein: formData.get("protein") as string || null,
+      marinade: formData.get("marinade") as string || null,
+      sauce: formData.get("sauce") as string || null,
+      toppings: toppingsStr ? toppingsStr.split(",").map(t => t.trim()).filter(Boolean) : null,
     };
 
     if (editingMenuItem) {
@@ -437,6 +447,7 @@ export function AdminMenu() {
                           name="categoryId"
                           defaultValue={editingMenuItem?.categoryId}
                           required
+                          onValueChange={(value) => setSelectedCategoryId(value)}
                         >
                           <SelectTrigger className="h-12 text-base px-4">
                             <SelectValue placeholder="Kategorie wählen" />
@@ -452,6 +463,60 @@ export function AdminMenu() {
                       </div>
                     </div>
 
+                    {/* Poke Bowl Special Fields */}
+                    {(selectedCategoryId && categories.find(c => c.id === selectedCategoryId)?.name === "Poke Bowls" || 
+                      (!selectedCategoryId && editingMenuItem && categories.find(c => c.id === editingMenuItem.categoryId)?.name === "Poke Bowls")) && (
+                      <div className="space-y-5 p-5 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                        <h3 className="font-poppins text-lg font-bold text-blue-900 mb-3">🥗 Poke Bowl Details</h3>
+                        
+                        <div className="grid grid-cols-2 gap-5">
+                          <div>
+                            <Label htmlFor="protein" className="text-base font-semibold mb-2">Protein</Label>
+                            <Input
+                              id="protein"
+                              name="protein"
+                              defaultValue={editingMenuItem?.protein || ""}
+                              placeholder="z.B. Lachs"
+                              className="h-12 text-base px-4"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="marinade" className="text-base font-semibold mb-2">Marinade</Label>
+                            <Input
+                              id="marinade"
+                              name="marinade"
+                              defaultValue={editingMenuItem?.marinade || ""}
+                              placeholder="z.B. Soja-Sesam"
+                              className="h-12 text-base px-4"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="sauce" className="text-base font-semibold mb-2">Sauce</Label>
+                          <Input
+                            id="sauce"
+                            name="sauce"
+                            defaultValue={editingMenuItem?.sauce || ""}
+                            placeholder="z.B. Spicy Mayo"
+                            className="h-12 text-base px-4"
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="toppings" className="text-base font-semibold mb-2">Toppings (kommagetrennt)</Label>
+                          <Textarea
+                            id="toppings"
+                            name="toppings"
+                            rows={2}
+                            defaultValue={editingMenuItem?.toppings?.join(", ") || ""}
+                            placeholder="z.B. Sesam, Frühlingszwiebeln, Nori"
+                            className="text-base px-4 py-3"
+                          />
+                        </div>
+                      </div>
+                    )}
+
                     <div className="grid grid-cols-2 gap-5">
                       <div>
                         <Label htmlFor="priceSmall" className="text-base font-semibold mb-2">Preis Klein (€) - Optional</Label>
@@ -460,20 +525,20 @@ export function AdminMenu() {
                           name="priceSmall"
                           type="number"
                           step="0.01"
-                          defaultValue={editingMenuItem?.price_small || ""}
+                          defaultValue={editingMenuItem?.priceSmall || ""}
                           placeholder="z.B. 8.50"
                           className="h-12 text-base px-4"
                         />
                         <p className="text-xs text-muted-foreground mt-1.5">Leer lassen, wenn nicht verwendet</p>
                       </div>
                       <div>
-                        <Label htmlFor="priceLarge" className="text-base font-semibold mb-2">Preis Mittel (€) - Optional</Label>
+                        <Label htmlFor="priceLarge" className="text-base font-semibold mb-2">Preis Standard (€) - Optional</Label>
                         <Input
                           id="priceLarge"
                           name="priceLarge"
                           type="number"
                           step="0.01"
-                          defaultValue={editingMenuItem?.price_large || ""}
+                          defaultValue={editingMenuItem?.priceLarge || ""}
                           placeholder="z.B. 12.50"
                           className="h-12 text-base px-4"
                         />

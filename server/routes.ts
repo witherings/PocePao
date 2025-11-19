@@ -268,10 +268,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/static-content/:page", async (req, res) => {
+  app.put("/api/static-content/:page", upload.single("image"), async (req, res) => {
     try {
       const { page } = req.params;
-      const contentData = { ...req.body, page };
+      let imageUrl = req.body.image;
+      
+      // If a new image was uploaded, use its URL
+      if (req.file) {
+        imageUrl = `/uploads/${req.file.filename}`;
+      }
+      
+      const contentData = { ...req.body, page, image: imageUrl };
       const content = await storage.upsertStaticContent(contentData);
       res.json(content);
     } catch (error: any) {
