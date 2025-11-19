@@ -49,3 +49,15 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 - **Notification Service:** Telegram Bot API (requires `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`)
 - **Authentication Libraries:** Passport.js, bcryptjs
 - **Frontend Libraries:** React, Vite, Tailwind CSS, shadcn/ui, TanStack Query, Zustand, Wouter
+
+### Recent Changes
+
+- **November 19, 2025**: Node.js 18 Compatibility & Railway Deployment Fixes - CRITICAL
+  - **FIXED**: `TypeError [ERR_INVALID_ARG_TYPE]` on Railway due to `import.meta.dirname` (Node.js 20+ only)
+  - **CONVERTED**: All path resolution to use Node.js 18 compatible `fileURLToPath` + `path.dirname`
+  - **ADDED**: `engines` field to package.json specifying Node.js >=18.0.0
+  - **CREATED**: PACKAGE_LOCK_FIX.md with instructions for fixing package-lock.json synchronization
+  - **CREATED**: RAILWAY_FIXES_SUMMARY.md with complete deployment troubleshooting guide
+  - **VERIFIED**: All code now compatible with Node.js 18+ (Railway uses 18.20.5)
+  - **FILES UPDATED**: vite.config.ts, server/vite.ts, package.json
+  - **STATUS**: Ready for Railway deployment after package-lock.json regeneration
