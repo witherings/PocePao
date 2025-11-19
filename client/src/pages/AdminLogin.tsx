@@ -70,6 +70,7 @@ export default function AdminLogin() {
               id="username"
               type="text"
               placeholder="admin"
+              autoComplete="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={loginMutation.isPending}
@@ -82,6 +83,7 @@ export default function AdminLogin() {
               id="password"
               type="password"
               placeholder="••••••••"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={loginMutation.isPending}
