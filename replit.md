@@ -52,6 +52,27 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 
 ### Recent Changes
 
+- **November 19, 2025**: Admin Panel UX Enhancements - COMPLETED
+  - **ENHANCED**: Menu items organized by categories in admin interface
+    - Items tab now displays dishes grouped under category headers
+    - Visual category headers with icons, names, and item counts
+    - Gradient backgrounds and border styling for better visual hierarchy
+    - Each category shows all its dishes in a clear, organized layout
+  - **ADDED**: Complete ingredient management system in admin panel
+    - New "Zutaten" (Ingredients) tab with full CRUD operations
+    - Ingredients organized by type: Protein, Base, Marinade, Fresh, Sauce, Topping
+    - Each ingredient supports: name, description, image upload, price, availability, order
+    - Grid layout with image cards for easy visual management
+    - Reuses proven upload flow and data invalidation patterns
+  - **IMPROVED**: Mobile UX for dish detail dialog
+    - Added dedicated "Zurück" (Back) button alongside "Hinzufügen" (Add) button
+    - Icon-only on mobile, full label on wider viewports
+    - Red styling for back button, orange for add-to-cart CTA
+  - **FILES UPDATED**: 
+    - client/src/pages/AdminMenu.tsx (category grouping, ingredient management)
+    - client/src/components/MenuItemDialog.tsx (back button)
+  - **STATUS**: All features working on Replit and ready for Railway deployment
+
 - **November 19, 2025**: Gallery Page Added
   - **CREATED**: Public gallery page at `/gallery` route
   - **FIXED**: 404 error when accessing gallery - added Gallery.tsx component
