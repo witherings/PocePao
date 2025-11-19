@@ -3,8 +3,10 @@
 ## Overview
 This is a modern full-stack e-commerce platform for PokePao, a Hawaiian poke bowl restaurant in Hamburg, Germany. The application enables customers to browse the menu, manage their cart, make reservations, and learn about the restaurant.
 
+**Deployment Platform:** Railway.app (optimized for Railway's infrastructure with trust proxy support)
+
 ## Project Structure
-The project is now cleaned and ready for production deployment on Render.com or similar platforms.
+The project is cleaned and ready for production deployment on Railway.app or similar platforms.
 
 ```
 /
@@ -32,10 +34,10 @@ The project is now cleaned and ready for production deployment on Render.com or 
 - Wouter for routing
 
 ### Backend
-- Express.js on Node.js
+- Express.js on Node.js with trust proxy support (Railway-ready)
 - TypeScript
 - RESTful API design
-- PostgreSQL with standard TCP connections (supports Render, Railway, etc.)
+- PostgreSQL with standard TCP connections (Railway, Render, etc.)
 - Drizzle ORM with node-postgres driver
 - Passport.js authentication
 - express-session with CSRF protection
@@ -64,8 +66,9 @@ npm run db:create-admin # Create admin user (requires ADMIN_PASSWORD env var)
 
 ### Production
 ```bash
-npm run build        # Build for production (pushes schema + builds frontend)
-npm run start        # Start production server
+npm run build         # Build for production (pushes schema + builds frontend)
+npm run railway:setup # Setup database and admin (Railway deployment command)
+npm run start         # Start production server
 ```
 
 ## Environment Variables
@@ -196,10 +199,13 @@ Add all required environment variables in Render dashboard:
 - Session-based authentication with Passport.js
 
 ### Features
-- Menu management: CRUD for categories, menu items, ingredients
-- Order viewing: See all customer orders
-- Reservation viewing: See all table reservations
-- Gallery management: Upload and delete images
+- **Menu Management**: Full CRUD for categories, menu items, ingredients
+  - Variant pricing support (price_small, price_large for different bowl sizes)
+  - Ingredients tracking (comma-separated list)
+  - Allergens tracking (comma-separated list)
+- **Order Viewing**: See all customer orders with details
+- **Reservation Management**: Full table view of bookings (name, date, time, phone, guests)
+- **Gallery Management**: Upload and delete restaurant photos
 - Secure authentication with bcrypt password hashing
 - CSRF protection via sameSite cookies
 
@@ -224,6 +230,19 @@ The PostgreSQL database contains the following tables:
 - `admin_users` - Admin panel users with bcrypt hashed passwords
 
 ## Recent Changes
+- **November 19, 2025**: Railway Migration & Admin CMS Completion
+  - **MIGRATED**: Platform from Render to Railway.app
+  - **ADDED**: Trust proxy setting in server/index.ts (critical for Railway load balancer authentication)
+  - **REMOVED**: All Vercel-specific code checks from server
+  - **ENHANCED**: AdminMenu with variant pricing fields (price_small, price_large)
+  - **ENHANCED**: AdminMenu with ingredients and allergens tracking (comma-separated inputs)
+  - **CREATED**: AdminReservations page with full table view (name, date, time, phone, guests)
+  - **FIXED**: Critical camelCase/snake_case bug in menu form that would have caused data loss
+  - **UPDATED**: package.json script from render:setup to railway:setup
+  - **CREATED**: RAILWAY_SETUP.md deployment guide
+  - **REMOVED**: RENDER_SETUP.md (obsolete)
+  - **VERIFIED**: All admin features production-ready with architect review
+
 - **November 19, 2025**: Critical Render Free Tier Fix (ESM/CommonJS Compatibility)
   - **REMOVED**: @neondatabase/serverless and ws packages (caused port 443 WebSocket errors)
   - **ADDED**: Standard pg driver with SSL/TLS support for Render PostgreSQL
