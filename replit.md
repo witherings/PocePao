@@ -35,14 +35,15 @@ The project is now cleaned and ready for production deployment on Render.com or 
 - Express.js on Node.js
 - TypeScript
 - RESTful API design
-- PostgreSQL via Neon serverless
-- Drizzle ORM
+- PostgreSQL with standard TCP connections (supports Render, Railway, etc.)
+- Drizzle ORM with node-postgres driver
 - Passport.js authentication
 - express-session with CSRF protection
+- SSL/TLS support for managed PostgreSQL (auto-detects non-localhost)
 
 ### Data Storage
-- **Primary**: PostgreSQL via Neon serverless
-- **ORM**: Drizzle ORM with type-safe queries
+- **Primary**: PostgreSQL (standard TCP driver with SSL support)
+- **ORM**: Drizzle ORM with type-safe queries using node-postgres
 - **Cart Data**: Client-side localStorage via Zustand
 - **Sessions**: express-session with sameSite=strict cookies
 
@@ -106,40 +107,52 @@ Required for production deployment:
    - Server port
    - Render sets this automatically (usually 10000)
 
-## Deployment on Render.com
+## Deployment on Render.com (Free Tier Compatible)
 
-### Step 1: Create Web Service
+### IMPORTANT: Render Free Tier Constraints
+- **No Shell Access**: Cannot run commands manually after deployment
+- **No Pre-Deploy Commands**: Must use chained Start Command
+- **SSL Required**: Render's PostgreSQL requires SSL/TLS (auto-configured)
+
+### Step 1: Create PostgreSQL Database
+1. In Render dashboard, create a **PostgreSQL** instance (free tier available)
+2. Copy the **Internal Database URL** (starts with `postgresql://`)
+3. Keep this connection string for Step 3
+
+### Step 2: Create Web Service
 1. Connect your GitHub repository to Render
 2. Create a new **Web Service**
 3. Set the following:
    - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `npm run start`
+   - **Start Command**: `npm run db:seed && npm run db:create-admin && npm run start`
    - **Environment**: Node
 
-### Step 2: Configure Environment Variables
+### Step 3: Configure Environment Variables
 Add all required environment variables in Render dashboard:
-- DATABASE_URL (from your PostgreSQL provider)
-- SESSION_SECRET (generate with `openssl rand -base64 32`)
-- TELEGRAM_BOT_TOKEN (optional)
-- TELEGRAM_CHAT_ID (optional)
+- **DATABASE_URL**: Your PostgreSQL Internal Database URL from Step 1
+- **SESSION_SECRET**: Generate with `openssl rand -base64 32`
+- **ADMIN_PASSWORD**: Your secure admin password (required for first boot)
+- **ADMIN_USERNAME**: (optional, defaults to "admin")
+- **TELEGRAM_BOT_TOKEN**: (optional)
+- **TELEGRAM_CHAT_ID**: (optional)
 
-### Step 3: Set up PostgreSQL Database
-1. Create a PostgreSQL database (Neon, Render, Railway, etc.)
-2. Copy the connection string to DATABASE_URL
-3. The build script will automatically push schema to database
+### Step 4: Deploy
+1. Click "Deploy" - Render will:
+   - Install dependencies
+   - Build the frontend
+   - Run database migrations
+   - Seed the database (idempotent - skips if data exists)
+   - Create admin user (idempotent - skips if admin exists)
+   - Start the production server
+2. Your app is now live!
 
-### Step 4: Create Admin User
-After first deployment:
-1. Go to Render dashboard → Shell
-2. Run: `ADMIN_PASSWORD=your_secure_password npm run db:create-admin`
-3. Save credentials securely
-4. (Optional) Remove ADMIN_PASSWORD from environment variables
-
-### Step 5: Seed Database (Optional)
-To populate the database with initial menu items:
-```bash
-npm run db:seed
-```
+### Important Notes for Free Tier
+- The **chained Start Command** runs on every deployment and restart
+- Scripts are **idempotent** - safe to run multiple times:
+  - `db:seed` checks if categories exist before seeding
+  - `db:create-admin` checks if admin exists before creating
+- **ADMIN_PASSWORD** must remain in environment variables since scripts run on every restart
+- Database connection uses SSL automatically (non-localhost connections)
 
 ## API Endpoints
 
@@ -211,6 +224,14 @@ The PostgreSQL database contains the following tables:
 - `admin_users` - Admin panel users with bcrypt hashed passwords
 
 ## Recent Changes
+- **November 19, 2025**: Critical Render Free Tier Fix
+  - **REMOVED**: @neondatabase/serverless and ws packages (caused port 443 WebSocket errors)
+  - **ADDED**: Standard pg driver with SSL/TLS support for Render PostgreSQL
+  - **FIXED**: Database connection to use standard TCP on port 5432 (not WebSockets)
+  - **IMPROVED**: Auto-detect SSL requirement (enabled for non-localhost connections)
+  - **VERIFIED**: Idempotent scripts (seed.ts and create-admin.ts) safe for chained Start Command
+  - **CONFIGURED**: Works perfectly on Render Free Tier with no shell access required
+
 - **November 12, 2025**: Production cleanup completed
   - Moved all files to project root for clean deployment
   - Removed legacy folders and Replit-specific files
@@ -218,11 +239,12 @@ The PostgreSQL database contains the following tables:
   - Added admin user creation script
   - Configured .gitignore for production
   - Added bcryptjs dependency for password hashing
-  - Ready for deployment on Render.com or similar platforms
 
 ## Notes
-- The application uses PostgreSQL via Neon serverless
+- The application uses standard PostgreSQL with node-postgres driver
+- SSL/TLS automatically enabled for managed databases (Render, Railway, etc.)
+- Local development (localhost) runs without SSL for simplicity
 - All static assets and images are served from the Express server
 - The Vite dev server is configured in middleware mode with HMR support
 - Database migrations are managed via Drizzle ORM (`npm run db:push`)
-- Admin users must be created via CLI script after first deployment
+- Seeding and admin creation are idempotent and run on every deployment via chained Start Command
