@@ -30,7 +30,6 @@ interface MenuItem {
   descriptionDE: string | null;
   price: string;
   priceSmall?: string | null;
-  priceLarge?: string | null;
   categoryId: string;
   available: number;
   popular: number;
@@ -233,7 +232,6 @@ export function AdminMenu() {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string || "";
     const priceSmall = formData.get("priceSmall") as string;
-    const priceLarge = formData.get("priceLarge") as string;
     const ingredientsStr = formData.get("ingredients") as string;
     const allergensStr = formData.get("allergens") as string;
     const toppingsStr = formData.get("toppings") as string;
@@ -245,7 +243,6 @@ export function AdminMenu() {
       descriptionDE: description,
       price: formData.get("price") as string,
       priceSmall: priceSmall || null,
-      priceLarge: priceLarge || null,
       categoryId: formData.get("categoryId") as string,
       available: formData.get("available") === "on" ? 1 : 0,
       popular: formData.get("popular") === "on" ? 1 : 0,
@@ -430,18 +427,6 @@ export function AdminMenu() {
 
                     <div className="grid grid-cols-2 gap-5">
                       <div>
-                        <Label htmlFor="price" className="text-base font-semibold mb-2">Preis Standard (€)</Label>
-                        <Input
-                          id="price"
-                          name="price"
-                          type="number"
-                          step="0.01"
-                          defaultValue={editingMenuItem?.price}
-                          required
-                          className="h-12 text-base px-4"
-                        />
-                      </div>
-                      <div>
                         <Label htmlFor="categoryId" className="text-base font-semibold mb-2">Kategorie</Label>
                         <Select
                           name="categoryId"
@@ -460,6 +445,20 @@ export function AdminMenu() {
                             ))}
                           </SelectContent>
                         </Select>
+                      </div>
+                      <div>
+                        <Label htmlFor="price" className="text-base font-semibold mb-2">Preis Standard (€) *</Label>
+                        <Input
+                          id="price"
+                          name="price"
+                          type="number"
+                          step="0.01"
+                          defaultValue={editingMenuItem?.price}
+                          required
+                          placeholder="Hauptpreis (erforderlich)"
+                          className="h-12 text-base px-4"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1.5">Standardgröße oder einziger Preis</p>
                       </div>
                     </div>
 
@@ -504,6 +503,18 @@ export function AdminMenu() {
                         </div>
 
                         <div>
+                          <Label htmlFor="ingredients" className="text-base font-semibold mb-2">Frische Zutaten (kommagetrennt)</Label>
+                          <Textarea
+                            id="ingredients"
+                            name="ingredients"
+                            rows={2}
+                            defaultValue={editingMenuItem?.ingredients?.join(", ") || ""}
+                            placeholder="z.B. Edamame, Gurke, Avocado, Mais"
+                            className="text-base px-4 py-3"
+                          />
+                        </div>
+
+                        <div>
                           <Label htmlFor="toppings" className="text-base font-semibold mb-2">Toppings (kommagetrennt)</Label>
                           <Textarea
                             id="toppings"
@@ -517,46 +528,18 @@ export function AdminMenu() {
                       </div>
                     )}
 
-                    <div className="grid grid-cols-2 gap-5">
-                      <div>
-                        <Label htmlFor="priceSmall" className="text-base font-semibold mb-2">Preis Klein (€) - Optional</Label>
-                        <Input
-                          id="priceSmall"
-                          name="priceSmall"
-                          type="number"
-                          step="0.01"
-                          defaultValue={editingMenuItem?.priceSmall || ""}
-                          placeholder="z.B. 8.50"
-                          className="h-12 text-base px-4"
-                        />
-                        <p className="text-xs text-muted-foreground mt-1.5">Leer lassen, wenn nicht verwendet</p>
-                      </div>
-                      <div>
-                        <Label htmlFor="priceLarge" className="text-base font-semibold mb-2">Preis Standard (€) - Optional</Label>
-                        <Input
-                          id="priceLarge"
-                          name="priceLarge"
-                          type="number"
-                          step="0.01"
-                          defaultValue={editingMenuItem?.priceLarge || ""}
-                          placeholder="z.B. 12.50"
-                          className="h-12 text-base px-4"
-                        />
-                        <p className="text-xs text-muted-foreground mt-1.5">Leer lassen, wenn nicht verwendet</p>
-                      </div>
-                    </div>
-
                     <div>
-                      <Label htmlFor="ingredients" className="text-base font-semibold mb-2">Zutaten (kommagetrennt) - Optional</Label>
-                      <Textarea
-                        id="ingredients"
-                        name="ingredients"
-                        rows={2}
-                        defaultValue={editingMenuItem?.ingredients?.join(", ") || ""}
-                        placeholder="z.B. Lachs, Avocado, Edamame, Gurke"
-                        className="text-base px-4 py-3"
+                      <Label htmlFor="priceSmall" className="text-base font-semibold mb-2">Preis Klein (€) - Optional</Label>
+                      <Input
+                        id="priceSmall"
+                        name="priceSmall"
+                        type="number"
+                        step="0.01"
+                        defaultValue={editingMenuItem?.priceSmall || ""}
+                        placeholder="Nur wenn Klein-Größe vorhanden"
+                        className="h-12 text-base px-4"
                       />
-                      <p className="text-xs text-muted-foreground mt-1.5">Trennen Sie mehrere Zutaten mit Kommas</p>
+                      <p className="text-xs text-muted-foreground mt-1.5">Für Pokébowls: Klein = 9.90€, Standard (oben) = 14.75€</p>
                     </div>
 
                     <div>

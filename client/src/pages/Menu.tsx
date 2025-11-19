@@ -60,8 +60,9 @@ export default function Menu() {
     if (!customPrice && size && item.hasSizeOptions === 1) {
       if (size === "klein" && item.priceSmall) {
         finalPrice = item.priceSmall;
-      } else if (size === "standard" && item.priceLarge) {
-        finalPrice = item.priceLarge;
+      } else if (size === "standard") {
+        // Standard size always uses the main price
+        finalPrice = item.price;
       }
     }
 
@@ -250,11 +251,19 @@ export default function Menu() {
                         </p>
                         <div className="flex items-center justify-between mt-auto">
                           <div>
-                            <span className="font-poppins text-xl font-bold text-ocean" data-testid={`text-menu-item-price-${item.id}`}>
-                              {item.hasSizeOptions === 1 && "ab "}€{item.priceSmall || item.price}
-                            </span>
-                            {item.hasSizeOptions === 1 && (
-                              <p className="text-xs text-muted-foreground">Klein/Standard</p>
+                            {item.hasSizeOptions === 1 && item.priceSmall ? (
+                              <>
+                                <span className="font-poppins text-base font-bold text-ocean block" data-testid={`text-menu-item-price-${item.id}`}>
+                                  Klein €{item.priceSmall}
+                                </span>
+                                <span className="font-poppins text-base font-semibold text-muted-foreground">
+                                  Standard €{item.price}
+                                </span>
+                              </>
+                            ) : (
+                              <span className="font-poppins text-xl font-bold text-ocean" data-testid={`text-menu-item-price-${item.id}`}>
+                                €{item.price}
+                              </span>
                             )}
                           </div>
                           <Button

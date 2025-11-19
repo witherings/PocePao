@@ -26,9 +26,8 @@ export const menuItems = pgTable("menu_items", {
   nameDE: text("name_de").notNull(),
   description: text("description").notNull(),
   descriptionDE: text("description_de").notNull(),
-  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
-  priceSmall: decimal("price_small", { precision: 10, scale: 2 }),
-  priceLarge: decimal("price_large", { precision: 10, scale: 2 }),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(), // Standard price (always required)
+  priceSmall: decimal("price_small", { precision: 10, scale: 2 }), // Klein price (optional, for size options)
   image: text("image").notNull(),
   categoryId: varchar("category_id").notNull().references(() => categories.id),
   available: integer("available").notNull().default(1), // 1 = available, 0 = not available

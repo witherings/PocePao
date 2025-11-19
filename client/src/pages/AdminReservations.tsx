@@ -28,7 +28,7 @@ export function AdminReservations() {
 
   const deleteReservationMutation = useMutation({
     mutationFn: async (id: string) => {
-      return await apiRequest("DELETE", `/api/reservations/${id}`, {});
+      return await apiRequest("DELETE", `/api/admin/reservations/${id}`, {});
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/reservations"] });

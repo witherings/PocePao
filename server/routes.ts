@@ -167,8 +167,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = insertReservationSchema.parse(req.body);
       const reservation = await storage.createReservation(validatedData);
       
-      // Send notification to restaurant
-      await notificationService.sendReservationNotification(reservation);
+      // Send notification to restaurant (non-blocking - don't fail reservation if notification fails)
+      try {
+        await notificationService.sendReservationNotification(reservation);
+      } catch (notificationError) {
+        console.error('⚠️  Telegram notification failed, but reservation was created:', notificationError);
+        // Reservation is still created successfully even if notification fails
+      }
       
       res.status(201).json(reservation);
     } catch (error: any) {
@@ -381,8 +386,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // Send notification to restaurant
-      await notificationService.sendOrderNotification(order, createdItems);
+      // Send notification to restaurant (non-blocking - don't fail order if notification fails)
+      try {
+        await notificationService.sendOrderNotification(order, createdItems);
+      } catch (notificationError) {
+        console.error('⚠️  Telegram notification failed, but order was created:', notificationError);
+        // Order is still created successfully even if notification fails
+      }
       
       res.status(201).json(order);
     } catch (error: any) {

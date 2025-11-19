@@ -81,7 +81,6 @@ export function registerSnapshotRoutes(app: Express) {
             descriptionDE: item.descriptionDE,
             price: item.price,
             priceSmall: item.priceSmall,
-            priceLarge: item.priceLarge,
             image: item.image,
             categoryId: item.categoryId,
             available: item.available,
@@ -120,11 +119,12 @@ export function registerSnapshotRoutes(app: Express) {
           currentStaticContent.map((content: any) => ({
             snapshotId: snapshot.id,
             page: content.page,
+            // Save complete static content row as JSON
             content: JSON.stringify({
               locale: content.locale,
               title: content.title,
               subtitle: content.subtitle,
-              content: content.content,
+              content: content.content, // This is already a string (plain text or JSON string)
               image: content.image,
             }),
           }))
@@ -249,7 +249,6 @@ export function registerSnapshotRoutes(app: Express) {
               descriptionDE: item.descriptionDE,
               price: item.price,
               priceSmall: item.priceSmall,
-              priceLarge: item.priceLarge,
               image: item.image,
               categoryId: item.categoryId,
               available: item.available,
@@ -287,7 +286,7 @@ export function registerSnapshotRoutes(app: Express) {
               locale: parsedContent.locale || 'de',
               title: parsedContent.title || null,
               subtitle: parsedContent.subtitle || null,
-              content: parsedContent.content || '',
+              content: parsedContent.content || '', // This is the original content value (string)
               image: parsedContent.image || null,
             });
           }

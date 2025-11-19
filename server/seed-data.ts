@@ -99,9 +99,8 @@ async function seedDatabase() {
         nameDE: "Wunsch Bowl",
         description: "Create your perfect poke bowl - choose your base, protein, toppings and sauce",
         descriptionDE: "Kreiere deine perfekte Poke Bowl - wähle deine Basis, Protein, Toppings und Sauce",
-        price: "10.90",
-        priceSmall: "8.90",
-        priceLarge: "12.90",
+        price: "14.75", // Standard price
+        priceSmall: "9.90", // Klein price (optional)
         image: "/images/custom-bowl.jpg",
         categoryId: pokeBowls.id,
         available: 1,
