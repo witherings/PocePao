@@ -124,7 +124,7 @@ export type InsertOrder = z.infer<typeof insertOrderSchema>;
 export const orderItems = pgTable("order_items", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   orderId: varchar("order_id").notNull().references(() => orders.id),
-  menuItemId: varchar("menu_item_id").references(() => menuItems.id),
+  menuItemId: varchar("menu_item_id").references(() => menuItems.id, { onDelete: 'set null' }),
   name: text("name").notNull(),
   nameDE: text("name_de").notNull(),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),

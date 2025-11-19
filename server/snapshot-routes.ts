@@ -221,11 +221,13 @@ export function registerSnapshotRoutes(app: Express) {
         const { staticContent } = await import("@shared/schema");
         
         // STEP 1: Delete all current live data
+        // NOTE: order_items are preserved (they have ON DELETE SET NULL FK)
+        // When menu items are deleted, order_items.menuItemId is set to NULL automatically
         await tx.delete(menuItems);
         await tx.delete(categories);
         await tx.delete(galleryImages);
         await tx.delete(staticContent);
-        console.log("Cleared live tables (in transaction)");
+        console.log("Cleared live tables (in transaction, orders preserved)");
         
         // STEP 2: Copy categories to live (preserving original IDs)
         await tx.insert(categories).values(
