@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertReservationSchema, insertGalleryImageSchema, insertOrderSchema, insertOrderItemSchema } from "@shared/schema";
+import { insertReservationSchema, insertGalleryImageSchema, insertOrderSchema, insertOrderItemSchema, insertIngredientSchema, insertCategorySchema, insertMenuItemSchema } from "@shared/schema";
 import { notificationService } from "./notifications";
 import { registerAdminRoutes } from "./admin-routes";
 import { registerSnapshotRoutes } from "./snapshot-routes";
@@ -52,7 +52,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/categories", async (req, res) => {
     try {
-      const category = await storage.createCategory(req.body);
+      const data = insertCategorySchema.parse(req.body);
+      const category = await storage.createCategory(data);
       res.status(201).json(category);
     } catch (error: any) {
       res.status(400).json({ error: error.message || "Failed to create category" });
@@ -62,7 +63,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/categories/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const category = await storage.updateCategory(id, req.body);
+      const data = insertCategorySchema.partial().parse(req.body);
+      const category = await storage.updateCategory(id, data);
       if (!category) {
         return res.status(404).json({ error: "Category not found" });
       }
@@ -122,7 +124,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/menu-items", async (req, res) => {
     try {
-      const menuItem = await storage.createMenuItem(req.body);
+      const data = insertMenuItemSchema.parse(req.body);
+      const menuItem = await storage.createMenuItem(data);
       res.status(201).json(menuItem);
     } catch (error: any) {
       res.status(400).json({ error: error.message || "Failed to create menu item" });
@@ -132,7 +135,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/menu-items/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const menuItem = await storage.updateMenuItem(id, req.body);
+      const data = insertMenuItemSchema.partial().parse(req.body);
+      const menuItem = await storage.updateMenuItem(id, data);
       if (!menuItem) {
         return res.status(404).json({ error: "Menu item not found" });
       }
@@ -337,6 +341,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(ingredients);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch ingredients by type" });
+    }
+  });
+
+  app.post("/api/ingredients", async (req, res) => {
+    try {
+      const data = insertIngredientSchema.parse(req.body);
+      const ingredient = await storage.createIngredient(data);
+      res.status(201).json(ingredient);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to create ingredient" });
+    }
+  });
+
+  app.put("/api/ingredients/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const data = insertIngredientSchema.partial().parse(req.body);
+      const ingredient = await storage.updateIngredient(id, data);
+      if (!ingredient) {
+        return res.status(404).json({ error: "Ingredient not found" });
+      }
+      res.json(ingredient);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to update ingredient" });
+    }
+  });
+
+  app.delete("/api/ingredients/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await storage.deleteIngredient(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Ingredient not found" });
+      }
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to delete ingredient" });
     }
   });
 
