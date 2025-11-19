@@ -1,0 +1,816 @@
+2025-11-19T10:25:34.000000000Z [inf]  Starting Container
+2025-11-19T10:25:35.830810295Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:25:35.830815042Z [inf]  
+2025-11-19T10:25:35.830819603Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T10:25:35.830825665Z [inf]  > sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T10:25:35.830833428Z [inf]  
+2025-11-19T10:25:38.105953474Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:25:38.141484442Z [inf]  
+2025-11-19T10:25:38.141492575Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T10:25:38.141500012Z [inf]  > drizzle-kit push
+2025-11-19T10:25:38.141507232Z [inf]  
+2025-11-19T10:25:38.715330827Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T10:25:38.715336060Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T10:25:38.715341819Z [inf]  Using 'pg' driver for database querying
+2025-11-19T10:25:38.715347484Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T10:25:38.835359653Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:25:38.966669142Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:25:39.078150458Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-19T10:25:39.736084180Z [inf]  
+2025-11-19T10:25:39.736115633Z [inf]  > tsx server/seed.ts
+2025-11-19T10:25:39.736125229Z [inf]  [✓] Changes applied
+2025-11-19T10:25:39.736126976Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:25:39.736133857Z [inf]  
+2025-11-19T10:25:39.736139980Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T10:25:40.204339234Z [inf]  🌱 Starting database seeding...
+2025-11-19T10:25:40.204343807Z [inf]  
+2025-11-19T10:25:40.204348359Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:25:43.207139854Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:25:43.207145801Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:25:43.841442299Z [inf]  
+2025-11-19T10:25:43.841470973Z [inf]  
+2025-11-19T10:25:43.841483896Z [inf]  📁 Seeding categories...
+2025-11-19T10:25:43.841491221Z [inf]  ✅ Created 6 categories
+2025-11-19T10:25:43.841500327Z [inf]  
+2025-11-19T10:25:43.841507452Z [inf]  🍱 Seeding menu items...
+2025-11-19T10:25:43.841513889Z [inf]  ✅ Created 48 menu items
+2025-11-19T10:25:43.841522413Z [inf]  
+2025-11-19T10:25:43.841522599Z [inf]     - Menu Items: 48
+2025-11-19T10:25:43.841530104Z [inf]  ✅ Database connection successful!
+2025-11-19T10:25:43.841531219Z [inf]     - Ingredients: 53
+2025-11-19T10:25:43.841531498Z [inf]  🥗 Seeding ingredients...
+2025-11-19T10:25:43.841538750Z [inf]  📝 Database is empty. Proceeding with seed...
+2025-11-19T10:25:43.841539361Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-19T10:25:43.841540345Z [inf]  ✅ Created 53 ingredients
+2025-11-19T10:25:43.841541385Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:25:43.841549222Z [inf]  > tsx server/create-admin.ts
+2025-11-19T10:25:43.841549664Z [inf]  
+2025-11-19T10:25:43.841550683Z [inf]  
+2025-11-19T10:25:43.841554786Z [inf]  ✨ Database seeding completed successfully!
+2025-11-19T10:25:43.841560846Z [inf]  
+2025-11-19T10:25:43.841565725Z [inf]  📊 Summary:
+2025-11-19T10:25:43.841570015Z [inf]     - Categories: 6
+2025-11-19T10:25:44.733229248Z [inf]  🔐 Creating admin user...
+2025-11-19T10:25:44.733246647Z [inf]  
+2025-11-19T10:25:44.733253321Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:25:47.743069891Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:25:47.743077049Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:25:48.834880594Z [inf]  🔒 Please save your credentials securely and delete this message from your terminal history.
+2025-11-19T10:25:48.834908651Z [inf]     Username: admin
+2025-11-19T10:25:48.834916758Z [inf]     Password: ********
+2025-11-19T10:25:48.834922449Z [inf]  
+2025-11-19T10:25:48.834937032Z [inf]  ✅ Database connection successful!
+2025-11-19T10:25:48.834943605Z [inf]  ✅ Admin user created successfully!
+2025-11-19T10:25:48.938549305Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:25:48.976493849Z [inf]  
+2025-11-19T10:25:48.976499615Z [inf]  > rest-express@1.0.0 start
+2025-11-19T10:25:48.976505380Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-19T10:25:48.976512743Z [inf]  
+2025-11-19T10:25:50.781122690Z [err]    code: 'ERR_INVALID_ARG_TYPE'
+2025-11-19T10:25:50.781133574Z [err]  }
+2025-11-19T10:25:50.781141035Z [err]  
+2025-11-19T10:25:50.781147461Z [err]  Node.js v18.20.5
+2025-11-19T10:25:50.781225000Z [err]      at <anonymous> (/app/vite.config.ts:24:17)
+2025-11-19T10:25:50.781225665Z [err]  TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+2025-11-19T10:25:50.781231504Z [err]      at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+2025-11-19T10:25:50.781232853Z [err]      at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+2025-11-19T10:25:50.781238670Z [err]      at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+2025-11-19T10:25:50.781240273Z [err]      at new NodeError (node:internal/errors:405:5)
+2025-11-19T10:25:50.781244615Z [err]  node:internal/errors:496
+2025-11-19T10:25:50.781246897Z [err]      at validateString (node:internal/validators:162:11)
+2025-11-19T10:25:50.781248482Z [err]      at async loadESM (node:internal/process/esm_loader:34:7)
+2025-11-19T10:25:50.781252510Z [err]      at Object.resolve (node:path:1097:7)
+2025-11-19T10:25:50.781259922Z [err]      ErrorCaptureStackTrace(err);
+2025-11-19T10:25:50.781267276Z [err]      ^
+2025-11-19T10:25:50.781272699Z [err]  
+2025-11-19T10:25:50.781332919Z [err]      at async handleMainPromise (node:internal/modules/run_main:106:12) {
+2025-11-19T10:25:51.860241422Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:25:51.892518160Z [inf]  
+2025-11-19T10:25:51.892526264Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T10:25:51.892531245Z [inf]  > sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T10:25:51.892535278Z [inf]  
+2025-11-19T10:25:55.010779246Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:25:55.044535068Z [inf]  
+2025-11-19T10:25:55.044541540Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T10:25:55.044546949Z [inf]  > drizzle-kit push
+2025-11-19T10:25:55.044552030Z [inf]  
+2025-11-19T10:25:55.776812562Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T10:25:55.776822979Z [inf]  Using 'pg' driver for database querying
+2025-11-19T10:25:55.776828950Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T10:25:55.777012365Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T10:25:55.784625887Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:25:55.912588250Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:25:56.038872861Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:25:56.166722033Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T10:25:56.733262975Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T10:25:56.733271492Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T10:25:56.733276753Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T10:25:56.733281876Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:25:56.887301008Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-19T10:25:56.887310719Z [inf]  [i] No changes detected
+2025-11-19T10:25:56.887373641Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:25:57.017547987Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:25:57.020583726Z [inf]  
+2025-11-19T10:25:57.020589226Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T10:25:57.020593932Z [inf]  > tsx server/seed.ts
+2025-11-19T10:25:57.020598327Z [inf]  
+2025-11-19T10:25:57.806293723Z [inf]  🌱 Starting database seeding...
+2025-11-19T10:25:57.806301187Z [inf]  
+2025-11-19T10:25:57.806308604Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:26:00.888849824Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:26:00.888854362Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:26:00.888859373Z [inf]  ✅ Database connection successful!
+2025-11-19T10:26:00.888864671Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-19T10:26:00.888869862Z [inf]     Found 6 categories.
+2025-11-19T10:26:00.978493605Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:01.008261918Z [inf]  
+2025-11-19T10:26:01.008266705Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-19T10:26:01.008271045Z [inf]  > tsx server/create-admin.ts
+2025-11-19T10:26:01.008276553Z [inf]  
+2025-11-19T10:26:01.737176607Z [inf]  🔐 Creating admin user...
+2025-11-19T10:26:01.737183205Z [inf]  
+2025-11-19T10:26:01.737188935Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:26:04.792985637Z [inf]  ✅ Database connection successful!
+2025-11-19T10:26:04.792995662Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-19T10:26:04.793002235Z [inf]     Username: admin
+2025-11-19T10:26:04.793018802Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:26:04.793025456Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:26:04.936673457Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:04.975694990Z [inf]  
+2025-11-19T10:26:04.975701477Z [inf]  > rest-express@1.0.0 start
+2025-11-19T10:26:04.975708095Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-19T10:26:04.975715327Z [inf]  
+2025-11-19T10:26:07.203340500Z [err]  node:internal/errors:496
+2025-11-19T10:26:07.203346896Z [err]      ErrorCaptureStackTrace(err);
+2025-11-19T10:26:07.203355885Z [err]      ^
+2025-11-19T10:26:07.203362303Z [err]  
+2025-11-19T10:26:07.203368599Z [err]  TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+2025-11-19T10:26:07.203374996Z [err]      at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+2025-11-19T10:26:07.203381223Z [err]      at new NodeError (node:internal/errors:405:5)
+2025-11-19T10:26:07.203387078Z [err]      at validateString (node:internal/validators:162:11)
+2025-11-19T10:26:07.203396060Z [err]      at Object.resolve (node:path:1097:7)
+2025-11-19T10:26:07.203401925Z [err]      at <anonymous> (/app/vite.config.ts:24:17)
+2025-11-19T10:26:07.203408263Z [err]      at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+2025-11-19T10:26:07.203414920Z [err]      at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+2025-11-19T10:26:07.203420748Z [err]      at async loadESM (node:internal/process/esm_loader:34:7)
+2025-11-19T10:26:07.203426271Z [err]      at async handleMainPromise (node:internal/modules/run_main:106:12) {
+2025-11-19T10:26:07.203431704Z [err]    code: 'ERR_INVALID_ARG_TYPE'
+2025-11-19T10:26:07.203437938Z [err]  }
+2025-11-19T10:26:07.203443528Z [err]  
+2025-11-19T10:26:07.203449388Z [err]  Node.js v18.20.5
+2025-11-19T10:26:08.058932938Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:08.096360454Z [inf]  
+2025-11-19T10:26:08.096367029Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T10:26:08.096373499Z [inf]  > sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T10:26:08.096379195Z [inf]  
+2025-11-19T10:26:11.247046856Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:11.283795767Z [inf]  
+2025-11-19T10:26:11.283802442Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T10:26:11.283807367Z [inf]  > drizzle-kit push
+2025-11-19T10:26:11.283811533Z [inf]  
+2025-11-19T10:26:11.740441518Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T10:26:11.740445846Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T10:26:11.756528309Z [inf]  Using 'pg' driver for database querying
+2025-11-19T10:26:11.837815288Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T10:26:11.965334970Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:26:12.092508549Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:26:12.217432415Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:26:12.810731433Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T10:26:12.810735131Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T10:26:12.810739142Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T10:26:12.810743637Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T10:26:12.866660748Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:26:12.931137948Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-19T10:26:12.955288563Z [inf]  [i] No changes detected
+2025-11-19T10:26:13.109750019Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:13.140482996Z [inf]  
+2025-11-19T10:26:13.140542450Z [inf]  
+2025-11-19T10:26:13.140549285Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T10:26:13.140554977Z [inf]  > tsx server/seed.ts
+2025-11-19T10:26:13.911638314Z [inf]  🌱 Starting database seeding...
+2025-11-19T10:26:13.911644746Z [inf]  
+2025-11-19T10:26:13.911650595Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:26:16.840252771Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:26:16.840258349Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:26:16.913198001Z [inf]  ✅ Database connection successful!
+2025-11-19T10:26:16.924157805Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-19T10:26:16.924163781Z [inf]     Found 6 categories.
+2025-11-19T10:26:17.110864251Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:17.138021070Z [inf]  
+2025-11-19T10:26:17.138026209Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-19T10:26:17.138031473Z [inf]  > tsx server/create-admin.ts
+2025-11-19T10:26:17.138047265Z [inf]  
+2025-11-19T10:26:17.830475207Z [inf]  🔐 Creating admin user...
+2025-11-19T10:26:17.830491919Z [inf]  
+2025-11-19T10:26:17.830497303Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:26:20.883534248Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:26:20.883540480Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:26:20.908928376Z [inf]  ✅ Database connection successful!
+2025-11-19T10:26:20.918150796Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-19T10:26:20.918158980Z [inf]     Username: admin
+2025-11-19T10:26:21.081294533Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:21.111873073Z [inf]  
+2025-11-19T10:26:21.111878354Z [inf]  > rest-express@1.0.0 start
+2025-11-19T10:26:21.111882868Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-19T10:26:21.111886831Z [inf]  
+2025-11-19T10:26:22.932243240Z [err]  node:internal/errors:496
+2025-11-19T10:26:22.932249305Z [err]      ErrorCaptureStackTrace(err);
+2025-11-19T10:26:22.932255607Z [err]      ^
+2025-11-19T10:26:22.932261954Z [err]  
+2025-11-19T10:26:22.932267415Z [err]  TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+2025-11-19T10:26:22.932274635Z [err]      at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+2025-11-19T10:26:22.932280822Z [err]      at new NodeError (node:internal/errors:405:5)
+2025-11-19T10:26:22.932287072Z [err]      at validateString (node:internal/validators:162:11)
+2025-11-19T10:26:22.932292477Z [err]      at Object.resolve (node:path:1097:7)
+2025-11-19T10:26:22.932298758Z [err]      at <anonymous> (/app/vite.config.ts:24:17)
+2025-11-19T10:26:22.932305771Z [err]      at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+2025-11-19T10:26:22.932311307Z [err]      at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+2025-11-19T10:26:22.932317958Z [err]      at async loadESM (node:internal/process/esm_loader:34:7)
+2025-11-19T10:26:22.932323196Z [err]      at async handleMainPromise (node:internal/modules/run_main:106:12) {
+2025-11-19T10:26:22.932328490Z [err]    code: 'ERR_INVALID_ARG_TYPE'
+2025-11-19T10:26:22.932334363Z [err]  }
+2025-11-19T10:26:22.932340817Z [err]  
+2025-11-19T10:26:22.932347034Z [err]  Node.js v18.20.5
+2025-11-19T10:26:24.175052992Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:24.217334590Z [inf]  
+2025-11-19T10:26:24.217340892Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T10:26:24.217345377Z [inf]  > sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T10:26:24.217349366Z [inf]  
+2025-11-19T10:26:27.918582823Z [inf]  
+2025-11-19T10:26:27.918585964Z [inf]  > drizzle-kit push
+2025-11-19T10:26:27.918594833Z [inf]  
+2025-11-19T10:26:27.918598271Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T10:26:27.918602606Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T10:26:27.918611338Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T10:26:27.918617665Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:27.918936172Z [inf]  Using 'pg' driver for database querying
+2025-11-19T10:26:27.987518258Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T10:26:28.110156885Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:26:28.233751853Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:26:28.921371300Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-19T10:26:28.921379925Z [inf]  [i] No changes detected
+2025-11-19T10:26:28.921402291Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:26:28.921409170Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T10:26:28.921415400Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T10:26:28.921421769Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T10:26:29.059122801Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:29.059130663Z [inf]  
+2025-11-19T10:26:29.059135403Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T10:26:29.059140391Z [inf]  > tsx server/seed.ts
+2025-11-19T10:26:29.059144783Z [inf]  
+2025-11-19T10:26:29.909364457Z [inf]  🌱 Starting database seeding...
+2025-11-19T10:26:29.909369247Z [inf]  
+2025-11-19T10:26:29.909509199Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:26:32.905862937Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-19T10:26:32.905874259Z [inf]  > tsx server/create-admin.ts
+2025-11-19T10:26:32.905881832Z [inf]  
+2025-11-19T10:26:32.905914683Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:26:32.905921145Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:26:32.905926863Z [inf]  ✅ Database connection successful!
+2025-11-19T10:26:32.905933427Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-19T10:26:32.905938955Z [inf]     Found 6 categories.
+2025-11-19T10:26:32.905944257Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:32.905949370Z [inf]  
+2025-11-19T10:26:33.828320535Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:26:33.828321950Z [inf]  🔐 Creating admin user...
+2025-11-19T10:26:33.828332816Z [inf]  
+2025-11-19T10:26:36.914631629Z [inf]  
+2025-11-19T10:26:36.914642667Z [inf]  > rest-express@1.0.0 start
+2025-11-19T10:26:36.914649835Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-19T10:26:36.914656930Z [inf]  
+2025-11-19T10:26:36.914698431Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:26:36.914704560Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:26:36.914711343Z [inf]  ✅ Database connection successful!
+2025-11-19T10:26:36.914717526Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-19T10:26:36.914733951Z [inf]     Username: admin
+2025-11-19T10:26:36.914740471Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:38.111307538Z [err]  node:internal/errors:496
+2025-11-19T10:26:38.111314819Z [err]      ErrorCaptureStackTrace(err);
+2025-11-19T10:26:38.111322922Z [err]      ^
+2025-11-19T10:26:38.111331356Z [err]  
+2025-11-19T10:26:38.111340610Z [err]  TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+2025-11-19T10:26:38.111348419Z [err]      at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+2025-11-19T10:26:38.111356198Z [err]      at new NodeError (node:internal/errors:405:5)
+2025-11-19T10:26:38.111364337Z [err]      at validateString (node:internal/validators:162:11)
+2025-11-19T10:26:38.111373020Z [err]      at Object.resolve (node:path:1097:7)
+2025-11-19T10:26:38.111380731Z [err]      at <anonymous> (/app/vite.config.ts:24:17)
+2025-11-19T10:26:38.111389507Z [err]      at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+2025-11-19T10:26:38.111401488Z [err]      at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+2025-11-19T10:26:38.111409377Z [err]      at async loadESM (node:internal/process/esm_loader:34:7)
+2025-11-19T10:26:38.111417420Z [err]      at async handleMainPromise (node:internal/modules/run_main:106:12) {
+2025-11-19T10:26:38.111424533Z [err]    code: 'ERR_INVALID_ARG_TYPE'
+2025-11-19T10:26:38.111432208Z [err]  }
+2025-11-19T10:26:38.111440408Z [err]  
+2025-11-19T10:26:38.111447426Z [err]  Node.js v18.20.5
+2025-11-19T10:26:39.860625091Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:39.860629364Z [inf]  
+2025-11-19T10:26:39.860633636Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T10:26:39.860637825Z [inf]  > sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T10:26:39.860641839Z [inf]  
+2025-11-19T10:26:42.913878311Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:42.913883967Z [inf]  
+2025-11-19T10:26:42.913897554Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T10:26:42.913903713Z [inf]  > drizzle-kit push
+2025-11-19T10:26:42.913909415Z [inf]  
+2025-11-19T10:26:42.913914567Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T10:26:42.913923194Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T10:26:43.180116862Z [inf]  Using 'pg' driver for database querying
+2025-11-19T10:26:43.285577183Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T10:26:44.164776030Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:26:44.164785576Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T10:26:44.164793310Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T10:26:44.164817845Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:26:44.164827148Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:26:44.164849924Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T10:26:44.169447693Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T10:26:44.293775457Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:26:44.342738403Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-19T10:26:44.373670754Z [inf]  [i] No changes detected
+2025-11-19T10:26:44.939287862Z [inf]  
+2025-11-19T10:26:44.939484298Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:44.939491090Z [inf]  
+2025-11-19T10:26:44.939502643Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T10:26:44.939508895Z [inf]  > tsx server/seed.ts
+2025-11-19T10:26:45.083801570Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:26:45.083984109Z [inf]  🌱 Starting database seeding...
+2025-11-19T10:26:45.083990547Z [inf]  
+2025-11-19T10:26:48.085430597Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:26:48.085435440Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:26:48.136122423Z [inf]  ✅ Database connection successful!
+2025-11-19T10:26:48.143687621Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-19T10:26:48.143696525Z [inf]     Found 6 categories.
+2025-11-19T10:26:48.307990746Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:48.337675507Z [inf]  
+2025-11-19T10:26:48.337679811Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-19T10:26:48.337683752Z [inf]  > tsx server/create-admin.ts
+2025-11-19T10:26:48.337687586Z [inf]  
+2025-11-19T10:26:49.042010474Z [inf]  🔐 Creating admin user...
+2025-11-19T10:26:49.042015710Z [inf]  
+2025-11-19T10:26:49.042019865Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:26:52.006337299Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:26:52.006343711Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:26:52.025952318Z [inf]  ✅ Database connection successful!
+2025-11-19T10:26:52.037291532Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-19T10:26:52.037299852Z [inf]     Username: admin
+2025-11-19T10:26:52.191967245Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:52.228821012Z [inf]  
+2025-11-19T10:26:52.228825712Z [inf]  > rest-express@1.0.0 start
+2025-11-19T10:26:52.228830632Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-19T10:26:52.228837199Z [inf]  
+2025-11-19T10:26:53.993481003Z [err]  node:internal/errors:496
+2025-11-19T10:26:53.993486806Z [err]      ErrorCaptureStackTrace(err);
+2025-11-19T10:26:53.993492159Z [err]      ^
+2025-11-19T10:26:53.993498435Z [err]  
+2025-11-19T10:26:53.993504291Z [err]  TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+2025-11-19T10:26:53.993509575Z [err]      at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+2025-11-19T10:26:53.993515645Z [err]      at new NodeError (node:internal/errors:405:5)
+2025-11-19T10:26:53.993521995Z [err]      at validateString (node:internal/validators:162:11)
+2025-11-19T10:26:53.993527147Z [err]      at Object.resolve (node:path:1097:7)
+2025-11-19T10:26:53.993532153Z [err]      at <anonymous> (/app/vite.config.ts:24:17)
+2025-11-19T10:26:53.993537299Z [err]      at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+2025-11-19T10:26:53.993543208Z [err]      at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+2025-11-19T10:26:53.993548908Z [err]      at async loadESM (node:internal/process/esm_loader:34:7)
+2025-11-19T10:26:53.993555221Z [err]      at async handleMainPromise (node:internal/modules/run_main:106:12) {
+2025-11-19T10:26:53.993560531Z [err]    code: 'ERR_INVALID_ARG_TYPE'
+2025-11-19T10:26:53.993566090Z [err]  }
+2025-11-19T10:26:53.993571758Z [err]  
+2025-11-19T10:26:53.993577215Z [err]  Node.js v18.20.5
+2025-11-19T10:26:55.065915872Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:55.065921707Z [inf]  
+2025-11-19T10:26:55.065927416Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T10:26:55.065933050Z [inf]  > sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T10:26:55.065938430Z [inf]  
+2025-11-19T10:26:58.211279736Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:26:58.263732844Z [inf]  
+2025-11-19T10:26:58.263739843Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T10:26:58.263746071Z [inf]  > drizzle-kit push
+2025-11-19T10:26:58.263752696Z [inf]  
+2025-11-19T10:26:59.045359542Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:26:59.045555529Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T10:26:59.045560200Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T10:26:59.045564574Z [inf]  Using 'pg' driver for database querying
+2025-11-19T10:26:59.045568880Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T10:26:59.157971850Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:26:59.285488194Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:26:59.413231305Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T10:26:59.983010241Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T10:26:59.983013239Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:26:59.983018265Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T10:26:59.983026014Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T10:27:00.055563775Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:27:00.186141418Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:27:00.261703707Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-19T10:27:00.291902688Z [inf]  [i] No changes detected
+2025-11-19T10:27:01.027826214Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:01.027833688Z [inf]  
+2025-11-19T10:27:01.027839374Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T10:27:01.027844849Z [inf]  > tsx server/seed.ts
+2025-11-19T10:27:01.027850085Z [inf]  
+2025-11-19T10:27:01.095172998Z [inf]  🌱 Starting database seeding...
+2025-11-19T10:27:01.095181704Z [inf]  
+2025-11-19T10:27:01.095188101Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:27:04.098838412Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:27:04.098842842Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:27:04.181751721Z [inf]  ✅ Database connection successful!
+2025-11-19T10:27:04.188536921Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-19T10:27:04.188541779Z [inf]     Found 6 categories.
+2025-11-19T10:27:04.399609068Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:05.010075689Z [inf]  
+2025-11-19T10:27:05.010085244Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-19T10:27:05.010094906Z [inf]  > tsx server/create-admin.ts
+2025-11-19T10:27:05.010103289Z [inf]  
+2025-11-19T10:27:05.024500498Z [inf]  🔐 Creating admin user...
+2025-11-19T10:27:05.024509599Z [inf]  
+2025-11-19T10:27:05.024514699Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:27:08.025800929Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:27:08.028807657Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:27:08.111729648Z [inf]  ✅ Database connection successful!
+2025-11-19T10:27:08.120493038Z [inf]     Username: admin
+2025-11-19T10:27:08.120578937Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-19T10:27:08.293224440Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:08.327025040Z [inf]  
+2025-11-19T10:27:08.327031997Z [inf]  > rest-express@1.0.0 start
+2025-11-19T10:27:08.327036898Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-19T10:27:08.327041546Z [inf]  
+2025-11-19T10:27:09.985765707Z [err]  node:internal/errors:496
+2025-11-19T10:27:09.985770564Z [err]      ErrorCaptureStackTrace(err);
+2025-11-19T10:27:09.985774339Z [err]      ^
+2025-11-19T10:27:09.985778146Z [err]  
+2025-11-19T10:27:09.985783868Z [err]  TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+2025-11-19T10:27:09.985787798Z [err]      at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+2025-11-19T10:27:09.985792185Z [err]      at new NodeError (node:internal/errors:405:5)
+2025-11-19T10:27:09.985796446Z [err]      at validateString (node:internal/validators:162:11)
+2025-11-19T10:27:09.985800210Z [err]      at Object.resolve (node:path:1097:7)
+2025-11-19T10:27:09.985804445Z [err]      at <anonymous> (/app/vite.config.ts:24:17)
+2025-11-19T10:27:09.985808419Z [err]      at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+2025-11-19T10:27:09.985812369Z [err]      at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+2025-11-19T10:27:09.985816238Z [err]      at async loadESM (node:internal/process/esm_loader:34:7)
+2025-11-19T10:27:09.985819936Z [err]      at async handleMainPromise (node:internal/modules/run_main:106:12) {
+2025-11-19T10:27:09.985824061Z [err]    code: 'ERR_INVALID_ARG_TYPE'
+2025-11-19T10:27:09.985828370Z [err]  }
+2025-11-19T10:27:09.985832372Z [err]  
+2025-11-19T10:27:09.985838026Z [err]  Node.js v18.20.5
+2025-11-19T10:27:11.296576780Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:11.335289200Z [inf]  
+2025-11-19T10:27:11.335295155Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T10:27:11.335300144Z [inf]  > sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T10:27:11.335305136Z [inf]  
+2025-11-19T10:27:15.023811569Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T10:27:15.023824945Z [inf]  Using 'pg' driver for database querying
+2025-11-19T10:27:15.023844943Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:15.023850879Z [inf]  
+2025-11-19T10:27:15.023856466Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T10:27:15.023866004Z [inf]  > drizzle-kit push
+2025-11-19T10:27:15.023875266Z [inf]  
+2025-11-19T10:27:15.023884470Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T10:27:15.085625478Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T10:27:15.201205352Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:27:15.331822510Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:27:15.458008286Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:27:16.032920050Z [inf]  [i] No changes detected
+2025-11-19T10:27:16.033020552Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T10:27:16.033026865Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T10:27:16.033031706Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T10:27:16.033036007Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T10:27:16.033041967Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-19T10:27:16.165794554Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:16.201403664Z [inf]  
+2025-11-19T10:27:16.201407931Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T10:27:16.201413529Z [inf]  > tsx server/seed.ts
+2025-11-19T10:27:16.201417444Z [inf]  
+2025-11-19T10:27:17.013795913Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:27:17.013848630Z [inf]  🌱 Starting database seeding...
+2025-11-19T10:27:17.013855579Z [inf]  
+2025-11-19T10:27:20.062728575Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:27:20.062732196Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:27:20.062738089Z [inf]  ✅ Database connection successful!
+2025-11-19T10:27:20.062742977Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-19T10:27:20.062748317Z [inf]     Found 6 categories.
+2025-11-19T10:27:20.062752328Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:20.062758799Z [inf]  
+2025-11-19T10:27:20.062763049Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-19T10:27:20.062766858Z [inf]  > tsx server/create-admin.ts
+2025-11-19T10:27:20.062774869Z [inf]  
+2025-11-19T10:27:21.041695273Z [inf]  🔐 Creating admin user...
+2025-11-19T10:27:21.041704405Z [inf]  
+2025-11-19T10:27:21.041711629Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:27:24.033613202Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:24.033624664Z [inf]  
+2025-11-19T10:27:24.033634059Z [inf]  > rest-express@1.0.0 start
+2025-11-19T10:27:24.033641505Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-19T10:27:24.033650983Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:27:24.033655350Z [inf]  
+2025-11-19T10:27:24.033661553Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:27:24.033669510Z [inf]  ✅ Database connection successful!
+2025-11-19T10:27:24.033677285Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-19T10:27:24.033683441Z [inf]     Username: admin
+2025-11-19T10:27:25.359954713Z [err]  node:internal/errors:496
+2025-11-19T10:27:25.359970622Z [err]      ErrorCaptureStackTrace(err);
+2025-11-19T10:27:25.359978021Z [err]      ^
+2025-11-19T10:27:25.359985353Z [err]  
+2025-11-19T10:27:25.359993287Z [err]  TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+2025-11-19T10:27:25.360000401Z [err]      at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+2025-11-19T10:27:25.360006954Z [err]      at new NodeError (node:internal/errors:405:5)
+2025-11-19T10:27:25.360014143Z [err]      at validateString (node:internal/validators:162:11)
+2025-11-19T10:27:25.360020801Z [err]      at Object.resolve (node:path:1097:7)
+2025-11-19T10:27:25.360028376Z [err]      at <anonymous> (/app/vite.config.ts:24:17)
+2025-11-19T10:27:25.360034842Z [err]      at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+2025-11-19T10:27:25.360041244Z [err]      at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+2025-11-19T10:27:25.360047651Z [err]      at async loadESM (node:internal/process/esm_loader:34:7)
+2025-11-19T10:27:25.360053974Z [err]      at async handleMainPromise (node:internal/modules/run_main:106:12) {
+2025-11-19T10:27:25.360060451Z [err]    code: 'ERR_INVALID_ARG_TYPE'
+2025-11-19T10:27:25.360066771Z [err]  }
+2025-11-19T10:27:25.360073173Z [err]  
+2025-11-19T10:27:25.360081513Z [err]  Node.js v18.20.5
+2025-11-19T10:27:27.057367912Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:27.057372918Z [inf]  
+2025-11-19T10:27:27.057377949Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T10:27:27.057382573Z [inf]  > sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T10:27:27.057386582Z [inf]  
+2025-11-19T10:27:30.105647559Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:30.138360439Z [inf]  
+2025-11-19T10:27:30.138365857Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T10:27:30.138371182Z [inf]  > drizzle-kit push
+2025-11-19T10:27:30.138377214Z [inf]  
+2025-11-19T10:27:30.335645477Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T10:27:30.335650760Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T10:27:30.963339532Z [inf]  Using 'pg' driver for database querying
+2025-11-19T10:27:30.963348370Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T10:27:30.963354004Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:27:31.009982810Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:27:31.136916432Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:27:31.262136577Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T10:27:31.393249776Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T10:27:32.051743592Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T10:27:32.051748128Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T10:27:32.051753953Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:27:32.051759152Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-19T10:27:32.051764264Z [inf]  [i] No changes detected
+2025-11-19T10:27:32.051769874Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:32.083991654Z [inf]  
+2025-11-19T10:27:32.083995915Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T10:27:32.084000406Z [inf]  > tsx server/seed.ts
+2025-11-19T10:27:32.084004905Z [inf]  
+2025-11-19T10:27:33.047021029Z [inf]  🌱 Starting database seeding...
+2025-11-19T10:27:33.047026572Z [inf]  
+2025-11-19T10:27:33.047033250Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:27:36.263707248Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:27:36.263711004Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:27:36.263714938Z [inf]  ✅ Database connection successful!
+2025-11-19T10:27:36.263719175Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-19T10:27:36.263727299Z [inf]     Found 6 categories.
+2025-11-19T10:27:36.263732999Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:36.263739095Z [inf]  
+2025-11-19T10:27:36.263744450Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-19T10:27:36.263750241Z [inf]  > tsx server/create-admin.ts
+2025-11-19T10:27:36.263755374Z [inf]  
+2025-11-19T10:27:37.235795388Z [inf]  🔐 Creating admin user...
+2025-11-19T10:27:37.235801393Z [inf]  
+2025-11-19T10:27:37.235806480Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:27:39.539832936Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:27:39.539839601Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:27:40.083847241Z [inf]  ✅ Database connection successful!
+2025-11-19T10:27:40.083852565Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-19T10:27:40.083857070Z [inf]     Username: admin
+2025-11-19T10:27:40.083861017Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:40.083866864Z [inf]  
+2025-11-19T10:27:40.083872914Z [inf]  > rest-express@1.0.0 start
+2025-11-19T10:27:40.083877997Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-19T10:27:40.083883670Z [inf]  
+2025-11-19T10:27:41.378851308Z [err]  node:internal/errors:496
+2025-11-19T10:27:41.378856773Z [err]  
+2025-11-19T10:27:41.378864299Z [err]      ErrorCaptureStackTrace(err);
+2025-11-19T10:27:41.378867761Z [err]  TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+2025-11-19T10:27:41.378873278Z [err]      ^
+2025-11-19T10:27:41.378876277Z [err]      at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+2025-11-19T10:27:41.378883379Z [err]      at new NodeError (node:internal/errors:405:5)
+2025-11-19T10:27:41.378889149Z [err]      at validateString (node:internal/validators:162:11)
+2025-11-19T10:27:41.378895558Z [err]      at Object.resolve (node:path:1097:7)
+2025-11-19T10:27:41.378901937Z [err]      at <anonymous> (/app/vite.config.ts:24:17)
+2025-11-19T10:27:41.378908886Z [err]      at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+2025-11-19T10:27:41.378914563Z [err]      at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+2025-11-19T10:27:41.378920257Z [err]      at async loadESM (node:internal/process/esm_loader:34:7)
+2025-11-19T10:27:41.378925922Z [err]      at async handleMainPromise (node:internal/modules/run_main:106:12) {
+2025-11-19T10:27:41.378931756Z [err]    code: 'ERR_INVALID_ARG_TYPE'
+2025-11-19T10:27:41.378938090Z [err]  }
+2025-11-19T10:27:41.378944073Z [err]  
+2025-11-19T10:27:41.378949305Z [err]  Node.js v18.20.5
+2025-11-19T10:27:43.148729406Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:43.148735046Z [inf]  
+2025-11-19T10:27:43.148740585Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T10:27:43.148746156Z [inf]  > sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T10:27:43.148751524Z [inf]  
+2025-11-19T10:27:46.094463294Z [inf]  > drizzle-kit push
+2025-11-19T10:27:46.094473830Z [inf]  
+2025-11-19T10:27:46.094507934Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:46.094514460Z [inf]  
+2025-11-19T10:27:46.094522168Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T10:27:46.203038341Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T10:27:46.205984572Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T10:27:46.522706978Z [inf]  Using 'pg' driver for database querying
+2025-11-19T10:27:47.253615183Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T10:27:47.253620842Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:27:47.253626788Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:27:47.253634354Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:27:47.253641305Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T10:27:47.253647459Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T10:27:47.364718655Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T10:27:47.496216708Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T10:27:48.222783348Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:27:48.222790712Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:27:48.222794957Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:27:48.222798981Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-19T10:27:48.222802987Z [inf]  [i] No changes detected
+2025-11-19T10:27:48.222808613Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:48.222812884Z [inf]  
+2025-11-19T10:27:48.222817439Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T10:27:48.222825919Z [inf]  > tsx server/seed.ts
+2025-11-19T10:27:48.222829661Z [inf]  
+2025-11-19T10:27:49.159591935Z [inf]  
+2025-11-19T10:27:49.159603794Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:27:49.159635358Z [inf]  🌱 Starting database seeding...
+2025-11-19T10:27:52.237524979Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:27:52.237530464Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:27:52.237536893Z [inf]  ✅ Database connection successful!
+2025-11-19T10:27:52.237542686Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-19T10:27:52.237550115Z [inf]     Found 6 categories.
+2025-11-19T10:27:52.237558762Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:52.237563097Z [inf]  
+2025-11-19T10:27:52.237567595Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-19T10:27:52.237572761Z [inf]  > tsx server/create-admin.ts
+2025-11-19T10:27:52.237578575Z [inf]  
+2025-11-19T10:27:53.159414000Z [inf]  🔐 Creating admin user...
+2025-11-19T10:27:53.159421330Z [inf]  
+2025-11-19T10:27:53.159428760Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:27:56.099499039Z [inf]     Username: admin
+2025-11-19T10:27:56.099509591Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:27:56.099520328Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:27:56.099523174Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:27:56.099531041Z [inf]  ✅ Database connection successful!
+2025-11-19T10:27:56.099537360Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-19T10:27:56.107990611Z [inf]  
+2025-11-19T10:27:56.107996987Z [inf]  > rest-express@1.0.0 start
+2025-11-19T10:27:56.108003058Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-19T10:27:56.108008955Z [inf]  
+2025-11-19T10:27:57.559276351Z [err]  node:internal/errors:496
+2025-11-19T10:27:57.559277134Z [err]      at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+2025-11-19T10:27:57.559288388Z [err]      ErrorCaptureStackTrace(err);
+2025-11-19T10:27:57.559288606Z [err]      at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+2025-11-19T10:27:57.559297126Z [err]      at async loadESM (node:internal/process/esm_loader:34:7)
+2025-11-19T10:27:57.559297394Z [err]      ^
+2025-11-19T10:27:57.559304872Z [err]  
+2025-11-19T10:27:57.559305736Z [err]      at async handleMainPromise (node:internal/modules/run_main:106:12) {
+2025-11-19T10:27:57.559312624Z [err]  TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+2025-11-19T10:27:57.559313516Z [err]    code: 'ERR_INVALID_ARG_TYPE'
+2025-11-19T10:27:57.559320555Z [err]  }
+2025-11-19T10:27:57.559322266Z [err]      at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+2025-11-19T10:27:57.559328516Z [err]  
+2025-11-19T10:27:57.559330365Z [err]      at new NodeError (node:internal/errors:405:5)
+2025-11-19T10:27:57.559337403Z [err]  Node.js v18.20.5
+2025-11-19T10:27:57.559337723Z [err]      at validateString (node:internal/validators:162:11)
+2025-11-19T10:27:57.559344151Z [err]      at Object.resolve (node:path:1097:7)
+2025-11-19T10:27:57.559349769Z [err]      at <anonymous> (/app/vite.config.ts:24:17)
+2025-11-19T10:27:59.165376343Z [inf]  
+2025-11-19T10:27:59.165386736Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T10:27:59.165393819Z [inf]  > sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T10:27:59.165398948Z [inf]  
+2025-11-19T10:27:59.165528745Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:28:02.302363591Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:28:02.345518389Z [inf]  
+2025-11-19T10:28:02.345525413Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T10:28:02.345530806Z [inf]  > drizzle-kit push
+2025-11-19T10:28:02.345534951Z [inf]  
+2025-11-19T10:28:02.539329310Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T10:28:02.543000656Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T10:28:03.208972090Z [inf]  Using 'pg' driver for database querying
+2025-11-19T10:28:03.208975999Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T10:28:03.208980252Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:28:03.208985487Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:28:03.286397138Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:28:03.416542258Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T10:28:03.551347632Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T10:28:04.145561940Z [inf]  [i] No changes detected
+2025-11-19T10:28:04.145572156Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:28:04.146053080Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T10:28:04.146057765Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-19T10:28:04.146061992Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:28:04.146066237Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-19T10:28:04.177974902Z [inf]  
+2025-11-19T10:28:04.177981194Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T10:28:04.177987700Z [inf]  > tsx server/seed.ts
+2025-11-19T10:28:04.177992927Z [inf]  
+2025-11-19T10:28:05.089592603Z [inf]  🌱 Starting database seeding...
+2025-11-19T10:28:05.089597920Z [inf]  
+2025-11-19T10:28:05.089602941Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:28:08.218922810Z [inf]  
+2025-11-19T10:28:08.218955685Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:28:08.218964440Z [inf]  ✅ Database connection successful!
+2025-11-19T10:28:08.218968440Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-19T10:28:08.218970184Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:28:08.218971005Z [inf]  
+2025-11-19T10:28:08.218976680Z [inf]     Found 6 categories.
+2025-11-19T10:28:08.218979973Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-19T10:28:08.218985839Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:28:08.218988369Z [inf]  > tsx server/create-admin.ts
+2025-11-19T10:28:08.465793164Z [inf]  🔐 Creating admin user...
+2025-11-19T10:28:08.465797364Z [inf]  
+2025-11-19T10:28:08.465807955Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:28:11.461943992Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:28:11.461956487Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:28:11.519527159Z [inf]  ✅ Database connection successful!
+2025-11-19T10:28:11.522903381Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-19T10:28:11.522911354Z [inf]     Username: admin
+2025-11-19T10:28:12.190095896Z [inf]  
+2025-11-19T10:28:12.190107235Z [inf]  > rest-express@1.0.0 start
+2025-11-19T10:28:12.190114209Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-19T10:28:12.190120770Z [inf]  
+2025-11-19T10:28:12.190206926Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:28:13.261319575Z [err]      at async handleMainPromise (node:internal/modules/run_main:106:12) {
+2025-11-19T10:28:13.261414246Z [err]  node:internal/errors:496
+2025-11-19T10:28:13.261420779Z [err]      ErrorCaptureStackTrace(err);
+2025-11-19T10:28:13.261429121Z [err]      at validateString (node:internal/validators:162:11)
+2025-11-19T10:28:13.261432043Z [err]      at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+2025-11-19T10:28:13.261438090Z [err]      at Object.resolve (node:path:1097:7)
+2025-11-19T10:28:13.261441169Z [err]      at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+2025-11-19T10:28:13.261446147Z [err]      at <anonymous> (/app/vite.config.ts:24:17)
+2025-11-19T10:28:13.261450441Z [err]      at async loadESM (node:internal/process/esm_loader:34:7)
+2025-11-19T10:28:13.261457733Z [err]      ^
+2025-11-19T10:28:13.261465963Z [err]  
+2025-11-19T10:28:13.261473049Z [err]  TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+2025-11-19T10:28:13.261479113Z [err]      at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+2025-11-19T10:28:13.261485382Z [err]      at new NodeError (node:internal/errors:405:5)
+2025-11-19T10:28:13.261697949Z [err]    code: 'ERR_INVALID_ARG_TYPE'
+2025-11-19T10:28:13.261705957Z [err]  }
+2025-11-19T10:28:13.261712253Z [err]  
+2025-11-19T10:28:13.261721489Z [err]  Node.js v18.20.5
+2025-11-19T10:28:14.526382531Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:28:14.555807657Z [inf]  
+2025-11-19T10:28:14.555818995Z [inf]  > rest-express@1.0.0 railway:up
+2025-11-19T10:28:14.555826162Z [inf]  > sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+2025-11-19T10:28:14.555831554Z [inf]  
+2025-11-19T10:28:18.257577668Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:28:18.257581827Z [inf]  
+2025-11-19T10:28:18.257586142Z [inf]  > rest-express@1.0.0 db:push
+2025-11-19T10:28:18.257590051Z [inf]  > drizzle-kit push
+2025-11-19T10:28:18.257594692Z [inf]  
+2025-11-19T10:28:18.257598679Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-19T10:28:18.257603155Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-19T10:28:18.283552553Z [inf]  Using 'pg' driver for database querying
+2025-11-19T10:28:18.365684903Z [inf]  [⣷] Pulling schema from database...
+2025-11-19T10:28:18.486865987Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-19T10:28:18.616066446Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-19T10:28:19.137120379Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-19T10:28:19.137127759Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-19T10:28:19.137134209Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-19T10:28:19.137140781Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-19T10:28:19.214553608Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-19T10:28:19.244822619Z [inf]  [i] No changes detected
+2025-11-19T10:28:19.409625471Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:28:19.447715999Z [inf]  
+2025-11-19T10:28:19.447722445Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-19T10:28:19.447727327Z [inf]  > tsx server/seed.ts
+2025-11-19T10:28:19.447731949Z [inf]  
+2025-11-19T10:28:20.194977957Z [inf]  🌱 Starting database seeding...
+2025-11-19T10:28:20.194983889Z [inf]  
+2025-11-19T10:28:20.194989667Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:28:23.206540521Z [inf]     Found 6 categories.
+2025-11-19T10:28:23.206541018Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:28:23.206552195Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:28:23.206560163Z [inf]  ✅ Database connection successful!
+2025-11-19T10:28:23.206567134Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-19T10:28:23.303494320Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:28:23.340246890Z [inf]  
+2025-11-19T10:28:23.340251493Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-19T10:28:23.340255831Z [inf]  > tsx server/create-admin.ts
+2025-11-19T10:28:23.340262834Z [inf]  
+2025-11-19T10:28:24.304996399Z [inf]  🔐 Creating admin user...
+2025-11-19T10:28:24.305001692Z [inf]  
+2025-11-19T10:28:24.305006570Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-19T10:28:27.183181264Z [inf]  > rest-express@1.0.0 start
+2025-11-19T10:28:27.183187571Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-19T10:28:27.183195003Z [inf]  
+2025-11-19T10:28:27.183204911Z [inf]  ✅ Database connection successful!
+2025-11-19T10:28:27.183206380Z [inf]     Username: admin
+2025-11-19T10:28:27.183207925Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-19T10:28:27.183215539Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-19T10:28:27.183217664Z [inf]  🔄 Connection attempt 1/5...
+2025-11-19T10:28:27.183224297Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-19T10:28:27.183231447Z [inf]  
+2025-11-19T10:28:29.403526661Z [err]  node:internal/errors:496
+2025-11-19T10:28:29.403532299Z [err]      ErrorCaptureStackTrace(err);
+2025-11-19T10:28:29.403537788Z [err]      ^
+2025-11-19T10:28:29.403543652Z [err]  
+2025-11-19T10:28:29.403549958Z [err]  TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+2025-11-19T10:28:29.403555291Z [err]      at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+2025-11-19T10:28:29.403561576Z [err]      at new NodeError (node:internal/errors:405:5)
+2025-11-19T10:28:29.403566110Z [err]      at validateString (node:internal/validators:162:11)
+2025-11-19T10:28:29.403570430Z [err]      at Object.resolve (node:path:1097:7)
+2025-11-19T10:28:29.403574574Z [err]      at <anonymous> (/app/vite.config.ts:24:17)
+2025-11-19T10:28:29.403578302Z [err]      at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+2025-11-19T10:28:29.403582268Z [err]      at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+2025-11-19T10:28:29.403586303Z [err]      at async loadESM (node:internal/process/esm_loader:34:7)
+2025-11-19T10:28:29.403590917Z [err]      at async handleMainPromise (node:internal/modules/run_main:106:12) {
+2025-11-19T10:28:29.403594569Z [err]    code: 'ERR_INVALID_ARG_TYPE'
+2025-11-19T10:28:29.403598297Z [err]  }
+2025-11-19T10:28:29.403602808Z [err]  
+2025-11-19T10:28:29.403606913Z [err]  Node.js v18.20.5
