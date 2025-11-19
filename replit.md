@@ -52,6 +52,47 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 
 ### Recent Changes
 
+- **November 19, 2025**: Railway Production Fixes - CRITICAL
+  - **FIXED**: Image upload serving on Railway with persistent storage
+    - Changed upload directory from `client/public/uploads` to persistent location
+    - Production: uses `/data/uploads` (Railway volume mount) or `UPLOAD_DIR` env var
+    - Development: uses local `uploads` directory in project root
+    - Added `app.use("/uploads", express.static(uploadDir))` to serve uploaded images
+    - Images now persist across Railway container restarts
+    - **REQUIRES**: Railway Volume mounted at `/data` with env var `UPLOAD_DIR=/data/uploads`
+  - **FIXED**: Menu item detail dialog showing hardcoded tea image for all items
+    - Removed hardcoded `ff_` import from MenuItemDialog.tsx
+    - Now displays actual `item.image` for each menu item
+    - Added fallback to default image if item has no image
+  - **FIXED**: Menu pricing issues (Klein and Standard sizes)
+    - Fixed MenuItemDialog to use `item.price` for Standard instead of non-existent `item.priceLarge`
+    - Auto-set `hasSizeOptions = 1` when `priceSmall` is provided in admin form
+    - Size selection now appears when either `hasSizeOptions` is set OR `priceSmall` exists
+    - Both Klein and Standard prices now save and display correctly for Pokebowls
+  - **ENHANCED**: Telegram notifications with flexible configuration
+    - Added support for separate bot tokens: `TELEGRAM_ORDER_BOT_TOKEN` and `TELEGRAM_RESERVATION_BOT_TOKEN`
+    - Falls back to shared `TELEGRAM_BOT_TOKEN` if specific tokens not set
+    - Allows orders and reservations to go to same or different Telegram accounts
+    - Better error messages showing which env vars to configure
+  - **ENHANCED**: Snapshot system with perfect fidelity
+    - Added detailed comments documenting all fields captured in snapshots
+    - Verified all fields including `priceSmall`, `hasSizeOptions`, arrays are captured
+    - Snapshots now capture and restore every detail including dual pricing
+    - Improved console logging during snapshot creation and restoration
+  - **FILES UPDATED**: 
+    - server/index.ts (added /uploads static route with persistent storage)
+    - server/routes.ts (changed upload directory to use Railway volume)
+    - client/src/components/MenuItemDialog.tsx (fixed image and pricing)
+    - client/src/pages/AdminMenu.tsx (auto-set hasSizeOptions)
+    - server/notifications.ts (flexible Telegram configuration)
+    - server/snapshot-routes.ts (enhanced comments and logging)
+  - **DOCUMENTATION CREATED**: RAILWAY_DEPLOYMENT_GUIDE.md with complete deployment instructions
+  - **DEPLOYMENT REQUIREMENTS**: 
+    - Railway Volume mounted at `/data` for persistent uploads
+    - Environment variable: `UPLOAD_DIR=/data/uploads`
+    - Environment variables for Telegram (see deployment guide)
+  - **STATUS**: All 5 critical Railway issues resolved with persistent storage solution
+
 - **November 19, 2025**: Gallery Database Integration - COMPLETED
   - **IMPORTED**: All 16 existing gallery images from `public/images` into database
   - **REMOVED**: Hardcoded defaultImages from Gallery3D component

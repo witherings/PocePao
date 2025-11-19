@@ -11,7 +11,10 @@ import { promises as fs } from "fs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Configure multer for file uploads
-  const uploadDir = path.join(process.cwd(), "client/public/uploads");
+  // For Railway production: use persistent volume mounted at /data or UPLOAD_DIR env variable
+  // Development: falls back to local uploads directory
+  const uploadDir = process.env.UPLOAD_DIR || 
+                    (process.env.NODE_ENV === 'production' ? '/data/uploads' : path.join(process.cwd(), "uploads"));
   
   // Ensure upload directory exists
   await fs.mkdir(uploadDir, { recursive: true });
