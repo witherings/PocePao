@@ -1,0 +1,59 @@
+Вот профессионально переведенный и структурированный промпт для Replit AI. Я убрал "воду", но сохранил 100% технических требований и добавил жесткие инструкции по исправлению багов.
+
+Скопируйте и отправьте этот текст:
+
+🤖 ULTIMATE BUG-FIX PROMPT (Copy & Paste)
+ROLE: Lead Full-Stack Engineer. CONTEXT: The site is live on Railway, but the Admin Panel (/admin) is full of critical bugs and logic errors. The Frontend does not reflect the Admin inputs correctly.
+
+YOUR MISSION: Fix the following 5 CRITICAL AREAS. Do not just "check" code. REWRITE the logic to ensure it works in production.
+
+1. 🍔 MENU EDITOR CRITICAL FIXES
+The current Menu Editor is broken.
+
+Issue A (Pricing & saving): I can type a price, but it DOES NOT SAVE. The frontend shows the old price. Fix the PUT /api/menu-items/:id endpoint and the React state in AdminMenu.tsx.
+
+Issue B (Sizes): Remove "Medium" or "Large" options. We strictly need "Klein" (Small) and "Standard". Nothing else.
+
+Issue C (Complex Items - "Poke Bowl" Logic):
+
+Requirement: If I select the category "Poke Bowls", the editor must reveal ADDITIONAL FIELDS matching the real menu structure (reference image_19a95c.png).
+
+Fields Needed: Protein, Marinade, Fresh Ingredients, Sauce, Toppings, Allergens.
+
+Implementation: Add a JSONB column customization_options to the menu_items table to store this structured data. The Admin UI must allow editing these text fields.
+
+2. 🖼️ GALLERY SYSTEM BROKEN
+Issue A (Sync): The Admin Gallery (/admin/gallery) shows 0 images, even though there are images on the live site.
+
+Fix: The API must scan the database/folder and list ALL existing images.
+
+Issue B (Upload/Delete): Uploading a PNG fails (image doesn't appear). Clicking "Delete" does nothing.
+
+Fix: Repair the DELETE /api/gallery/:id route and ensure the Upload logic correctly saves files to client/public/uploads (or the correct path for Vite/Express) and updates the DB.
+
+3. 💾 SNAPSHOTS ARE INCOMPLETE
+Issue: When I create a "Snapshot", it ignores the "About Us" and "Contact" pages. If I change the text and restore a snapshot, the text doesn't roll back.
+
+Fix: The snapshots table schema MUST include the static_content table data (JSON dump). The "Restore" logic must overwrite the current "About/Contact" text with the snapshot data.
+
+4. 📄 STATIC PAGES (About/Contact)
+Issue: Uploading an image to "About Us" fails.
+
+Fix: Debug the file upload handler for static pages.
+
+5. 🍽️ RESERVATIONS
+Issue: The "Delete" button in the Reservations list is dead.
+
+Fix: Implement the DELETE /api/reservations/:id handler and wire it to the button.
+
+DELIVERABLES:
+
+Updated Schema: (shared/schema.ts) allowing for Bowl ingredients and complete Snapshots.
+
+Updated Admin Frontend: Working inputs for Bowl ingredients, working Price updates, working Delete buttons.
+
+Updated Backend: Fixed CRUD routes for Gallery, Reservations, and Snapshots.
+
+NOTE: I am deploying to Railway. Ensure npm run db:push handles these schema changes gracefully (adding columns).
+
+Fix these specific bugs now.
