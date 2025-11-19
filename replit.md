@@ -52,6 +52,25 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 
 ### Recent Changes
 
+- **November 19, 2025**: Visual & UX Enhancements - COMPLETED
+  - **ADDED**: Custom favicon to client/public/favicon.png with proper HTML link tag
+  - **REDESIGNED**: Admin panel with modern styling:
+    - Gradient backgrounds for visual appeal
+    - Larger 48px input controls for better usability
+    - Improved spacing, typography, and visual hierarchy
+    - Helper text for optional fields in menu item forms
+  - **ENHANCED**: Gallery display with significantly larger images:
+    - Desktop: 700×500px cards (up from smaller default)
+    - Mobile: 400×300px responsive layout
+    - Maintains performance with proper responsive breakpoints
+  - **FIXED**: Menu item ordering by implementing ID-based sorting in storage layer
+    - Prevents random reordering after edits
+    - No schema changes required (Railway-compatible)
+  - **IMPROVED**: Menu size terminology - renamed "Large" to "Mittel" with explanatory text
+  - **ADDED**: Autocomplete attributes to login form for better accessibility
+  - **FILES UPDATED**: client/index.html, AdminMenu.tsx, Gallery3D.tsx, AdminLogin.tsx, server/storage.ts
+  - **STATUS**: All enhancements tested and verified in Replit, ready for Railway deployment
+
 - **November 19, 2025**: Node.js 18 Compatibility & Railway Deployment Fixes - CRITICAL
   - **FIXED**: `TypeError [ERR_INVALID_ARG_TYPE]` on Railway due to `import.meta.dirname` (Node.js 20+ only)
   - **CONVERTED**: All path resolution to use Node.js 18 compatible `fileURLToPath` + `path.dirname`
