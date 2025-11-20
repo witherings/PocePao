@@ -367,19 +367,12 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       return `€${getSizePrice(size)}`;
     }
     
-    // Show price range
+    // Show minimum price only
     if (size === "klein") {
-      if (priceRange.min === priceRange.max) {
-        return `ab €${priceRange.min.toFixed(2)}`;
-      }
-      return `€${priceRange.min.toFixed(2)} - €${priceRange.max.toFixed(2)}`;
+      return `ab €${priceRange.min.toFixed(2)}`;
     } else {
       const minStandard = priceRange.min + (priceRange.min === 9.90 ? 6.00 : 5.25);
-      const maxStandard = priceRange.max + (priceRange.max === 9.90 ? 6.00 : 5.25);
-      if (minStandard === maxStandard) {
-        return `ab €${minStandard.toFixed(2)}`;
-      }
-      return `€${minStandard.toFixed(2)} - €${maxStandard.toFixed(2)}`;
+      return `ab €${minStandard.toFixed(2)}`;
     }
   };
 
