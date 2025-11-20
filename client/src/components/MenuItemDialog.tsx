@@ -2,8 +2,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus, ChevronLeft } from "lucide-react";
-import type { MenuItem } from "@shared/schema";
+import type { MenuItem, ProductVariant } from "@shared/schema";
 import { useState, useEffect, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 interface MenuItemDialogProps {
@@ -17,6 +18,14 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
   const [selectedSize, setSelectedSize] = useState<"klein" | "standard">("standard");
   const [selectedBase, setSelectedBase] = useState<string>("");
   const contentRef = useRef<HTMLDivElement>(null);
+
+  // Fetch all variants
+  const { data: allVariants = [] } = useQuery<ProductVariant[]>({
+    queryKey: ['/api/product-variants'],
+  });
+
+  // Get base variants for this item
+  const baseVariants = item ? allVariants.filter(v => v.menuItemId === item.id && v.type === 'base' && v.available === 1).sort((a, b) => a.order - b.order) : [];
 
   useBodyScrollLock(isOpen);
 
@@ -168,23 +177,23 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
               )}
 
               {/* Base Selection */}
-              {item.enableBaseSelection === 1 && (
+              {item.enableBaseSelection === 1 && baseVariants.length > 0 && (
                 <div>
                   <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Base wählen *</h4>
                   <div className="grid grid-cols-2 gap-2">
-                    {["Reis", "Quinoa", "Zucchini-Nudeln", "Couscous"].map((base) => (
+                    {baseVariants.map((variant) => (
                       <Button
-                        key={base}
-                        variant={selectedBase === base ? "default" : "outline"}
-                        onClick={() => setSelectedBase(base)}
+                        key={variant.id}
+                        variant={selectedBase === variant.nameDE ? "default" : "outline"}
+                        onClick={() => setSelectedBase(variant.nameDE)}
                         className={`font-poppins font-semibold min-h-[44px] text-sm ${
-                          selectedBase === base 
+                          selectedBase === variant.nameDE 
                             ? "bg-ocean hover:bg-ocean/90 text-white" 
                             : ""
                         }`}
-                        data-testid={`button-base-${base}`}
+                        data-testid={`button-base-${variant.nameDE}`}
                       >
-                        {base}
+                        {variant.nameDE}
                       </Button>
                     ))}
                   </div>
