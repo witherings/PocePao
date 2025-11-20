@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, ArrowLeft } from "lucide-react";
 
 interface AppSettings {
   maintenanceMode: number;
@@ -54,6 +56,13 @@ export default function AdminSettings() {
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
+      <Link href="/admin">
+        <Button variant="ghost" className="mb-4">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Zurück zum Dashboard
+        </Button>
+      </Link>
+      
       <div className="mb-8">
         <h1 className="font-poppins font-bold text-3xl mb-2">Einstellungen</h1>
         <p className="text-muted-foreground">
