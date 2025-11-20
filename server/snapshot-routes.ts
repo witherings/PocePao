@@ -80,7 +80,7 @@ export function registerSnapshotRoutes(app: Express) {
             snapshotId: snapshot.id,
             name: ing.name,
             nameDE: ing.nameDE,
-            type: ing.type,
+            ingredientType: ing.type,
             description: ing.description,
             descriptionDE: ing.descriptionDE,
             image: ing.image,

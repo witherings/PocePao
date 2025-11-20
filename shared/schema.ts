@@ -349,7 +349,7 @@ export const snapshotIngredients = pgTable("snapshot_ingredients", {
   snapshotId: varchar("snapshot_id").notNull().references(() => snapshots.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   nameDE: text("name_de").notNull(),
-  type: text("type").notNull(),
+  ingredientType: text("ingredient_type").notNull(),
   description: text("description"),
   descriptionDE: text("description_de"),
   image: text("image").notNull(),
