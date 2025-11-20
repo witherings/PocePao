@@ -622,7 +622,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         </div>
                         <div className="p-2 bg-white">
                           <p className="font-poppins text-sm font-medium text-center mb-1">{ingredient.nameDE}</p>
-                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{(parseFloat(String(ingredient.price || ingredient.priceStandard || "0"))).toFixed(2)}</p>
+                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{getExtraPrice("sauce").toFixed(2)}</p>
                           <Button
                             onClick={() => handleExtraSelect(ingredient.id, "sauce")}
                             variant={selected ? "default" : "outline"}
@@ -667,7 +667,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         </div>
                         <div className="p-2 bg-white">
                           <p className="font-poppins text-sm font-medium text-center mb-1">{ingredient.nameDE}</p>
-                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{(parseFloat(String(ingredient.price || ingredient.priceStandard || "0"))).toFixed(2)}</p>
+                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{getExtraPrice("topping").toFixed(2)}</p>
                           <Button
                             onClick={() => handleExtraSelect(ingredient.id, "topping")}
                             variant={selected ? "default" : "outline"}
