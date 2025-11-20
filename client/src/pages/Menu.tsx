@@ -309,14 +309,9 @@ export default function Menu() {
                         <div className="flex items-center justify-between mt-auto">
                           <div>
                             {item.isCustomBowl === 1 && item.hasSizeOptions === 1 ? (
-                              <>
-                                <span className="font-poppins text-base font-bold text-ocean block" data-testid={`text-menu-item-price-${item.id}`}>
-                                  Klein €{customBowlPriceRange.kleinMin}-{customBowlPriceRange.kleinMax}
-                                </span>
-                                <span className="font-poppins text-base font-semibold text-muted-foreground">
-                                  Standard €{customBowlPriceRange.standardMin}-{customBowlPriceRange.standardMax}
-                                </span>
-                              </>
+                              <span className="font-poppins text-xl font-bold text-ocean" data-testid={`text-menu-item-price-${item.id}`}>
+                                ab €9.50
+                              </span>
                             ) : item.hasSizeOptions === 1 && item.priceSmall ? (
                               <>
                                 <span className="font-poppins text-base font-bold text-ocean block" data-testid={`text-menu-item-price-${item.id}`}>
