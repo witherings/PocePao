@@ -88,7 +88,6 @@ export function AdminMenu() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [selectedIngredientType, setSelectedIngredientType] = useState<string>("");
   const [ingredientFilterType, setIngredientFilterType] = useState<string | null>(null);
-  const [createAsExtraCheckbox, setCreateAsExtraCheckbox] = useState(false);
   
   const [showVariantsDialog, setShowVariantsDialog] = useState(false);
   const [managingVariantsForItem, setManagingVariantsForItem] = useState<MenuItem | null>(null);
@@ -492,69 +491,9 @@ export function AdminMenu() {
     };
 
     if (editingIngredient) {
-      updateIngredientMutation.mutate({ id: editingIngredient.id, data }, {
-        onSuccess: () => {
-          // If checked, also update or create the corresponding extra ingredient
-          if (createAsExtraCheckbox && ingredientType !== "extra") {
-            const extraName = name;
-            const extraIngredient = ingredients.find(ing => 
-              ing.type === "extra" && 
-              ing.nameDE === extraName && 
-              ing.id !== editingIngredient.id
-            );
-
-            if (extraIngredient) {
-              // Update existing extra ingredient with synchronized price
-              const extraData: any = {
-                price: ingredientType === 'protein' ? priceStandard : price,
-                priceSmall: ingredientType === 'protein' ? priceSmall : null,
-                priceStandard: ingredientType === 'protein' ? priceStandard : null,
-              };
-              updateIngredientMutation.mutate({ id: extraIngredient.id, data: extraData });
-            } else {
-              // Create new extra ingredient with same name
-              const extraData: any = {
-                name: extraName,
-                nameDE: extraName,
-                description: description,
-                descriptionDE: description,
-                type: "extra",
-                image: imageUrl,
-                price: ingredientType === 'protein' ? priceStandard : price,
-                priceSmall: null,
-                priceStandard: null,
-                order: parseInt(formData.get("order") as string) || 0,
-                available: formData.get("available") === "on" ? 1 : 0,
-              };
-              createIngredientMutation.mutate(extraData);
-            }
-          }
-          setCreateAsExtraCheckbox(false);
-        }
-      });
+      updateIngredientMutation.mutate({ id: editingIngredient.id, data });
     } else {
-      createIngredientMutation.mutate(data, {
-        onSuccess: () => {
-          // If checked, also create the corresponding extra ingredient
-          if (createAsExtraCheckbox && ingredientType !== "extra") {
-            const extraData: any = {
-              name: name,
-              nameDE: name,
-              description: description,
-              descriptionDE: description,
-              type: "extra",
-              image: imageUrl,
-              price: ingredientType === 'protein' ? priceStandard : price,
-              priceSmall: null,
-              priceStandard: null,
-              order: parseInt(formData.get("order") as string) || 0,
-              available: formData.get("available") === "on" ? 1 : 0,
-            };
-            createIngredientMutation.mutate(extraData);
-          }
-          setCreateAsExtraCheckbox(false);
-        }
-      });
+      createIngredientMutation.mutate(data);
     }
     
     setSelectedImage(null);
@@ -1160,7 +1099,6 @@ export function AdminMenu() {
                     setSelectedImage(null);
                     setImagePreview(null);
                     setSelectedIngredientType("");
-                    setCreateAsExtraCheckbox(false);
                   }}>
                     <Plus className="mr-2 h-4 w-4" />
                     Zutat hinzufügen
@@ -1202,6 +1140,7 @@ export function AdminMenu() {
                             <SelectItem value="fresh" className="text-base">Frische Zutat</SelectItem>
                             <SelectItem value="sauce" className="text-base">Sauce</SelectItem>
                             <SelectItem value="topping" className="text-base">Topping</SelectItem>
+                            <SelectItem value="extra" className="text-base">Extra</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -1348,19 +1287,6 @@ export function AdminMenu() {
                       <Label htmlFor="ing-available">Verfügbar</Label>
                     </div>
 
-                    {(selectedIngredientType && selectedIngredientType !== 'extra') && (
-                      <div className="flex items-center space-x-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
-                        <Switch
-                          id="create-as-extra"
-                          checked={createAsExtraCheckbox}
-                          onCheckedChange={setCreateAsExtraCheckbox}
-                        />
-                        <Label htmlFor="create-as-extra" className="font-semibold">
-                          Auch als Extra-Zutat erstellen (mit synchonisiertem Preis)
-                        </Label>
-                      </div>
-                    )}
-
                     <Button 
                       type="submit" 
                       className="w-full h-12 text-base font-semibold bg-ocean hover:bg-ocean/90"
@@ -1486,7 +1412,6 @@ export function AdminMenu() {
                                     setSelectedImage(null);
                                     setImagePreview(null);
                                     setSelectedIngredientType(ingredient.type || "");
-                                    setCreateAsExtraCheckbox(false);
                                     setShowIngredientDialog(true);
                                   }}
                                 >
