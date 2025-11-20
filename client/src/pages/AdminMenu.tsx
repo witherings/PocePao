@@ -87,6 +87,12 @@ export function AdminMenu() {
     queryKey: ["/api/ingredients"],
   });
 
+  // Helper function to check if a category is "Wunsch Bowls"
+  const isWunschBowlCategory = (categoryId: string): boolean => {
+    const category = categories.find(c => c.id === categoryId);
+    return category?.nameDE === "Wunsch Bowls" || category?.name === "Custom Bowls" || category?.name === "Wunsch Bowls";
+  };
+
   const createCategoryMutation = useMutation({
     mutationFn: async (data: Partial<Category>) => {
       return await apiRequest("POST", "/api/categories", data);
@@ -306,19 +312,24 @@ export function AdminMenu() {
 
     const name = formData.get("name") as string;
     const description = formData.get("description") as string || "";
+    const categoryId = formData.get("categoryId") as string;
     const priceSmall = formData.get("priceSmall") as string;
     const ingredientsStr = formData.get("ingredients") as string;
     const allergensStr = formData.get("allergens") as string;
     const toppingsStr = formData.get("toppings") as string;
+    
+    // For Wunsch Bowls, price is dynamic and calculated from ingredients
+    const isWunschBowl = isWunschBowlCategory(categoryId);
+    const price = isWunschBowl ? "0" : (formData.get("price") as string);
     
     const data: any = {
       name: name,
       nameDE: name,
       description: description,
       descriptionDE: description,
-      price: formData.get("price") as string,
-      priceSmall: priceSmall || null,
-      hasSizeOptions: priceSmall ? 1 : 0,
+      price: price,
+      priceSmall: isWunschBowl ? null : (priceSmall || null),
+      hasSizeOptions: isWunschBowl ? 0 : (priceSmall ? 1 : 0),
       categoryId: formData.get("categoryId") as string,
       available: formData.get("available") === "on" ? 1 : 0,
       popular: formData.get("popular") === "on" ? 1 : 0,
@@ -530,12 +541,21 @@ export function AdminMenu() {
           <Card className="border-2 shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Gerichte ({menuItems.length})</CardTitle>
-              <Dialog open={showMenuItemDialog} onOpenChange={setShowMenuItemDialog}>
+              <Dialog open={showMenuItemDialog} onOpenChange={(open) => {
+                setShowMenuItemDialog(open);
+                if (!open) {
+                  setSelectedCategoryId("");
+                  setEditingMenuItem(null);
+                  setSelectedImage(null);
+                  setImagePreview(null);
+                }
+              }}>
                 <DialogTrigger asChild>
                   <Button onClick={() => {
                     setEditingMenuItem(null);
                     setSelectedImage(null);
                     setImagePreview(null);
+                    setSelectedCategoryId("");
                   }}>
                     <Plus className="mr-2 h-4 w-4" />
                     Gericht hinzufügen
@@ -591,21 +611,35 @@ export function AdminMenu() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div>
-                        <Label htmlFor="price" className="text-base font-semibold mb-2">Preis Standard (€) *</Label>
-                        <Input
-                          id="price"
-                          name="price"
-                          type="number"
-                          step="0.01"
-                          defaultValue={editingMenuItem?.price}
-                          required
-                          placeholder="Hauptpreis (erforderlich)"
-                          className="h-12 text-base px-4"
-                        />
-                        <p className="text-xs text-muted-foreground mt-1.5">Standardgröße oder einziger Preis</p>
-                      </div>
+                      
+                      {/* Hide price for Wunsch Bowls - price is dynamic based on user selection */}
+                      {!isWunschBowlCategory(selectedCategoryId || editingMenuItem?.categoryId || "") && (
+                        <div>
+                          <Label htmlFor="price" className="text-base font-semibold mb-2">Preis Standard (€) *</Label>
+                          <Input
+                            id="price"
+                            name="price"
+                            type="number"
+                            step="0.01"
+                            defaultValue={editingMenuItem?.price}
+                            required
+                            placeholder="Hauptpreis (erforderlich)"
+                            className="h-12 text-base px-4"
+                          />
+                          <p className="text-xs text-muted-foreground mt-1.5">Standardgröße oder einziger Preis</p>
+                        </div>
+                      )}
                     </div>
+
+                    {/* Wunsch Bowl Info */}
+                    {isWunschBowlCategory(selectedCategoryId || editingMenuItem?.categoryId || "") && (
+                      <div className="p-5 bg-purple-50 border-2 border-purple-200 rounded-lg">
+                        <h3 className="font-poppins text-lg font-bold text-purple-900 mb-2">⭐ Wunsch Bowl</h3>
+                        <p className="text-sm text-purple-800">
+                          Für Wunsch Bowls wird die Preisgestaltung nicht hier festgelegt, da der Preis dynamisch aus den vom Kunden ausgewählten Zutaten (Protein, Base, Frische Zutaten, etc.) berechnet wird. Die Preise werden in der Zutatenverwaltung festgelegt.
+                        </p>
+                      </div>
+                    )}
 
                     {/* Poke Bowl Special Fields */}
                     {(selectedCategoryId && categories.find(c => c.id === selectedCategoryId)?.name === "Poke Bowls" || 
@@ -673,19 +707,22 @@ export function AdminMenu() {
                       </div>
                     )}
 
-                    <div>
-                      <Label htmlFor="priceSmall" className="text-base font-semibold mb-2">Preis Klein (€) - Optional</Label>
-                      <Input
-                        id="priceSmall"
-                        name="priceSmall"
-                        type="number"
-                        step="0.01"
-                        defaultValue={editingMenuItem?.priceSmall || ""}
-                        placeholder="Nur wenn Klein-Größe vorhanden"
-                        className="h-12 text-base px-4"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1.5">Für Pokébowls: Klein = 9.90€, Standard (oben) = 14.75€</p>
-                    </div>
+                    {/* Hide small price for Wunsch Bowls - price is dynamic */}
+                    {!isWunschBowlCategory(selectedCategoryId || editingMenuItem?.categoryId || "") && (
+                      <div>
+                        <Label htmlFor="priceSmall" className="text-base font-semibold mb-2">Preis Klein (€) - Optional</Label>
+                        <Input
+                          id="priceSmall"
+                          name="priceSmall"
+                          type="number"
+                          step="0.01"
+                          defaultValue={editingMenuItem?.priceSmall || ""}
+                          placeholder="Nur wenn Klein-Größe vorhanden"
+                          className="h-12 text-base px-4"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1.5">Für Pokébowls: Klein = 9.90€, Standard (oben) = 14.75€</p>
+                      </div>
+                    )}
 
                     <div>
                       <Label htmlFor="allergens" className="text-base font-semibold mb-2">Allergene (kommagetrennt) - Optional</Label>
@@ -878,6 +915,7 @@ export function AdminMenu() {
                                   setEditingMenuItem(item);
                                   setSelectedImage(null);
                                   setImagePreview(null);
+                                  setSelectedCategoryId(item.categoryId);
                                   setShowMenuItemDialog(true);
                                 }}
                               >
