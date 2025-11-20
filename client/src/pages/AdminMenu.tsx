@@ -72,11 +72,19 @@ interface Ingredient {
   available: number;
 }
 
+interface DeleteConfirmation {
+  type: "category" | "menuItem" | "ingredient" | "variant" | null;
+  id: string | null;
+  name?: string;
+}
+
 export function AdminMenu() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
   
+  const [deleteConfirm, setDeleteConfirm] = useState<DeleteConfirmation>({ type: null, id: null });
+
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [editingMenuItem, setEditingMenuItem] = useState<MenuItem | null>(null);
   const [editingIngredient, setEditingIngredient] = useState<Ingredient | null>(null);
@@ -722,7 +730,7 @@ export function AdminMenu() {
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => deleteCategoryMutation.mutate(category.id)}
+                        onClick={() => setDeleteConfirm({ type: "category", id: category.id, name: category.nameDE || category.name })}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -1114,7 +1122,7 @@ export function AdminMenu() {
                               <Button
                                 variant="destructive"
                                 size="sm"
-                                onClick={() => deleteMenuItemMutation.mutate(item.id)}
+                                onClick={() => setDeleteConfirm({ type: "menuItem", id: item.id, name: item.nameDE || item.name })}
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -1466,7 +1474,7 @@ export function AdminMenu() {
                                   variant="destructive"
                                   size="sm"
                                   className="flex-1"
-                                  onClick={() => deleteIngredientMutation.mutate(ingredient.id)}
+                                  onClick={() => setDeleteConfirm({ type: "ingredient", id: ingredient.id, name: ingredient.nameDE || ingredient.name })}
                                 >
                                   <Trash2 className="h-3 w-3" />
                                 </Button>
@@ -1483,6 +1491,46 @@ export function AdminMenu() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteConfirm.type !== null} onOpenChange={(open) => { if (!open) setDeleteConfirm({ type: null, id: null }); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {deleteConfirm.type === "category" && "Kategorie löschen?"}
+              {deleteConfirm.type === "menuItem" && "Gericht löschen?"}
+              {deleteConfirm.type === "ingredient" && "Zutat löschen?"}
+              {deleteConfirm.type === "variant" && "Variante löschen?"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {deleteConfirm.type === "category" && `Kategorie "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
+              {deleteConfirm.type === "menuItem" && `Gericht "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
+              {deleteConfirm.type === "ingredient" && `Zutat "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
+              {deleteConfirm.type === "variant" && `Variante "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex gap-3 justify-end">
+            <AlertDialogCancel className="font-semibold">Abbrechen</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (deleteConfirm.type === "category" && deleteConfirm.id) {
+                  deleteCategoryMutation.mutate(deleteConfirm.id);
+                } else if (deleteConfirm.type === "menuItem" && deleteConfirm.id) {
+                  deleteMenuItemMutation.mutate(deleteConfirm.id);
+                } else if (deleteConfirm.type === "ingredient" && deleteConfirm.id) {
+                  deleteIngredientMutation.mutate(deleteConfirm.id);
+                } else if (deleteConfirm.type === "variant" && deleteConfirm.id) {
+                  deleteVariantMutation.mutate(deleteConfirm.id);
+                }
+                setDeleteConfirm({ type: null, id: null });
+              }}
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold"
+            >
+              Löschen
+            </AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Variant Management Dialog */}
       <Dialog open={showVariantsDialog} onOpenChange={setShowVariantsDialog}>
@@ -1657,7 +1705,7 @@ export function AdminMenu() {
                           <Button
                             variant="destructive"
                             size="sm"
-                            onClick={() => deleteVariantMutation.mutate(variant.id)}
+                            onClick={() => setDeleteConfirm({ type: "variant", id: variant.id, name: variant.nameDE })}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
