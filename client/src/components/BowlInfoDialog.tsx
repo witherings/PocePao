@@ -80,12 +80,6 @@ export function BowlInfoDialog({ item, isOpen, onClose, onStartBuilder }: BowlIn
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-sunset/10 to-ocean/10 rounded-lg p-4 border border-sunset/20">
-            <p className="font-lato text-sm text-center text-foreground">
-              <strong className="font-poppins">Preise:</strong> Klein (€{item.priceSmall || "9.50"}) • Standard (€{item.price || "14.75"})
-            </p>
-          </div>
-
           <div className="flex flex-col sm:flex-row gap-3">
             <Button
               onClick={onClose}
