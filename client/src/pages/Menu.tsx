@@ -140,16 +140,10 @@ export default function Menu() {
     if (item.isCustomBowl === 1) {
       setSelectedItem(item);
       setBowlInfoOpen(true);
-    } else if (item.hasVariants === 1 && item.requiresVariantSelection === 1) {
-      // Open variant selection dialog for items with variants
-      setSelectedItem(item);
-      setVariantDialogOpen(true);
-    } else if (item.hasSizeOptions === 1 || item.enableBaseSelection === 1) {
-      // Open dialog if item has size options OR requires base selection
+    } else {
+      // Open ItemDialog for all regular items
       setSelectedItem(item);
       setItemDialogOpen(true);
-    } else {
-      handleAddToCart(item);
     }
   };
 
