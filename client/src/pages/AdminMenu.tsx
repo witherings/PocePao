@@ -820,17 +820,6 @@ export function AdminMenu() {
                           <Label htmlFor="popular">Beliebt</Label>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Switch
-                          id="enableBaseSelection"
-                          name="enableBaseSelection"
-                          defaultChecked={editingMenuItem?.enableBaseSelection === 1}
-                        />
-                        <Label htmlFor="enableBaseSelection">Base-Auswahl aktivieren</Label>
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Wenn aktiviert, muss der Kunde eine Base auswählen (Reis, Quinoa, Zucchini-Nudeln, Couscous)
-                      </p>
                     </div>
 
                     <Button 
