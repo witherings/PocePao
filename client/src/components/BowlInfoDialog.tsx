@@ -20,7 +20,7 @@ export function BowlInfoDialog({ item, isOpen, onClose, onStartBuilder }: BowlIn
     { label: "1 Protein", description: "Tofu, Falafel, Hähnchen, Lachs oder Ente" },
     { label: "1 Base", description: "Reis, Salat oder gemischt" },
     { label: "1 Marinade", description: "Verschiedene Marinaden zur Auswahl" },
-    { label: "4 Frische Zutaten", description: "Avocado, Gurke, Mango, Edamame und mehr" },
+    { label: "5 Frische Zutaten", description: "Avocado, Gurke, Mango, Edamame und mehr" },
     { label: "1 Sauce", description: "Sesam, Granatapfel, Nori und mehr" },
     { label: "3 Toppings", description: "Verschiedene leckere Toppings" },
     { label: "Extras (Optional)", description: "Zusätzliche Proteine, Zutaten oder Sauces" },
@@ -82,7 +82,7 @@ export function BowlInfoDialog({ item, isOpen, onClose, onStartBuilder }: BowlIn
 
           <div className="bg-gradient-to-r from-sunset/10 to-ocean/10 rounded-lg p-4 border border-sunset/20">
             <p className="font-lato text-sm text-center text-foreground">
-              <strong className="font-poppins">Preise:</strong> Klein (€{item.priceSmall || "9.50"}) • Standard (€{item.priceLarge || item.price || "14.75"})
+              <strong className="font-poppins">Preise:</strong> Klein (€{item.priceSmall || "9.50"}) • Standard (€{item.price || "14.75"})
             </p>
           </div>
 
