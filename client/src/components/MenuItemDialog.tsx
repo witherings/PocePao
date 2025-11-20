@@ -51,38 +51,44 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent ref={contentRef} className="max-w-2xl max-h-[85dvh] overflow-y-auto p-4 sm:p-6 overscroll-contain border border-gray-300 dark:border-gray-600 shadow-2xl" style={{ WebkitOverflowScrolling: 'touch' }} data-testid="dialog-menu-item">
-        <DialogHeader>
-          <DialogTitle className="font-poppins text-2xl" data-testid="text-dialog-title">
-            {item.nameDE}
-          </DialogTitle>
-          <DialogDescription className="sr-only">
-            Produktdetails und Größenauswahl für {item.nameDE}
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="space-y-4 sm:space-y-6">
-          {/* Image */}
-          <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
-            <img
-              src={item.image || "/images/default-dish.png"}
-              alt={item.nameDE}
-              loading="lazy"
-              className="w-full h-full object-cover"
-              data-testid="img-dialog-item"
-            />
-            {item.popular === 1 && (
-              <div className="absolute top-3 right-3 group/badge">
-                <div className="relative backdrop-blur-sm bg-gradient-to-br from-yellow-400/90 via-orange-500/90 to-red-500/90 text-white text-xs font-poppins font-bold px-4 py-2 rounded-full shadow-lg border-2 border-white/30 hover:scale-105 transition-all duration-300">
-                  <div className="absolute inset-0 bg-gradient-gold-shimmer bg-[length:200%_100%] opacity-30 rounded-full animate-shimmer"></div>
-                  <span className="relative flex items-center gap-1.5">
-                    <span className="animate-pulse-glow inline-block">⭐</span>
-                    <span className="font-extrabold tracking-wide">Beliebt</span>
-                  </span>
+      <DialogContent ref={contentRef} className="w-[95dvw] h-[95dvh] max-w-6xl max-h-[95dvh] p-3 sm:p-6 overflow-y-auto overscroll-contain border border-gray-300 dark:border-gray-600 shadow-2xl" style={{ WebkitOverflowScrolling: 'touch' }} data-testid="dialog-menu-item">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 h-full">
+          {/* Left: Image */}
+          <div className="flex flex-col">
+            <div className="relative aspect-[4/3] lg:aspect-square rounded-lg overflow-hidden flex-shrink-0">
+              <img
+                src={item.image || "/images/default-dish.png"}
+                alt={item.nameDE}
+                loading="lazy"
+                className="w-full h-full object-cover"
+                data-testid="img-dialog-item"
+              />
+              {item.popular === 1 && (
+                <div className="absolute top-3 right-3 group/badge">
+                  <div className="relative backdrop-blur-sm bg-gradient-to-br from-yellow-400/90 via-orange-500/90 to-red-500/90 text-white text-xs font-poppins font-bold px-4 py-2 rounded-full shadow-lg border-2 border-white/30 hover:scale-105 transition-all duration-300">
+                    <div className="absolute inset-0 bg-gradient-gold-shimmer bg-[length:200%_100%] opacity-30 rounded-full animate-shimmer"></div>
+                    <span className="relative flex items-center gap-1.5">
+                      <span className="animate-pulse-glow inline-block">⭐</span>
+                      <span className="font-extrabold tracking-wide">Beliebt</span>
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
+
+          {/* Right: Content */}
+          <div className="flex flex-col overflow-y-auto space-y-4">
+            <DialogHeader className="mb-2">
+              <DialogTitle className="font-poppins text-2xl" data-testid="text-dialog-title">
+                {item.nameDE}
+              </DialogTitle>
+              <DialogDescription className="sr-only">
+                Produktdetails und Größenauswahl für {item.nameDE}
+              </DialogDescription>
+            </DialogHeader>
+
+        <div className="space-y-4">
 
           {/* Description */}
           <p className="font-lato text-muted-foreground" data-testid="text-dialog-description">
