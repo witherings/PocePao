@@ -1202,7 +1202,6 @@ export function AdminMenu() {
                             <SelectItem value="fresh" className="text-base">Frische Zutat</SelectItem>
                             <SelectItem value="sauce" className="text-base">Sauce</SelectItem>
                             <SelectItem value="topping" className="text-base">Topping</SelectItem>
-                            <SelectItem value="extra" className="text-base">Extra</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
