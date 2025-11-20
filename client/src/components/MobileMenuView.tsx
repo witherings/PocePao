@@ -70,11 +70,10 @@ export function MobileMenuView({
     };
   }, [emblaApi, checkCanScroll]);
 
-  // Reinitialize when category changes
+  // Reinitialize carousel but don't scroll to top when category changes
   useEffect(() => {
     if (!emblaApi) return;
     emblaApi.reInit();
-    emblaApi.scrollTo(0);
     checkCanScroll();
   }, [selectedCategory, emblaApi, checkCanScroll]);
 

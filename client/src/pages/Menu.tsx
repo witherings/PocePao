@@ -182,7 +182,7 @@ export default function Menu() {
             <>
               {/* Desktop: Category Navigation with Scroll Snap */}
               <div className="mb-12">
-                <div className="overflow-x-auto scroll-smooth snap-x snap-mandatory flex gap-3 pb-4 min-w-max">
+                <div className="overflow-x-auto snap-x snap-mandatory flex gap-3 pb-4 min-w-max">
                   {categories.map((category) => (
                     <button
                       key={category.id}
