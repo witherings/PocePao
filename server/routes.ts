@@ -45,8 +45,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const categories = await storage.getAllCategories();
       res.json(categories);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch categories" });
+    } catch (error: any) {
+      console.error("❌ Error fetching categories:", error);
+      console.error("Stack:", error.stack);
+      res.status(500).json({ error: "Failed to fetch categories", details: error.message });
     }
   });
 
@@ -92,8 +94,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const menuItems = await storage.getAllMenuItems();
       res.json(menuItems);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch menu items" });
+    } catch (error: any) {
+      console.error("❌ Error fetching menu items:", error);
+      console.error("Stack:", error.stack);
+      res.status(500).json({ error: "Failed to fetch menu items", details: error.message });
     }
   });
 
@@ -102,8 +106,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { categoryId } = req.params;
       const menuItems = await storage.getMenuItemsByCategory(categoryId);
       res.json(menuItems);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch menu items" });
+    } catch (error: any) {
+      console.error("❌ Error fetching menu items by category:", error);
+      console.error("Stack:", error.stack);
+      res.status(500).json({ error: "Failed to fetch menu items", details: error.message });
     }
   });
 
@@ -117,8 +123,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       res.json(menuItem);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch menu item" });
+    } catch (error: any) {
+      console.error("❌ Error fetching menu item:", error);
+      console.error("Stack:", error.stack);
+      res.status(500).json({ error: "Failed to fetch menu item", details: error.message });
     }
   });
 
@@ -329,8 +337,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const ingredients = await storage.getAllIngredients();
       res.json(ingredients);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch ingredients" });
+    } catch (error: any) {
+      console.error("❌ Error fetching ingredients:", error);
+      console.error("Stack:", error.stack);
+      res.status(500).json({ error: "Failed to fetch ingredients", details: error.message });
     }
   });
 
@@ -339,8 +349,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { type } = req.params;
       const ingredients = await storage.getIngredientsByType(type);
       res.json(ingredients);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch ingredients by type" });
+    } catch (error: any) {
+      console.error("❌ Error fetching ingredients by type:", error);
+      console.error("Stack:", error.stack);
+      res.status(500).json({ error: "Failed to fetch ingredients by type", details: error.message });
     }
   });
 

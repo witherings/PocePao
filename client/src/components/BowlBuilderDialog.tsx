@@ -250,7 +250,9 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
   const handleComplete = () => {
     if (isStepComplete()) {
       // Calculate final price based on selected protein and size
-      const finalPrice = item.hasSizeOptions === 1 ? getSizePrice(selectedSize) : parseFloat(item.price).toFixed(2);
+      const finalPrice = item.hasSizeOptions === 1 
+        ? getSizePrice(selectedSize) 
+        : parseFloat(item.price || "0").toFixed(2);
       onAddToCart(item, selectedSize, undefined, selections, finalPrice);
       onClose();
     }
@@ -299,7 +301,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
     if (item.hasSizeOptions === 1) {
       return getSizePrice(selectedSize);
     }
-    return parseFloat(item.price).toFixed(2);
+    return parseFloat(item.price || "0").toFixed(2);
   };
 
   // Get price range for protein options
@@ -309,7 +311,10 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
     );
     
     if (proteinIngredients.length === 0) {
-      return { min: parseFloat(item.price), max: parseFloat(item.price) };
+      return { 
+        min: parseFloat(item.price || "0"), 
+        max: parseFloat(item.price || "0") 
+      };
     }
     
     const prices = proteinIngredients.map(ing => parseFloat(ing.price || "0"));

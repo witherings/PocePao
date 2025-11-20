@@ -15,8 +15,8 @@
     "db:seed": "tsx server/seed.ts",
     "db:create-admin": "tsx server/create-admin.ts",
     "db:test": "tsx server/test-connection.ts",
-    "railway:setup": "sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin",
-    "railway:up": "sleep 3 && npm run db:push && npm run db:seed && npm run db:create-admin && npm run start"
+    "railway:setup": "npm run db:push; npm run db:seed; npm run db:create-admin || true",
+    "railway:start": "npm run db:push; npm run db:seed; npm run db:create-admin || true; npm run start"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

@@ -9,13 +9,9 @@ async function createAdmin() {
   }
 
   const adminUsername = process.env.ADMIN_USERNAME || 'admin';
-  const adminPassword = process.env.ADMIN_PASSWORD;
-
-  if (!adminPassword) {
-    console.error("❌ ADMIN_PASSWORD not set. Please provide a password for the admin user.");
-    console.error("   Usage: ADMIN_PASSWORD=your_secure_password npm run db:create-admin");
-    process.exit(1);
-  }
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';  // Default password for Railway
+  
+  const isDefaultPassword = !process.env.ADMIN_PASSWORD;
 
   try {
     console.log("🔐 Creating admin user...\n");
@@ -39,7 +35,14 @@ async function createAdmin() {
     console.log("✅ Admin user created successfully!");
     console.log(`   Username: ${adminUsername}`);
     console.log(`   Password: ${adminPassword.replace(/./g, '*')}`);
-    console.log("\n🔒 Please save your credentials securely and delete this message from your terminal history.");
+    
+    if (isDefaultPassword) {
+      console.log("\n⚠️  WARNING: Using default password 'admin123'");
+      console.log("   🔒 PLEASE CHANGE THIS PASSWORD IMMEDIATELY AFTER FIRST LOGIN!");
+      console.log("   To set a custom password, add ADMIN_PASSWORD environment variable.");
+    } else {
+      console.log("\n🔒 Please save your credentials securely and delete this message from your terminal history.");
+    }
     
   } catch (error) {
     console.error("❌ Error creating admin user:", error);
