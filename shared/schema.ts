@@ -230,6 +230,7 @@ export const galleryImages = pgTable("gallery_images", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   url: text("url").notNull(),
   filename: text("filename").notNull(),
+  type: text("type").notNull().default("main"), // "header" or "main"
   uploadedAt: text("uploaded_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 

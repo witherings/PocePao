@@ -6,25 +6,32 @@ import { Input } from "@/components/ui/input";
 import { Trash2, Upload, ImageIcon, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface GalleryImage {
-  id: number;
+  id: string;
   url: string;
   filename: string;
+  type: string;
   createdAt: string;
 }
 
 export function AdminGallery() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [galleryType, setGalleryType] = useState<"header" | "main">("main");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
 
-  const { data: images = [], isLoading, isError, error } = useQuery<GalleryImage[]>({
+  const { data: allImages = [], isLoading, isError, error } = useQuery<GalleryImage[]>({
     queryKey: ["/api/gallery"],
   });
+
+  const headerImages = allImages.filter(img => img.type === "header");
+  const mainImages = allImages.filter(img => img.type === "main");
+  const images = galleryType === "header" ? headerImages : mainImages;
 
   useEffect(() => {
     if (selectedFile) {
@@ -40,6 +47,7 @@ export function AdminGallery() {
     mutationFn: async (file: File) => {
       const formData = new FormData();
       formData.append("image", file);
+      formData.append("type", galleryType);
 
       const response = await fetch("/api/gallery", {
         method: "POST",
@@ -134,6 +142,33 @@ export function AdminGallery() {
         </CardHeader>
         <CardContent className="pt-6">
           <div className="space-y-6">
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <label className="block text-sm font-semibold text-gray-700 mb-3">Galerie-Typ:</label>
+              <div className="flex gap-4">
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="galleryType"
+                    value="main"
+                    checked={galleryType === "main"}
+                    onChange={(e) => setGalleryType(e.target.value as "main")}
+                    className="mr-2"
+                  />
+                  <span className="text-sm">🖼️ Hauptgalerie (unten)</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="galleryType"
+                    value="header"
+                    checked={galleryType === "header"}
+                    onChange={(e) => setGalleryType(e.target.value as "header")}
+                    className="mr-2"
+                  />
+                  <span className="text-sm">📸 Header-Galerie (oben)</span>
+                </label>
+              </div>
+            </div>
             <Input
               ref={fileInputRef}
               type="file"
@@ -202,7 +237,7 @@ export function AdminGallery() {
       <Card>
         <CardHeader>
           <CardTitle>
-            Bilder ({images.length})
+            {galleryType === "header" ? "📸 Header-Galerie" : "🖼️ Hauptgalerie"} ({images.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
