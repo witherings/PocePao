@@ -271,7 +271,7 @@ export default function Menu() {
                               </>
                             ) : (
                               <span className="font-poppins text-xl font-bold text-ocean" data-testid={`text-menu-item-price-${item.id}`}>
-                                €{item.price}
+                                {item.isCustomBowl === 1 ? "ab €9.50" : `€${item.price}`}
                               </span>
                             )}
                           </div>
