@@ -349,7 +349,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                       );
                       onClose();
                     }}
-                    disabled={item.available === 0 || (item.enableBaseSelection === 1 && !selectedBase) || (item.hasVariants === 1 && item.variantType === 'flavor' && !selectedFlavorId)}
+                    disabled={item.available === 0 || (item.enableBaseSelection === 1 && !selectedBase) || (item.requiresVariantSelection === 1 && !selectedFlavorId)}
                     className="flex-1 sm:flex-initial bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full px-6 sm:px-8 min-h-[48px] text-sm sm:text-base shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     data-testid="button-dialog-add-to-cart"
                   >
