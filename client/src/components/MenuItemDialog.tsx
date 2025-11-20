@@ -20,6 +20,23 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
 
   useBodyScrollLock(isOpen);
 
+  // Handle browser back button to close dialog instead of navigating away
+  useEffect(() => {
+    if (isOpen) {
+      // Add entry to history stack
+      window.history.pushState({ dialogOpen: true }, "");
+
+      const handlePopState = () => {
+        onClose();
+      };
+
+      window.addEventListener("popstate", handlePopState);
+      return () => {
+        window.removeEventListener("popstate", handlePopState);
+      };
+    }
+  }, [isOpen, onClose]);
+
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => {
