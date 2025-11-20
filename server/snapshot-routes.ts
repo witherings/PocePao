@@ -5,14 +5,17 @@ import {
   snapshots, 
   snapshotMenuItems,
   snapshotCategories,
+  snapshotIngredients,
   snapshotGalleryImages, 
   snapshotStaticContent,
   menuItems,
   categories,
+  ingredients,
   galleryImages,
   insertSnapshotSchema,
   type Category,
   type MenuItem,
+  type Ingredient,
   type GalleryImage,
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
@@ -65,6 +68,27 @@ export function registerSnapshotRoutes(app: Express) {
             icon: cat.icon,
             order: cat.order,
             originalCategoryId: cat.id,
+          }))
+        );
+      }
+      
+      // Copy current ingredients (ALL fields for perfect fidelity)
+      const currentIngredients = await db.select().from(ingredients);
+      if (currentIngredients.length > 0) {
+        await db.insert(snapshotIngredients).values(
+          currentIngredients.map((ing: Ingredient) => ({
+            snapshotId: snapshot.id,
+            name: ing.name,
+            nameDE: ing.nameDE,
+            type: ing.type,
+            description: ing.description,
+            descriptionDE: ing.descriptionDE,
+            image: ing.image,
+            price: ing.price,
+            priceSmall: ing.priceSmall,
+            priceStandard: ing.priceStandard,
+            available: ing.available,
+            originalIngredientId: ing.id,
           }))
         );
       }
@@ -179,6 +203,11 @@ export function registerSnapshotRoutes(app: Express) {
         .from(snapshotCategories)
         .where(eq(snapshotCategories.snapshotId, snapshotId));
       
+      const snapshotIngs = await db
+        .select()
+        .from(snapshotIngredients)
+        .where(eq(snapshotIngredients.snapshotId, snapshotId));
+      
       const snapshotItems = await db
         .select()
         .from(snapshotMenuItems)
@@ -194,7 +223,7 @@ export function registerSnapshotRoutes(app: Express) {
         .from(snapshotStaticContent)
         .where(eq(snapshotStaticContent.snapshotId, snapshotId));
       
-      console.log(`Loaded snapshot data: ${snapshotCats.length} categories, ${snapshotItems.length} items, ${snapshotGallery.length} gallery images, ${snapshotStatic.length} static pages`);
+      console.log(`Loaded snapshot data: ${snapshotCats.length} categories, ${snapshotIngs.length} ingredients, ${snapshotItems.length} items, ${snapshotGallery.length} gallery images, ${snapshotStatic.length} static pages`);
       
       // CRITICAL VALIDATION: Ensure snapshot data integrity BEFORE transaction
       if (snapshotCats.length === 0) {
@@ -225,6 +254,7 @@ export function registerSnapshotRoutes(app: Express) {
         // When menu items are deleted, order_items.menuItemId is set to NULL automatically
         await tx.delete(menuItems);
         await tx.delete(categories);
+        await tx.delete(ingredients);
         await tx.delete(galleryImages);
         await tx.delete(staticContent);
         console.log("Cleared live tables (in transaction, orders preserved)");
@@ -240,6 +270,26 @@ export function registerSnapshotRoutes(app: Express) {
           }))
         );
         console.log("Restored categories");
+        
+        // STEP 2B: Copy ingredients to live (preserving original IDs)
+        if (snapshotIngs.length > 0) {
+          await tx.insert(ingredients).values(
+            snapshotIngs.map((ing: any) => ({
+              id: ing.originalIngredientId, // Use original ID to maintain references
+              name: ing.name,
+              nameDE: ing.nameDE,
+              type: ing.type,
+              description: ing.description,
+              descriptionDE: ing.descriptionDE,
+              image: ing.image,
+              price: ing.price,
+              priceSmall: ing.priceSmall,
+              priceStandard: ing.priceStandard,
+              available: ing.available,
+            }))
+          );
+          console.log(`Restored ${snapshotIngs.length} ingredients`);
+        }
         
         // STEP 3: Copy menu items to live (restoring ALL fields with perfect fidelity)
         if (snapshotItems.length > 0) {

@@ -343,6 +343,25 @@ export const snapshotCategories = pgTable("snapshot_categories", {
 
 export type SnapshotCategory = typeof snapshotCategories.$inferSelect;
 
+// Snapshot Ingredients (copies of ingredients in a snapshot)
+export const snapshotIngredients = pgTable("snapshot_ingredients", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  snapshotId: varchar("snapshot_id").notNull().references(() => snapshots.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  nameDE: text("name_de").notNull(),
+  type: text("type").notNull(),
+  description: text("description"),
+  descriptionDE: text("description_de"),
+  image: text("image").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }),
+  priceSmall: decimal("price_small", { precision: 10, scale: 2 }),
+  priceStandard: decimal("price_standard", { precision: 10, scale: 2 }),
+  available: integer("available").notNull().default(1),
+  originalIngredientId: varchar("original_ingredient_id").notNull(),
+});
+
+export type SnapshotIngredient = typeof snapshotIngredients.$inferSelect;
+
 // Snapshot Gallery Images (copies of gallery images in a snapshot)
 export const snapshotGalleryImages = pgTable("snapshot_gallery_images", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
