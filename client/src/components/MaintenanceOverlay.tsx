@@ -63,7 +63,7 @@ export function MaintenanceOverlay() {
 
         {/* Admin Backdoor - Small, discreet link in bottom-right corner */}
         <Link
-          href="/admin"
+          href="/admin/login?bypass=true"
           className="fixed bottom-6 right-6 text-white/30 hover:text-white/60 text-xs transition-colors duration-200"
         >
           •
