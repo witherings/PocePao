@@ -87,6 +87,8 @@ export function AdminMenu() {
   const [isUploading, setIsUploading] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [selectedIngredientType, setSelectedIngredientType] = useState<string>("");
+  const [ingredientFilterType, setIngredientFilterType] = useState<string | null>(null);
+  const [createAsExtraCheckbox, setCreateAsExtraCheckbox] = useState(false);
   
   const [showVariantsDialog, setShowVariantsDialog] = useState(false);
   const [managingVariantsForItem, setManagingVariantsForItem] = useState<MenuItem | null>(null);
@@ -473,13 +475,14 @@ export function AdminMenu() {
     const price = formData.get("price") as string;
     const priceSmall = formData.get("priceSmall") as string;
     const priceStandard = formData.get("priceStandard") as string;
+    const ingredientType = formData.get("type") as string;
     
     const data: any = {
       name: name,
       nameDE: name,
       description: description,
       descriptionDE: description,
-      type: formData.get("type") as string,
+      type: ingredientType,
       image: imageUrl,
       price: price || null,
       priceSmall: priceSmall || null,
@@ -489,9 +492,69 @@ export function AdminMenu() {
     };
 
     if (editingIngredient) {
-      updateIngredientMutation.mutate({ id: editingIngredient.id, data });
+      updateIngredientMutation.mutate({ id: editingIngredient.id, data }, {
+        onSuccess: () => {
+          // If checked, also update or create the corresponding extra ingredient
+          if (createAsExtraCheckbox && ingredientType !== "extra") {
+            const extraName = name;
+            const extraIngredient = ingredients.find(ing => 
+              ing.type === "extra" && 
+              ing.nameDE === extraName && 
+              ing.id !== editingIngredient.id
+            );
+
+            if (extraIngredient) {
+              // Update existing extra ingredient with synchronized price
+              const extraData: any = {
+                price: ingredientType === 'protein' ? priceStandard : price,
+                priceSmall: ingredientType === 'protein' ? priceSmall : null,
+                priceStandard: ingredientType === 'protein' ? priceStandard : null,
+              };
+              updateIngredientMutation.mutate({ id: extraIngredient.id, data: extraData });
+            } else {
+              // Create new extra ingredient with same name
+              const extraData: any = {
+                name: extraName,
+                nameDE: extraName,
+                description: description,
+                descriptionDE: description,
+                type: "extra",
+                image: imageUrl,
+                price: ingredientType === 'protein' ? priceStandard : price,
+                priceSmall: null,
+                priceStandard: null,
+                order: parseInt(formData.get("order") as string) || 0,
+                available: formData.get("available") === "on" ? 1 : 0,
+              };
+              createIngredientMutation.mutate(extraData);
+            }
+          }
+          setCreateAsExtraCheckbox(false);
+        }
+      });
     } else {
-      createIngredientMutation.mutate(data);
+      createIngredientMutation.mutate(data, {
+        onSuccess: () => {
+          // If checked, also create the corresponding extra ingredient
+          if (createAsExtraCheckbox && ingredientType !== "extra") {
+            const extraData: any = {
+              name: name,
+              nameDE: name,
+              description: description,
+              descriptionDE: description,
+              type: "extra",
+              image: imageUrl,
+              price: ingredientType === 'protein' ? priceStandard : price,
+              priceSmall: null,
+              priceStandard: null,
+              order: parseInt(formData.get("order") as string) || 0,
+              available: formData.get("available") === "on" ? 1 : 0,
+            };
+            createIngredientMutation.mutate(extraData);
+          }
+          setCreateAsExtraCheckbox(false);
+        }
+      });
     }
     
     setSelectedImage(null);
@@ -1097,6 +1160,7 @@ export function AdminMenu() {
                     setSelectedImage(null);
                     setImagePreview(null);
                     setSelectedIngredientType("");
+                    setCreateAsExtraCheckbox(false);
                   }}>
                     <Plus className="mr-2 h-4 w-4" />
                     Zutat hinzufügen
@@ -1285,6 +1349,19 @@ export function AdminMenu() {
                       <Label htmlFor="ing-available">Verfügbar</Label>
                     </div>
 
+                    {(selectedIngredientType && selectedIngredientType !== 'extra') && (
+                      <div className="flex items-center space-x-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <Switch
+                          id="create-as-extra"
+                          checked={createAsExtraCheckbox}
+                          onCheckedChange={setCreateAsExtraCheckbox}
+                        />
+                        <Label htmlFor="create-as-extra" className="font-semibold">
+                          Auch als Extra-Zutat erstellen (mit synchonisiertem Preis)
+                        </Label>
+                      </div>
+                    )}
+
                     <Button 
                       type="submit" 
                       className="w-full h-12 text-base font-semibold bg-ocean hover:bg-ocean/90"
@@ -1297,8 +1374,39 @@ export function AdminMenu() {
               </Dialog>
             </CardHeader>
             <CardContent className="p-6">
+              <div className="mb-6">
+                <Label className="text-base font-semibold mb-2 block">Nach Typ filtern:</Label>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant={ingredientFilterType === null ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setIngredientFilterType(null)}
+                    className={ingredientFilterType === null ? "bg-ocean hover:bg-ocean/90 text-white" : ""}
+                  >
+                    Alle
+                  </Button>
+                  {["protein", "base", "marinade", "fresh", "sauce", "topping", "extra"].map((type) => (
+                    <Button
+                      key={type}
+                      variant={ingredientFilterType === type ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setIngredientFilterType(type)}
+                      className={ingredientFilterType === type ? "bg-ocean hover:bg-ocean/90 text-white" : ""}
+                    >
+                      {type === "protein" ? "🍗 Proteine" : 
+                       type === "base" ? "🍚 Bases" :
+                       type === "marinade" ? "🧂 Marinaden" :
+                       type === "fresh" ? "🥬 Frische" :
+                       type === "sauce" ? "🥫 Saucen" :
+                       type === "topping" ? "✨ Toppings" : "➕ Extras"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
               <div className="space-y-6">
                 {["protein", "base", "marinade", "fresh", "sauce", "topping", "extra"].map((type) => {
+                  if (ingredientFilterType !== null && ingredientFilterType !== type) return null;
+                  
                   const typeIngredients = ingredients.filter(ing => ing.type === type).sort((a, b) => a.order - b.order);
                   
                   if (typeIngredients.length === 0) return null;
@@ -1379,6 +1487,7 @@ export function AdminMenu() {
                                     setSelectedImage(null);
                                     setImagePreview(null);
                                     setSelectedIngredientType(ingredient.type || "");
+                                    setCreateAsExtraCheckbox(false);
                                     setShowIngredientDialog(true);
                                   }}
                                 >
