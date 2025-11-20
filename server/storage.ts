@@ -9,6 +9,8 @@ import {
   type InsertGalleryImage,
   type Ingredient,
   type InsertIngredient,
+  type ProductVariant,
+  type InsertProductVariant,
   type Order,
   type InsertOrder,
   type OrderItem,
@@ -21,6 +23,7 @@ import {
   reservations as reservationsTable,
   galleryImages as galleryImagesTable,
   ingredients as ingredientsTable,
+  productVariants as productVariantsTable,
   orders as ordersTable,
   orderItems as orderItemsTable,
   staticContent as staticContentTable,
@@ -64,6 +67,14 @@ export interface IStorage {
   createIngredient(ingredient: InsertIngredient): Promise<Ingredient>;
   updateIngredient(id: string, ingredient: Partial<InsertIngredient>): Promise<Ingredient | undefined>;
   deleteIngredient(id: string): Promise<boolean>;
+
+  // Product Variants
+  getAllProductVariants(): Promise<ProductVariant[]>;
+  getProductVariantsByMenuItemId(menuItemId: string): Promise<ProductVariant[]>;
+  getProductVariantById(id: string): Promise<ProductVariant | undefined>;
+  createProductVariant(variant: InsertProductVariant): Promise<ProductVariant>;
+  updateProductVariant(id: string, variant: Partial<InsertProductVariant>): Promise<ProductVariant | undefined>;
+  deleteProductVariant(id: string): Promise<boolean>;
 
   // Orders
   getAllOrders(): Promise<Order[]>;
@@ -242,6 +253,47 @@ class DatabaseStorage implements IStorage {
   async deleteIngredient(id: string): Promise<boolean> {
     const db = await getDb();
     const results = await db.delete(ingredientsTable).where(eq(ingredientsTable.id, id)).returning();
+    return results.length > 0;
+  }
+
+  // Product Variants
+  async getAllProductVariants(): Promise<ProductVariant[]> {
+    const db = await getDb();
+    return await db.select().from(productVariantsTable).orderBy(asc(productVariantsTable.order));
+  }
+
+  async getProductVariantsByMenuItemId(menuItemId: string): Promise<ProductVariant[]> {
+    const db = await getDb();
+    return await db.select()
+      .from(productVariantsTable)
+      .where(eq(productVariantsTable.menuItemId, menuItemId))
+      .orderBy(asc(productVariantsTable.order));
+  }
+
+  async getProductVariantById(id: string): Promise<ProductVariant | undefined> {
+    const db = await getDb();
+    const results = await db.select().from(productVariantsTable).where(eq(productVariantsTable.id, id));
+    return results[0];
+  }
+
+  async createProductVariant(variant: InsertProductVariant): Promise<ProductVariant> {
+    const db = await getDb();
+    const results = await db.insert(productVariantsTable).values(variant).returning();
+    return results[0];
+  }
+
+  async updateProductVariant(id: string, variant: Partial<InsertProductVariant>): Promise<ProductVariant | undefined> {
+    const db = await getDb();
+    const results = await db.update(productVariantsTable)
+      .set(variant)
+      .where(eq(productVariantsTable.id, id))
+      .returning();
+    return results[0];
+  }
+
+  async deleteProductVariant(id: string): Promise<boolean> {
+    const db = await getDb();
+    const results = await db.delete(productVariantsTable).where(eq(productVariantsTable.id, id)).returning();
     return results.length > 0;
   }
 

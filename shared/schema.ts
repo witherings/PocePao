@@ -41,6 +41,9 @@ export const menuItems = pgTable("menu_items", {
   hasSizeOptions: integer("has_size_options").notNull().default(0), // 1 = has size options
   isCustomBowl: integer("is_custom_bowl").notNull().default(0), // 1 = Wunsch Bowl
   enableBaseSelection: integer("enable_base_selection").notNull().default(0), // 1 = force base selection before adding to cart
+  hasVariants: integer("has_variants").notNull().default(0), // 1 = has variants (base/flavor selection)
+  variantType: text("variant_type"), // "base" or "flavor"
+  requiresVariantSelection: integer("requires_variant_selection").notNull().default(0), // 1 = must select variant before adding to cart
 });
 
 export const insertMenuItemSchema = createInsertSchema(menuItems).omit({
@@ -49,6 +52,24 @@ export const insertMenuItemSchema = createInsertSchema(menuItems).omit({
 
 export type MenuItem = typeof menuItems.$inferSelect;
 export type InsertMenuItem = z.infer<typeof insertMenuItemSchema>;
+
+// Product Variants (for base/flavor selection)
+export const productVariants = pgTable("product_variants", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  menuItemId: varchar("menu_item_id").notNull().references(() => menuItems.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  nameDE: text("name_de").notNull(),
+  type: text("type").notNull(), // "base" or "flavor"
+  order: integer("order").notNull().default(0),
+  available: integer("available").notNull().default(1),
+});
+
+export const insertProductVariantSchema = createInsertSchema(productVariants).omit({
+  id: true,
+});
+
+export type ProductVariant = typeof productVariants.$inferSelect;
+export type InsertProductVariant = z.infer<typeof insertProductVariantSchema>;
 
 // Ingredient Types
 export enum IngredientType {
@@ -134,7 +155,8 @@ export const orderItems = pgTable("order_items", {
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   quantity: integer("quantity").notNull(),
   size: text("size"), // klein or standard
-  selectedBase: text("selected_base"), // For standard menu items with base selection
+  selectedBase: text("selected_base"), // For standard menu items with base selection (DEPRECATED - use selectedVariant)
+  selectedVariant: text("selected_variant"), // For items with variant selection (base/flavor)
   customization: text("customization"), // JSON string for custom bowl selections
 });
 
@@ -170,7 +192,9 @@ export const cartItemSchema = z.object({
   image: z.string(),
   quantity: z.number().int().positive(),
   size: z.enum(["klein", "standard"]).optional(),
-  selectedBase: z.string().optional(), // For standard menu items with base selection
+  selectedBase: z.string().optional(), // For standard menu items with base selection (DEPRECATED - use selectedVariant)
+  selectedVariant: z.string().optional(), // For items with variant selection (base/flavor)
+  selectedVariantName: z.string().optional(), // Display name of selected variant
   customization: customBowlSelectionSchema.optional(),
 });
 

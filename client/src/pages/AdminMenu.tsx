@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Trash2, Edit, Plus, ArrowLeft, Upload, X } from "lucide-react";
+import { Trash2, Edit, Plus, ArrowLeft, Upload, X, Settings, ArrowUp, ArrowDown, List } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
@@ -41,6 +41,19 @@ interface MenuItem {
   sauce?: string | null;
   toppings?: string[] | null;
   enableBaseSelection?: number;
+  hasVariants?: number;
+  variantType?: string | null;
+  requiresVariantSelection?: number;
+}
+
+interface ProductVariant {
+  id: string;
+  menuItemId: string;
+  name: string;
+  nameDE: string;
+  type: string;
+  order: number;
+  available: number;
 }
 
 interface Ingredient {
@@ -74,6 +87,17 @@ export function AdminMenu() {
   const [isUploading, setIsUploading] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [selectedIngredientType, setSelectedIngredientType] = useState<string>("");
+  
+  const [showVariantsDialog, setShowVariantsDialog] = useState(false);
+  const [managingVariantsForItem, setManagingVariantsForItem] = useState<MenuItem | null>(null);
+  const [variantFormData, setVariantFormData] = useState({
+    hasVariants: false,
+    variantType: "base" as "base" | "flavor",
+    requiresVariantSelection: false,
+  });
+  const [variants, setVariants] = useState<ProductVariant[]>([]);
+  const [editingVariant, setEditingVariant] = useState<ProductVariant | null>(null);
+  const [showVariantEditDialog, setShowVariantEditDialog] = useState(false);
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],

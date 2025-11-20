@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertReservationSchema, insertGalleryImageSchema, insertOrderSchema, insertOrderItemSchema, insertIngredientSchema, insertCategorySchema, insertMenuItemSchema } from "@shared/schema";
+import { insertReservationSchema, insertGalleryImageSchema, insertOrderSchema, insertOrderItemSchema, insertIngredientSchema, insertCategorySchema, insertMenuItemSchema, insertProductVariantSchema } from "@shared/schema";
 import { notificationService } from "./notifications";
 import { registerAdminRoutes } from "./admin-routes";
 import { registerSnapshotRoutes } from "./snapshot-routes";
@@ -390,6 +390,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true });
     } catch (error: any) {
       res.status(400).json({ error: error.message || "Failed to delete ingredient" });
+    }
+  });
+
+  // Product Variants
+  app.get("/api/product-variants", async (req, res) => {
+    try {
+      const variants = await storage.getAllProductVariants();
+      res.json(variants);
+    } catch (error: any) {
+      console.error("❌ Error fetching product variants:", error);
+      res.status(500).json({ error: "Failed to fetch product variants", details: error.message });
+    }
+  });
+
+  app.get("/api/product-variants/menu-item/:menuItemId", async (req, res) => {
+    try {
+      const { menuItemId } = req.params;
+      const variants = await storage.getProductVariantsByMenuItemId(menuItemId);
+      res.json(variants);
+    } catch (error: any) {
+      console.error("❌ Error fetching product variants by menu item:", error);
+      res.status(500).json({ error: "Failed to fetch product variants", details: error.message });
+    }
+  });
+
+  app.post("/api/product-variants", async (req, res) => {
+    try {
+      const data = insertProductVariantSchema.parse(req.body);
+      const variant = await storage.createProductVariant(data);
+      res.status(201).json(variant);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to create product variant" });
+    }
+  });
+
+  app.put("/api/product-variants/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const data = insertProductVariantSchema.partial().parse(req.body);
+      const variant = await storage.updateProductVariant(id, data);
+      if (!variant) {
+        return res.status(404).json({ error: "Product variant not found" });
+      }
+      res.json(variant);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to update product variant" });
+    }
+  });
+
+  app.delete("/api/product-variants/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await storage.deleteProductVariant(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Product variant not found" });
+      }
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Failed to delete product variant" });
     }
   });
 

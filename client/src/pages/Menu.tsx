@@ -17,6 +17,7 @@ import { MenuItemDialog } from "@/components/MenuItemDialog";
 import { BowlBuilderDialog } from "@/components/BowlBuilderDialog";
 import { BowlInfoDialog } from "@/components/BowlInfoDialog";
 import { MobileMenuView } from "@/components/MobileMenuView";
+import { VariantSelectionDialog } from "@/components/VariantSelectionDialog";
 import { useCartStore } from "@/lib/cartStore";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion } from "framer-motion";
@@ -31,6 +32,7 @@ export default function Menu() {
   const [itemDialogOpen, setItemDialogOpen] = useState(false);
   const [bowlBuilderOpen, setBowlBuilderOpen] = useState(false);
   const [bowlInfoOpen, setBowlInfoOpen] = useState(false);
+  const [variantDialogOpen, setVariantDialogOpen] = useState(false);
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const { addItem, items: cartItems, updateItem } = useCartStore();
   const isMobile = useIsMobile();
@@ -53,7 +55,7 @@ export default function Menu() {
   // Filter menu items by category
   const filteredItems = menuItems.filter((item) => item.categoryId === selectedCategory);
 
-  const handleAddToCart = (item: MenuItem, size?: "klein" | "standard", selectedBase?: string, customization?: CustomBowlSelection, customPrice?: string) => {
+  const handleAddToCart = (item: MenuItem, size?: "klein" | "standard", selectedBase?: string, customization?: CustomBowlSelection, customPrice?: string, selectedVariant?: string, selectedVariantName?: string) => {
     // Use custom price if provided (for bowl builder with dynamic protein pricing)
     // Otherwise determine the correct price based on size
     let finalPrice = customPrice || item.price;
@@ -72,17 +74,22 @@ export default function Menu() {
         price: finalPrice,
         size: size,
         selectedBase: selectedBase,
+        selectedVariant: selectedVariant,
+        selectedVariantName: selectedVariantName,
         customization: customization,
       });
       setEditingItemId(null);
     } else {
-      // Create unique cart ID per size and base to allow different combinations in cart simultaneously
+      // Create unique cart ID per size, base, and variant to allow different combinations in cart simultaneously
       let cartItemId = item.id;
       if (size) {
         cartItemId = `${item.id}-${size}`;
       }
       if (selectedBase) {
         cartItemId = `${cartItemId}-${selectedBase.toLowerCase().replace(/\s+/g, '-')}`;
+      }
+      if (selectedVariant) {
+        cartItemId = `${cartItemId}-${selectedVariant}`;
       }
 
       addItem({
@@ -94,6 +101,8 @@ export default function Menu() {
         image: item.image,
         size: size,
         selectedBase: selectedBase,
+        selectedVariant: selectedVariant,
+        selectedVariantName: selectedVariantName,
         customization: customization,
       });
     }
@@ -127,6 +136,10 @@ export default function Menu() {
     if (item.isCustomBowl === 1) {
       setSelectedItem(item);
       setBowlInfoOpen(true);
+    } else if (item.hasVariants === 1 && item.requiresVariantSelection === 1) {
+      // Open variant selection dialog for items with variants
+      setSelectedItem(item);
+      setVariantDialogOpen(true);
     } else if (item.hasSizeOptions === 1 || item.enableBaseSelection === 1) {
       // Open dialog if item has size options OR requires base selection
       setSelectedItem(item);
@@ -134,6 +147,10 @@ export default function Menu() {
     } else {
       handleAddToCart(item);
     }
+  };
+
+  const handleVariantSelection = (item: MenuItem, variantId: string, variantName: string) => {
+    handleAddToCart(item, undefined, undefined, undefined, undefined, variantId, variantName);
   };
 
   return (
@@ -335,6 +352,14 @@ export default function Menu() {
         }}
         onAddToCart={handleAddToCart}
         editingCartItemId={editingItemId}
+      />
+
+      {/* Variant Selection Dialog */}
+      <VariantSelectionDialog
+        item={selectedItem}
+        isOpen={variantDialogOpen}
+        onClose={() => setVariantDialogOpen(false)}
+        onAddToCart={handleVariantSelection}
       />
     </div>
   );
