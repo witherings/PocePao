@@ -69,6 +69,20 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
     return ingredient?.nameDE || "";
   };
 
+  // Helper function to get extra price by type
+  const getExtraPrice = (extraType: "protein" | "fresh" | "sauce" | "topping") => {
+    const extraNames: Record<string, string> = {
+      protein: "Extra Protein",
+      fresh: "Extra frische Zutat",
+      sauce: "Extra Sauce",
+      topping: "Extra Topping"
+    };
+    const extraIngredient = ingredients.find(
+      ing => ing.type === "extra" && ing.nameDE === extraNames[extraType]
+    );
+    return extraIngredient?.price ? parseFloat(extraIngredient.price) : 0;
+  };
+
   // Reset when dialog opens or item changes
   useEffect(() => {
     if (isOpen && item) {
@@ -279,22 +293,18 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       }
     }
 
-    // Add extras pricing with fixed prices
-    // Extra Protein: €3.70 each
+    // Add extras pricing from database
     const extraProteinCount = selections.extraProtein?.length || 0;
-    totalPrice += extraProteinCount * 3.70;
+    totalPrice += extraProteinCount * getExtraPrice("protein");
     
-    // Extra Fresh Ingredients: €1.00 each
     const extraFreshCount = selections.extraFreshIngredients?.length || 0;
-    totalPrice += extraFreshCount * 1.00;
+    totalPrice += extraFreshCount * getExtraPrice("fresh");
     
-    // Extra Sauces: €0.60 each
     const extraSaucesCount = selections.extraSauces?.length || 0;
-    totalPrice += extraSaucesCount * 0.60;
+    totalPrice += extraSaucesCount * getExtraPrice("sauce");
     
-    // Extra Toppings: €0.60 each
     const extraToppingsCount = selections.extraToppings?.length || 0;
-    totalPrice += extraToppingsCount * 0.60;
+    totalPrice += extraToppingsCount * getExtraPrice("topping");
 
     return totalPrice.toFixed(2);
   };
@@ -459,7 +469,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         </div>
                         <div className="p-2 bg-white">
                           <p className="font-poppins text-sm font-medium text-center mb-1">{ingredient.nameDE}</p>
-                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€3.70</p>
+                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{getExtraPrice("protein").toFixed(2)}</p>
                           <Button
                             onClick={() => handleExtraSelect(ingredient.id, "protein")}
                             variant={selected ? "default" : "outline"}
@@ -500,7 +510,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         </div>
                         <div className="p-2 bg-white">
                           <p className="font-poppins text-sm font-medium text-center mb-1">{ingredient.nameDE}</p>
-                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€1.00</p>
+                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{getExtraPrice("fresh").toFixed(2)}</p>
                           <Button
                             onClick={() => handleExtraSelect(ingredient.id, "fresh")}
                             variant={selected ? "default" : "outline"}
@@ -541,7 +551,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         </div>
                         <div className="p-2 bg-white">
                           <p className="font-poppins text-sm font-medium text-center mb-1">{ingredient.nameDE}</p>
-                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€0.60</p>
+                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{getExtraPrice("sauce").toFixed(2)}</p>
                           <Button
                             onClick={() => handleExtraSelect(ingredient.id, "sauce")}
                             variant={selected ? "default" : "outline"}
@@ -582,7 +592,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         </div>
                         <div className="p-2 bg-white">
                           <p className="font-poppins text-sm font-medium text-center mb-1">{ingredient.nameDE}</p>
-                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€0.60</p>
+                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{getExtraPrice("topping").toFixed(2)}</p>
                           <Button
                             onClick={() => handleExtraSelect(ingredient.id, "topping")}
                             variant={selected ? "default" : "outline"}

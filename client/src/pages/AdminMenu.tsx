@@ -1136,7 +1136,7 @@ export function AdminMenu() {
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-6">
-                {["protein", "base", "marinade", "fresh", "sauce", "topping"].map((type) => {
+                {["protein", "base", "marinade", "fresh", "sauce", "topping", "extra"].map((type) => {
                   const typeIngredients = ingredients.filter(ing => ing.type === type).sort((a, b) => a.order - b.order);
                   
                   if (typeIngredients.length === 0) return null;
@@ -1147,7 +1147,8 @@ export function AdminMenu() {
                     marinade: "🧂 Marinaden",
                     fresh: "🥬 Frische Zutaten",
                     sauce: "🥫 Saucen",
-                    topping: "✨ Toppings"
+                    topping: "✨ Toppings",
+                    extra: "➕ Extras"
                   };
                   
                   return (
