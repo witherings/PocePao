@@ -279,20 +279,22 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       }
     }
 
-    // Add extras pricing from EXTRA type ingredients
-    const extraIngredients = ingredients.filter(ing => ing.type === "extra" && ing.available === 1);
+    // Add extras pricing with fixed prices
+    // Extra Protein: €3.70 each
+    const extraProteinCount = selections.extraProtein?.length || 0;
+    totalPrice += extraProteinCount * 3.70;
     
-    // Calculate extras total
-    [...(selections.extraProtein || []), 
-     ...(selections.extraFreshIngredients || []), 
-     ...(selections.extraSauces || []), 
-     ...(selections.extraToppings || [])
-    ].forEach(extraId => {
-      const extra = extraIngredients.find(ing => ing.id === extraId);
-      if (extra && extra.price) {
-        totalPrice += parseFloat(extra.price);
-      }
-    });
+    // Extra Fresh Ingredients: €1.00 each
+    const extraFreshCount = selections.extraFreshIngredients?.length || 0;
+    totalPrice += extraFreshCount * 1.00;
+    
+    // Extra Sauces: €0.60 each
+    const extraSaucesCount = selections.extraSauces?.length || 0;
+    totalPrice += extraSaucesCount * 0.60;
+    
+    // Extra Toppings: €0.60 each
+    const extraToppingsCount = selections.extraToppings?.length || 0;
+    totalPrice += extraToppingsCount * 0.60;
 
     return totalPrice.toFixed(2);
   };
@@ -702,11 +704,13 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
               </Button>
             )}
 
-            <div className="flex items-center gap-1 sm:gap-2">
-              <span className="font-poppins text-lg sm:text-2xl font-bold text-ocean" data-testid="text-builder-price">
-                €{getDisplayPrice()}
-              </span>
-            </div>
+            {currentStep > 0 && (
+              <div className="flex items-center gap-1 sm:gap-2">
+                <span className="font-poppins text-lg sm:text-2xl font-bold text-ocean" data-testid="text-builder-price">
+                  €{getDisplayPrice()}
+                </span>
+              </div>
+            )}
 
             {currentStep < STEPS.length - 1 ? (
               <Button
