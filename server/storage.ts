@@ -15,6 +15,7 @@ import {
   type InsertOrderItem,
   type StaticContent,
   type InsertStaticContent,
+  type AppSettings,
   categories as categoriesTable,
   menuItems as menuItemsTable,
   reservations as reservationsTable,
@@ -22,7 +23,8 @@ import {
   ingredients as ingredientsTable,
   orders as ordersTable,
   orderItems as orderItemsTable,
-  staticContent as staticContentTable
+  staticContent as staticContentTable,
+  appSettings as appSettingsTable
 } from "@shared/schema";
 import { getDb } from "./db";
 import { eq, asc, desc, and } from "drizzle-orm";
@@ -73,6 +75,10 @@ export interface IStorage {
 
   // Static Content
   getAllStaticContent(): Promise<StaticContent[]>;
+  
+  // App Settings
+  getSettings(): Promise<{ maintenanceMode: number }>;
+  updateSettings(settings: { maintenanceMode?: number }): Promise<{ maintenanceMode: number }>;
   getStaticContentByPage(page: string, locale?: string): Promise<StaticContent | undefined>;
   upsertStaticContent(content: InsertStaticContent): Promise<StaticContent>;
   deleteStaticContent(id: string): Promise<boolean>;
@@ -320,6 +326,38 @@ class DatabaseStorage implements IStorage {
       .where(eq(staticContentTable.id, id))
       .returning();
     return results.length > 0;
+  }
+
+  // App Settings
+  async getSettings(): Promise<{ maintenanceMode: number }> {
+    const db = await getDb();
+    const results = await db.select()
+      .from(appSettingsTable)
+      .where(eq(appSettingsTable.id, 1));
+    
+    // If no settings exist, create default
+    if (results.length === 0) {
+      const newSettings = await db.insert(appSettingsTable)
+        .values({ id: 1, maintenanceMode: 0 })
+        .returning();
+      return { maintenanceMode: newSettings[0].maintenanceMode };
+    }
+    
+    return { maintenanceMode: results[0].maintenanceMode };
+  }
+
+  async updateSettings(settings: { maintenanceMode?: number }): Promise<{ maintenanceMode: number }> {
+    const db = await getDb();
+    
+    // Ensure settings exist
+    await this.getSettings();
+    
+    const results = await db.update(appSettingsTable)
+      .set({ ...settings, updatedAt: new Date() })
+      .where(eq(appSettingsTable.id, 1))
+      .returning();
+    
+    return { maintenanceMode: results[0].maintenanceMode };
   }
 }
 

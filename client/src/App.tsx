@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { MaintenanceOverlay } from "@/components/MaintenanceOverlay";
 import Home from "@/pages/Home";
 import Menu from "@/pages/Menu";
 import About from "@/pages/About";
@@ -15,6 +16,7 @@ import Gallery from "@/pages/Gallery";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminSnapshots from "@/pages/AdminSnapshots";
+import AdminSettings from "@/pages/AdminSettings";
 import { AdminGallery } from "@/pages/AdminGallery";
 import { AdminMenu } from "@/pages/AdminMenu";
 import { AdminReservations } from "@/pages/AdminReservations";
@@ -69,6 +71,7 @@ function Router() {
         <Route path="/admin/content" component={AdminContent} />
         <Route path="/admin/about" component={AdminAbout} />
         <Route path="/admin/contact" component={AdminContact} />
+        <Route path="/admin/settings" component={AdminSettings} />
         <Route component={NotFound} />
       </Switch>
     );
@@ -94,6 +97,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        {!isAdminRoute && <MaintenanceOverlay />}
         <div className="min-h-screen flex flex-col">
           {!isAdminRoute && <Header />}
           <main className="flex-1">

@@ -460,6 +460,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // App Settings
+  app.get("/api/settings", async (req, res) => {
+    try {
+      const settings = await storage.getSettings();
+      res.json(settings);
+    } catch (error: any) {
+      console.error("❌ Error fetching settings:", error);
+      res.status(500).json({ error: "Failed to fetch settings" });
+    }
+  });
+
+  app.put("/api/settings", async (req, res) => {
+    try {
+      const settings = await storage.updateSettings(req.body);
+      res.json(settings);
+    } catch (error: any) {
+      console.error("❌ Error updating settings:", error);
+      res.status(500).json({ error: "Failed to update settings" });
+    }
+  });
+
   // Register admin routes
   registerAdminRoutes(app);
   

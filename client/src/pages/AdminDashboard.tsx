@@ -90,6 +90,13 @@ export default function AdminDashboard() {
       color: "bg-rose-500",
     },
     {
+      title: "Einstellungen",
+      description: "Wartungsmodus und globale Einstellungen",
+      icon: Settings,
+      href: "/admin/settings",
+      color: "bg-gray-500",
+    },
+    {
       title: "Über Uns",
       description: "About-Seite bearbeiten",
       icon: Settings,

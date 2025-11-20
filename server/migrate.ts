@@ -74,6 +74,30 @@ async function runMigrations() {
       'Price for Standard bowl size'
     );
 
+    // Ensure app_settings table exists
+    console.log("\n📝 Ensuring app_settings table exists...");
+    const tableCheckResult = await pool.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'app_settings'
+      );
+    `);
+    
+    if (!tableCheckResult.rows[0].exists) {
+      console.log("  ➕ Creating app_settings table");
+      await pool.query(`
+        CREATE TABLE app_settings (
+          id INTEGER PRIMARY KEY DEFAULT 1,
+          maintenance_mode INTEGER NOT NULL DEFAULT 0,
+          updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+      await pool.query(`INSERT INTO app_settings (id, maintenance_mode) VALUES (1, 0)`);
+      console.log("     ✓ Successfully created app_settings table");
+    } else {
+      console.log("  ✓ app_settings table exists");
+    }
+
     // Verify all critical columns exist
     console.log("\n🔍 Verifying schema...");
     const criticalColumns = [
