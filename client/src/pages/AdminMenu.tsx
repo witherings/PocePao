@@ -816,9 +816,11 @@ export function AdminMenu() {
                           </SelectContent>
                         </Select>
                       </div>
-                      
-                      {/* Hide price for Wunsch Bowls - price is dynamic based on user selection */}
-                      {!isWunschBowlCategory(selectedCategoryId || editingMenuItem?.categoryId || "") && (
+                    </div>
+
+                    {/* Hide prices for Wunsch Bowls - price is dynamic based on user selection */}
+                    {!isWunschBowlCategory(selectedCategoryId || editingMenuItem?.categoryId || "") && (
+                      <div className="grid grid-cols-2 gap-5">
                         <div>
                           <Label htmlFor="price" className="text-base font-semibold mb-2">Preis Standard (€) *</Label>
                           <Input
@@ -833,8 +835,22 @@ export function AdminMenu() {
                           />
                           <p className="text-xs text-muted-foreground mt-1.5">Standardgröße oder einziger Preis</p>
                         </div>
-                      )}
-                    </div>
+                        
+                        <div>
+                          <Label htmlFor="priceSmall" className="text-base font-semibold mb-2">Preis Klein (€) - Optional</Label>
+                          <Input
+                            id="priceSmall"
+                            name="priceSmall"
+                            type="number"
+                            step="0.01"
+                            defaultValue={editingMenuItem?.priceSmall || ""}
+                            placeholder="Nur wenn Klein-Größe vorhanden"
+                            className="h-12 text-base px-4"
+                          />
+                          <p className="text-xs text-muted-foreground mt-1.5">Für Pokébowls: Klein = 9.90€, Standard = 14.75€</p>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Wunsch Bowl Info */}
                     {isWunschBowlCategory(selectedCategoryId || editingMenuItem?.categoryId || "") && (
@@ -912,22 +928,6 @@ export function AdminMenu() {
                       </div>
                     )}
 
-                    {/* Hide small price for Wunsch Bowls - price is dynamic */}
-                    {!isWunschBowlCategory(selectedCategoryId || editingMenuItem?.categoryId || "") && (
-                      <div>
-                        <Label htmlFor="priceSmall" className="text-base font-semibold mb-2">Preis Klein (€) - Optional</Label>
-                        <Input
-                          id="priceSmall"
-                          name="priceSmall"
-                          type="number"
-                          step="0.01"
-                          defaultValue={editingMenuItem?.priceSmall || ""}
-                          placeholder="Nur wenn Klein-Größe vorhanden"
-                          className="h-12 text-base px-4"
-                        />
-                        <p className="text-xs text-muted-foreground mt-1.5">Für Pokébowls: Klein = 9.90€, Standard (oben) = 14.75€</p>
-                      </div>
-                    )}
 
                     <div>
                       <Label htmlFor="allergens" className="text-base font-semibold mb-2">Allergene (kommagetrennt) - Optional</Label>
