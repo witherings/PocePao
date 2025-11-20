@@ -66,8 +66,25 @@ export default function Menu() {
   // Get custom bowl price range from shared hook
   const customBowlPriceRange = useCustomBowlPrices();
 
-  // Filter menu items by category
-  const filteredItems = menuItems.filter((item) => item.categoryId === selectedCategory);
+  // Helper function to get max price for sorting
+  const getMaxPrice = (item: MenuItem): number => {
+    return Math.max(parseFloat(item.price || "0"), parseFloat(item.priceSmall || "0"));
+  };
+
+  // Filter and sort menu items by category
+  // Popular items first (⭐Beliebt), then all items sorted by price (high to low)
+  const filteredItems = menuItems
+    .filter((item) => item.categoryId === selectedCategory)
+    .sort((a, b) => {
+      // Popular items always come first
+      if (a.popular === 1 && b.popular !== 1) return -1;
+      if (a.popular !== 1 && b.popular === 1) return 1;
+      
+      // Sort by price (high to low)
+      const maxPriceA = getMaxPrice(a);
+      const maxPriceB = getMaxPrice(b);
+      return maxPriceB - maxPriceA;
+    });
 
   const handleAddToCart = (item: MenuItem, size?: "klein" | "standard", selectedBase?: string, customization?: CustomBowlSelection, customPrice?: string, selectedVariant?: string, selectedVariantName?: string) => {
     // Use custom price if provided (for bowl builder with dynamic protein pricing)

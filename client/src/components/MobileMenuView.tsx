@@ -49,8 +49,25 @@ export function MobileMenuView({
   // Get custom bowl price range from shared hook
   const customBowlPriceRange = useCustomBowlPrices();
 
-  // Filter items by category - no pagination, show all
-  const filteredItems = items.filter(item => item.categoryId === selectedCategory);
+  // Helper function to get max price for sorting
+  const getMaxPrice = (item: MenuItem): number => {
+    return Math.max(parseFloat(item.price || "0"), parseFloat(item.priceSmall || "0"));
+  };
+
+  // Filter and sort items by category
+  // Popular items first (⭐Beliebt), then all items sorted by price (high to low)
+  const filteredItems = items
+    .filter(item => item.categoryId === selectedCategory)
+    .sort((a, b) => {
+      // Popular items always come first
+      if (a.popular === 1 && b.popular !== 1) return -1;
+      if (a.popular !== 1 && b.popular === 1) return 1;
+      
+      // Sort by price (high to low)
+      const maxPriceA = getMaxPrice(a);
+      const maxPriceB = getMaxPrice(b);
+      return maxPriceB - maxPriceA;
+    });
 
   // Check if category carousel can scroll
   const checkCanScroll = useCallback(() => {
