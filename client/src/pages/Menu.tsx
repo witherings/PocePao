@@ -263,7 +263,7 @@ export default function Menu() {
                             {item.hasSizeOptions === 1 && item.priceSmall ? (
                               <>
                                 <span className="font-poppins text-base font-bold text-ocean block" data-testid={`text-menu-item-price-${item.id}`}>
-                                  ab €9.50
+                                  Klein €{item.priceSmall}
                                 </span>
                                 <span className="font-poppins text-base font-semibold text-muted-foreground">
                                   Standard €{item.price}
