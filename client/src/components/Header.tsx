@@ -5,7 +5,7 @@ import { FaWhatsapp, FaInstagram, FaTiktok } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
@@ -116,9 +116,20 @@ export function Header() {
           <div className="flex items-center gap-4">
             <Button
               onClick={() => {
-                const orderSection = document.getElementById('order-options');
-                if (orderSection) {
-                  orderSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const handleScroll = () => {
+                  const orderSection = document.getElementById('order-options');
+                  if (orderSection) {
+                    orderSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                };
+
+                if (location === '/') {
+                  // Already on home - scroll directly
+                  handleScroll();
+                } else {
+                  // Navigate to home and scroll after render
+                  navigate('/');
+                  setTimeout(handleScroll, 300);
                 }
               }}
               className="hidden md:inline-flex bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full px-6 py-2 shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
