@@ -459,8 +459,12 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         }`}
                         data-testid={`card-extra-protein-${ingredient.id}`}
                       >
-                        <div className="aspect-square relative">
-                          <img src={ingredient.image} alt={ingredient.nameDE} loading="lazy" className="w-full h-full object-cover" />
+                        <div className="aspect-square relative bg-gray-100 flex items-center justify-center">
+                          {ingredient.image && ingredient.image.trim() ? (
+                            <img src={ingredient.image} alt={ingredient.nameDE} loading="lazy" className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-gray-400 text-sm">Kein Bild</span>
+                          )}
                           {selected && (
                             <div className="absolute top-2 right-2 bg-ocean text-white rounded-full p-1">
                               <Check className="w-4 h-4" />
@@ -500,8 +504,12 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         }`}
                         data-testid={`card-extra-fresh-${ingredient.id}`}
                       >
-                        <div className="aspect-square relative">
-                          <img src={ingredient.image} alt={ingredient.nameDE} loading="lazy" className="w-full h-full object-cover" />
+                        <div className="aspect-square relative bg-gray-100 flex items-center justify-center">
+                          {ingredient.image && ingredient.image.trim() ? (
+                            <img src={ingredient.image} alt={ingredient.nameDE} loading="lazy" className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-gray-400 text-sm">Kein Bild</span>
+                          )}
                           {selected && (
                             <div className="absolute top-2 right-2 bg-ocean text-white rounded-full p-1">
                               <Check className="w-4 h-4" />
@@ -541,8 +549,12 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         }`}
                         data-testid={`card-extra-sauce-${ingredient.id}`}
                       >
-                        <div className="aspect-square relative">
-                          <img src={ingredient.image} alt={ingredient.nameDE} loading="lazy" className="w-full h-full object-cover" />
+                        <div className="aspect-square relative bg-gray-100 flex items-center justify-center">
+                          {ingredient.image && ingredient.image.trim() ? (
+                            <img src={ingredient.image} alt={ingredient.nameDE} loading="lazy" className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-gray-400 text-sm">Kein Bild</span>
+                          )}
                           {selected && (
                             <div className="absolute top-2 right-2 bg-ocean text-white rounded-full p-1">
                               <Check className="w-4 h-4" />
@@ -582,8 +594,12 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         }`}
                         data-testid={`card-extra-topping-${ingredient.id}`}
                       >
-                        <div className="aspect-square relative">
-                          <img src={ingredient.image} alt={ingredient.nameDE} loading="lazy" className="w-full h-full object-cover" />
+                        <div className="aspect-square relative bg-gray-100 flex items-center justify-center">
+                          {ingredient.image && ingredient.image.trim() ? (
+                            <img src={ingredient.image} alt={ingredient.nameDE} loading="lazy" className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-gray-400 text-sm">Kein Bild</span>
+                          )}
                           {selected && (
                             <div className="absolute top-2 right-2 bg-ocean text-white rounded-full p-1">
                               <Check className="w-4 h-4" />
@@ -636,14 +652,18 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                     data-testid={`card-ingredient-${ingredient.id}`}
                   >
                     {/* Image */}
-                    <div className="aspect-square relative">
-                      <img
-                        src={ingredient.image}
-                        alt={ingredient.nameDE}
-                        loading="lazy"
-                        className="w-full h-full object-cover"
-                        data-testid={`img-ingredient-${ingredient.id}`}
-                      />
+                    <div className="aspect-square relative bg-gray-100 flex items-center justify-center">
+                      {ingredient.image && ingredient.image.trim() ? (
+                        <img
+                          src={ingredient.image}
+                          alt={ingredient.nameDE}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                          data-testid={`img-ingredient-${ingredient.id}`}
+                        />
+                      ) : (
+                        <span className="text-gray-400 text-sm">Kein Bild</span>
+                      )}
                       {selected && (
                         <div className="absolute top-2 right-2 bg-ocean text-white rounded-full p-1">
                           <Check className="w-4 h-4" />
