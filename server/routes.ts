@@ -234,6 +234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const imageData = {
         url: `/uploads/${req.file.filename}`,
         filename: req.body.filename || req.file.originalname,
+        type: req.body.type || "main", // "header" or "main"
       };
 
       const validatedData = insertGalleryImageSchema.parse(imageData);
