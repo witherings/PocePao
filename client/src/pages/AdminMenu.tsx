@@ -896,10 +896,6 @@ export function AdminMenu() {
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-sm text-gray-500">
-                                  {item.price}€
-                                  {item.priceSmall && ` (Klein: ${item.priceSmall}€)`}
-                                </p>
                                 {item.descriptionDE && (
                                   <p className="text-sm text-gray-600 mt-1 line-clamp-2">
                                     {item.descriptionDE}
