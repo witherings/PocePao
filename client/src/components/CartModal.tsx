@@ -202,6 +202,13 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                       </p>
                     )}
                     
+                    {/* Flavor selection for items like Fritz-Kola */}
+                    {item.selectedVariantName && (
+                      <p className="font-lato text-xs text-muted-foreground mb-1">
+                        Geschmacksrichtung: {item.selectedVariantName}
+                      </p>
+                    )}
+                    
                     {/* Base selection for standard menu items */}
                     {item.selectedBase && !item.customization && (
                       <p className="font-lato text-xs text-muted-foreground mb-1">

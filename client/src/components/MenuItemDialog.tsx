@@ -11,7 +11,7 @@ interface MenuItemDialogProps {
   item: MenuItem | null;
   isOpen: boolean;
   onClose: () => void;
-  onAddToCart: (item: MenuItem, size?: "klein" | "standard", selectedBase?: string) => void;
+  onAddToCart: (item: MenuItem, size?: "klein" | "standard", selectedBase?: string, customization?: any, customPrice?: string, selectedVariant?: string, selectedVariantName?: string) => void;
 }
 
 export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemDialogProps) {
