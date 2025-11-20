@@ -66,6 +66,17 @@ export default function Menu() {
   // Get custom bowl price range from shared hook
   const customBowlPriceRange = useCustomBowlPrices();
 
+  // Get minimum protein prices for Wunsch Bowl from ingredients
+  const getCustomBowlMenuPrices = () => {
+    const proteinIngredients = menuItems
+      .find(item => item.isCustomBowl === 1)
+      ? null
+      : null;
+    
+    // We'll get this from a new hook or calculate it - for now use fallback
+    return { kleinMin: "", standardMin: "" };
+  };
+
   // Helper function to get max price for sorting
   const getMaxPrice = (item: MenuItem): number => {
     return Math.max(parseFloat(item.price || "0"), parseFloat(item.priceSmall || "0"));
@@ -309,8 +320,11 @@ export default function Menu() {
                         <div className="flex items-center justify-between mt-auto">
                           <div>
                             {item.isCustomBowl === 1 ? (
-                              <span className="font-poppins text-xl font-bold text-ocean" data-testid={`text-menu-item-price-${item.id}`}>
-                                ab €9.50
+                              <span className="font-poppins text-base font-bold text-ocean" data-testid={`text-menu-item-price-${item.id}`}>
+                                {customBowlPriceRange.kleinMin && customBowlPriceRange.standardMin 
+                                  ? `ab €${customBowlPriceRange.kleinMin} / ab €${customBowlPriceRange.standardMin}`
+                                  : "ab €9.50"
+                                }
                               </span>
                             ) : item.hasSizeOptions === 1 && item.priceSmall ? (
                               <>

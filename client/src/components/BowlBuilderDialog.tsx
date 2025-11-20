@@ -324,7 +324,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
     return parseFloat(item.price || "0").toFixed(2);
   };
 
-  // Get price range for protein options
+  // Get price range for protein options (Klein prices)
   const getProteinPriceRange = () => {
     const proteinIngredients = ingredients.filter(
       ing => ing.type === "protein" && ing.available === 1
@@ -337,16 +337,18 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       };
     }
     
-    // Get prices from each ingredient - use regularPrice as fallback
-    const prices = proteinIngredients.map(ing => {
+    // Get KLEIN prices (priceSmall) from each ingredient - fallback to price
+    const kleinPrices = proteinIngredients.map(ing => {
       let price = 0;
-      if (ing.price) {
+      if (ing.priceSmall) {
+        price = parseFloat(String(ing.priceSmall));
+      } else if (ing.price) {
         price = parseFloat(String(ing.price));
       }
       return price;
     }).filter(p => p > 0);
     
-    if (prices.length === 0) {
+    if (kleinPrices.length === 0) {
       return { 
         min: parseFloat(item.price || "0"), 
         max: parseFloat(item.price || "0") 
@@ -354,9 +356,35 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
     }
     
     return {
-      min: Math.min(...prices),
-      max: Math.max(...prices)
+      min: Math.min(...kleinPrices),
+      max: Math.max(...kleinPrices)
     };
+  };
+
+  // Get Standard prices for Wunsch Bowl menu display
+  const getCustomBowlMenuPrices = () => {
+    const proteinIngredients = ingredients.filter(
+      ing => ing.type === "protein" && ing.available === 1
+    );
+    
+    if (proteinIngredients.length === 0) {
+      return { kleinMin: "0.00", standardMin: "0.00" };
+    }
+    
+    // Get Klein prices (priceSmall)
+    const kleinPrices = proteinIngredients
+      .map(ing => ing.priceSmall ? parseFloat(String(ing.priceSmall)) : (ing.price ? parseFloat(String(ing.price)) : 0))
+      .filter(p => p > 0);
+    
+    // Get Standard prices (priceStandard)
+    const standardPrices = proteinIngredients
+      .map(ing => ing.priceStandard ? parseFloat(String(ing.priceStandard)) : 0)
+      .filter(p => p > 0);
+    
+    const kleinMin = kleinPrices.length > 0 ? Math.min(...kleinPrices).toFixed(2) : "0.00";
+    const standardMin = standardPrices.length > 0 ? Math.min(...standardPrices).toFixed(2) : "0.00";
+    
+    return { kleinMin, standardMin };
   };
 
   const getSizeButtonText = (size: "klein" | "standard") => {
