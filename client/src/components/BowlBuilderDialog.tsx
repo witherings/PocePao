@@ -283,14 +283,18 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
 
     // Add protein price based on size
     if (selectedProtein) {
-      // Try to get size-specific price first, then fallback to legacy price
-      const basePrice = 
-        (size === "klein" && selectedProtein.priceSmall ? parseFloat(selectedProtein.priceSmall) : 0) ||
-        (size === "standard" && selectedProtein.priceStandard ? parseFloat(selectedProtein.priceStandard) : 0) ||
-        (selectedProtein.price ? parseFloat(selectedProtein.price) : 0) ||
-        0;
+      // Get the appropriate price - check size-specific first, then fallback to regular price
+      let proteinPrice = 0;
       
-      totalPrice = basePrice;
+      if (size === "klein" && selectedProtein.priceSmall) {
+        proteinPrice = parseFloat(String(selectedProtein.priceSmall));
+      } else if (size === "standard" && selectedProtein.priceStandard) {
+        proteinPrice = parseFloat(String(selectedProtein.priceStandard));
+      } else if (selectedProtein.price) {
+        proteinPrice = parseFloat(String(selectedProtein.price));
+      }
+      
+      totalPrice = proteinPrice;
     }
 
     // Add extras pricing from database
@@ -329,11 +333,13 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       };
     }
     
-    // Get smallest price from each ingredient (priceSmall > price > 0)
+    // Get prices from each ingredient - use regularPrice as fallback
     const prices = proteinIngredients.map(ing => {
-      const smallPrice = ing.priceSmall ? parseFloat(ing.priceSmall) : 0;
-      const regularPrice = ing.price ? parseFloat(ing.price) : 0;
-      return smallPrice > 0 ? smallPrice : regularPrice;
+      let price = 0;
+      if (ing.price) {
+        price = parseFloat(String(ing.price));
+      }
+      return price;
     }).filter(p => p > 0);
     
     if (prices.length === 0) {
