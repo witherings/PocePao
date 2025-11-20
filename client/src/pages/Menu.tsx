@@ -178,12 +178,8 @@ export default function Menu() {
     if (item.isCustomBowl === 1) {
       setSelectedItem(item);
       setBowlInfoOpen(true);
-    } else if (item.hasVariants === 1 && item.requiresVariantSelection === 1) {
-      // Open VariantSelectionDialog for items with required variants (e.g., Fritz-Kola)
-      setSelectedItem(item);
-      setVariantDialogOpen(true);
     } else {
-      // Open ItemDialog for all other items
+      // Open ItemDialog for all regular items (including those with variants)
       setSelectedItem(item);
       setItemDialogOpen(true);
     }

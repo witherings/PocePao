@@ -17,6 +17,8 @@ interface MenuItemDialogProps {
 export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemDialogProps) {
   const [selectedSize, setSelectedSize] = useState<"klein" | "standard">("standard");
   const [selectedBase, setSelectedBase] = useState<string>("");
+  const [selectedFlavor, setSelectedFlavor] = useState<string>("");
+  const [selectedFlavorId, setSelectedFlavorId] = useState<string>("");
   const contentRef = useRef<HTMLDivElement>(null);
 
   // Fetch all variants
@@ -26,6 +28,9 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
 
   // Get base variants for this item
   const baseVariants = item ? allVariants.filter(v => v.menuItemId === item.id && v.type === 'base' && v.available === 1).sort((a, b) => a.order - b.order) : [];
+  
+  // Get flavor variants for this item
+  const flavorVariants = item ? allVariants.filter(v => v.menuItemId === item.id && v.type === 'flavor' && v.available === 1).sort((a, b) => a.order - b.order) : [];
 
   useBodyScrollLock(isOpen);
 
@@ -56,6 +61,8 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
         setSelectedSize("standard");
       }
       setSelectedBase("");
+      setSelectedFlavor("");
+      setSelectedFlavorId("");
     }
   }, [item, isOpen]);
 
@@ -200,6 +207,33 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 </div>
               )}
 
+              {/* Flavor Selection (for items like Fritz-Kola) */}
+              {item.hasVariants === 1 && item.variantType === 'flavor' && flavorVariants.length > 0 && (
+                <div>
+                  <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Geschmacksrichtung wählen *</h4>
+                  <div className="space-y-2">
+                    {flavorVariants.map((variant) => (
+                      <Button
+                        key={variant.id}
+                        variant={selectedFlavorId === variant.id ? "default" : "outline"}
+                        onClick={() => {
+                          setSelectedFlavorId(variant.id);
+                          setSelectedFlavor(variant.nameDE);
+                        }}
+                        className={`w-full font-poppins font-semibold min-h-[48px] text-sm justify-start text-left ${
+                          selectedFlavorId === variant.id 
+                            ? "bg-ocean hover:bg-ocean/90 text-white" 
+                            : ""
+                        }`}
+                        data-testid={`button-flavor-${variant.nameDE}`}
+                      >
+                        {variant.nameDE}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Protein */}
               {item.protein && (
                 <div>
@@ -307,11 +341,15 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                       onAddToCart(
                         item, 
                         item.hasSizeOptions === 1 ? selectedSize : undefined, 
-                        item.enableBaseSelection === 1 ? selectedBase : undefined
+                        item.enableBaseSelection === 1 ? selectedBase : undefined,
+                        undefined,
+                        undefined,
+                        item.hasVariants === 1 && item.variantType === 'flavor' ? selectedFlavorId : undefined,
+                        item.hasVariants === 1 && item.variantType === 'flavor' ? selectedFlavor : undefined
                       );
                       onClose();
                     }}
-                    disabled={item.available === 0 || (item.enableBaseSelection === 1 && !selectedBase)}
+                    disabled={item.available === 0 || (item.enableBaseSelection === 1 && !selectedBase) || (item.hasVariants === 1 && item.variantType === 'flavor' && !selectedFlavorId)}
                     className="flex-1 sm:flex-initial bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full px-6 sm:px-8 min-h-[48px] text-sm sm:text-base shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     data-testid="button-dialog-add-to-cart"
                   >
