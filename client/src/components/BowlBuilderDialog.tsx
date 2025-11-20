@@ -283,14 +283,14 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
 
     // Add protein price based on size
     if (selectedProtein) {
-      if (size === "klein" && selectedProtein.priceSmall) {
-        totalPrice = parseFloat(selectedProtein.priceSmall);
-      } else if (size === "standard" && selectedProtein.priceStandard) {
-        totalPrice = parseFloat(selectedProtein.priceStandard);
-      } else if (selectedProtein.price) {
-        // Fallback to legacy price if size-specific prices not available
-        totalPrice = parseFloat(selectedProtein.price);
-      }
+      // Try to get size-specific price first, then fallback to legacy price
+      const basePrice = 
+        (size === "klein" && selectedProtein.priceSmall ? parseFloat(selectedProtein.priceSmall) : 0) ||
+        (size === "standard" && selectedProtein.priceStandard ? parseFloat(selectedProtein.priceStandard) : 0) ||
+        (selectedProtein.price ? parseFloat(selectedProtein.price) : 0) ||
+        0;
+      
+      totalPrice = basePrice;
     }
 
     // Add extras pricing from database
@@ -319,7 +319,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
   // Get price range for protein options
   const getProteinPriceRange = () => {
     const proteinIngredients = ingredients.filter(
-      ing => ing.type === "protein" && ing.available === 1 && ing.price
+      ing => ing.type === "protein" && ing.available === 1
     );
     
     if (proteinIngredients.length === 0) {
@@ -329,7 +329,20 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       };
     }
     
-    const prices = proteinIngredients.map(ing => parseFloat(ing.price || "0"));
+    // Get smallest price from each ingredient (priceSmall > price > 0)
+    const prices = proteinIngredients.map(ing => {
+      const smallPrice = ing.priceSmall ? parseFloat(ing.priceSmall) : 0;
+      const regularPrice = ing.price ? parseFloat(ing.price) : 0;
+      return smallPrice > 0 ? smallPrice : regularPrice;
+    }).filter(p => p > 0);
+    
+    if (prices.length === 0) {
+      return { 
+        min: parseFloat(item.price || "0"), 
+        max: parseFloat(item.price || "0") 
+      };
+    }
+    
     return {
       min: Math.min(...prices),
       max: Math.max(...prices)
