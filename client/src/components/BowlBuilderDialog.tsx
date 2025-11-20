@@ -380,8 +380,8 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       
       // Check if any protein has priceStandard defined
       const standardPrices = proteinIngredients
-        .map(ing => ing.priceStandard ? parseFloat(String(ing.priceStandard)) : null)
-        .filter(p => p !== null && p > 0);
+        .map(ing => ing.priceStandard ? parseFloat(String(ing.priceStandard)) : 0)
+        .filter(p => p > 0);
       
       if (standardPrices.length > 0) {
         minStandardPrice = Math.min(...standardPrices);
