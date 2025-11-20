@@ -1462,7 +1462,7 @@ export function AdminMenu() {
                                   onClick={() => {
                                     setEditingIngredient(ingredient);
                                     setSelectedImage(null);
-                                    setImagePreview(null);
+                                    setImagePreview(ingredient.image || null);
                                     setSelectedIngredientType(ingredient.type || "");
                                     setCreateAsExtraCheckbox(false);
                                     setShowIngredientDialog(true);
