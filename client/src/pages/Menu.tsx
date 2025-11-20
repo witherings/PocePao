@@ -26,6 +26,16 @@ import type { MenuItem, Category, CustomBowlSelection } from "@shared/schema";
 
 const defaultBowlImage = "/images/vitamins-bowl.png";
 
+// Category gradient mapping - icons come from database
+const categoryGradients: Record<string, string> = {
+  "⭐": "from-sunset to-orange-600", // Wunsch Bowls
+  "🥗": "from-ocean to-ocean-dark", // Poke Bowls
+  "🌯": "from-amber-400 to-amber-600", // Wraps
+  "🥟": "from-green-400 to-green-600", // Vorspeisen
+  "🍰": "from-pink-400 to-pink-600", // Desserts
+  "🥤": "from-blue-400 to-blue-600", // Getränke
+};
+
 export default function Menu() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [cartModalOpen, setCartModalOpen] = useState(false);
@@ -183,20 +193,26 @@ export default function Menu() {
               {/* Desktop: Category Navigation with Scroll Snap */}
               <div className="mb-12">
                 <div className="overflow-x-auto snap-x snap-mandatory flex gap-3 pb-4 min-w-max">
-                  {categories.map((category) => (
-                    <button
-                      key={category.id}
-                      onClick={() => setSelectedCategory(category.id)}
-                      className={`px-6 py-3 rounded-full font-poppins font-semibold transition-all whitespace-nowrap snap-center ${
-                        selectedCategory === category.id
-                          ? "bg-ocean text-white shadow-lg"
-                          : "bg-card text-foreground hover:bg-accent"
-                      }`}
-                      data-testid={`button-category-${category.id}`}
-                    >
-                      {category.nameDE}
-                    </button>
-                  ))}
+                  {categories.map((category) => {
+                    const gradient = categoryGradients[category.icon] || "from-ocean to-ocean-dark";
+                    const isSelected = selectedCategory === category.id;
+                    
+                    return (
+                      <button
+                        key={category.id}
+                        onClick={() => setSelectedCategory(category.id)}
+                        className={`transition-all duration-300 rounded-lg px-6 py-3 font-poppins font-semibold text-base whitespace-nowrap snap-center flex items-center gap-2 ${
+                          isSelected
+                            ? `bg-gradient-to-br ${gradient} text-white shadow-lg`
+                            : "bg-card text-foreground shadow-sm hover:shadow-md"
+                        }`}
+                        data-testid={`button-category-${category.id}`}
+                      >
+                        <span className="text-xl">{category.icon}</span>
+                        {category.nameDE}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
