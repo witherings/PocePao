@@ -262,6 +262,60 @@ export function AdminMenu() {
     },
   });
 
+  // Variant management mutations
+  const createVariantMutation = useMutation({
+    mutationFn: async (data: Partial<ProductVariant>) => {
+      return await apiRequest("POST", "/api/product-variants", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/product-variants"] });
+      if (managingVariantsForItem) {
+        loadVariantsForItem(managingVariantsForItem.id);
+      }
+      toast({ title: "Variante erstellt" });
+      setShowVariantEditDialog(false);
+      setEditingVariant(null);
+    },
+  });
+
+  const updateVariantMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<ProductVariant> }) => {
+      return await apiRequest("PUT", `/api/product-variants/${id}`, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/product-variants"] });
+      if (managingVariantsForItem) {
+        loadVariantsForItem(managingVariantsForItem.id);
+      }
+      toast({ title: "Variante aktualisiert" });
+      setShowVariantEditDialog(false);
+      setEditingVariant(null);
+    },
+  });
+
+  const deleteVariantMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await apiRequest("DELETE", `/api/product-variants/${id}`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/product-variants"] });
+      if (managingVariantsForItem) {
+        loadVariantsForItem(managingVariantsForItem.id);
+      }
+      toast({ title: "Variante gelöscht" });
+    },
+  });
+
+  const updateMenuItemVariantSettingsMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<MenuItem> }) => {
+      return await apiRequest("PUT", `/api/menu-items/${id}`, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/menu-items"] });
+      toast({ title: "Varianteneinstellungen aktualisiert" });
+    },
+  });
+
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -442,6 +496,82 @@ export function AdminMenu() {
     
     setSelectedImage(null);
     setImagePreview(null);
+  };
+
+  // Variant management handlers
+  const loadVariantsForItem = async (menuItemId: string) => {
+    try {
+      const response = await fetch(`/api/product-variants/menu-item/${menuItemId}`, {
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to fetch variants");
+      const data = await response.json();
+      setVariants(data.sort((a: ProductVariant, b: ProductVariant) => a.order - b.order));
+    } catch (error) {
+      toast({ title: "Fehler beim Laden der Varianten", variant: "destructive" });
+    }
+  };
+
+  const handleOpenVariantDialog = async (item: MenuItem) => {
+    setManagingVariantsForItem(item);
+    setVariantFormData({
+      hasVariants: item.hasVariants === 1,
+      variantType: (item.variantType as "base" | "flavor") || "base",
+      requiresVariantSelection: item.requiresVariantSelection === 1,
+    });
+    await loadVariantsForItem(item.id);
+    setShowVariantsDialog(true);
+  };
+
+  const handleSaveVariantSettings = () => {
+    if (!managingVariantsForItem) return;
+    
+    updateMenuItemVariantSettingsMutation.mutate({
+      id: managingVariantsForItem.id,
+      data: {
+        hasVariants: variantFormData.hasVariants ? 1 : 0,
+        variantType: variantFormData.variantType,
+        requiresVariantSelection: variantFormData.requiresVariantSelection ? 1 : 0,
+      },
+    });
+  };
+
+  const handleSaveVariant = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!managingVariantsForItem) return;
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    
+    const data = {
+      menuItemId: managingVariantsForItem.id,
+      name: name,
+      nameDE: name,
+      type: variantFormData.variantType,
+      order: parseInt(formData.get("order") as string) || 0,
+      available: formData.get("available") === "on" ? 1 : 0,
+    };
+
+    if (editingVariant) {
+      updateVariantMutation.mutate({ id: editingVariant.id, data });
+    } else {
+      createVariantMutation.mutate(data);
+    }
+  };
+
+  const handleMoveVariant = (variantId: string, direction: "up" | "down") => {
+    const index = variants.findIndex(v => v.id === variantId);
+    if (index === -1) return;
+    
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= variants.length) return;
+
+    // Swap orders
+    const variant1 = variants[index];
+    const variant2 = variants[newIndex];
+    
+    updateVariantMutation.mutate({ id: variant1.id, data: { order: variant2.order } });
+    updateVariantMutation.mutate({ id: variant2.id, data: { order: variant1.order } });
   };
 
   return (
@@ -920,6 +1050,14 @@ export function AdminMenu() {
                               <Button
                                 variant="outline"
                                 size="sm"
+                                title="Varianten verwalten"
+                                onClick={() => handleOpenVariantDialog(item)}
+                              >
+                                <List className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => {
                                   setEditingMenuItem(item);
                                   setSelectedImage(null);
@@ -1267,6 +1405,207 @@ export function AdminMenu() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Variant Management Dialog */}
+      <Dialog open={showVariantsDialog} onOpenChange={setShowVariantsDialog}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="font-poppins text-2xl">
+              Varianten verwalten: {managingVariantsForItem?.nameDE || managingVariantsForItem?.name}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            {/* Variant Settings */}
+            <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+              <h3 className="font-semibold text-lg">Varianteneinstellungen</h3>
+              
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={variantFormData.hasVariants}
+                  onCheckedChange={(checked) => {
+                    setVariantFormData({...variantFormData, hasVariants: checked});
+                    if (managingVariantsForItem) {
+                      updateMenuItemVariantSettingsMutation.mutate({
+                        id: managingVariantsForItem.id,
+                        data: { hasVariants: checked ? 1 : 0 }
+                      });
+                    }
+                  }}
+                />
+                <Label>Varianten aktivieren</Label>
+              </div>
+
+              {variantFormData.hasVariants && (
+                <>
+                  <div className="space-y-2">
+                    <Label>Variantentyp</Label>
+                    <Select
+                      value={variantFormData.variantType}
+                      onValueChange={(value: "base" | "flavor") => {
+                        setVariantFormData({...variantFormData, variantType: value});
+                        if (managingVariantsForItem) {
+                          updateMenuItemVariantSettingsMutation.mutate({
+                            id: managingVariantsForItem.id,
+                            data: { variantType: value }
+                          });
+                        }
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="base">Base (Reis, Quinoa, etc.)</SelectItem>
+                        <SelectItem value="flavor">Geschmacksrichtung</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      checked={variantFormData.requiresVariantSelection}
+                      onCheckedChange={(checked) => {
+                        setVariantFormData({...variantFormData, requiresVariantSelection: checked});
+                        if (managingVariantsForItem) {
+                          updateMenuItemVariantSettingsMutation.mutate({
+                            id: managingVariantsForItem.id,
+                            data: { requiresVariantSelection: checked ? 1 : 0 }
+                          });
+                        }
+                      }}
+                    />
+                    <Label>Variantenauswahl erforderlich</Label>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Variant List */}
+            {variantFormData.hasVariants && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-lg">Varianten ({variants.length})</h3>
+                  <Dialog open={showVariantEditDialog} onOpenChange={setShowVariantEditDialog}>
+                    <DialogTrigger asChild>
+                      <Button onClick={() => setEditingVariant(null)} size="sm">
+                        <Plus className="w-4 h-4 mr-2" />
+                        Variante hinzufügen
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>
+                          {editingVariant ? "Variante bearbeiten" : "Neue Variante"}
+                        </DialogTitle>
+                      </DialogHeader>
+                      <form onSubmit={handleSaveVariant} className="space-y-4">
+                        <div>
+                          <Label htmlFor="variant-name">Name *</Label>
+                          <Input
+                            id="variant-name"
+                            name="name"
+                            defaultValue={editingVariant?.nameDE || ""}
+                            required
+                            placeholder="z.B. Reis, Quinoa, Fritz-Kola Original"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="variant-order">Reihenfolge</Label>
+                          <Input
+                            id="variant-order"
+                            name="order"
+                            type="number"
+                            defaultValue={editingVariant?.order || variants.length + 1}
+                          />
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="variant-available"
+                            name="available"
+                            defaultChecked={editingVariant?.available === 1}
+                          />
+                          <Label htmlFor="variant-available">Verfügbar</Label>
+                        </div>
+                        <Button type="submit" className="w-full">Speichern</Button>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+
+                {variants.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-8">
+                    Keine Varianten vorhanden. Fügen Sie eine Variante hinzu.
+                  </p>
+                ) : (
+                  <div className="space-y-2">
+                    {variants.map((variant, index) => (
+                      <div
+                        key={variant.id}
+                        className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="flex flex-col gap-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleMoveVariant(variant.id, "up")}
+                              disabled={index === 0}
+                              className="h-5 w-5 p-0"
+                            >
+                              <ArrowUp className="h-3 w-3" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleMoveVariant(variant.id, "down")}
+                              disabled={index === variants.length - 1}
+                              className="h-5 w-5 p-0"
+                            >
+                              <ArrowDown className="h-3 w-3" />
+                            </Button>
+                          </div>
+                          <div>
+                            <p className="font-medium">{variant.nameDE}</p>
+                            <p className="text-xs text-muted-foreground">
+                              Reihenfolge: {variant.order}
+                            </p>
+                          </div>
+                          {variant.available === 0 && (
+                            <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
+                              Nicht verfügbar
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setEditingVariant(variant);
+                              setShowVariantEditDialog(true);
+                            }}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => deleteVariantMutation.mutate(variant.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
       </div>
     </div>
   );

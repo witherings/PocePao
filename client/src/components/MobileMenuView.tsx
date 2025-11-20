@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { motion } from "framer-motion";
+import { useCustomBowlPrices } from "@/hooks/useCustomBowlPrices";
 import type { MenuItem, Category } from "@shared/schema";
 
 const defaultBowlImage = "/images/vitamins-bowl.png";
@@ -46,6 +47,9 @@ export function MobileMenuView({
   });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+
+  // Get custom bowl price range from shared hook
+  const customBowlPriceRange = useCustomBowlPrices();
 
   // Filter items by category
   const filteredItems = items.filter(item => item.categoryId === selectedCategory);
@@ -216,11 +220,24 @@ export function MobileMenuView({
                               </Button>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="font-poppins text-base font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
-                                {item.hasSizeOptions === 1 && "ab "}€{item.priceSmall || item.price}
-                              </span>
-                              {item.hasSizeOptions === 1 && (
-                                <span className="text-xs text-muted-foreground">Klein/Standard</span>
+                              {item.isCustomBowl === 1 && item.hasSizeOptions === 1 ? (
+                                <div className="flex flex-col">
+                                  <span className="font-poppins text-sm font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
+                                    Klein €{customBowlPriceRange.kleinMin}-{customBowlPriceRange.kleinMax}
+                                  </span>
+                                  <span className="font-poppins text-xs font-semibold text-muted-foreground">
+                                    Standard €{customBowlPriceRange.standardMin}-{customBowlPriceRange.standardMax}
+                                  </span>
+                                </div>
+                              ) : (
+                                <>
+                                  <span className="font-poppins text-base font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
+                                    {item.hasSizeOptions === 1 && "ab "}€{item.priceSmall || item.price}
+                                  </span>
+                                  {item.hasSizeOptions === 1 && (
+                                    <span className="text-xs text-muted-foreground">Klein/Standard</span>
+                                  )}
+                                </>
                               )}
                             </div>
                           </div>

@@ -20,6 +20,7 @@ import { MobileMenuView } from "@/components/MobileMenuView";
 import { VariantSelectionDialog } from "@/components/VariantSelectionDialog";
 import { useCartStore } from "@/lib/cartStore";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useCustomBowlPrices } from "@/hooks/useCustomBowlPrices";
 import { motion } from "framer-motion";
 import type { MenuItem, Category, CustomBowlSelection } from "@shared/schema";
 
@@ -51,6 +52,9 @@ export default function Menu() {
   const { data: menuItems = [], isLoading } = useQuery<MenuItem[]>({
     queryKey: ["/api/menu-items"],
   });
+
+  // Get custom bowl price range from shared hook
+  const customBowlPriceRange = useCustomBowlPrices();
 
   // Filter menu items by category
   const filteredItems = menuItems.filter((item) => item.categoryId === selectedCategory);
@@ -277,7 +281,16 @@ export default function Menu() {
                         </p>
                         <div className="flex items-center justify-between mt-auto">
                           <div>
-                            {item.hasSizeOptions === 1 && item.priceSmall ? (
+                            {item.isCustomBowl === 1 && item.hasSizeOptions === 1 ? (
+                              <>
+                                <span className="font-poppins text-base font-bold text-ocean block" data-testid={`text-menu-item-price-${item.id}`}>
+                                  Klein €{customBowlPriceRange.kleinMin}-{customBowlPriceRange.kleinMax}
+                                </span>
+                                <span className="font-poppins text-base font-semibold text-muted-foreground">
+                                  Standard €{customBowlPriceRange.standardMin}-{customBowlPriceRange.standardMax}
+                                </span>
+                              </>
+                            ) : item.hasSizeOptions === 1 && item.priceSmall ? (
                               <>
                                 <span className="font-poppins text-base font-bold text-ocean block" data-testid={`text-menu-item-price-${item.id}`}>
                                   Klein €{item.priceSmall}
@@ -288,7 +301,7 @@ export default function Menu() {
                               </>
                             ) : (
                               <span className="font-poppins text-xl font-bold text-ocean" data-testid={`text-menu-item-price-${item.id}`}>
-                                {item.isCustomBowl === 1 ? "ab €9.50" : `€${item.price}`}
+                                €{item.price}
                               </span>
                             )}
                           </div>
