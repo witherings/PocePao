@@ -1,14 +1,16 @@
-import { X, Plus, Minus, Trash2, ShoppingBag, Check, Edit } from "lucide-react";
+import { X, Plus, Minus, Trash2, ShoppingBag, Check, Edit, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useCartStore } from "@/lib/cartStore";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
+import { useIsMobile } from "@/hooks/use-mobile";
 import type { Ingredient } from "@shared/schema";
 import { useState, useRef, useEffect } from "react";
 
@@ -27,7 +29,9 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
   const [tableNumber, setTableNumber] = useState("");
   const [pickupTime, setPickupTime] = useState("");
   const [comment, setComment] = useState("");
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
@@ -198,42 +202,127 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                       </p>
                     )}
                     
-                    {item.customization && (
-                      <div className="mt-1.5 sm:mt-2 space-y-1 text-xs">
+                    {/* Base selection for standard menu items */}
+                    {item.selectedBase && !item.customization && (
+                      <p className="font-lato text-xs text-muted-foreground mb-1">
+                        Base: {item.selectedBase}
+                      </p>
+                    )}
+                    
+                    {/* Collapsible customization for Wunschbowl on mobile */}
+                    {item.customization && isMobile && (
+                      <Collapsible
+                        open={expandedItems[item.id] || false}
+                        onOpenChange={(isOpen) => setExpandedItems(prev => ({ ...prev, [item.id]: isOpen }))}
+                        className="mt-1.5"
+                      >
+                        <CollapsibleTrigger asChild>
+                          <button className="flex items-center gap-1 text-xs text-ocean hover:text-ocean/80 font-semibold">
+                            {expandedItems[item.id] ? (
+                              <>
+                                <ChevronUp className="w-3 h-3" />
+                                Details ausblenden
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="w-3 h-3" />
+                                Details anzeigen
+                              </>
+                            )}
+                          </button>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="mt-2 space-y-1 text-xs">
+                          {item.customization.protein && (
+                            <div className="flex items-center gap-1 flex-wrap">
+                              <span className="font-semibold text-muted-foreground text-[10px]">Protein:</span>
+                              <Badge variant="outline" className="text-[10px] h-4">{getIngredientName(item.customization.protein)}</Badge>
+                            </div>
+                          )}
+                          {item.customization.base && (
+                            <div className="flex items-center gap-1 flex-wrap">
+                              <span className="font-semibold text-muted-foreground text-[10px]">Base:</span>
+                              <Badge variant="outline" className="text-[10px] h-4">{getIngredientName(item.customization.base)}</Badge>
+                            </div>
+                          )}
+                          {item.customization.marinade && (
+                            <div className="flex items-center gap-1 flex-wrap">
+                              <span className="font-semibold text-muted-foreground text-[10px]">Marinade:</span>
+                              <Badge variant="outline" className="text-[10px] h-4">{getIngredientName(item.customization.marinade)}</Badge>
+                            </div>
+                          )}
+                          {item.customization.freshIngredients && item.customization.freshIngredients.length > 0 && (
+                            <div className="flex items-start gap-1">
+                              <span className="font-semibold text-muted-foreground whitespace-nowrap text-[10px]">Zutaten:</span>
+                              <div className="flex flex-wrap gap-1">
+                                {item.customization.freshIngredients.map((ing, idx) => (
+                                  <Badge key={idx} variant="outline" className="text-[10px] h-4">{getIngredientName(ing)}</Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {item.customization.sauce && (
+                            <div className="flex items-center gap-1 flex-wrap">
+                              <span className="font-semibold text-muted-foreground text-[10px]">Sauce:</span>
+                              <Badge variant="outline" className="text-[10px] h-4">{getIngredientName(item.customization.sauce)}</Badge>
+                            </div>
+                          )}
+                          {item.customization.toppings && item.customization.toppings.length > 0 && (
+                            <div className="flex items-start gap-1">
+                              <span className="font-semibold text-muted-foreground whitespace-nowrap text-[10px]">Toppings:</span>
+                              <div className="flex flex-wrap gap-1">
+                                {item.customization.toppings.map((topping, idx) => (
+                                  <Badge key={idx} variant="outline" className="text-[10px] h-4">{getIngredientName(topping)}</Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </CollapsibleContent>
+                      </Collapsible>
+                    )}
+                    
+                    {/* Full customization display for desktop */}
+                    {item.customization && !isMobile && (
+                      <div className="mt-2 space-y-1 text-xs">
+                        {item.customization.protein && (
+                          <div className="flex items-center gap-1 flex-wrap">
+                            <span className="font-semibold text-muted-foreground text-xs">Protein:</span>
+                            <Badge variant="outline" className="text-xs h-5">{getIngredientName(item.customization.protein)}</Badge>
+                          </div>
+                        )}
                         {item.customization.base && (
                           <div className="flex items-center gap-1 flex-wrap">
-                            <span className="font-semibold text-muted-foreground text-[10px] sm:text-xs">Base:</span>
-                            <Badge variant="outline" className="text-[10px] sm:text-xs h-4 sm:h-5">{getIngredientName(item.customization.base)}</Badge>
+                            <span className="font-semibold text-muted-foreground text-xs">Base:</span>
+                            <Badge variant="outline" className="text-xs h-5">{getIngredientName(item.customization.base)}</Badge>
                           </div>
                         )}
                         {item.customization.marinade && (
                           <div className="flex items-center gap-1 flex-wrap">
-                            <span className="font-semibold text-muted-foreground text-[10px] sm:text-xs">Marinade:</span>
-                            <Badge variant="outline" className="text-[10px] sm:text-xs h-4 sm:h-5">{getIngredientName(item.customization.marinade)}</Badge>
+                            <span className="font-semibold text-muted-foreground text-xs">Marinade:</span>
+                            <Badge variant="outline" className="text-xs h-5">{getIngredientName(item.customization.marinade)}</Badge>
                           </div>
                         )}
                         {item.customization.freshIngredients && item.customization.freshIngredients.length > 0 && (
                           <div className="flex items-start gap-1">
-                            <span className="font-semibold text-muted-foreground whitespace-nowrap text-[10px] sm:text-xs">Zutaten:</span>
+                            <span className="font-semibold text-muted-foreground whitespace-nowrap text-xs">Zutaten:</span>
                             <div className="flex flex-wrap gap-1">
                               {item.customization.freshIngredients.map((ing, idx) => (
-                                <Badge key={idx} variant="outline" className="text-[10px] sm:text-xs h-4 sm:h-5">{getIngredientName(ing)}</Badge>
+                                <Badge key={idx} variant="outline" className="text-xs h-5">{getIngredientName(ing)}</Badge>
                               ))}
                             </div>
                           </div>
                         )}
                         {item.customization.sauce && (
                           <div className="flex items-center gap-1 flex-wrap">
-                            <span className="font-semibold text-muted-foreground text-[10px] sm:text-xs">Sauce:</span>
-                            <Badge variant="outline" className="text-[10px] sm:text-xs h-4 sm:h-5">{getIngredientName(item.customization.sauce)}</Badge>
+                            <span className="font-semibold text-muted-foreground text-xs">Sauce:</span>
+                            <Badge variant="outline" className="text-xs h-5">{getIngredientName(item.customization.sauce)}</Badge>
                           </div>
                         )}
                         {item.customization.toppings && item.customization.toppings.length > 0 && (
                           <div className="flex items-start gap-1">
-                            <span className="font-semibold text-muted-foreground whitespace-nowrap text-[10px] sm:text-xs">Toppings:</span>
+                            <span className="font-semibold text-muted-foreground whitespace-nowrap text-xs">Toppings:</span>
                             <div className="flex flex-wrap gap-1">
                               {item.customization.toppings.map((topping, idx) => (
-                                <Badge key={idx} variant="outline" className="text-[10px] sm:text-xs h-4 sm:h-5">{getIngredientName(topping)}</Badge>
+                                <Badge key={idx} variant="outline" className="text-xs h-5">{getIngredientName(topping)}</Badge>
                               ))}
                             </div>
                           </div>
