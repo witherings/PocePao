@@ -1191,7 +1191,12 @@ export function AdminMenu() {
                               <p className="font-poppins font-semibold text-sm truncate">
                                 {ingredient.nameDE || ingredient.name}
                               </p>
-                              {ingredient.price && (
+                              {type === 'protein' && ingredient.priceSmall && ingredient.priceStandard ? (
+                                <div className="text-xs font-bold mt-1">
+                                  <p className="text-ocean">Klein: €{ingredient.priceSmall}</p>
+                                  <p className="text-sunset">Standard: €{ingredient.priceStandard}</p>
+                                </div>
+                              ) : ingredient.price && (
                                 <p className="text-xs text-sunset font-bold mt-1">
                                   €{ingredient.price}
                                 </p>
