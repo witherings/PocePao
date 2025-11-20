@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,8 +19,6 @@ interface MobileMenuViewProps {
   onCardClick: (item: MenuItem) => void;
   onAddButtonClick: (e: React.MouseEvent, item: MenuItem) => void;
 }
-
-const ITEMS_PER_PAGE = 2;
 
 // Category gradient mapping - icons come from database
 const categoryGradients: Record<string, string> = {
@@ -43,67 +41,42 @@ export function MobileMenuView({
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop: false,
     skipSnaps: false,
-    dragFree: false,
+    dragFree: true,
   });
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Get custom bowl price range from shared hook
   const customBowlPriceRange = useCustomBowlPrices();
 
-  // Filter items by category
+  // Filter items by category - no pagination, show all
   const filteredItems = items.filter(item => item.categoryId === selectedCategory);
 
-  // Pagination
-  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
-  const pages = Array.from({ length: totalPages }, (_, i) => {
-    const start = i * ITEMS_PER_PAGE;
-    return filteredItems.slice(start, start + ITEMS_PER_PAGE);
-  });
-
-  const onSelect = useCallback(() => {
+  // Check if category carousel can scroll
+  const checkCanScroll = useCallback(() => {
     if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
+    const scrollSnapList = emblaApi.scrollSnapList();
+    const selectedIndex = emblaApi.selectedScrollSnap();
+    setCanScrollNext(selectedIndex < scrollSnapList.length - 1);
   }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
-    setScrollSnaps(emblaApi.scrollSnapList());
-    emblaApi.on("select", onSelect);
-    onSelect();
+    emblaApi.on("select", checkCanScroll);
+    checkCanScroll();
     
     return () => {
-      emblaApi.off("select", onSelect);
+      emblaApi.off("select", checkCanScroll);
     };
-  }, [emblaApi, onSelect]);
+  }, [emblaApi, checkCanScroll]);
 
-  // Reinitialize carousel and reset to first page when category changes or items change
+  // Reinitialize when category changes
   useEffect(() => {
     if (!emblaApi) return;
-    
-    // Reinitialize to update slide count and snap points
     emblaApi.reInit();
-    
-    // Update scroll snaps after reinit
-    setScrollSnaps(emblaApi.scrollSnapList());
-    
-    // Reset to first page
     emblaApi.scrollTo(0);
-    
-    // Ensure selected index doesn't exceed new total pages
-    setSelectedIndex(0);
-  }, [selectedCategory, filteredItems.length, emblaApi]);
-
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
-
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
-
-  const canScrollPrev = selectedIndex > 0;
-  const canScrollNext = selectedIndex < totalPages - 1;
+    checkCanScroll();
+  }, [selectedCategory, emblaApi, checkCanScroll]);
 
   // Get category name for display
   const getCurrentCategoryName = () => {
@@ -112,47 +85,58 @@ export function MobileMenuView({
   };
 
   return (
-    <div className="space-y-2">
-      {/* Category Horizontal Scroll - Ultra Compact */}
-      <div className="overflow-x-auto scrollbar-hide -mx-6 px-6">
-        <div className="flex gap-2 pb-2">
-          {categories.map((category) => {
-            const gradient = categoryGradients[category.icon] || "from-ocean to-ocean-dark";
-            const isSelected = selectedCategory === category.id;
-            
-            return (
-              <button
-                key={category.id}
-                onClick={() => onCategoryChange(category.id)}
-                className={`flex-shrink-0 rounded-lg px-3 py-1.5 transition-all duration-300 ${
-                  isSelected
-                    ? `bg-gradient-to-br ${gradient} text-white shadow-lg`
-                    : "bg-card text-foreground shadow-sm"
-                }`}
-                data-testid={`button-mobile-category-${category.id}`}
-              >
-                <div className="flex items-center gap-1.5">
+    <div className="space-y-4">
+      {/* Category Carousel - with scroll indicator */}
+      <div className="relative">
+        <div className="embla overflow-hidden rounded-lg" ref={emblaRef}>
+          <div className="embla__container flex gap-2">
+            {categories.map((category) => {
+              const gradient = categoryGradients[category.icon] || "from-ocean to-ocean-dark";
+              const isSelected = selectedCategory === category.id;
+              
+              return (
+                <button
+                  key={category.id}
+                  onClick={() => onCategoryChange(category.id)}
+                  className={`embla__slide flex-[0_0_auto] transition-all duration-300 ${
+                    isSelected
+                      ? `bg-gradient-to-br ${gradient} text-white shadow-lg`
+                      : "bg-card text-foreground shadow-sm hover:shadow-md"
+                  } rounded-lg px-4 py-2.5 font-poppins font-semibold text-sm whitespace-nowrap flex items-center gap-2`}
+                  data-testid={`button-mobile-category-${category.id}`}
+                >
                   <span className="text-lg">{category.icon}</span>
-                  <span className="font-poppins font-semibold text-xs whitespace-nowrap">
-                    {category.nameDE}
-                  </span>
-                </div>
-              </button>
-            );
-          })}
+                  {category.nameDE}
+                </button>
+              );
+            })}
+          </div>
         </div>
+        
+        {/* Scroll indicator for categories */}
+        {canScrollNext && (
+          <motion.div
+            className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none"
+            animate={{ x: [0, 4, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <div className="bg-gradient-to-l from-white/80 to-transparent pl-8 pr-2 py-2">
+              <ChevronDown className="w-5 h-5 text-ocean rotate-90" />
+            </div>
+          </motion.div>
+        )}
       </div>
 
-      {/* Current Category & Page Indicator */}
+      {/* Category Name */}
       {filteredItems.length > 0 && (
         <div className="text-center">
-          <p className="font-poppins font-bold text-xs text-ocean" data-testid="text-mobile-category-indicator">
-            {getCurrentCategoryName()} • {selectedIndex + 1} / {totalPages}
-          </p>
+          <h2 className="font-poppins font-bold text-base text-ocean" data-testid="text-mobile-category-name">
+            {getCurrentCategoryName()}
+          </h2>
         </div>
       )}
 
-      {/* Items Carousel */}
+      {/* Items Vertical Scroll */}
       {filteredItems.length === 0 ? (
         <div className="text-center py-12">
           <p className="font-poppins text-lg text-muted-foreground" data-testid="text-mobile-no-items">
@@ -160,139 +144,107 @@ export function MobileMenuView({
           </p>
         </div>
       ) : (
-        <>
-          <div className="embla overflow-hidden" ref={emblaRef}>
-            <div className="embla__container flex">
-              {pages.map((pageItems, pageIndex) => (
-                <div key={pageIndex} className="embla__slide flex-[0_0_100%] min-w-0 px-0.5">
-                  <div className="space-y-2">
-                    {pageItems.map((item) => (
-                      <motion.div
-                        key={item.id}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3 }}
+        <div 
+          ref={scrollContainerRef}
+          className="space-y-3 max-h-[60vh] overflow-y-auto pb-4 scrollbar-hide"
+        >
+          {/* Scroll indicator at top */}
+          <motion.div
+            className="text-center flex justify-center opacity-50"
+            animate={{ y: [0, 4, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <ChevronDown className="w-4 h-4 text-ocean" />
+          </motion.div>
+
+          {filteredItems.map((item) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Card
+                className="overflow-hidden hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition-all duration-200 group cursor-pointer border-2 border-gray-200 dark:border-gray-700 hover:border-ocean/40 bg-card shadow-md"
+                data-testid={`card-mobile-menu-item-${item.id}`}
+                onClick={() => onCardClick(item)}
+              >
+                <div className="flex gap-3">
+                  {/* Image */}
+                  <div className="relative w-24 h-24 flex-shrink-0 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r-2 border-gray-200 dark:border-gray-700">
+                    <img
+                      src={item.image || defaultBowlImage}
+                      alt={item.nameDE}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      data-testid={`img-mobile-menu-item-${item.id}`}
+                    />
+                    {item.popular === 1 && (
+                      <div className="absolute top-1 right-1" data-testid={`badge-mobile-popular-${item.id}`}>
+                        <div className="relative backdrop-blur-sm bg-gradient-to-br from-yellow-400/90 via-orange-500/90 to-red-500/90 text-white text-xs font-poppins font-bold px-1.5 py-0.5 rounded-full shadow-lg border border-white/30">
+                          ⭐ Beliebt
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 p-2.5 flex flex-col justify-between min-w-0">
+                    <div>
+                      <h3 className="font-poppins font-bold text-sm text-foreground line-clamp-2" data-testid={`text-mobile-menu-item-name-${item.id}`}>
+                        {item.nameDE}
+                      </h3>
+                      {item.protein && (
+                        <Badge variant="secondary" className="mt-1 font-lato text-xs" data-testid={`badge-mobile-protein-${item.id}`}>
+                          {item.protein}
+                        </Badge>
+                      )}
+                    </div>
+
+                    {/* Price and Button */}
+                    <div className="flex items-center justify-between gap-2 mt-2">
+                      <div>
+                        {item.isCustomBowl === 1 && item.hasSizeOptions === 1 ? (
+                          <div className="flex flex-col">
+                            <span className="font-poppins text-xs font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
+                              €{customBowlPriceRange.kleinMin}-{customBowlPriceRange.kleinMax}
+                            </span>
+                            <span className="font-poppins text-xs text-muted-foreground">
+                              Klein/Std
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="font-poppins text-sm font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
+                            {item.hasSizeOptions === 1 && "ab "}€{item.priceSmall || item.price}
+                          </span>
+                        )}
+                      </div>
+
+                      <Button
+                        onClick={(e) => onAddButtonClick(e, item)}
+                        disabled={item.available === 0}
+                        size="sm"
+                        className="bg-sunset hover:bg-sunset-dark text-white font-poppins font-semibold rounded-full px-2 py-1 text-xs shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                        data-testid={`button-mobile-add-to-cart-${item.id}`}
                       >
-                        <Card
-                          className="overflow-hidden hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition-all duration-200 group cursor-pointer border-2 border-gray-200 dark:border-gray-700 hover:border-ocean/40 bg-card shadow-md"
-                          data-testid={`card-mobile-menu-item-${item.id}`}
-                          onClick={() => onCardClick(item)}
-                        >
-                          <div className="relative aspect-[3/2] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-b-2 border-gray-200 dark:border-gray-700">
-                            <img
-                              src={item.image || defaultBowlImage}
-                              alt={item.nameDE}
-                              loading="lazy"
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                              data-testid={`img-mobile-menu-item-${item.id}`}
-                            />
-                            {item.popular === 1 && (
-                              <div className="absolute top-1.5 right-1.5" data-testid={`badge-mobile-popular-${item.id}`}>
-                                <div className="relative backdrop-blur-sm bg-gradient-to-br from-yellow-400/90 via-orange-500/90 to-red-500/90 text-white text-xs font-poppins font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white/30">
-                                  <span className="relative flex items-center gap-0.5">
-                                    <span className="text-xs">⭐</span>
-                                    <span className="font-extrabold text-xs">Beliebt</span>
-                                  </span>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                          <div className="p-2.5">
-                            <div className="flex items-start justify-between gap-2 mb-1.5">
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-poppins font-bold text-sm text-foreground line-clamp-1" data-testid={`text-mobile-menu-item-name-${item.id}`}>
-                                  {item.nameDE}
-                                </h3>
-                                {item.protein && (
-                                  <Badge variant="secondary" className="mt-0.5 font-lato text-xs" data-testid={`badge-mobile-protein-${item.id}`}>
-                                    {item.protein}
-                                  </Badge>
-                                )}
-                              </div>
-                              <Button
-                                onClick={(e) => onAddButtonClick(e, item)}
-                                disabled={item.available === 0}
-                                size="sm"
-                                className="bg-sunset hover:bg-sunset-dark text-white font-poppins font-semibold rounded-full px-2.5 py-1 text-xs shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-                                data-testid={`button-mobile-add-to-cart-${item.id}`}
-                              >
-                                <Plus className="w-3 h-3" />
-                              </Button>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              {item.isCustomBowl === 1 && item.hasSizeOptions === 1 ? (
-                                <div className="flex flex-col">
-                                  <span className="font-poppins text-sm font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
-                                    Klein €{customBowlPriceRange.kleinMin}-{customBowlPriceRange.kleinMax}
-                                  </span>
-                                  <span className="font-poppins text-xs font-semibold text-muted-foreground">
-                                    Standard €{customBowlPriceRange.standardMin}-{customBowlPriceRange.standardMax}
-                                  </span>
-                                </div>
-                              ) : (
-                                <>
-                                  <span className="font-poppins text-base font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
-                                    {item.hasSizeOptions === 1 && "ab "}€{item.priceSmall || item.price}
-                                  </span>
-                                  {item.hasSizeOptions === 1 && (
-                                    <span className="text-xs text-muted-foreground">Klein/Standard</span>
-                                  )}
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </Card>
-                      </motion.div>
-                    ))}
+                        <Plus className="w-3 h-3" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </Card>
+            </motion.div>
+          ))}
 
-          {/* Pagination Controls - Compact */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-3 pt-1">
-              <Button
-                onClick={scrollPrev}
-                disabled={!canScrollPrev}
-                variant="outline"
-                size="sm"
-                className="rounded-full disabled:opacity-30 h-8 w-8 p-0"
-                data-testid="button-mobile-prev"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              
-              {/* Dot Indicators */}
-              <div className="flex gap-1.5">
-                {scrollSnaps.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => emblaApi?.scrollTo(index)}
-                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                      index === selectedIndex
-                        ? "bg-ocean w-5"
-                        : "bg-gray-300 dark:bg-gray-600"
-                    }`}
-                    data-testid={`button-mobile-dot-${index}`}
-                  />
-                ))}
-              </div>
-              
-              <Button
-                onClick={scrollNext}
-                disabled={!canScrollNext}
-                variant="outline"
-                size="sm"
-                className="rounded-full disabled:opacity-30 h-8 w-8 p-0"
-                data-testid="button-mobile-next"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            </div>
-          )}
-        </>
+          {/* Scroll indicator at bottom */}
+          <motion.div
+            className="text-center flex justify-center opacity-50 pt-2"
+            animate={{ y: [0, -4, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <ChevronDown className="w-4 h-4 text-ocean rotate-180" />
+          </motion.div>
+        </div>
       )}
     </div>
   );
