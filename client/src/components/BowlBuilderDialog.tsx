@@ -297,49 +297,18 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       totalPrice = proteinPrice;
     }
 
-    // Add extras pricing from database - get from actual ingredient prices
-    // Extra Protein - use protein's price
-    selections.extraProtein?.forEach(proteinId => {
-      const protein = ingredients.find(ing => ing.id === proteinId);
-      if (protein) {
-        let proteinPrice = 0;
-        if (size === "klein" && protein.priceSmall) {
-          proteinPrice = parseFloat(String(protein.priceSmall));
-        } else if (size === "standard" && protein.priceStandard) {
-          proteinPrice = parseFloat(String(protein.priceStandard));
-        } else if (protein.price) {
-          proteinPrice = parseFloat(String(protein.price));
-        }
-        totalPrice += proteinPrice;
-      }
-    });
+    // Add extras pricing from database - use SURCHARGE amounts
+    const extraProteinCount = selections.extraProtein?.length || 0;
+    totalPrice += extraProteinCount * getExtraPrice("protein");
     
-    // Extra Fresh - use ingredient's price
-    selections.extraFreshIngredients?.forEach(freshId => {
-      const fresh = ingredients.find(ing => ing.id === freshId);
-      if (fresh) {
-        let freshPrice = parseFloat(String(fresh.price || fresh.priceStandard || "0"));
-        totalPrice += freshPrice;
-      }
-    });
+    const extraFreshCount = selections.extraFreshIngredients?.length || 0;
+    totalPrice += extraFreshCount * getExtraPrice("fresh");
     
-    // Extra Sauce - use ingredient's price
-    selections.extraSauces?.forEach(sauceId => {
-      const sauce = ingredients.find(ing => ing.id === sauceId);
-      if (sauce) {
-        let saucePrice = parseFloat(String(sauce.price || sauce.priceStandard || "0"));
-        totalPrice += saucePrice;
-      }
-    });
+    const extraSaucesCount = selections.extraSauces?.length || 0;
+    totalPrice += extraSaucesCount * getExtraPrice("sauce");
     
-    // Extra Toppings - use ingredient's price
-    selections.extraToppings?.forEach(toppingId => {
-      const topping = ingredients.find(ing => ing.id === toppingId);
-      if (topping) {
-        let toppingPrice = parseFloat(String(topping.price || topping.priceStandard || "0"));
-        totalPrice += toppingPrice;
-      }
-    });
+    const extraToppingsCount = selections.extraToppings?.length || 0;
+    totalPrice += extraToppingsCount * getExtraPrice("topping");
 
     return totalPrice.toFixed(2);
   };
