@@ -19,15 +19,10 @@ export const useCartStore = create<CartStore>()(
       
       addItem: (item) => {
         // For custom bowls, always create a new item (unique ID for each customization)
-        // For regular items, check if same item with same size exists
+        // For regular items, composite ID (itemId-size-base) uniquely identifies the cart entry
         const existingItem = item.customization 
           ? null 
-          : get().items.find((i) => 
-              i.id === item.id && 
-              i.menuItemId === item.menuItemId && 
-              i.size === item.size &&
-              !i.customization
-            );
+          : get().items.find((i) => i.id === item.id && !i.customization);
         
         if (existingItem) {
           set({
@@ -38,13 +33,14 @@ export const useCartStore = create<CartStore>()(
             ),
           });
         } else {
-          // Generate a unique ID for custom bowls
-          const newId = item.customization 
+          // For custom bowls, generate unique ID with timestamp
+          // For regular items, use the composite ID passed from caller (itemId-size-base)
+          const finalId = item.customization 
             ? `${item.id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-            : item.id;
+            : item.id;  // Preserve the composite ID for deduplication
           
           set({
-            items: [...get().items, { ...item, id: newId, quantity: item.quantity || 1 }],
+            items: [...get().items, { ...item, id: finalId, quantity: item.quantity || 1 }],
           });
         }
       },

@@ -40,6 +40,7 @@ interface MenuItem {
   marinade?: string | null;
   sauce?: string | null;
   toppings?: string[] | null;
+  enableBaseSelection?: number;
 }
 
 interface Ingredient {
@@ -51,6 +52,8 @@ interface Ingredient {
   descriptionDE: string | null;
   image: string | null;
   price: string | null;
+  priceSmall: string | null;
+  priceStandard: string | null;
   order: number;
   available: number;
 }
@@ -70,6 +73,7 @@ export function AdminMenu() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
+  const [selectedIngredientType, setSelectedIngredientType] = useState<string>("");
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -318,6 +322,7 @@ export function AdminMenu() {
       categoryId: formData.get("categoryId") as string,
       available: formData.get("available") === "on" ? 1 : 0,
       popular: formData.get("popular") === "on" ? 1 : 0,
+      enableBaseSelection: formData.get("enableBaseSelection") === "on" ? 1 : 0,
       image: imageUrl,
       ingredients: ingredientsStr ? ingredientsStr.split(",").map(i => i.trim()).filter(Boolean) : null,
       allergens: allergensStr ? allergensStr.split(",").map(a => a.trim()).filter(Boolean) : null,
@@ -377,6 +382,8 @@ export function AdminMenu() {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string || "";
     const price = formData.get("price") as string;
+    const priceSmall = formData.get("priceSmall") as string;
+    const priceStandard = formData.get("priceStandard") as string;
     
     const data: any = {
       name: name,
@@ -386,6 +393,8 @@ export function AdminMenu() {
       type: formData.get("type") as string,
       image: imageUrl,
       price: price || null,
+      priceSmall: priceSmall || null,
+      priceStandard: priceStandard || null,
       order: parseInt(formData.get("order") as string) || 0,
       available: formData.get("available") === "on" ? 1 : 0,
     };
@@ -755,23 +764,36 @@ export function AdminMenu() {
                       </div>
                     </div>
 
-                    <div className="flex gap-6">
-                      <div className="flex items-center space-x-2">
-                        <Switch
-                          id="available"
-                          name="available"
-                          defaultChecked={editingMenuItem?.available === 1}
-                        />
-                        <Label htmlFor="available">Verfügbar</Label>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex gap-6">
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="available"
+                            name="available"
+                            defaultChecked={editingMenuItem?.available === 1}
+                          />
+                          <Label htmlFor="available">Verfügbar</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="popular"
+                            name="popular"
+                            defaultChecked={editingMenuItem?.popular === 1}
+                          />
+                          <Label htmlFor="popular">Beliebt</Label>
+                        </div>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Switch
-                          id="popular"
-                          name="popular"
-                          defaultChecked={editingMenuItem?.popular === 1}
+                          id="enableBaseSelection"
+                          name="enableBaseSelection"
+                          defaultChecked={editingMenuItem?.enableBaseSelection === 1}
                         />
-                        <Label htmlFor="popular">Beliebt</Label>
+                        <Label htmlFor="enableBaseSelection">Base-Auswahl aktivieren</Label>
                       </div>
+                      <p className="text-xs text-muted-foreground">
+                        Wenn aktiviert, muss der Kunde eine Base auswählen (Reis, Quinoa, Zucchini-Nudeln, Couscous)
+                      </p>
                     </div>
 
                     <Button 
@@ -889,6 +911,7 @@ export function AdminMenu() {
                     setEditingIngredient(null);
                     setSelectedImage(null);
                     setImagePreview(null);
+                    setSelectedIngredientType("");
                   }}>
                     <Plus className="mr-2 h-4 w-4" />
                     Zutat hinzufügen
@@ -918,6 +941,7 @@ export function AdminMenu() {
                           name="type"
                           defaultValue={editingIngredient?.type}
                           required
+                          onValueChange={(value) => setSelectedIngredientType(value)}
                         >
                           <SelectTrigger className="h-12 text-base px-4">
                             <SelectValue placeholder="Typ wählen" />
@@ -929,6 +953,7 @@ export function AdminMenu() {
                             <SelectItem value="fresh" className="text-base">Frische Zutat</SelectItem>
                             <SelectItem value="sauce" className="text-base">Sauce</SelectItem>
                             <SelectItem value="topping" className="text-base">Topping</SelectItem>
+                            <SelectItem value="extra" className="text-base">Extra</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -945,29 +970,63 @@ export function AdminMenu() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-5">
+                    {/* Conditional Price Fields based on Type */}
+                    {((selectedIngredientType || editingIngredient?.type) === 'protein') && (
+                      <div className="grid grid-cols-2 gap-5">
+                        <div>
+                          <Label htmlFor="ing-price-small" className="text-base font-semibold mb-2">Preis Klein (€) *</Label>
+                          <Input
+                            id="ing-price-small"
+                            name="priceSmall"
+                            type="number"
+                            step="0.01"
+                            defaultValue={editingIngredient?.priceSmall || ""}
+                            placeholder="z.B. 9.50"
+                            className="h-12 text-base px-4"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="ing-price-standard" className="text-base font-semibold mb-2">Preis Standard (€) *</Label>
+                          <Input
+                            id="ing-price-standard"
+                            name="priceStandard"
+                            type="number"
+                            step="0.01"
+                            defaultValue={editingIngredient?.priceStandard || ""}
+                            placeholder="z.B. 14.50"
+                            className="h-12 text-base px-4"
+                            required
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {((selectedIngredientType || editingIngredient?.type) === 'extra') && (
                       <div>
-                        <Label htmlFor="ing-price" className="text-base font-semibold mb-2">Preis (€) - Optional</Label>
+                        <Label htmlFor="ing-price" className="text-base font-semibold mb-2">Preis (€) *</Label>
                         <Input
                           id="ing-price"
                           name="price"
                           type="number"
                           step="0.01"
                           defaultValue={editingIngredient?.price || ""}
-                          placeholder="Nur für Proteine"
+                          placeholder="z.B. 2.00"
                           className="h-12 text-base px-4"
+                          required
                         />
                       </div>
-                      <div>
-                        <Label htmlFor="ing-order" className="text-base font-semibold mb-2">Reihenfolge</Label>
-                        <Input
-                          id="ing-order"
-                          name="order"
-                          type="number"
-                          defaultValue={editingIngredient?.order || 0}
-                          className="h-12 text-base px-4"
-                        />
-                      </div>
+                    )}
+
+                    <div>
+                      <Label htmlFor="ing-order" className="text-base font-semibold mb-2">Reihenfolge</Label>
+                      <Input
+                        id="ing-order"
+                        name="order"
+                        type="number"
+                        defaultValue={editingIngredient?.order || 0}
+                        className="h-12 text-base px-4"
+                      />
                     </div>
 
                     <div>
@@ -1128,6 +1187,7 @@ export function AdminMenu() {
                                     setEditingIngredient(ingredient);
                                     setSelectedImage(null);
                                     setImagePreview(null);
+                                    setSelectedIngredientType(ingredient.type || "");
                                     setShowIngredientDialog(true);
                                   }}
                                 >

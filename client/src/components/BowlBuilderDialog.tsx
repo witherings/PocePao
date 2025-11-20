@@ -15,19 +15,20 @@ interface BowlBuilderDialogProps {
   item: MenuItem | null;
   isOpen: boolean;
   onClose: () => void;
-  onAddToCart: (item: MenuItem, size: "klein" | "standard", customization: CustomBowlSelection, customPrice?: string) => void;
+  onAddToCart: (item: MenuItem, size: "klein" | "standard", selectedBase: string | undefined, customization: CustomBowlSelection, customPrice?: string) => void;
   editingCartItemId?: string | null;
 }
 
-type BuilderStep = "protein" | "base" | "marinade" | "fresh" | "sauce" | "topping" | "extras";
+type BuilderStep = "size" | "protein" | "base" | "marinade" | "fresh" | "sauce" | "topping" | "extras";
 
-const STEPS: BuilderStep[] = ["protein", "base", "marinade", "fresh", "sauce", "topping", "extras"];
+const STEPS: BuilderStep[] = ["size", "protein", "base", "marinade", "fresh", "sauce", "topping", "extras"];
 
 const STEP_CONFIG = {
+  size: { title: "Wähle deine Größe", min: 1, max: 1 },
   protein: { title: "Wähle dein Protein", min: 1, max: 1 },
   base: { title: "Wähle deine Base", min: 1, max: 1 },
   marinade: { title: "Wähle deine Marinade", min: 1, max: 1 },
-  fresh: { title: "Wähle 4 frische Zutaten", min: 4, max: 4 },
+  fresh: { title: "Wähle 5 frische Zutaten", min: 5, max: 5 },
   sauce: { title: "Wähle deine Sauce", min: 1, max: 1 },
   topping: { title: "Wähle 3 Toppings", min: 3, max: 3 },
   extras: { title: "Deine extra (optional)", min: 0, max: 999 },
@@ -114,7 +115,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
         if (currentType === "protein" || currentType === "base" || currentType === "marinade" || currentType === "sauce") {
           return !!selections[currentType];
         } else if (currentType === "fresh") {
-          return selections.freshIngredients?.length === 4;
+          return selections.freshIngredients?.length === 5;
         } else if (currentType === "topping") {
           return selections.toppings?.length === 3;
         }
@@ -147,11 +148,13 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
   // Check if current step is complete
   const isStepComplete = () => {
     const current = currentStepType;
-    if (current === "protein" || current === "base" || current === "marinade" || current === "sauce") {
+    if (current === "size") {
+      return !!selectedSize;
+    } else if (current === "protein" || current === "base" || current === "marinade" || current === "sauce") {
       const key = current as keyof typeof selections;
       return !!selections[key];
     } else if (current === "fresh") {
-      return selections.freshIngredients?.length === 4;
+      return selections.freshIngredients?.length === 5;
     } else if (current === "topping") {
       return selections.toppings?.length === 3;
     } else if (current === "extras") {
@@ -178,7 +181,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
         const current = prev.freshIngredients || [];
         if (current.includes(ingredientId)) {
           return { ...prev, freshIngredients: current.filter(id => id !== ingredientId) };
-        } else if (current.length < 4) {
+        } else if (current.length < 5) {
           return { ...prev, freshIngredients: [...current, ingredientId] };
         }
         return prev;
@@ -248,34 +251,46 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
     if (isStepComplete()) {
       // Calculate final price based on selected protein and size
       const finalPrice = item.hasSizeOptions === 1 ? getSizePrice(selectedSize) : parseFloat(item.price).toFixed(2);
-      onAddToCart(item, selectedSize, selections, finalPrice);
+      onAddToCart(item, selectedSize, undefined, selections, finalPrice);
       onClose();
     }
   };
 
   const getSizePrice = (size: "klein" | "standard") => {
-    // Get selected protein's base price
+    // Get selected protein
     const selectedProtein = selections.protein 
       ? ingredients.find(ing => ing.id === selections.protein)
       : null;
     
-    const basePrice = selectedProtein?.price 
-      ? parseFloat(selectedProtein.price) 
-      : parseFloat(item.price);
+    // Total Price = Protein_Price_For_Selected_Size + Sum_of_All_Extras
+    let totalPrice = 0;
 
-    let totalPrice = basePrice;
-
-    if (size === "standard") {
-      // Standard pricing: +5.25 for €9.50 proteins, +6.00 for €9.90 proteins
-      const priceIncrease = basePrice === 9.90 ? 6.00 : 5.25;
-      totalPrice += priceIncrease;
+    // Add protein price based on size
+    if (selectedProtein) {
+      if (size === "klein" && selectedProtein.priceSmall) {
+        totalPrice = parseFloat(selectedProtein.priceSmall);
+      } else if (size === "standard" && selectedProtein.priceStandard) {
+        totalPrice = parseFloat(selectedProtein.priceStandard);
+      } else if (selectedProtein.price) {
+        // Fallback to legacy price if size-specific prices not available
+        totalPrice = parseFloat(selectedProtein.price);
+      }
     }
 
-    // Add extras pricing
-    totalPrice += (selections.extraProtein?.length || 0) * 3.70;
-    totalPrice += (selections.extraFreshIngredients?.length || 0) * 1.00;
-    totalPrice += (selections.extraSauces?.length || 0) * 0.60;
-    totalPrice += (selections.extraToppings?.length || 0) * 0.60;
+    // Add extras pricing from EXTRA type ingredients
+    const extraIngredients = ingredients.filter(ing => ing.type === "extra" && ing.available === 1);
+    
+    // Calculate extras total
+    [...(selections.extraProtein || []), 
+     ...(selections.extraFreshIngredients || []), 
+     ...(selections.extraSauces || []), 
+     ...(selections.extraToppings || [])
+    ].forEach(extraId => {
+      const extra = extraIngredients.find(ing => ing.id === extraId);
+      if (extra && extra.price) {
+        totalPrice += parseFloat(extra.price);
+      }
+    });
 
     return totalPrice.toFixed(2);
   };
@@ -359,10 +374,9 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
             <Progress value={progress} className="h-2" />
           </div>
 
-          {/* Size Selection (shown on first step) */}
-          {currentStep === 0 && item.hasSizeOptions === 1 && (
+          {/* Size Selection Step */}
+          {currentStepType === "size" && (
             <div>
-              <h4 className="font-poppins font-semibold text-sm mb-3 text-foreground">Größe wählen</h4>
               <div className="flex gap-2 sm:gap-3">
                 <Button
                   variant={selectedSize === "klein" ? "default" : "outline"}
@@ -581,8 +595,8 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
             </div>
           )}
 
-          {/* Ingredient Selection Grid (for non-extras steps) */}
-          {currentStepType !== "extras" && (
+          {/* Ingredient Selection Grid (for non-extras and non-size steps) */}
+          {currentStepType !== "extras" && currentStepType !== "size" && (
             <>
               <motion.div 
                 key={currentStepType}
@@ -627,12 +641,12 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                       </p>
                       
                       {/* Price for protein */}
-                      {currentStepType === "protein" && ingredient.price && (
+                      {currentStepType === "protein" && (
                         <p className="font-poppins text-xs text-center text-muted-foreground mb-2">
                           {selectedSize === "klein" ? (
-                            <>€{ingredient.price}</>
+                            <>{ingredient.priceSmall ? `€${ingredient.priceSmall}` : (ingredient.price ? `€${ingredient.price}` : '')}</>
                           ) : (
-                            <>€{(parseFloat(ingredient.price) + (parseFloat(ingredient.price) === 9.90 ? 6.00 : 5.25)).toFixed(2)}</>
+                            <>{ingredient.priceStandard ? `€${ingredient.priceStandard}` : (ingredient.price ? `€${ingredient.price}` : '')}</>
                           )}
                         </p>
                       )}
@@ -718,7 +732,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
 
           {/* Helper Text */}
           <p className="text-center text-sm text-muted-foreground font-lato">
-            {currentStepType === "fresh" && `${selections.freshIngredients?.length || 0} von 4 ausgewählt`}
+            {currentStepType === "fresh" && `${selections.freshIngredients?.length || 0} von 5 ausgewählt`}
             {currentStepType === "topping" && `${selections.toppings?.length || 0} von 3 ausgewählt`}
             {(currentStepType === "protein" || currentStepType === "base" || currentStepType === "marinade" || currentStepType === "sauce") && 
               !isStepComplete() && "Bitte wähle eine Option"}

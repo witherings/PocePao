@@ -40,6 +40,7 @@ export const menuItems = pgTable("menu_items", {
   allergens: text("allergens").array(),
   hasSizeOptions: integer("has_size_options").notNull().default(0), // 1 = has size options
   isCustomBowl: integer("is_custom_bowl").notNull().default(0), // 1 = Wunsch Bowl
+  enableBaseSelection: integer("enable_base_selection").notNull().default(0), // 1 = force base selection before adding to cart
 });
 
 export const insertMenuItemSchema = createInsertSchema(menuItems).omit({
@@ -56,7 +57,8 @@ export enum IngredientType {
   MARINADE = "marinade",
   FRESH = "fresh",
   SAUCE = "sauce",
-  TOPPING = "topping"
+  TOPPING = "topping",
+  EXTRA = "extra"
 }
 
 // Ingredients for Custom Bowls
@@ -64,11 +66,13 @@ export const ingredients = pgTable("ingredients", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
   nameDE: text("name_de").notNull(),
-  type: text("type").notNull(), // protein, base, marinade, fresh, sauce, topping
+  type: text("type").notNull(), // protein, base, marinade, fresh, sauce, topping, extra
   description: text("description"),
   descriptionDE: text("description_de"),
   image: text("image").notNull(),
-  price: decimal("price", { precision: 10, scale: 2 }), // price for protein type
+  price: decimal("price", { precision: 10, scale: 2 }), // price for extras or legacy single price
+  priceSmall: decimal("price_small", { precision: 10, scale: 2 }), // Price when bowl size is Klein (for proteins)
+  priceStandard: decimal("price_standard", { precision: 10, scale: 2 }), // Price when bowl size is Standard (for proteins)
   available: integer("available").notNull().default(1),
   order: integer("order").notNull().default(0),
 });
@@ -130,6 +134,7 @@ export const orderItems = pgTable("order_items", {
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   quantity: integer("quantity").notNull(),
   size: text("size"), // klein or standard
+  selectedBase: text("selected_base"), // For standard menu items with base selection
   customization: text("customization"), // JSON string for custom bowl selections
 });
 
@@ -165,6 +170,7 @@ export const cartItemSchema = z.object({
   image: z.string(),
   quantity: z.number().int().positive(),
   size: z.enum(["klein", "standard"]).optional(),
+  selectedBase: z.string().optional(), // For standard menu items with base selection
   customization: customBowlSelectionSchema.optional(),
 });
 
@@ -341,3 +347,18 @@ export const publishedSnapshot = pgTable("published_snapshot", {
 });
 
 export type PublishedSnapshot = typeof publishedSnapshot.$inferSelect;
+
+// App Settings
+export const appSettings = pgTable("app_settings", {
+  id: integer("id").primaryKey().default(1), // Single row table
+  maintenanceMode: integer("maintenance_mode").notNull().default(0), // 1 = enabled, 0 = disabled
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const insertAppSettingsSchema = createInsertSchema(appSettings).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export type AppSettings = typeof appSettings.$inferSelect;
+export type InsertAppSettings = z.infer<typeof insertAppSettingsSchema>;

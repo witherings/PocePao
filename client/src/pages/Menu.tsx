@@ -53,7 +53,7 @@ export default function Menu() {
   // Filter menu items by category
   const filteredItems = menuItems.filter((item) => item.categoryId === selectedCategory);
 
-  const handleAddToCart = (item: MenuItem, size?: "klein" | "standard", customization?: CustomBowlSelection, customPrice?: string) => {
+  const handleAddToCart = (item: MenuItem, size?: "klein" | "standard", selectedBase?: string, customization?: CustomBowlSelection, customPrice?: string) => {
     // Use custom price if provided (for bowl builder with dynamic protein pricing)
     // Otherwise determine the correct price based on size
     let finalPrice = customPrice || item.price;
@@ -71,12 +71,19 @@ export default function Menu() {
       updateItem(editingItemId, {
         price: finalPrice,
         size: size,
+        selectedBase: selectedBase,
         customization: customization,
       });
       setEditingItemId(null);
     } else {
-      // Create unique cart ID per size to allow both sizes in cart simultaneously
-      const cartItemId = size ? `${item.id}-${size}` : item.id;
+      // Create unique cart ID per size and base to allow different combinations in cart simultaneously
+      let cartItemId = item.id;
+      if (size) {
+        cartItemId = `${item.id}-${size}`;
+      }
+      if (selectedBase) {
+        cartItemId = `${cartItemId}-${selectedBase.toLowerCase().replace(/\s+/g, '-')}`;
+      }
 
       addItem({
         id: cartItemId,
@@ -86,6 +93,7 @@ export default function Menu() {
         price: finalPrice,
         image: item.image,
         size: size,
+        selectedBase: selectedBase,
         customization: customization,
       });
     }
@@ -119,7 +127,8 @@ export default function Menu() {
     if (item.isCustomBowl === 1) {
       setSelectedItem(item);
       setBowlInfoOpen(true);
-    } else if (item.hasSizeOptions === 1) {
+    } else if (item.hasSizeOptions === 1 || item.enableBaseSelection === 1) {
+      // Open dialog if item has size options OR requires base selection
       setSelectedItem(item);
       setItemDialogOpen(true);
     } else {

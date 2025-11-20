@@ -10,16 +10,17 @@ interface MenuItemDialogProps {
   item: MenuItem | null;
   isOpen: boolean;
   onClose: () => void;
-  onAddToCart: (item: MenuItem, size?: "klein" | "standard") => void;
+  onAddToCart: (item: MenuItem, size?: "klein" | "standard", selectedBase?: string) => void;
 }
 
 export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemDialogProps) {
   const [selectedSize, setSelectedSize] = useState<"klein" | "standard">("standard");
+  const [selectedBase, setSelectedBase] = useState<string>("");
   const contentRef = useRef<HTMLDivElement>(null);
 
   useBodyScrollLock(isOpen);
 
-  // Reset to default size when dialog opens or item changes
+  // Reset to default size and base when dialog opens or item changes
   useEffect(() => {
     if (isOpen) {
       // Scroll to top when dialog opens
@@ -30,6 +31,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
       if (item?.hasSizeOptions === 1) {
         setSelectedSize("standard");
       }
+      setSelectedBase("");
     }
   }, [item, isOpen]);
 
@@ -130,6 +132,30 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
             </div>
           )}
 
+          {/* Base Selection */}
+          {item.enableBaseSelection === 1 && (
+            <div>
+              <h4 className="font-poppins font-semibold text-sm mb-3 text-foreground">Base wählen *</h4>
+              <div className="grid grid-cols-2 gap-2">
+                {["Reis", "Quinoa", "Zucchini-Nudeln", "Couscous"].map((base) => (
+                  <Button
+                    key={base}
+                    variant={selectedBase === base ? "default" : "outline"}
+                    onClick={() => setSelectedBase(base)}
+                    className={`font-poppins font-semibold min-h-[48px] ${
+                      selectedBase === base 
+                        ? "bg-ocean hover:bg-ocean/90 text-white" 
+                        : ""
+                    }`}
+                    data-testid={`button-base-${base}`}
+                  >
+                    {base}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Protein */}
           {item.protein && (
             <div>
@@ -225,10 +251,14 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
               </Button>
               <Button
                 onClick={() => {
-                  onAddToCart(item, item.hasSizeOptions === 1 ? selectedSize : undefined);
+                  onAddToCart(
+                    item, 
+                    item.hasSizeOptions === 1 ? selectedSize : undefined, 
+                    item.enableBaseSelection === 1 ? selectedBase : undefined
+                  );
                   onClose();
                 }}
-                disabled={item.available === 0}
+                disabled={item.available === 0 || (item.enableBaseSelection === 1 && !selectedBase)}
                 className="flex-1 sm:flex-initial bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full px-6 sm:px-8 min-h-[52px] sm:min-h-[56px] text-base sm:text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 data-testid="button-dialog-add-to-cart"
               >
