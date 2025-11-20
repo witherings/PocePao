@@ -308,7 +308,7 @@ export default function Menu() {
                         </p>
                         <div className="flex items-center justify-between mt-auto">
                           <div>
-                            {item.isCustomBowl === 1 && item.hasSizeOptions === 1 ? (
+                            {item.isCustomBowl === 1 ? (
                               <span className="font-poppins text-xl font-bold text-ocean" data-testid={`text-menu-item-price-${item.id}`}>
                                 ab €9.50
                               </span>
