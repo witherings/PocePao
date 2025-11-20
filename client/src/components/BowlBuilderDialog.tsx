@@ -371,8 +371,23 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
     if (size === "klein") {
       return `ab €${priceRange.min.toFixed(2)}`;
     } else {
-      const minStandard = priceRange.min + (priceRange.min === 9.90 ? 6.00 : 5.25);
-      return `ab €${minStandard.toFixed(2)}`;
+      // Get minimum standard price from available proteins
+      const proteinIngredients = ingredients.filter(
+        ing => ing.type === "protein" && ing.available === 1
+      );
+      
+      let minStandardPrice = priceRange.min + 5.25; // Default: min klein price + 5.25
+      
+      // Check if any protein has priceStandard defined
+      const standardPrices = proteinIngredients
+        .map(ing => ing.priceStandard ? parseFloat(String(ing.priceStandard)) : null)
+        .filter(p => p !== null && p > 0);
+      
+      if (standardPrices.length > 0) {
+        minStandardPrice = Math.min(...standardPrices);
+      }
+      
+      return `ab €${minStandardPrice.toFixed(2)}`;
     }
   };
 
