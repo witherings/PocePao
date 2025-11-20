@@ -17,7 +17,7 @@ export function BowlInfoDialog({ item, isOpen, onClose, onStartBuilder }: BowlIn
   if (!item) return null;
 
   const includedItems = [
-    { label: "1 Protein", description: "Tofu, Falafel, Hähnchen, Lachs oder Ente" },
+    { label: "1 Protein", description: "Tofu, Falafel, Hähnchen, Lachs, Garnelen, Thunfisch" },
     { label: "1 Base", description: "Reis, Salat oder gemischt" },
     { label: "1 Marinade", description: "Verschiedene Marinaden zur Auswahl" },
     { label: "5 Frische Zutaten", description: "Avocado, Gurke, Mango, Edamame und mehr" },
