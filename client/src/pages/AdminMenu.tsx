@@ -487,7 +487,6 @@ export function AdminMenu() {
       price: price || null,
       priceSmall: priceSmall || null,
       priceStandard: priceStandard || null,
-      order: parseInt(formData.get("order") as string) || 0,
       available: formData.get("available") === "on" ? 1 : 0,
     };
 
@@ -505,7 +504,6 @@ export function AdminMenu() {
               price: null,
               priceSmall: null,
               priceStandard: null,
-              order: parseInt(formData.get("order") as string) || 0,
               available: formData.get("available") === "on" ? 1 : 0,
             };
             const existingExtra = ingredients.find(ing => ing.type === "extra" && ing.nameDE === name);
@@ -530,7 +528,6 @@ export function AdminMenu() {
               price: null,
               priceSmall: null,
               priceStandard: null,
-              order: parseInt(formData.get("order") as string) || 0,
               available: formData.get("available") === "on" ? 1 : 0,
             };
             createIngredientMutation.mutate(extraData);
@@ -594,7 +591,6 @@ export function AdminMenu() {
       name: name,
       nameDE: name,
       type: variantFormData.variantType,
-      order: parseInt(formData.get("order") as string) || 0,
       available: formData.get("available") === "on" ? 1 : 0,
     };
 
@@ -1251,17 +1247,6 @@ export function AdminMenu() {
                     )}
 
                     <div>
-                      <Label htmlFor="ing-order" className="text-base font-semibold mb-2">Reihenfolge</Label>
-                      <Input
-                        id="ing-order"
-                        name="order"
-                        type="number"
-                        defaultValue={editingIngredient?.order || 0}
-                        className="h-12 text-base px-4"
-                      />
-                    </div>
-
-                    <div>
                       <Label className="mb-3 block">Foto der Zutat</Label>
                       
                       <div className="mb-4">
@@ -1602,15 +1587,6 @@ export function AdminMenu() {
                             placeholder="z.B. Reis, Quinoa, Fritz-Kola Original"
                           />
                         </div>
-                        <div>
-                          <Label htmlFor="variant-order">Reihenfolge</Label>
-                          <Input
-                            id="variant-order"
-                            name="order"
-                            type="number"
-                            defaultValue={editingVariant?.order || variants.length + 1}
-                          />
-                        </div>
                         <div className="flex items-center space-x-2">
                           <Switch
                             id="variant-available"
@@ -1659,9 +1635,6 @@ export function AdminMenu() {
                           </div>
                           <div>
                             <p className="font-medium">{variant.nameDE}</p>
-                            <p className="text-xs text-muted-foreground">
-                              Reihenfolge: {variant.order}
-                            </p>
                           </div>
                           {variant.available === 0 && (
                             <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
