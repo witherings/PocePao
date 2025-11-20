@@ -1,0 +1,45 @@
+rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+🔌 Attempting database connection to: postgresql://postgres:****@helium/heliumdb?sslmode=disable
+🔄 Connection attempt 1/5...
+✅ Database connection successful!
+✅ Admin user already exists
+9:59:11 PM [express] serving on port 5000
+Browserslist: browsers data (caniuse-lite) is 13 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+A PostCSS plugin did not pass the `from` option to `postcss.parse`. This may cause imported assets to be incorrectly transformed. If you've recently added a PostCSS plugin that raised this warning, please contact the package author to fix the issue.
+9:59:25 PM [express] GET /api/settings 304 in 17ms :: {"maintenanceMode":0}
+9:59:25 PM [express] GET /api/gallery 500 in 15ms :: {"error":"Failed to fetch gallery images"}
+9:59:30 PM [express] POST /api/admin/login 200 in 240ms :: {"success":true,"user":{"id":"fb2893dc-cb…
+9:59:30 PM [express] GET /api/admin/me 304 in 38ms :: {"id":"fb2893dc-cb02-415b-99ff-0a5c22bae96a","…
+9:59:31 PM [express] GET /api/admin/snapshots 304 in 11ms :: []
+Error creating snapshot: error: relation "snapshot_ingredients" does not exist
+    at /home/runner/workspace/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/snapshot-routes.ts:78:9) {
+  length: 119,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '13',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '1452',
+  routine: 'parserOpenTable'
+}
+9:59:35 PM [express] POST /api/admin/snapshots 400 in 48ms :: {"error":"relation \"snapshot_ingredie…
+10:00:39 PM [express] GET /api/categories 304 in 39ms :: [{"id":"882b3d65-06be-40d5-acf9-9e45e0bbf75c…
+10:00:39 PM [express] GET /api/ingredients 304 in 34ms :: [{"id":"95b639bf-deaa-424f-a847-f1017054e55…
+10:00:39 PM [express] GET /api/menu-items 304 in 43ms :: [{"id":"04190b8c-9c9e-4ccb-a464-2742eac38f62…
+npm run db:push
