@@ -532,7 +532,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         </div>
                         <div className="p-2 bg-white">
                           <p className="font-poppins text-sm font-medium text-center mb-1">{ingredient.nameDE}</p>
-                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{selectedSize === "klein" && ingredient.priceSmall ? ingredient.priceSmall : (ingredient.priceStandard || ingredient.price || "0")}</p>
+                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{getExtraPrice("protein").toFixed(2)}</p>
                           <Button
                             onClick={() => handleExtraSelect(ingredient.id, "protein")}
                             variant={selected ? "default" : "outline"}
