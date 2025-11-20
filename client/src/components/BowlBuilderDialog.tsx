@@ -278,6 +278,8 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       ? ingredients.find(ing => ing.id === selections.protein)
       : null;
     
+    console.log('DEBUG getSizePrice:', { selectedProtein, size, ingredients_count: ingredients.length });
+    
     // Total Price = Protein_Price_For_Selected_Size + Sum_of_All_Extras
     let totalPrice = 0;
 
@@ -288,12 +290,16 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       
       if (size === "klein" && selectedProtein.priceSmall) {
         proteinPrice = parseFloat(String(selectedProtein.priceSmall));
+        console.log('DEBUG: using priceSmall', proteinPrice);
       } else if (size === "standard" && selectedProtein.priceStandard) {
         proteinPrice = parseFloat(String(selectedProtein.priceStandard));
+        console.log('DEBUG: using priceStandard', proteinPrice);
       } else if (selectedProtein.price) {
         proteinPrice = parseFloat(String(selectedProtein.price));
+        console.log('DEBUG: using price', proteinPrice, 'from', selectedProtein);
       }
       
+      console.log('DEBUG proteinPrice calculated:', proteinPrice);
       totalPrice = proteinPrice;
     }
 
@@ -310,14 +316,23 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
     const extraToppingsCount = selections.extraToppings?.length || 0;
     totalPrice += extraToppingsCount * getExtraPrice("topping");
 
+    console.log('DEBUG final totalPrice:', totalPrice);
     return totalPrice.toFixed(2);
   };
 
   const getDisplayPrice = () => {
-    if (item.hasSizeOptions === 1) {
-      return getSizePrice(selectedSize);
+    // For custom bowl (Wunsch Bowl), ALWAYS calculate from selected ingredients
+    const isCustomBowl = item.isCustomBowl === 1;
+    
+    if (isCustomBowl || item.hasSizeOptions === 1) {
+      const price = getSizePrice(selectedSize);
+      console.log('DEBUG getDisplayPrice:', { isCustomBowl, hasSizeOptions: item.hasSizeOptions, selectedSize, selectedProtein: selections.protein, price });
+      return price;
     }
-    return parseFloat(item.price || "0").toFixed(2);
+    
+    const fallbackPrice = parseFloat(item.price || "0").toFixed(2);
+    console.log('DEBUG fallback price:', fallbackPrice);
+    return fallbackPrice;
   };
 
   // Get price range for protein options
