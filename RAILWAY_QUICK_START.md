@@ -81,7 +81,7 @@ npm run railway:start
 ```
 
 This command automatically:
-1. Runs database migrations (`drizzle-kit push`)
+1. Runs database migrations (non-interactive, idempotent)
 2. Seeds the database with initial data
 3. Creates admin user
 4. Starts the production server

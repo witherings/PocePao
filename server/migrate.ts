@@ -1,0 +1,114 @@
+import { getDb, getPool } from "./db";
+
+async function runMigrations() {
+  if (!process.env.DATABASE_URL) {
+    console.error("❌ DATABASE_URL not set. Make sure the database is provisioned.");
+    process.exit(1);
+  }
+
+  try {
+    console.log("🔄 Running database migrations...\n");
+
+    const db = await getDb();
+    const pool = await getPool();
+
+    // Helper to get column definition
+    const getColumnInfo = async (table: string, column: string) => {
+      const result = await pool.query(`
+        SELECT column_name, data_type, is_nullable, column_default, numeric_precision, numeric_scale
+        FROM information_schema.columns 
+        WHERE table_name = $1 AND column_name = $2
+      `, [table, column]);
+      return result.rows[0];
+    };
+
+    // Helper to safely add column if it doesn't exist
+    const ensureColumn = async (
+      table: string,
+      column: string,
+      definition: string,
+      description: string
+    ) => {
+      const existing = await getColumnInfo(table, column);
+      
+      if (!existing) {
+        console.log(`  ➕ Adding ${column}: ${description}`);
+        await pool.query(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+        console.log(`     ✓ Successfully added ${column}`);
+      } else {
+        console.log(`  ✓ ${column} exists`);
+      }
+    };
+
+    // Menu Items migrations
+    console.log("📝 Migrating menu_items table...");
+    
+    await ensureColumn(
+      'menu_items',
+      'price_small',
+      'NUMERIC(10,2)',
+      'Klein price for size options'
+    );
+
+    await ensureColumn(
+      'menu_items',
+      'enable_base_selection',
+      'INTEGER NOT NULL DEFAULT 0',
+      'Enable base selection before cart'
+    );
+
+    // Ingredients migrations
+    console.log("\n📝 Migrating ingredients table...");
+    
+    await ensureColumn(
+      'ingredients',
+      'price_small',
+      'NUMERIC(10,2)',
+      'Price for Klein bowl size'
+    );
+
+    await ensureColumn(
+      'ingredients',
+      'price_standard',
+      'NUMERIC(10,2)',
+      'Price for Standard bowl size'
+    );
+
+    // Verify all critical columns exist
+    console.log("\n🔍 Verifying schema...");
+    const criticalColumns = [
+      { table: 'menu_items', column: 'price_small' },
+      { table: 'menu_items', column: 'enable_base_selection' },
+      { table: 'ingredients', column: 'price_small' },
+      { table: 'ingredients', column: 'price_standard' },
+    ];
+
+    let allColumnsExist = true;
+    for (const { table, column } of criticalColumns) {
+      const exists = await getColumnInfo(table, column);
+      if (!exists) {
+        console.error(`  ❌ Missing column: ${table}.${column}`);
+        allColumnsExist = false;
+      } else {
+        console.log(`  ✓ ${table}.${column}`);
+      }
+    }
+
+    if (!allColumnsExist) {
+      console.error("\n❌ Schema verification failed - some columns are still missing!");
+      process.exit(1);
+    }
+
+    console.log("\n✅ All migrations completed successfully!");
+    console.log("✅ Schema verification passed!");
+    
+  } catch (error: any) {
+    console.error("❌ Error running migrations:", error.message);
+    console.error("Stack:", error.stack);
+    process.exit(1);
+  }
+
+  process.exit(0);
+}
+
+runMigrations();

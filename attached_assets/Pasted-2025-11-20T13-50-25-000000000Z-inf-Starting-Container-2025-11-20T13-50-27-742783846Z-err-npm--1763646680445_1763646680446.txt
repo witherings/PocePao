@@ -1,0 +1,129 @@
+2025-11-20T13:50:25.000000000Z [inf]  Starting Container
+2025-11-20T13:50:27.742783846Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-20T13:50:27.742790185Z [inf]  
+2025-11-20T13:50:27.742796263Z [inf]  > rest-express@1.0.0 railway:start
+2025-11-20T13:50:27.742802034Z [inf]  > npm run db:push; npm run db:seed; npm run db:create-admin || true; npm run start
+2025-11-20T13:50:27.742808756Z [inf]  
+2025-11-20T13:50:27.742815270Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-20T13:50:27.742822050Z [inf]  
+2025-11-20T13:50:27.742828083Z [inf]  > rest-express@1.0.0 db:push
+2025-11-20T13:50:27.742833571Z [inf]  > drizzle-kit push
+2025-11-20T13:50:27.742838508Z [inf]  
+2025-11-20T13:50:27.742844847Z [inf]  No config path provided, using default 'drizzle.config.ts'
+2025-11-20T13:50:27.742850397Z [inf]  Reading config file '/app/drizzle.config.ts'
+2025-11-20T13:50:27.742854372Z [inf]  Using 'pg' driver for database querying
+2025-11-20T13:50:27.742858400Z [inf]  [⣷] Pulling schema from database...
+2025-11-20T13:50:27.742862596Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-20T13:50:27.742867415Z [inf]  [2K[1G[⣟] Pulling schema from database...
+2025-11-20T13:50:28.857070497Z [inf]  [2K[1G[⣷] Pulling schema from database...
+2025-11-20T13:50:28.857087806Z [inf]  [2K[1G[⣽] Pulling schema from database...
+2025-11-20T13:50:28.857101311Z [inf]  ❯ + app_settings           create table
+2025-11-20T13:50:28.857114431Z [inf]  [2K[1G[⣯] Pulling schema from database...
+2025-11-20T13:50:28.857125106Z [inf]  [2K[1G[✓] Pulling schema from database...
+2025-11-20T13:50:28.857128933Z [inf]  [?25l
+2025-11-20T13:50:28.857139022Z [inf]  Is app_settings table created or renamed from another table?
+2025-11-20T13:50:28.857437450Z [inf]  [2K[1G[⡿] Pulling schema from database...
+2025-11-20T13:50:28.857442478Z [inf]  [2K[1G[⢿] Pulling schema from database...
+2025-11-20T13:50:28.857447317Z [inf]  [2K[1G[⣻] Pulling schema from database...
+2025-11-20T13:50:48.332849466Z [inf]    ~ session › app_settings rename tablenpm warn config production Use `--omit=dev` instead.
+2025-11-20T13:50:48.332857217Z [inf]  
+2025-11-20T13:50:48.332863677Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-20T13:50:48.332868456Z [inf]  > tsx server/seed.ts
+2025-11-20T13:50:48.332877076Z [inf]  
+2025-11-20T13:50:48.332881496Z [inf]  🌱 Starting database seeding...
+2025-11-20T13:50:48.332886483Z [inf]  
+2025-11-20T13:50:48.332891491Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-20T13:50:48.332895996Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-20T13:50:48.332900538Z [inf]  🔄 Connection attempt 1/5...
+2025-11-20T13:50:48.332904887Z [inf]  ✅ Database connection successful!
+2025-11-20T13:50:48.332909274Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-20T13:50:48.332913679Z [inf]     Found 6 categories.
+2025-11-20T13:50:48.332917832Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-20T13:50:48.332921988Z [inf]  
+2025-11-20T13:50:48.332926313Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-20T13:50:48.332930784Z [inf]  > tsx server/create-admin.ts
+2025-11-20T13:50:48.332935137Z [inf]  
+2025-11-20T13:50:48.332939731Z [inf]  🔐 Creating admin user...
+2025-11-20T13:50:48.332943831Z [inf]  
+2025-11-20T13:50:48.332948244Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-20T13:50:48.332952779Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-20T13:50:48.332958310Z [inf]  🔄 Connection attempt 1/5...
+2025-11-20T13:50:48.332962562Z [inf]  ✅ Database connection successful!
+2025-11-20T13:50:48.332966701Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-20T13:50:49.501380468Z [inf]     Username: admin
+2025-11-20T13:50:49.501387125Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-20T13:50:49.501394434Z [inf]  
+2025-11-20T13:50:49.501401566Z [inf]  > rest-express@1.0.0 start
+2025-11-20T13:50:49.501411284Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-20T13:50:49.501418598Z [inf]  
+2025-11-20T13:50:50.846140101Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-20T13:50:53.182807074Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-20T13:50:53.182814075Z [inf]  🔄 Connection attempt 1/5...
+2025-11-20T13:50:53.182822848Z [inf]  ✅ Database connection successful!
+2025-11-20T13:50:53.182830042Z [inf]  ✅ Admin user already exists
+2025-11-20T13:50:53.182836743Z [inf]  1:50:52 PM [express] serving on port 8080
+2025-11-20T13:50:54.551257758Z [inf]  1:50:53 PM [express] GET /api/health 200 in 12ms
+2025-11-20T13:50:57.903456084Z [inf]  1:50:57 PM [express] GET /api/gallery 304 in 26ms :: [{"id":"94b68133-4779-4ff1-b778-4a90dce5967c","…
+2025-11-20T13:50:59.862644686Z [err]      at async <anonymous> (/app/server/routes.ts:338:27) {
+2025-11-20T13:50:59.862656410Z [err]    length: 111,
+2025-11-20T13:50:59.862664340Z [err]    severity: 'ERROR',
+2025-11-20T13:50:59.862670796Z [err]    code: '42703',
+2025-11-20T13:50:59.862677503Z [err]    detail: undefined,
+2025-11-20T13:50:59.862687281Z [err]    hint: undefined,
+2025-11-20T13:50:59.862739355Z [err]  ❌ Error fetching ingredients: error: column "price_small" does not exist
+2025-11-20T13:50:59.862751854Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-20T13:50:59.862759204Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-20T13:50:59.862772060Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-20T13:50:59.862778390Z [err]      at async DatabaseStorage.getAllIngredients (/app/server/storage.ts:204:12)
+2025-11-20T13:50:59.862806768Z [err]    position: '92',
+2025-11-20T13:50:59.862819775Z [err]    internalPosition: undefined,
+2025-11-20T13:50:59.862827349Z [err]    internalQuery: undefined,
+2025-11-20T13:50:59.862841480Z [err]    where: undefined,
+2025-11-20T13:50:59.862849199Z [err]    schema: undefined,
+2025-11-20T13:50:59.862864424Z [err]    table: undefined,
+2025-11-20T13:50:59.862872205Z [err]    column: undefined,
+2025-11-20T13:50:59.862894153Z [err]    dataType: undefined,
+2025-11-20T13:50:59.862919424Z [err]    constraint: undefined,
+2025-11-20T13:50:59.862927719Z [err]    file: 'parse_relation.c',
+2025-11-20T13:50:59.862940318Z [err]    line: '3716',
+2025-11-20T13:50:59.862954367Z [err]    routine: 'errorMissingColumn'
+2025-11-20T13:50:59.862962942Z [err]  }
+2025-11-20T13:50:59.862973889Z [err]  Stack: error: column "price_small" does not exist
+2025-11-20T13:50:59.862983643Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-20T13:50:59.863002501Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-20T13:50:59.867254924Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-20T13:50:59.867261049Z [err]      at async DatabaseStorage.getAllIngredients (/app/server/storage.ts:204:12)
+2025-11-20T13:50:59.867267196Z [err]      at async <anonymous> (/app/server/routes.ts:338:27)
+2025-11-20T13:50:59.867275663Z [inf]  1:50:59 PM [express] GET /api/categories 304 in 80ms :: [{"id":"98ad7c95-5940-4d69-8b10-13ab682ef305…
+2025-11-20T13:50:59.867286889Z [inf]  1:50:59 PM [express] GET /api/ingredients 500 in 109ms :: {"error":"Failed to fetch ingredients","de…
+2025-11-20T13:50:59.867294414Z [err]  ❌ Error fetching menu items: error: column "enable_base_selection" does not exist
+2025-11-20T13:50:59.867301926Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-20T13:50:59.867307560Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-20T13:50:59.867314155Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-20T13:50:59.867319825Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:118:12)
+2025-11-20T13:50:59.867324604Z [err]      at async <anonymous> (/app/server/routes.ts:95:25) {
+2025-11-20T13:50:59.867330309Z [err]    length: 122,
+2025-11-20T13:50:59.867336110Z [err]    severity: 'ERROR',
+2025-11-20T13:50:59.867341002Z [err]    code: '42703',
+2025-11-20T13:50:59.867347139Z [err]    detail: undefined,
+2025-11-20T13:50:59.867353082Z [err]    hint: undefined,
+2025-11-20T13:50:59.867359459Z [err]    position: '248',
+2025-11-20T13:50:59.867366484Z [err]    internalPosition: undefined,
+2025-11-20T13:50:59.867373523Z [err]    internalQuery: undefined,
+2025-11-20T13:50:59.867379886Z [err]    where: undefined,
+2025-11-20T13:50:59.867387016Z [err]    schema: undefined,
+2025-11-20T13:50:59.867393388Z [err]    table: undefined,
+2025-11-20T13:50:59.872315383Z [err]    column: undefined,
+2025-11-20T13:50:59.872321770Z [err]    dataType: undefined,
+2025-11-20T13:50:59.872328748Z [err]    constraint: undefined,
+2025-11-20T13:50:59.872335135Z [err]    file: 'parse_relation.c',
+2025-11-20T13:50:59.872343248Z [err]    line: '3716',
+2025-11-20T13:50:59.872350212Z [err]    routine: 'errorMissingColumn'
+2025-11-20T13:50:59.872356900Z [err]  }
+2025-11-20T13:50:59.872364499Z [err]  Stack: error: column "enable_base_selection" does not exist
+2025-11-20T13:50:59.872370963Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-20T13:50:59.872377753Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-20T13:50:59.872384679Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-20T13:50:59.872392652Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:118:12)
+2025-11-20T13:50:59.872399255Z [err]      at async <anonymous> (/app/server/routes.ts:95:25)
+2025-11-20T13:50:59.872405626Z [inf]  1:50:59 PM [express] GET /api/menu-items 500 in 118ms :: {"error":"Failed to fetch menu items","deta…
