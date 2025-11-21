@@ -672,6 +672,84 @@ export function AdminMenu() {
     updateVariantMutation.mutate({ id: variant2.id, data: { order: variant1.order } });
   };
 
+  const handlePageImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPageImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPageImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const loadPageImages = async (page: string) => {
+    try {
+      const response = await fetch(`/api/page-images/${page}`);
+      if (response.ok) {
+        const images = await response.json();
+        setPageImages(images);
+      }
+    } catch (error) {
+      console.error("Failed to load page images:", error);
+    }
+  };
+
+  const handleUploadPageImage = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!pageImageFile) {
+      toast({ title: "Bitte wählen Sie ein Bild", variant: "destructive" });
+      return;
+    }
+
+    setIsUploadingPageImage(true);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append("image", pageImageFile);
+      uploadFormData.append("page", selectedPageForImages);
+
+      const response = await fetch("/api/page-images", {
+        method: "POST",
+        credentials: "include",
+        body: uploadFormData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      toast({ title: "Bild erfolgreich hochgeladen" });
+      setPageImageFile(null);
+      setPageImagePreview(null);
+      setShowPageImageDialog(false);
+      loadPageImages(selectedPageForImages);
+    } catch (error) {
+      toast({ title: "Fehler beim Upload", variant: "destructive" });
+    } finally {
+      setIsUploadingPageImage(false);
+    }
+  };
+
+  const handleDeletePageImage = async (id: string) => {
+    try {
+      const response = await fetch(`/api/page-images/${id}`, { 
+        method: "DELETE",
+        credentials: "include"
+      });
+      if (response.ok) {
+        toast({ title: "Bild gelöscht" });
+        loadPageImages(selectedPageForImages);
+      }
+    } catch (error) {
+      toast({ title: "Fehler beim Löschen", variant: "destructive" });
+    }
+  };
+
+  useEffect(() => {
+    loadPageImages(selectedPageForImages);
+  }, [selectedPageForImages]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="container mx-auto p-6 md:p-8">
@@ -1550,6 +1628,133 @@ export function AdminMenu() {
                     </div>
                   );
                 })}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="pages">
+          <Card className="border-2 shadow-lg">
+            <CardHeader>
+              <CardTitle>Seiten-Bilder</CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-6">
+                {/* Page Selection */}
+                <div>
+                  <Label className="text-base font-semibold mb-3 block">Seite wählen</Label>
+                  <Select value={selectedPageForImages} onValueChange={setSelectedPageForImages}>
+                    <SelectTrigger className="h-12">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {pages.map(page => (
+                        <SelectItem key={page.id} value={page.id}>
+                          {page.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Upload Button */}
+                <div>
+                  <Dialog open={showPageImageDialog} onOpenChange={setShowPageImageDialog}>
+                    <DialogTrigger asChild>
+                      <Button className="bg-ocean hover:bg-ocean/90 text-white">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Bild hochladen
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Bild hochladen für {pages.find(p => p.id === selectedPageForImages)?.label}</DialogTitle>
+                      </DialogHeader>
+                      <form onSubmit={handleUploadPageImage} className="space-y-4">
+                        {/* Preview */}
+                        {pageImagePreview ? (
+                          <div className="relative inline-block">
+                            <img 
+                              src={pageImagePreview} 
+                              alt="Preview" 
+                              className="w-full max-w-sm h-48 object-cover rounded-lg border-2 border-gray-200"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              className="absolute top-2 right-2"
+                              onClick={() => {
+                                setPageImageFile(null);
+                                setPageImagePreview(null);
+                              }}
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        ) : (
+                          <div className="w-full h-48 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                            <p className="text-gray-400">Kein Bild gewählt</p>
+                          </div>
+                        )}
+
+                        {/* File Input */}
+                        <div>
+                          <Input
+                            id="page-image"
+                            type="file"
+                            accept="image/*"
+                            onChange={handlePageImageSelect}
+                            className="hidden"
+                          />
+                          <Label
+                            htmlFor="page-image"
+                            className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                          >
+                            <Upload className="w-4 h-4" />
+                            {pageImageFile ? "Bild ändern" : "Bild wählen"}
+                          </Label>
+                        </div>
+
+                        <Button 
+                          type="submit" 
+                          className="w-full bg-ocean hover:bg-ocean/90"
+                          disabled={isUploadingPageImage}
+                        >
+                          {isUploadingPageImage ? "Wird hochgeladen..." : "Hochladen"}
+                        </Button>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+
+                {/* Images Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {pageImages.map(image => (
+                    <div key={image.id} className="relative group">
+                      <img 
+                        src={image.url} 
+                        alt={image.alt || "Page image"} 
+                        className="w-full h-48 object-cover rounded-lg border-2 border-gray-200"
+                      />
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => handleDeletePageImage(image.id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                      <p className="text-sm text-muted-foreground mt-2">{image.filename}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {pageImages.length === 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">Keine Bilder für diese Seite vorhanden</p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
