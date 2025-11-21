@@ -199,19 +199,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // General image upload endpoint
+  // General image upload endpoint with category support
   app.post("/api/upload", upload.single("image"), async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ error: "No file uploaded" });
       }
 
+      const { type, category, duplicateToExtra } = req.body;
+      let uploadPath = `/uploads/${req.file.filename}`;
+
+      // If category and type provided, save to category folder
+      if (category && type) {
+        const categoryFolder = category.replace(/\s+/g, " "); // Normalize spaces
+        const categoryPath = path.join(process.cwd(), "public", "images", "categories", categoryFolder, "zutaten", type);
+        
+        await fs.mkdir(categoryPath, { recursive: true });
+        const destPath = path.join(categoryPath, req.file.filename);
+        await fs.rename(path.join(uploadDir, req.file.filename), destPath);
+        uploadPath = `/images/categories/${categoryFolder}/zutaten/${type}/${req.file.filename}`;
+
+        // Duplicate to extra folder if requested
+        if (duplicateToExtra === "true") {
+          const extraType = `extra ${type}`;
+          const extraPath = path.join(process.cwd(), "public", "images", "categories", categoryFolder, "zutaten extra", extraType);
+          await fs.mkdir(extraPath, { recursive: true });
+          const extraDestPath = path.join(extraPath, req.file.filename);
+          await fs.copyFile(destPath, extraDestPath);
+        }
+      }
+
       res.status(200).json({
-        url: `/uploads/${req.file.filename}`,
+        url: uploadPath,
         filename: req.file.originalname,
       });
     } catch (error: any) {
-      res.status(500).json({ error: "Failed to upload image" });
+      console.error("Upload error:", error);
+      res.status(500).json({ error: "Failed to upload image", details: error.message });
     }
   });
 

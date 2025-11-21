@@ -465,6 +465,9 @@ export function AdminMenu() {
       try {
         const uploadFormData = new FormData();
         uploadFormData.append("image", selectedImage);
+        uploadFormData.append("type", selectedIngredientType);
+        uploadFormData.append("category", "Wunsch Bowls");
+        uploadFormData.append("duplicateToExtra", "true");
 
         const response = await fetch("/api/upload", {
           method: "POST",
@@ -495,7 +498,7 @@ export function AdminMenu() {
     const price = formData.get("price") as string;
     const priceSmall = formData.get("priceSmall") as string;
     const priceStandard = formData.get("priceStandard") as string;
-    const ingredientType = formData.get("type") as string;
+    const ingredientType = selectedIngredientType;
     
     const data: any = {
       name: name,
