@@ -13,13 +13,24 @@ export function Hero() {
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Fetch header slider images from database
-  const { data: allImages = [] } = useQuery<GalleryImage[]>({
-    queryKey: ["/api/gallery"],
+  // Fetch header slider images from page images
+  const { data: pageImages = [] } = useQuery({
+    queryKey: ["/api/page-images", "startseite"],
+    queryFn: async () => {
+      const response = await fetch("/api/page-images/startseite");
+      if (!response.ok) return [];
+      return response.json();
+    },
   });
 
-  // Filter only header images for the slider
-  const heroImages = allImages.filter(img => img.type === "header");
+  // Use page images as hero images, or fallback to default
+  const heroImages = pageImages.map((img: any) => ({
+    id: img.id,
+    url: img.url,
+    filename: img.filename,
+    type: "header",
+    createdAt: new Date().toISOString(),
+  }));
 
   // Fallback to default images if no header images exist
   const FALLBACK_HERO_IMAGES = [
