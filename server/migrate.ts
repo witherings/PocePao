@@ -57,6 +57,27 @@ async function runMigrations() {
       'Enable base selection before cart'
     );
 
+    await ensureColumn(
+      'menu_items',
+      'has_variants',
+      'INTEGER NOT NULL DEFAULT 0',
+      'Has variants (base/flavor selection)'
+    );
+
+    await ensureColumn(
+      'menu_items',
+      'variant_type',
+      'TEXT',
+      'Type of variant: base or flavor'
+    );
+
+    await ensureColumn(
+      'menu_items',
+      'requires_variant_selection',
+      'INTEGER NOT NULL DEFAULT 0',
+      'Must select variant before adding to cart'
+    );
+
     // Ingredients migrations
     console.log("\n📝 Migrating ingredients table...");
     
@@ -103,6 +124,9 @@ async function runMigrations() {
     const criticalColumns = [
       { table: 'menu_items', column: 'price_small' },
       { table: 'menu_items', column: 'enable_base_selection' },
+      { table: 'menu_items', column: 'has_variants' },
+      { table: 'menu_items', column: 'variant_type' },
+      { table: 'menu_items', column: 'requires_variant_selection' },
       { table: 'ingredients', column: 'price_small' },
       { table: 'ingredients', column: 'price_standard' },
     ];
