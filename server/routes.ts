@@ -609,3 +609,84 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   return httpServer;
 }
+
+  // Page Images API
+  app.get("/api/page-images/:page", async (req, res) => {
+    try {
+      const { page } = req.params;
+      const db = await getDb();
+      const images = await db.select()
+        .from(require("@shared/schema").pageImages)
+        .where(require("drizzle-orm").eq(require("@shared/schema").pageImages.page, page))
+        .orderBy(require("drizzle-orm").asc(require("@shared/schema").pageImages.order));
+      res.json(images);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch page images" });
+    }
+  });
+
+  app.post("/api/page-images", upload.single("image"), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
+
+      const { page, alt } = req.body;
+      if (!page) {
+        return res.status(400).json({ error: "Page name required" });
+      }
+
+      const pageName = page.replace(/\s+/g, "-").toLowerCase();
+      const pageFolder = require("path").join(process.cwd(), "public", "images", "pages", page);
+      
+      await require("fs").promises.mkdir(pageFolder, { recursive: true });
+      const destPath = require("path").join(pageFolder, req.file.filename);
+      await require("fs").promises.rename(require("path").join(process.env.UPLOAD_DIR || "uploads", req.file.filename), destPath);
+      
+      const imageUrl = `/images/pages/${page}/${req.file.filename}`;
+      const db = await getDb();
+      const { pageImages, insertPageImageSchema } = require("@shared/schema");
+      const validatedData = insertPageImageSchema.parse({
+        page: pageName,
+        url: imageUrl,
+        filename: req.file.originalname,
+        alt: alt || "",
+        order: 0,
+      });
+      const image = await db.insert(pageImages).values(validatedData).returning();
+      res.status(201).json(image[0]);
+    } catch (error: any) {
+      console.error("Page image upload error:", error);
+      res.status(500).json({ error: "Failed to upload page image" });
+    }
+  });
+
+  app.delete("/api/page-images/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const db = await getDb();
+      const { pageImages } = require("@shared/schema");
+      const { eq } = require("drizzle-orm");
+      
+      const image = await db.select().from(pageImages).where(eq(pageImages.id, id));
+      if (image.length === 0) {
+        return res.status(404).json({ error: "Image not found" });
+      }
+
+      await db.delete(pageImages).where(eq(pageImages.id, id));
+      
+      // Delete file from disk
+      if (image[0].url.startsWith('/images/pages/')) {
+        const filePath = require("path").join(process.cwd(), 'public', image[0].url);
+        try {
+          await require("fs").promises.unlink(filePath);
+        } catch (err) {
+          console.warn(`Could not delete file: ${filePath}`);
+        }
+      }
+      
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete page image" });
+    }
+  });

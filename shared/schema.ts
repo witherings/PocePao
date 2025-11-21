@@ -427,3 +427,22 @@ export const sessions = pgTable("session", {
   sess: text("sess").notNull(), // JSON string
   expire: timestamp("expire", { precision: 6 }).notNull(),
 });
+
+// Page Images (for managing images for each page)
+export const pageImages = pgTable("page_images", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  page: text("page").notNull(), // "startseite", "speisekarte", "ueber-uns", "reservierung", "kontakt"
+  url: text("url").notNull(),
+  filename: text("filename").notNull(),
+  alt: text("alt"),
+  order: integer("order").notNull().default(0),
+  uploadedAt: timestamp("uploaded_at").notNull().defaultNow(),
+});
+
+export const insertPageImageSchema = createInsertSchema(pageImages).omit({
+  id: true,
+  uploadedAt: true,
+});
+
+export type PageImage = typeof pageImages.$inferSelect;
+export type InsertPageImage = z.infer<typeof insertPageImageSchema>;
