@@ -98,9 +98,21 @@ export const ingredients = pgTable("ingredients", {
   order: integer("order").notNull().default(0),
 });
 
-export const insertIngredientSchema = createInsertSchema(ingredients).omit({
-  id: true,
-});
+export const insertIngredientSchema = createInsertSchema(ingredients)
+  .omit({
+    id: true,
+  })
+  .refine(
+    (data) => {
+      // Validate type is one of the allowed values
+      const validTypes = ["protein", "base", "marinade", "fresh", "sauce", "topping", "extra"];
+      return data.type && validTypes.includes(data.type);
+    },
+    {
+      message: "Invalid ingredient type",
+      path: ["type"],
+    }
+  );
 
 export type Ingredient = typeof ingredients.$inferSelect;
 export type InsertIngredient = z.infer<typeof insertIngredientSchema>;
