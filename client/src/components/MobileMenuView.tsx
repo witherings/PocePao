@@ -223,7 +223,7 @@ export function MobileMenuView({
                         {item.isCustomBowl === 1 && item.hasSizeOptions === 1 ? (
                           <div className="flex flex-col">
                             <span className="font-poppins text-xs font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
-                              €{customBowlPriceRange.kleinMin}-{customBowlPriceRange.kleinMax}
+                              ab €{item.priceSmall}-{item.price}
                             </span>
                             <span className="font-poppins text-xs text-muted-foreground">
                               Klein/Std
