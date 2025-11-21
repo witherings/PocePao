@@ -98,12 +98,14 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
       total: getTotal().toFixed(2),
       comment: comment || undefined,
       items: items.map(item => ({
-        menuItemId: item.menuItemId,
+        menuItemId: item.menuItemId || null,
         name: item.name,
         nameDE: item.nameDE,
-        price: item.price,
-        quantity: item.quantity,
-        size: item.size,
+        price: parseFloat(String(item.price).replace(/[^\d.-]/g, '')) || 0,
+        quantity: parseInt(String(item.quantity)) || 1,
+        size: item.size || null,
+        selectedBase: item.selectedBase || null,
+        selectedVariant: item.selectedVariant || null,
         customization: item.customization ? JSON.stringify(item.customization) : null,
       })),
     };
