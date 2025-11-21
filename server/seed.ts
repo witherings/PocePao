@@ -6,7 +6,8 @@ import {
   categories as categoriesTable,
   menuItems as menuItemsTable,
   ingredients as ingredientsTable,
-  productVariants as productVariantsTable
+  productVariants as productVariantsTable,
+  galleryImages as galleryTable
 } from "@shared/schema";
 
 async function seed() {
@@ -71,12 +72,34 @@ async function seed() {
     const createdVariants = await db.insert(productVariantsTable).values(variantsData).returning();
     console.log(`✅ Created ${createdVariants.length} product variants\n`);
 
+    console.log("📸 Seeding gallery (slider images)...");
+    const sliderImages = [
+      {
+        url: "/images/pages/Startseite/slider-1.jpg",
+        filename: "slider-1.jpg",
+        type: "header",
+      },
+      {
+        url: "/images/pages/Startseite/slider-2.jpg",
+        filename: "slider-2.jpg",
+        type: "header",
+      },
+      {
+        url: "/images/pages/Startseite/slider-3.jpg",
+        filename: "slider-3.jpg",
+        type: "header",
+      },
+    ];
+    const createdGallery = await db.insert(galleryTable).values(sliderImages).returning();
+    console.log(`✅ Created ${createdGallery.length} slider images\n`);
+
     console.log("✨ Database seeding completed successfully!");
     console.log("\n📊 Summary:");
     console.log(`   - Categories: ${createdCategories.length}`);
     console.log(`   - Menu Items: ${createdMenuItems.length}`);
     console.log(`   - Ingredients: ${createdIngredients.length}`);
     console.log(`   - Product Variants: ${createdVariants.length}`);
+    console.log(`   - Gallery/Slider Images: ${createdGallery.length}`);
     
   } catch (error) {
     console.error("❌ Error seeding database:", error);
