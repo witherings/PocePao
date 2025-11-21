@@ -495,7 +495,7 @@ export function AdminMenu() {
     const price = formData.get("price") as string;
     const priceSmall = formData.get("priceSmall") as string;
     const priceStandard = formData.get("priceStandard") as string;
-    const ingredientType = selectedIngredientType;
+    const ingredientType = formData.get("type") as string;
     
     const data: any = {
       name: name,
@@ -1172,6 +1172,13 @@ export function AdminMenu() {
                     </DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleSaveIngredient} className="space-y-5">
+                    {/* Hidden input to ensure type is sent in FormData */}
+                    <Input
+                      type="hidden"
+                      name="type"
+                      value={selectedIngredientType || editingIngredient?.type || ""}
+                    />
+                    
                     <div className="grid grid-cols-2 gap-5">
                       <div>
                         <Label htmlFor="ing-name" className="text-base font-semibold mb-2">Name</Label>
