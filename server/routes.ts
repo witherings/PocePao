@@ -534,28 +534,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { items, ...orderData } = req.body;
       
-      // Validate order data
-      const validatedOrderData = insertOrderSchema.parse(orderData);
+      console.log('📦 Creating order:', {
+        serviceType: orderData.serviceType,
+        customerName: orderData.name,
+        itemCount: items?.length || 0
+      });
+      
+      // Validate order data - provide helpful error messages
+      let validatedOrderData;
+      try {
+        validatedOrderData = insertOrderSchema.parse(orderData);
+      } catch (validationError: any) {
+        console.error('❌ Order validation failed:', validationError);
+        return res.status(400).json({ 
+          error: "Validierungsfehler bei der Bestellung", 
+          details: validationError.errors || validationError.message,
+          receivedData: orderData
+        });
+      }
       
       // Create order
       const order = await storage.createOrder(validatedOrderData);
+      console.log('✅ Order created with ID:', order.id);
       
       // Create order items
       const createdItems = [];
       if (items && Array.isArray(items)) {
         for (const item of items) {
-          const validatedItem = insertOrderItemSchema.parse({
-            ...item,
-            orderId: order.id,
-          });
-          const createdItem = await storage.createOrderItem(validatedItem);
-          createdItems.push(createdItem);
+          try {
+            const validatedItem = insertOrderItemSchema.parse({
+              ...item,
+              orderId: order.id,
+            });
+            const createdItem = await storage.createOrderItem(validatedItem);
+            createdItems.push(createdItem);
+          } catch (itemError: any) {
+            console.error('❌ Item validation failed for:', item.name, itemError);
+            // Continue with other items but log the error
+          }
         }
+        console.log(`✅ Created ${createdItems.length} order items`);
       }
       
       // Send notification to restaurant (non-blocking - don't fail order if notification fails)
       try {
         await notificationService.sendOrderNotification(order, createdItems);
+        console.log('📬 Telegram notification sent successfully');
       } catch (notificationError) {
         console.error('⚠️  Telegram notification failed, but order was created:', notificationError);
         // Order is still created successfully even if notification fails
@@ -563,11 +587,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.status(201).json(order);
     } catch (error: any) {
+      console.error('❌ CRITICAL Order creation error:', {
+        error: error.message,
+        stack: error.stack,
+        name: error.name
+      });
+      
       if (error.name === 'ZodError') {
-        return res.status(400).json({ error: "Invalid order data", details: error.errors });
+        return res.status(400).json({ 
+          error: "Ungültige Bestelldaten", 
+          details: error.errors 
+        });
       }
-      console.error('Order creation error:', error);
-      res.status(500).json({ error: "Failed to create order" });
+      
+      res.status(500).json({ 
+        error: "Bestellung konnte nicht erstellt werden",
+        message: error.message 
+      });
     }
   });
 

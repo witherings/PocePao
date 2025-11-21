@@ -23,13 +23,15 @@ let sessionMiddleware: any;
 // Passport middleware - will be configured after session middleware
 
 // Serve menu images from public/images with proper cache headers
+// CRITICAL FOR RAILWAY: Use absolute path resolution for production
+const publicImagesPath = path.join(process.cwd(), "public", "images");
 app.use("/images", (req, res, next) => {
   res.set({
     "Cache-Control": "public, max-age=3600",
     "Content-Type": "image/*"
   });
   next();
-}, express.static("public/images"));
+}, express.static(publicImagesPath));
 
 // Serve uploaded files from persistent storage
 // Railway: use /data/uploads volume or UPLOAD_DIR env variable
