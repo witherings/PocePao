@@ -328,7 +328,6 @@ export const snapshotMenuItems = pgTable("snapshot_menu_items", {
   descriptionDE: text("description_de").notNull(),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   priceSmall: decimal("price_small", { precision: 10, scale: 2 }),
-  priceLarge: decimal("price_large", { precision: 10, scale: 2 }),
   image: text("image").notNull(),
   categoryId: varchar("category_id").notNull(),
   available: integer("available").notNull().default(1),
@@ -367,7 +366,7 @@ export const snapshotIngredients = pgTable("snapshot_ingredients", {
   ingredientType: text("ingredient_type").notNull(),
   description: text("description"),
   descriptionDE: text("description_de"),
-  image: text("image").notNull(),
+  image: text("image"), // Nullable - some ingredients may not have images
   price: decimal("price", { precision: 10, scale: 2 }),
   priceSmall: decimal("price_small", { precision: 10, scale: 2 }),
   priceStandard: decimal("price_standard", { precision: 10, scale: 2 }),
