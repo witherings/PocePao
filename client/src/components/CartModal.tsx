@@ -285,6 +285,46 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                               </div>
                             </div>
                           )}
+                          {item.customization.extraProtein && item.customization.extraProtein.length > 0 && (
+                            <div className="flex items-start gap-1 border-t pt-1">
+                              <span className="font-semibold text-ocean whitespace-nowrap text-[10px]">Extra Protein:</span>
+                              <div className="flex flex-wrap gap-1">
+                                {item.customization.extraProtein.map((ing, idx) => (
+                                  <Badge key={idx} variant="secondary" className="text-[10px] h-4">{getIngredientName(ing)}</Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {item.customization.extraFreshIngredients && item.customization.extraFreshIngredients.length > 0 && (
+                            <div className="flex items-start gap-1">
+                              <span className="font-semibold text-ocean whitespace-nowrap text-[10px]">Extra Zutaten:</span>
+                              <div className="flex flex-wrap gap-1">
+                                {item.customization.extraFreshIngredients.map((ing, idx) => (
+                                  <Badge key={idx} variant="secondary" className="text-[10px] h-4">{getIngredientName(ing)}</Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {item.customization.extraSauces && item.customization.extraSauces.length > 0 && (
+                            <div className="flex items-start gap-1">
+                              <span className="font-semibold text-ocean whitespace-nowrap text-[10px]">Extra Sauce:</span>
+                              <div className="flex flex-wrap gap-1">
+                                {item.customization.extraSauces.map((sauce, idx) => (
+                                  <Badge key={idx} variant="secondary" className="text-[10px] h-4">{getIngredientName(sauce)}</Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {item.customization.extraToppings && item.customization.extraToppings.length > 0 && (
+                            <div className="flex items-start gap-1">
+                              <span className="font-semibold text-ocean whitespace-nowrap text-[10px]">Extra Toppings:</span>
+                              <div className="flex flex-wrap gap-1">
+                                {item.customization.extraToppings.map((topping, idx) => (
+                                  <Badge key={idx} variant="secondary" className="text-[10px] h-4">{getIngredientName(topping)}</Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </CollapsibleContent>
                       </Collapsible>
                     )}
@@ -332,6 +372,46 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                             <div className="flex flex-wrap gap-1">
                               {item.customization.toppings.map((topping, idx) => (
                                 <Badge key={idx} variant="outline" className="text-xs h-5">{getIngredientName(topping)}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {item.customization.extraProtein && item.customization.extraProtein.length > 0 && (
+                          <div className="flex items-start gap-1 border-t pt-1">
+                            <span className="font-semibold text-ocean whitespace-nowrap text-xs">Extra Protein:</span>
+                            <div className="flex flex-wrap gap-1">
+                              {item.customization.extraProtein.map((ing, idx) => (
+                                <Badge key={idx} variant="secondary" className="text-xs h-5">{getIngredientName(ing)}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {item.customization.extraFreshIngredients && item.customization.extraFreshIngredients.length > 0 && (
+                          <div className="flex items-start gap-1">
+                            <span className="font-semibold text-ocean whitespace-nowrap text-xs">Extra Zutaten:</span>
+                            <div className="flex flex-wrap gap-1">
+                              {item.customization.extraFreshIngredients.map((ing, idx) => (
+                                <Badge key={idx} variant="secondary" className="text-xs h-5">{getIngredientName(ing)}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {item.customization.extraSauces && item.customization.extraSauces.length > 0 && (
+                          <div className="flex items-start gap-1">
+                            <span className="font-semibold text-ocean whitespace-nowrap text-xs">Extra Sauce:</span>
+                            <div className="flex flex-wrap gap-1">
+                              {item.customization.extraSauces.map((sauce, idx) => (
+                                <Badge key={idx} variant="secondary" className="text-xs h-5">{getIngredientName(sauce)}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {item.customization.extraToppings && item.customization.extraToppings.length > 0 && (
+                          <div className="flex items-start gap-1">
+                            <span className="font-semibold text-ocean whitespace-nowrap text-xs">Extra Toppings:</span>
+                            <div className="flex flex-wrap gap-1">
+                              {item.customization.extraToppings.map((topping, idx) => (
+                                <Badge key={idx} variant="secondary" className="text-xs h-5">{getIngredientName(topping)}</Badge>
                               ))}
                             </div>
                           </div>
