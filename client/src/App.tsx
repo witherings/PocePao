@@ -23,6 +23,7 @@ import { AdminReservations } from "@/pages/AdminReservations";
 import { AdminContent } from "@/pages/AdminContent";
 import { AdminAbout } from "@/pages/AdminAbout";
 import { AdminContact } from "@/pages/AdminContact";
+import { AdminHome } from "@/pages/AdminHome";
 import NotFound from "@/pages/not-found";
 
 function AdminRedirect() {
@@ -69,6 +70,7 @@ function Router() {
         <Route path="/admin/menu" component={AdminMenu} />
         <Route path="/admin/reservations" component={AdminReservations} />
         <Route path="/admin/content" component={AdminContent} />
+        <Route path="/admin/home" component={AdminHome} />
         <Route path="/admin/about" component={AdminAbout} />
         <Route path="/admin/contact" component={AdminContact} />
         <Route path="/admin/settings" component={AdminSettings} />

@@ -90,11 +90,11 @@ export default function AdminDashboard() {
       color: "bg-rose-500",
     },
     {
-      title: "Einstellungen",
-      description: "Wartungsmodus und globale Einstellungen",
+      title: "Startseite",
+      description: "Startseite und Hero-Section bearbeiten",
       icon: Settings,
-      href: "/admin/settings",
-      color: "bg-gray-500",
+      href: "/admin/home",
+      color: "bg-cyan-500",
     },
     {
       title: "Über Uns",
@@ -109,6 +109,13 @@ export default function AdminDashboard() {
       icon: Settings,
       href: "/admin/contact",
       color: "bg-green-500",
+    },
+    {
+      title: "Einstellungen",
+      description: "Wartungsmodus und globale Einstellungen",
+      icon: Settings,
+      href: "/admin/settings",
+      color: "bg-gray-500",
     },
   ];
 
