@@ -109,6 +109,21 @@ export function AdminMenu() {
   const [variants, setVariants] = useState<ProductVariant[]>([]);
   const [editingVariant, setEditingVariant] = useState<ProductVariant | null>(null);
   const [showVariantEditDialog, setShowVariantEditDialog] = useState(false);
+  
+  const [pageImages, setPageImages] = useState<any[]>([]);
+  const [selectedPageForImages, setSelectedPageForImages] = useState<string>("startseite");
+  const [showPageImageDialog, setShowPageImageDialog] = useState(false);
+  const [pageImagePreview, setPageImagePreview] = useState<string | null>(null);
+  const [pageImageFile, setPageImageFile] = useState<File | null>(null);
+  const [isUploadingPageImage, setIsUploadingPageImage] = useState(false);
+
+  const pages = [
+    { id: "startseite", label: "Startseite" },
+    { id: "speisekarte", label: "Speisekarte" },
+    { id: "ueber-uns", label: "Über Uns" },
+    { id: "reservierung", label: "Reservierung" },
+    { id: "kontakt", label: "Kontakt" },
+  ];
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -678,6 +693,7 @@ export function AdminMenu() {
           <TabsTrigger value="categories" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Kategorien</TabsTrigger>
           <TabsTrigger value="items" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Gerichte</TabsTrigger>
           <TabsTrigger value="ingredients" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Zutaten</TabsTrigger>
+          <TabsTrigger value="pages" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Seiten-Bilder</TabsTrigger>
         </TabsList>
 
         <TabsContent value="categories">
