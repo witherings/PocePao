@@ -142,20 +142,27 @@ export function AdminGallery() {
         </CardHeader>
         <CardContent className="pt-6">
           <div className="space-y-6">
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-              <label className="block text-sm font-semibold text-gray-700 mb-3">Galerie-Typ:</label>
-              <div className="flex gap-4">
-                <label className="flex items-center cursor-pointer">
-                  <input
-                    type="radio"
-                    name="galleryType"
-                    value="main"
-                    checked={galleryType === "main"}
-                    onChange={(e) => setGalleryType(e.target.value as "main")}
-                    className="mr-2"
-                  />
-                  <span className="text-sm">🖼️ Hauptgalerie (unten)</span>
-                </label>
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">Galerie-Typ:</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="galleryType"
+                      value="main"
+                      checked={galleryType === "main"}
+                      onChange={(e) => setGalleryType(e.target.value as "main")}
+                      className="mr-2"
+                    />
+                    <span className="text-sm">🖼️ <strong>Hauptgalerie</strong> (unten auf der Startseite)</span>
+                  </label>
+                </div>
+                <p className="text-xs text-gray-600 mt-2 ml-6">
+                  Format: JPG/PNG | Größe: 800x600px oder größer | Max. 5MB
+                </p>
+              </div>
+              <div className="border-t border-blue-200 pt-4">
                 <label className="flex items-center cursor-pointer">
                   <input
                     type="radio"
@@ -165,8 +172,11 @@ export function AdminGallery() {
                     onChange={(e) => setGalleryType(e.target.value as "header")}
                     className="mr-2"
                   />
-                  <span className="text-sm">📸 Header-Galerie (oben)</span>
+                  <span className="text-sm">📸 <strong>Header-Slider</strong> (drehender Hintergrund oben)</span>
                 </label>
+                <p className="text-xs text-gray-600 mt-2 ml-6">
+                  Format: JPG/PNG | Größe: 1920x1080px (16:9 Verhältnis) | Max. 5MB
+                </p>
               </div>
             </div>
             <Input

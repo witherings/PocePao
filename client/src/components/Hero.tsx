@@ -4,13 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useQuery } from "@tanstack/react-query";
-
-// Placeholder images - user will replace with real poke bowl photos
-const HERO_IMAGES = [
-  "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1920&h=1080&fit=crop&q=80", // Food bowl 1
-  "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1920&h=1080&fit=crop&q=80", // Food bowl 2
-  "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=1920&h=1080&fit=crop&q=80", // Fresh salad
-];
+import { type GalleryImage } from "@shared/schema";
 
 export function Hero() {
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -18,6 +12,29 @@ export function Hero() {
     [Autoplay({ delay: 5000, stopOnInteraction: false })]
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  // Fetch header slider images from database
+  const { data: allImages = [] } = useQuery<GalleryImage[]>({
+    queryKey: ["/api/gallery"],
+  });
+
+  // Filter only header images for the slider
+  const heroImages = allImages.filter(img => img.type === "header");
+
+  // Fallback to default images if no header images exist
+  const FALLBACK_HERO_IMAGES = [
+    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1920&h=1080&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1920&h=1080&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=1920&h=1080&fit=crop&q=80",
+  ];
+
+  const displayImages = heroImages.length > 0 ? heroImages : FALLBACK_HERO_IMAGES.map((url, idx) => ({
+    id: `fallback-${idx}`,
+    url,
+    filename: `fallback-${idx}`,
+    type: "header" as const,
+    createdAt: new Date().toISOString(),
+  }));
 
   // Fetch home page content from database
   const { data: homeContent } = useQuery({
@@ -57,11 +74,11 @@ export function Hero() {
       {/* Carousel */}
       <div className="embla absolute inset-0" ref={emblaRef}>
         <div className="embla__container h-full flex">
-          {HERO_IMAGES.map((image, index) => (
-            <div key={index} className="embla__slide flex-[0_0_100%] relative">
+          {displayImages.map((image, index) => (
+            <div key={image.id || index} className="embla__slide flex-[0_0_100%] relative">
               <img
-                src={image}
-                alt={`PokePao Bowl ${index + 1}`}
+                src={image.url}
+                alt={image.filename || `PokePao Bowl ${index + 1}`}
                 className="w-full h-full object-cover"
               />
               {/* Dark gradient overlay for better text readability */}
@@ -73,7 +90,7 @@ export function Hero() {
 
       {/* Carousel Dots */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
-        {HERO_IMAGES.map((_, index) => (
+        {displayImages.map((_, index) => (
           <button
             key={index}
             disabled={!emblaApi}
