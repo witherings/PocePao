@@ -90,7 +90,7 @@ export const ingredients = pgTable("ingredients", {
   type: text("type").notNull(), // protein, base, marinade, fresh, sauce, topping, extra
   description: text("description"),
   descriptionDE: text("description_de"),
-  image: text("image").notNull(),
+  image: text("image"), // Made optional - can be null for extras
   price: decimal("price", { precision: 10, scale: 2 }), // price for extras or legacy single price
   priceSmall: decimal("price_small", { precision: 10, scale: 2 }), // Price when bowl size is Klein (for proteins)
   priceStandard: decimal("price_standard", { precision: 10, scale: 2 }), // Price when bowl size is Standard (for proteins)
