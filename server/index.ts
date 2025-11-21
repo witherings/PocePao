@@ -22,15 +22,24 @@ let sessionMiddleware: any;
 
 // Passport middleware - will be configured after session middleware
 
-// Serve menu images from public/images
-app.use("/images", express.static("public/images"));
+// Serve menu images from public/images with proper cache headers
+app.use("/images", (req, res, next) => {
+  res.set({
+    "Cache-Control": "public, max-age=3600",
+    "Content-Type": "image/*"
+  });
+  next();
+}, express.static("public/images"));
 
 // Serve uploaded files from persistent storage
 // Railway: use /data/uploads volume or UPLOAD_DIR env variable
 // Development: use local uploads directory
 const uploadDir = process.env.UPLOAD_DIR || 
                   (process.env.NODE_ENV === 'production' ? '/data/uploads' : path.join(process.cwd(), "uploads"));
-app.use("/uploads", express.static(uploadDir));
+app.use("/uploads", (req, res, next) => {
+  res.set("Cache-Control", "public, max-age=3600");
+  next();
+}, express.static(uploadDir));
 
 app.use((req, res, next) => {
   const start = Date.now();
