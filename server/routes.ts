@@ -1,7 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertReservationSchema, insertGalleryImageSchema, insertOrderSchema, insertOrderItemSchema, insertIngredientSchema, insertCategorySchema, insertMenuItemSchema, insertProductVariantSchema } from "@shared/schema";
+import { insertReservationSchema, insertGalleryImageSchema, insertOrderSchema, insertOrderItemSchema, insertIngredientSchema, insertCategorySchema, insertMenuItemSchema, insertProductVariantSchema, pageImages, insertPageImageSchema } from "@shared/schema";
+import { eq, asc } from "drizzle-orm";
 import { notificationService } from "./notifications";
 import { registerAdminRoutes } from "./admin-routes";
 import { registerSnapshotRoutes } from "./snapshot-routes";
@@ -604,15 +605,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { page } = req.params;
       const db = await getDb();
-      const { pageImages } = require("@shared/schema");
-      const { eq, asc } = require("drizzle-orm");
       const images = await db.select()
         .from(pageImages)
         .where(eq(pageImages.page, page))
         .orderBy(asc(pageImages.order));
       res.json(images);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch page images" });
+    } catch (error: any) {
+      console.error("❌ Error fetching page images:", error);
+      res.status(500).json({ error: "Failed to fetch page images", details: error.message });
     }
   });
 
@@ -634,7 +634,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const imageUrl = `/images/pages/${page}/${req.file.filename}`;
       const db = await getDb();
-      const { pageImages, insertPageImageSchema } = require("@shared/schema");
       const validatedData = insertPageImageSchema.parse({
         page: page.toLowerCase(),
         url: imageUrl,
@@ -654,8 +653,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { id } = req.params;
       const db = await getDb();
-      const { pageImages } = require("@shared/schema");
-      const { eq } = require("drizzle-orm");
       
       const image = await db.select().from(pageImages).where(eq(pageImages.id, id)).limit(1);
       if (image.length === 0) {
