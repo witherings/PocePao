@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { getDb } from "./db";
 import { insertReservationSchema, insertGalleryImageSchema, insertOrderSchema, insertOrderItemSchema, insertIngredientSchema, insertCategorySchema, insertMenuItemSchema, insertProductVariantSchema, pageImages, insertPageImageSchema } from "@shared/schema";
 import { eq, asc } from "drizzle-orm";
 import { notificationService } from "./notifications";

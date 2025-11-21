@@ -85,7 +85,7 @@ export function Hero() {
       {/* Carousel */}
       <div className="embla absolute inset-0" ref={emblaRef}>
         <div className="embla__container h-full flex">
-          {displayImages.map((image, index) => (
+          {displayImages.map((image: any, index: number) => (
             <div key={image.id || index} className="embla__slide flex-[0_0_100%] relative">
               <img
                 src={image.url}
@@ -101,7 +101,7 @@ export function Hero() {
 
       {/* Carousel Dots */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
-        {displayImages.map((_, index) => (
+        {displayImages.map((_: any, index: number) => (
           <button
             key={index}
             disabled={!emblaApi}
