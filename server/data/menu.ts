@@ -48,7 +48,7 @@ export const createMenuItems = (categoryIds: { customBowls: string, bowls: strin
     nameDE: "Wunsch Bowl",
     description: "Create your own custom poke bowl: Choose protein, base, marinade, 4 fresh ingredients, sauce, and 3 toppings",
     descriptionDE: "Stelle deinen Wunsch Bowl zusammen: Wähle Protein, Base, Marinade, 4 frische Zutaten, Sauce und 3 Toppings",
-    price: "9.50",
+    price: "14.75",
     priceSmall: "9.50",
     image: "/images/categories/Wunsch Bowls/main/Gemini_Generated_Image_4oapkm4oapkm4oap.png",
     categoryId: categoryIds.customBowls,
