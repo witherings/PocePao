@@ -78,6 +78,8 @@ export const createMenuItems = (categoryIds: { customBowls: string, bowls: strin
     allergens: ["Fisch", "Soja", "Sesam", "Ei", "Knoblauch"],
     hasSizeOptions: 1,
     enableBaseSelection: 1,
+    hasVariants: 1,
+    variantType: "base",
   },
   {
     name: "Hähnchen-Harmonie",
@@ -98,6 +100,8 @@ export const createMenuItems = (categoryIds: { customBowls: string, bowls: strin
     allergens: ["Sesam", "Soja", "Ei", "Schalenfrüchte (Cashewkerne)", "Knoblauch"],
     hasSizeOptions: 1,
     enableBaseSelection: 1,
+    hasVariants: 1,
+    variantType: "base",
   },
   {
     name: "Lachs-Lust",
@@ -118,6 +122,8 @@ export const createMenuItems = (categoryIds: { customBowls: string, bowls: strin
     allergens: ["Fisch", "Soja", "Sesam", "Knoblauch"],
     hasSizeOptions: 1,
     enableBaseSelection: 1,
+    hasVariants: 1,
+    variantType: "base",
   },
   {
     name: "Falafel-Freude",
@@ -138,6 +144,8 @@ export const createMenuItems = (categoryIds: { customBowls: string, bowls: strin
     allergens: ["Soja", "Ei", "Knoblauch", "Hülsenfrüchte (Kichererbsen)", "Schalenfrüchte (Mandeln)"],
     hasSizeOptions: 1,
     enableBaseSelection: 1,
+    hasVariants: 1,
+    variantType: "base",
   },
   {
     name: "Garnelen-Genuss",
@@ -158,6 +166,8 @@ export const createMenuItems = (categoryIds: { customBowls: string, bowls: strin
     allergens: ["Krebstiere", "Sesam", "Soja", "Ei", "Erdnüsse", "Knoblauch"],
     hasSizeOptions: 1,
     enableBaseSelection: 1,
+    hasVariants: 1,
+    variantType: "base",
   },
   {
     name: "Tofu-Triumph",
@@ -178,6 +188,8 @@ export const createMenuItems = (categoryIds: { customBowls: string, bowls: strin
     allergens: ["Soja", "Ei", "Knoblauch"],
     hasSizeOptions: 1,
     enableBaseSelection: 1,
+    hasVariants: 1,
+    variantType: "base",
   },
   {
     name: "Vitamins Bowl",
