@@ -1175,8 +1175,7 @@ export function AdminMenu() {
                       <div>
                         <Label htmlFor="ing-type" className="text-base font-semibold mb-2">Typ *</Label>
                         <Select
-                          name="type"
-                          defaultValue={editingIngredient?.type}
+                          value={selectedIngredientType || editingIngredient?.type || ""}
                           required
                           onValueChange={(value) => setSelectedIngredientType(value)}
                         >
