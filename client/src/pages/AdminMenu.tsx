@@ -72,8 +72,18 @@ interface Ingredient {
   available: number;
 }
 
+interface PageImage {
+  id: string;
+  page: string;
+  url: string;
+  filename: string;
+  alt?: string;
+  order: number;
+  uploadedAt: string;
+}
+
 interface DeleteConfirmation {
-  type: "category" | "menuItem" | "ingredient" | "variant" | null;
+  type: "category" | "menuItem" | "ingredient" | "variant" | "pageImage" | null;
   id: string | null;
   name?: string;
 }
@@ -109,6 +119,9 @@ export function AdminMenu() {
   const [variants, setVariants] = useState<ProductVariant[]>([]);
   const [editingVariant, setEditingVariant] = useState<ProductVariant | null>(null);
   const [showVariantEditDialog, setShowVariantEditDialog] = useState(false);
+  const [sliderImageFile, setSliderImageFile] = useState<File | null>(null);
+  const [sliderImagePreview, setSliderImagePreview] = useState<string | null>(null);
+  const [isUploadingSlider, setIsUploadingSlider] = useState(false);
   
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -120,6 +133,10 @@ export function AdminMenu() {
 
   const { data: ingredients = [] } = useQuery<Ingredient[]>({
     queryKey: ["/api/ingredients"],
+  });
+
+  const { data: headerImages = [] } = useQuery<PageImage[]>({
+    queryKey: ["/api/page-images/startseite"],
   });
 
   // Helper function to check if a category is "Wunsch Bowls"
@@ -324,6 +341,34 @@ export function AdminMenu() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/menu-items"] });
       toast({ title: "Varianteneinstellungen aktualisiert" });
+    },
+  });
+
+  const createPageImageMutation = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const response = await fetch("/api/page-images", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
+      if (!response.ok) throw new Error("Failed to upload");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/page-images/startseite"] });
+      setSliderImageFile(null);
+      setSliderImagePreview(null);
+      toast({ title: "Slider erfolgreich hinzugefügt" });
+    },
+  });
+
+  const deletePageImageMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await apiRequest("DELETE", `/api/page-images/${id}`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/page-images/startseite"] });
+      toast({ title: "Slider gelöscht" });
     },
   });
 
