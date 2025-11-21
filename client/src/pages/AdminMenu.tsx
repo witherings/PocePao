@@ -1207,7 +1207,10 @@ export function AdminMenu() {
                             <SelectItem value="fresh" className="text-base">Frische Zutat</SelectItem>
                             <SelectItem value="sauce" className="text-base">Sauce</SelectItem>
                             <SelectItem value="topping" className="text-base">Topping</SelectItem>
-                            <SelectItem value="extra" className="text-base">Extra</SelectItem>
+                            <SelectItem value="extra_protein" className="text-base">Extra Protein</SelectItem>
+                            <SelectItem value="extra_fresh" className="text-base">Extra Frische Zutat</SelectItem>
+                            <SelectItem value="extra_sauce" className="text-base">Extra Sauce</SelectItem>
+                            <SelectItem value="extra_topping" className="text-base">Extra Topping</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -1256,7 +1259,7 @@ export function AdminMenu() {
                       </div>
                     )}
 
-                    {((selectedIngredientType || editingIngredient?.type) === 'extra') && (
+                    {['extra_protein', 'extra_fresh', 'extra_sauce', 'extra_topping'].includes(selectedIngredientType || editingIngredient?.type || '') && (
                       <div>
                         <Label htmlFor="ing-price" className="text-base font-semibold mb-2">Preis (€) *</Label>
                         <Input
@@ -1343,7 +1346,7 @@ export function AdminMenu() {
                       <Label htmlFor="ing-available">Verfügbar</Label>
                     </div>
 
-                    {(selectedIngredientType && selectedIngredientType !== 'extra') && (
+                    {(selectedIngredientType && !['extra_protein', 'extra_fresh', 'extra_sauce', 'extra_topping'].includes(selectedIngredientType)) && (
                       <div className="flex items-center space-x-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
                         <Switch
                           id="create-as-extra"
