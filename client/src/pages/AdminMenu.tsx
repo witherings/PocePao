@@ -1382,7 +1382,7 @@ export function AdminMenu() {
                   >
                     Alle
                   </Button>
-                  {["protein", "base", "marinade", "fresh", "sauce", "topping", "extra"].map((type) => (
+                  {["protein", "base", "marinade", "fresh", "sauce", "topping", "extra_protein", "extra_fresh", "extra_sauce", "extra_topping"].map((type) => (
                     <Button
                       key={type}
                       variant={ingredientFilterType === type ? "default" : "outline"}
@@ -1395,13 +1395,17 @@ export function AdminMenu() {
                        type === "marinade" ? "🧂 Marinaden" :
                        type === "fresh" ? "🥬 Frische" :
                        type === "sauce" ? "🥫 Saucen" :
-                       type === "topping" ? "✨ Toppings" : "➕ Extras"}
+                       type === "topping" ? "✨ Toppings" :
+                       type === "extra_protein" ? "➕ Extra Protein" :
+                       type === "extra_fresh" ? "➕ Extra Frische" :
+                       type === "extra_sauce" ? "➕ Extra Sauce" :
+                       type === "extra_topping" ? "➕ Extra Toppings" : ""}
                     </Button>
                   ))}
                 </div>
               </div>
               <div className="space-y-6">
-                {["protein", "base", "marinade", "fresh", "sauce", "topping", "extra"].map((type) => {
+                {["protein", "base", "marinade", "fresh", "sauce", "topping", "extra_protein", "extra_fresh", "extra_sauce", "extra_topping"].map((type) => {
                   if (ingredientFilterType !== null && ingredientFilterType !== type) return null;
                   
                   const typeIngredients = ingredients.filter(ing => ing.type === type).sort((a, b) => a.order - b.order);
@@ -1415,7 +1419,10 @@ export function AdminMenu() {
                     fresh: "🥬 Frische Zutaten",
                     sauce: "🥫 Saucen",
                     topping: "✨ Toppings",
-                    extra: "➕ Extras"
+                    extra_protein: "➕ Extra Protein",
+                    extra_fresh: "➕ Extra Frische Zutaten",
+                    extra_sauce: "➕ Extra Saucen",
+                    extra_topping: "➕ Extra Toppings"
                   };
                   
                   return (
