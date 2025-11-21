@@ -95,6 +95,33 @@ async function runMigrations() {
       'Price for Standard bowl size'
     );
 
+    // Ensure product_variants table exists
+    console.log("\n📝 Ensuring product_variants table exists...");
+    const pvTableResult = await pool.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'product_variants'
+      );
+    `);
+    
+    if (!pvTableResult.rows[0].exists) {
+      console.log("  ➕ Creating product_variants table");
+      await pool.query(`
+        CREATE TABLE product_variants (
+          id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid(),
+          menu_item_id VARCHAR NOT NULL REFERENCES menu_items(id) ON DELETE CASCADE,
+          name TEXT NOT NULL,
+          name_de TEXT NOT NULL,
+          type TEXT NOT NULL,
+          "order" INTEGER NOT NULL DEFAULT 0,
+          available INTEGER NOT NULL DEFAULT 1
+        )
+      `);
+      console.log("     ✓ Successfully created product_variants table");
+    } else {
+      console.log("  ✓ product_variants table exists");
+    }
+
     // Ensure app_settings table exists
     console.log("\n📝 Ensuring app_settings table exists...");
     const tableCheckResult = await pool.query(`
