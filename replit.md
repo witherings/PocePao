@@ -3,6 +3,17 @@
 ### Overview
 PokePao is a full-stack e-commerce platform for a Hawaiian poke bowl restaurant. It enables customers to browse the menu, manage their cart, make reservations, and learn about the establishment. The platform includes a comprehensive admin panel for managing menu items, orders, reservations, and gallery content. The project is designed for production deployment on platforms like Railway.app, aiming for a robust, scalable, and user-friendly solution in the food service e-commerce market.
 
+### Recent Changes (November 21, 2025)
+**Complete Database Initialization System for Railway**
+- ✅ Created `server/init-database.ts` - comprehensive database initialization using Drizzle Kit as single source of truth
+- ✅ Created `server/verify-database.ts` - detailed database verification and validation script
+- ✅ Added healthcheck endpoint `/api/health` for Railway monitoring
+- ✅ Fixed critical pricing structure: removed invalid `priceLarge` fields, added correct `priceSmall`/`priceStandard` for protein ingredients
+- ✅ **CRITICAL FIX**: Moved `drizzle-kit` from devDependencies to dependencies (Railway production builds require this)
+- ✅ **CRITICAL FIX**: Changed railway:start to fail-fast approach (removed `|| true`) for immediate error visibility
+- ✅ Created comprehensive Railway deployment documentation (RAILWAY_DEPLOYMENT.md)
+- ✅ All features tested and verified: menu, admin panel, snapshots, Wunsch Bowl constructor, product variants, gallery
+
 ### User Preferences
 I prefer iterative development with clear, concise explanations for each step. Please ask for my approval before implementing major changes or architectural shifts. I value clean, readable code and prefer modern JavaScript/TypeScript practices. Do not make changes to the `shared/` folder without explicit instruction.
 
@@ -36,10 +47,13 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 
 **System Design Choices:**
 - **Database:** PostgreSQL managed with Drizzle ORM for type-safe queries.
+- **Database Initialization:** Automated initialization system (`server/init-database.ts`) using Drizzle Kit push for schema creation from `shared/schema.ts` as single source of truth. Includes connection testing, schema creation, data seeding, admin user creation, and verification steps.
+- **Database Verification:** Comprehensive verification script (`server/verify-database.ts`) that validates all tables, data integrity, and ingredient types.
 - **Session Management:** `express-session` with `sameSite=strict` cookies.
-- **Environment:** Optimized for cloud deployment (Railway.app, Render.com) with robust connection retry logic, secure database connections (SSL/TLS), and environment variable management.
+- **Environment:** Optimized for cloud deployment (Railway.app, Render.com) with robust connection retry logic, secure database connections (SSL/TLS), fail-fast error handling, and environment variable management.
 - **Idempotent Scripts:** Database seeding, admin creation, and gallery import scripts are idempotent for safe, repeated execution.
 - **Menu Ordering:** Implemented ID-based sorting in the storage layer for consistent menu item display.
+- **Health Monitoring:** `/api/health` endpoint for deployment platform monitoring and database connection validation.
 
 ### External Dependencies
 - **Database:** PostgreSQL (via `node-postgres` driver, Drizzle ORM)
