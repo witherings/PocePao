@@ -629,9 +629,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const pageFolder = path.join(process.cwd(), "public", "images", "pages", page);
-      await fs.promises.mkdir(pageFolder, { recursive: true });
+      await fs.mkdir(pageFolder, { recursive: true });
       const destPath = path.join(pageFolder, req.file.filename);
-      await fs.promises.rename(path.join(uploadDir, req.file.filename), destPath);
+      await fs.rename(path.join(uploadDir, req.file.filename), destPath);
       
       const imageUrl = `/images/pages/${page}/${req.file.filename}`;
       const db = await getDb();
@@ -665,7 +665,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (image[0].url.startsWith('/images/pages/')) {
         const filePath = path.join(process.cwd(), 'public', image[0].url);
         try {
-          await fs.promises.unlink(filePath);
+          await fs.unlink(filePath);
         } catch (err) {
           console.warn(`Could not delete file: ${filePath}`);
         }
