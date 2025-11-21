@@ -507,7 +507,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
               <div>
                 <h3 className="font-poppins font-bold text-xl mb-4">Extra Protein</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {ingredients.filter(ing => ing.type === "protein" && ing.available === 1).map((ingredient) => {
+                  {ingredients.filter(ing => ing.type === "extra_protein" && ing.available === 1).map((ingredient) => {
                     const selected = isExtraSelected(ingredient.id, "protein");
                     return (
                       <div
@@ -552,7 +552,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
               <div>
                 <h3 className="font-poppins font-bold text-xl mb-4">extra frische Zutaten</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {ingredients.filter(ing => ing.type === "fresh" && ing.available === 1).map((ingredient) => {
+                  {ingredients.filter(ing => ing.type === "extra_fresh" && ing.available === 1).map((ingredient) => {
                     const selected = isExtraSelected(ingredient.id, "fresh");
                     return (
                       <div
@@ -597,7 +597,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
               <div>
                 <h3 className="font-poppins font-bold text-xl mb-4">extra Sauce</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {ingredients.filter(ing => ing.type === "sauce" && ing.available === 1).map((ingredient) => {
+                  {ingredients.filter(ing => ing.type === "extra_sauce" && ing.available === 1).map((ingredient) => {
                     const selected = isExtraSelected(ingredient.id, "sauce");
                     return (
                       <div
@@ -642,7 +642,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
               <div>
                 <h3 className="font-poppins font-bold text-xl mb-4">extra Toppings</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {ingredients.filter(ing => ing.type === "topping" && ing.available === 1).map((ingredient) => {
+                  {ingredients.filter(ing => ing.type === "extra_topping" && ing.available === 1).map((ingredient) => {
                     const selected = isExtraSelected(ingredient.id, "topping");
                     return (
                       <div

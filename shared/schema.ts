@@ -79,7 +79,10 @@ export enum IngredientType {
   FRESH = "fresh",
   SAUCE = "sauce",
   TOPPING = "topping",
-  EXTRA = "extra"
+  EXTRA_PROTEIN = "extra_protein",
+  EXTRA_FRESH = "extra_fresh",
+  EXTRA_SAUCE = "extra_sauce",
+  EXTRA_TOPPING = "extra_topping"
 }
 
 // Ingredients for Custom Bowls
@@ -105,7 +108,7 @@ export const insertIngredientSchema = createInsertSchema(ingredients)
   .refine(
     (data) => {
       // Validate type is one of the allowed values
-      const validTypes = ["protein", "base", "marinade", "fresh", "sauce", "topping", "extra"];
+      const validTypes = ["protein", "base", "marinade", "fresh", "sauce", "topping", "extra_protein", "extra_fresh", "extra_sauce", "extra_topping"];
       return data.type && validTypes.includes(data.type);
     },
     {
