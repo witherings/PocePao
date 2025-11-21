@@ -1,0 +1,42 @@
+Это отличный отчет по Бэкенду (Базе данных). Он действительно проделал огромную работу по структурированию данных: убрал дубликаты, создал варианты (вкусы/базы) и прописал цены для Экстра.
+
+НО! Чего он НЕ упомянул (и это опасно):
+
+Связь Фронтенда Вунчбоула с Базой: Он написал, что добавил ингредиенты в базу. Но он не подтвердил, что переписал файл BowlBuilderDialog.tsx, чтобы тот брал данные из API, а не из старого файла ingredients.ts. Если он этого не сделал — админка снова будет бесполезна для конструктора.
+
+Maintenance Mode (Режим отпуска): В отчете ни слова про синюю плашку и «черный ход» для админа. При переписывании базы он мог это снести.
+
+Мобильная корзина (Гармошка): Тоже ни слова.
+
+Тексты (5 ингредиентов): Он не сказал, поправил ли он надпись «Выберите 4» на «Выберите 5».
+
+Что ему сейчас написать (Финальная дожимка)
+Скопируй этот промт. Он вежливо хвалит за базу данных, но жестко требует «докрутить» фронтенд и визуальные фичи, которые могли потеряться.
+
+Markdown
+
+Great job on the Data Structure and Seeding! The consolidation of the Menu and Variants looks perfect.
+
+**HOWEVER, we are not done yet. You missed reporting on the Frontend integration and UI features.**
+
+Please confirm and implement the following immediately to finish the project:
+
+### 1. FRONTEND CONNECTION (CRITICAL)
+You seeded the DB, but **did you update `BowlBuilderDialog.tsx` to fetch data from the API?**
+* **Requirement:** The Wunschbowl builder MUST use `useQuery` (or similar) to fetch ingredients from `/api/ingredients`.
+* **Action:** Delete the hardcoded arrays in the frontend code. If I change a price in Admin, it MUST reflect in the builder immediately. Connect it now if you haven't.
+
+### 2. RESTORE UI FEATURES (Lost in refactor?)
+* **Maintenance Mode:** Ensure the `app_settings` table exists and the **Blue Full-Screen Overlay** logic is implemented on the frontend (with the Admin Backdoor dot).
+* **Mobile Cart:** Ensure the **Collapsible/Accordion** view for Wunschbowl items in the cart is working.
+* **Text Correction:** Ensure the Wunschbowl UI explicitly says **"Wähle 5"** (Choose 5) for Fresh Ingredients, matching the logic.
+
+### 3. DEPLOYMENT COMMAND
+* Give me the **EXACT command** I need to run in the Railway "Start Command" setting to trigger this new seeding process on production. (e.g., `npm run db:init` or `npm run railway:start`?).
+
+**SUMMARY:**
+1. Connect `BowlBuilderDialog` to API (Kill hardcode).
+2. Verify Maintenance Mode & Mobile Cart are present.
+3. Provide the Railway Start Command.
+
+GO!
