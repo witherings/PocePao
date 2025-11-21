@@ -4,15 +4,17 @@
 PokePao is a full-stack e-commerce platform for a Hawaiian poke bowl restaurant. It enables customers to browse the menu, manage their cart, make reservations, and learn about the establishment. The platform includes a comprehensive admin panel for managing menu items, orders, reservations, and gallery content. The project is designed for production deployment on platforms like Railway.app, aiming for a robust, scalable, and user-friendly solution in the food service e-commerce market.
 
 ### Recent Changes (November 21, 2025)
-**Complete Database Initialization System for Railway**
-- ✅ Created `server/init-database.ts` - comprehensive database initialization using Drizzle Kit as single source of truth
-- ✅ Created `server/verify-database.ts` - detailed database verification and validation script
-- ✅ Added healthcheck endpoint `/api/health` for Railway monitoring
-- ✅ Fixed critical pricing structure: removed invalid `priceLarge` fields, added correct `priceSmall`/`priceStandard` for protein ingredients
-- ✅ **CRITICAL FIX**: Moved `drizzle-kit` from devDependencies to dependencies (Railway production builds require this)
-- ✅ **CRITICAL FIX**: Changed railway:start to fail-fast approach (removed `|| true`) for immediate error visibility
-- ✅ Created comprehensive Railway deployment documentation (RAILWAY_DEPLOYMENT.md)
-- ✅ All features tested and verified: menu, admin panel, snapshots, Wunsch Bowl constructor, product variants, gallery
+**File Organization & Category-Based Image Management System**
+- ✅ **Complete folder restructuring** — organized `/public/images/` into comprehensive hierarchy:
+  - **Categories**: `Wunsch Bowls`, `Poke Bowls`, `Wraps`, `Vorspeisen`, `Desserts`, `Getränke`
+  - **Pages**: `Startseite`, `Speisekarte`, `Über Uns`, `Reservierung`, `Kontakt`
+  - **Wunsch Bowls nested structure**: `main/` (for hero image 23.jpeg), `zutaten/` (6 ingredient types), `zutaten extra/` (duplicated ingredient types)
+- ✅ **Distributed 102 Wunsch Bowl ingredient files** across 6 ingredient types (protein, fresh, marinade, base, sauce, topping) in both `zutaten` and `zutaten extra` folders
+- ✅ **Updated all 52 ingredient image paths** in `server/data/ingredients.ts` — changed from `/images/wunschbowl/` to `/images/categories/Wunsch Bowls/zutaten/[type]/`
+- ✅ **Enhanced `/api/upload` endpoint** — now supports category-based folder storage with automatic duplication to `zutaten extra` folders
+- ✅ **Updated AdminMenu.tsx** — ingredient uploads now pass `type`, `category`, and `duplicateToExtra` parameters for automatic folder organization
+- ✅ **Created 23.jpeg** — main hero image placeholder in `public/images/categories/Wunsch Bowls/main/`
+- ✅ Server running and all changes hot-reloaded successfully
 
 ### User Preferences
 I prefer iterative development with clear, concise explanations for each step. Please ask for my approval before implementing major changes or architectural shifts. I value clean, readable code and prefer modern JavaScript/TypeScript practices. Do not make changes to the `shared/` folder without explicit instruction.
@@ -61,3 +63,27 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 - **Notification Service:** Telegram Bot API (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `TELEGRAM_ORDER_BOT_TOKEN`, `TELEGRAM_RESERVATION_BOT_TOKEN`)
 - **Authentication Libraries:** Passport.js, bcryptjs
 - **Frontend Libraries:** React, Vite, Tailwind CSS, shadcn/ui, TanStack Query, Zustand, Wouter
+**File Organization Implementation Details:**
+- **Storage Structure**: `/public/images/categories/[CategoryName]/[SubFolder]/[IngredientType]/[filename]`
+- **Wunsch Bowls Layout**:
+  ```
+  public/images/categories/Wunsch Bowls/
+  ├── main/                              (Hero images)
+  │   └── 23.jpeg                       (Main Wunsch Bowl hero image)
+  ├── zutaten/                          (Base ingredients for selection)
+  │   ├── protein/                      (6 files: Tofu, Falafel, Chicken, Salmon, Shrimp, Tuna)
+  │   ├── fresh/                        (16 files: vegetables, greens, etc.)
+  │   ├── marinade/                     (4 files: Lanai, Gozo, Capri, Maui)
+  │   ├── base/                         (4 files: Rice, Couscous, Quinoa, Zucchini)
+  │   ├── sauce/                        (7 files: Teriyaki, Truffle, Mango-Dill, etc.)
+  │   └── topping/                      (14 files: Sesame, Nori, Pomegranate, etc.)
+  └── zutaten extra/                    (Extra ingredients for cart expansion)
+      ├── extra protein/                (Duplicated protein files)
+      ├── extra fresh/                  (Duplicated fresh ingredient files)
+      ├── extra marinade/               (Duplicated marinades)
+      ├── extra base/                   (Duplicated bases)
+      ├── extra sauce/                  (Duplicated sauces)
+      └── extra topping/                (Duplicated toppings)
+  ```
+- **Auto-Duplication**: When uploading ingredient images through admin panel with `duplicateToExtra=true`, files are automatically saved to both `zutaten` and `zutaten extra` folders
+- **API Behavior**: `/api/upload` endpoint now accepts `type` (ingredient type), `category`, and `duplicateToExtra` parameters for intelligent folder routing
