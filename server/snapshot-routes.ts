@@ -60,37 +60,47 @@ export function registerSnapshotRoutes(app: Express) {
       // Copy current categories
       const currentCategories = await db.select().from(categories);
       if (currentCategories.length > 0) {
-        await db.insert(snapshotCategories).values(
-          currentCategories.map((cat: Category) => ({
-            snapshotId: snapshot.id,
-            name: cat.name,
-            nameDE: cat.nameDE,
-            icon: cat.icon,
-            order: cat.order,
-            originalCategoryId: cat.id,
-          }))
-        );
+        try {
+          await db.insert(snapshotCategories).values(
+            currentCategories.map((cat: Category) => ({
+              snapshotId: snapshot.id,
+              name: cat.name,
+              nameDE: cat.nameDE,
+              icon: cat.icon,
+              order: cat.order,
+              originalCategoryId: cat.id,
+            }))
+          );
+        } catch (err: any) {
+          console.error("Error saving snapshot categories:", err.message);
+          // Continue even if categories snapshot fails
+        }
       }
       
       // Copy current ingredients (ALL fields for perfect fidelity)
       const currentIngredients = await db.select().from(ingredients);
       if (currentIngredients.length > 0) {
-        await db.insert(snapshotIngredients).values(
-          currentIngredients.map((ing: Ingredient) => ({
-            snapshotId: snapshot.id,
-            name: ing.name,
-            nameDE: ing.nameDE,
-            ingredientType: ing.type,
-            description: ing.description,
-            descriptionDE: ing.descriptionDE,
-            image: ing.image,
-            price: ing.price,
-            priceSmall: ing.priceSmall,
-            priceStandard: ing.priceStandard,
-            available: ing.available,
-            originalIngredientId: ing.id,
-          }))
-        );
+        try {
+          await db.insert(snapshotIngredients).values(
+            currentIngredients.map((ing: Ingredient) => ({
+              snapshotId: snapshot.id,
+              name: ing.name,
+              nameDE: ing.nameDE,
+              ingredientType: ing.type,
+              description: ing.description,
+              descriptionDE: ing.descriptionDE,
+              image: ing.image,
+              price: ing.price,
+              priceSmall: ing.priceSmall,
+              priceStandard: ing.priceStandard,
+              available: ing.available,
+              originalIngredientId: ing.id,
+            }))
+          );
+        } catch (err: any) {
+          console.error("Error saving snapshot ingredients:", err.message);
+          // Continue even if ingredients snapshot fails
+        }
       }
       
       // Copy current menu items (capturing ALL fields for perfect fidelity)
