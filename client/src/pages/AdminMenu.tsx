@@ -513,20 +513,29 @@ export function AdminMenu() {
     if (editingIngredient) {
       updateIngredientMutation.mutate({ id: editingIngredient.id, data }, {
         onSuccess: () => {
-          if (createAsExtraCheckbox && ingredientType !== "extra") {
+          if (createAsExtraCheckbox && ingredientType !== "extra_protein" && ingredientType !== "extra_fresh" && ingredientType !== "extra_sauce" && ingredientType !== "extra_topping") {
+            // Map base types to extra types
+            const extraTypeMap: Record<string, string> = {
+              'protein': 'extra_protein',
+              'fresh': 'extra_fresh',
+              'sauce': 'extra_sauce',
+              'topping': 'extra_topping'
+            };
+            const extraType = extraTypeMap[ingredientType] || `extra_${ingredientType}`;
+            
             const extraData: any = {
               name: name,
               nameDE: name,
               description: description,
               descriptionDE: description,
-              type: "extra",
+              type: extraType,
               image: imageUrl,
               price: null,
               priceSmall: null,
               priceStandard: null,
               available: formData.get("available") === "on" ? 1 : 0,
             };
-            const existingExtra = ingredients.find(ing => ing.type === "extra" && ing.nameDE === name);
+            const existingExtra = ingredients.find(ing => ing.type === extraType && ing.nameDE === name);
             if (!existingExtra) {
               createIngredientMutation.mutate(extraData);
             }
@@ -537,13 +546,22 @@ export function AdminMenu() {
     } else {
       createIngredientMutation.mutate(data, {
         onSuccess: () => {
-          if (createAsExtraCheckbox && ingredientType !== "extra") {
+          if (createAsExtraCheckbox && ingredientType !== "extra_protein" && ingredientType !== "extra_fresh" && ingredientType !== "extra_sauce" && ingredientType !== "extra_topping") {
+            // Map base types to extra types
+            const extraTypeMap: Record<string, string> = {
+              'protein': 'extra_protein',
+              'fresh': 'extra_fresh',
+              'sauce': 'extra_sauce',
+              'topping': 'extra_topping'
+            };
+            const extraType = extraTypeMap[ingredientType] || `extra_${ingredientType}`;
+            
             const extraData: any = {
               name: name,
               nameDE: name,
               description: description,
               descriptionDE: description,
-              type: "extra",
+              type: extraType,
               image: imageUrl,
               price: null,
               priceSmall: null,

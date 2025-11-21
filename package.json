@@ -16,6 +16,7 @@
     "db:seed": "tsx server/seed.ts",
     "db:create-admin": "tsx server/create-admin.ts",
     "db:test": "tsx server/test-connection.ts",
+    "db:fix-extras": "tsx server/fix-extra-ingredients.ts",
     "railway:setup": "npm run db:migrate; npm run db:seed; npm run db:create-admin || true",
     "railway:start": "npm run db:migrate; npm run db:seed; npm run db:create-admin || true; npm run start"
   },

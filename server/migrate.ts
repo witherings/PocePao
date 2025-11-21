@@ -146,6 +146,39 @@ async function runMigrations() {
       console.log("  ✓ app_settings table exists");
     }
 
+    // Ensure snapshot_ingredients table exists
+    console.log("\n📝 Ensuring snapshot_ingredients table exists...");
+    const siTableResult = await pool.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'snapshot_ingredients'
+      );
+    `);
+    
+    if (!siTableResult.rows[0].exists) {
+      console.log("  ➕ Creating snapshot_ingredients table");
+      await pool.query(`
+        CREATE TABLE snapshot_ingredients (
+          id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid(),
+          snapshot_id VARCHAR NOT NULL REFERENCES snapshots(id) ON DELETE CASCADE,
+          name TEXT NOT NULL,
+          name_de TEXT NOT NULL,
+          ingredient_type TEXT NOT NULL,
+          description TEXT,
+          description_de TEXT,
+          image TEXT,
+          price NUMERIC(10,2),
+          price_small NUMERIC(10,2),
+          price_standard NUMERIC(10,2),
+          available INTEGER NOT NULL DEFAULT 1,
+          original_ingredient_id VARCHAR NOT NULL
+        )
+      `);
+      console.log("     ✓ Successfully created snapshot_ingredients table");
+    } else {
+      console.log("  ✓ snapshot_ingredients table exists");
+    }
+
     // Verify all critical columns exist
     console.log("\n🔍 Verifying schema...");
     const criticalColumns = [
