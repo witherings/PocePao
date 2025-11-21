@@ -444,6 +444,17 @@ export function AdminMenu() {
 
   const handleSaveIngredient = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Validate that type is selected
+    if (!selectedIngredientType) {
+      toast({ 
+        title: "Fehler", 
+        description: "Bitte wählen Sie einen Typ aus",
+        variant: "destructive" 
+      });
+      return;
+    }
+    
     const formData = new FormData(e.currentTarget);
     
     let imageUrl = editingIngredient?.image || null;
