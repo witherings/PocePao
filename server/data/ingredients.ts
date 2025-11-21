@@ -2,7 +2,7 @@ import type { InsertIngredient } from "@shared/schema";
 
 export function createIngredients(): InsertIngredient[] {
   return [
-    // PROTEINS
+    // PROTEINS (with size-based pricing: Klein vs Standard)
     {
       name: "Tofu",
       nameDE: "Tofu",
@@ -10,7 +10,8 @@ export function createIngredients(): InsertIngredient[] {
       description: "Marinated tofu",
       descriptionDE: "Marinierter Tofu",
       image: "/images/wunschbowl/tofu cubes.png",
-      price: "9.50",
+      priceSmall: "9.50",      // Klein bowl price
+      priceStandard: "14.75",  // Standard bowl price
       order: 1,
       available: 1,
     },
@@ -21,7 +22,8 @@ export function createIngredients(): InsertIngredient[] {
       description: "Homemade falafel",
       descriptionDE: "Hausgemachte Falafel",
       image: "/images/wunschbowl/falafel balls.png",
-      price: "9.50",
+      priceSmall: "9.50",
+      priceStandard: "14.75",
       order: 2,
       available: 1,
     },
@@ -32,7 +34,8 @@ export function createIngredients(): InsertIngredient[] {
       description: "Tender chicken",
       descriptionDE: "Zartes Hähnchen",
       image: "/images/wunschbowl/chicken slices.png",
-      price: "9.50",
+      priceSmall: "9.50",
+      priceStandard: "14.75",
       order: 3,
       available: 1,
     },
@@ -43,7 +46,8 @@ export function createIngredients(): InsertIngredient[] {
       description: "Fresh salmon",
       descriptionDE: "Frischer Lachs",
       image: "/images/wunschbowl/salmon slices .png",
-      price: "9.90",
+      priceSmall: "9.90",
+      priceStandard: "15.90",
       order: 4,
       available: 1,
     },
@@ -54,7 +58,8 @@ export function createIngredients(): InsertIngredient[] {
       description: "Fresh shrimp",
       descriptionDE: "Frische Garnelen",
       image: "/images/wunschbowl/shrimp.png",
-      price: "9.90",
+      priceSmall: "9.90",
+      priceStandard: "15.90",
       order: 5,
       available: 1,
     },
@@ -65,7 +70,8 @@ export function createIngredients(): InsertIngredient[] {
       description: "Fresh tuna",
       descriptionDE: "Frischer Thunfisch",
       image: "/images/wunschbowl/tuna slices.png",
-      price: "9.90",
+      priceSmall: "9.90",
+      priceStandard: "15.90",
       order: 6,
       available: 1,
     },
