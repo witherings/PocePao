@@ -3,6 +3,7 @@ import { Trophy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import { useQuery } from "@tanstack/react-query";
 
 // Placeholder images - user will replace with real poke bowl photos
 const HERO_IMAGES = [
@@ -17,6 +18,25 @@ export function Hero() {
     [Autoplay({ delay: 5000, stopOnInteraction: false })]
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  // Fetch home page content from database
+  const { data: homeContent } = useQuery({
+    queryKey: ["/api/static-content", "home", { locale: "de" }],
+    queryFn: async () => {
+      const response = await fetch("/api/static-content/home?locale=de");
+      if (!response.ok) return null;
+      return response.json();
+    },
+  });
+
+  // Parse content or use defaults
+  const contentData = homeContent?.content ? 
+    (typeof homeContent.content === 'string' ? JSON.parse(homeContent.content) : homeContent.content) 
+    : {};
+
+  const heroTitle = contentData.heroTitle || "Dein Kurzurlaub in der Schüssel.";
+  const heroSubtitle = contentData.heroSubtitle || "Frische, Geschmack und Hawaii-Feeling direkt in Hamburg. Gönn dir das Beste.";
+  const awardTitle = contentData.awardTitle || "Deutschlands Beste Poke Bowl 2024";
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -101,7 +121,7 @@ export function Hero() {
           >
             <Trophy className="w-4 h-4 md:w-6 md:h-6 text-gold" />
             <span className="font-poppins font-semibold text-ocean text-xs md:text-base">
-              Deutschlands Beste Poke Bowl 2024
+              {awardTitle}
             </span>
           </div>
 
@@ -111,7 +131,7 @@ export function Hero() {
             style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.7)" }}
             data-testid="text-hero-title"
           >
-            Dein Kurzurlaub in der Schüssel.
+            {heroTitle}
           </h1>
 
           {/* Subheading */}
@@ -120,7 +140,7 @@ export function Hero() {
             style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.7)", animationDelay: "0.1s" }}
             data-testid="text-hero-subtitle"
           >
-            Frische, Geschmack und Hawaii-Feeling direkt in Hamburg. Gönn dir das Beste.
+            {heroSubtitle}
           </p>
 
           {/* CTA Button */}

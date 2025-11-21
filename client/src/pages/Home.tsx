@@ -4,8 +4,33 @@ import { Gallery3D } from "@/components/Gallery3D";
 import { Truck, ShoppingBag, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
+  // Fetch home page content from database
+  const { data: homeContent } = useQuery({
+    queryKey: ["/api/static-content", "home", { locale: "de" }],
+    queryFn: async () => {
+      const response = await fetch("/api/static-content/home?locale=de");
+      if (!response.ok) return null;
+      return response.json();
+    },
+  });
+
+  // Parse content or use defaults
+  const contentData = homeContent?.content ? 
+    (typeof homeContent.content === 'string' ? JSON.parse(homeContent.content) : homeContent.content) 
+    : {};
+
+  const orderTitle = contentData.orderTitle || "Wähle dein Erlebnis";
+  const orderSubtitle = contentData.orderSubtitle || "Ob schnell geliefert, zum Mitnehmen oder gemütlich bei uns – Frische ist garantiert.";
+  const deliveryTitle = contentData.deliveryTitle || "Lieferung";
+  const deliveryDesc = contentData.deliveryDesc || "Bestell online und spare 10%!";
+  const pickupTitle = contentData.pickupTitle || "Speisekarte & Abholung";
+  const pickupDesc = contentData.pickupDesc || "Online vorbestellen, ohne Wartezeit abholen.";
+  const reservationTitle = contentData.reservationTitle || "Vor Ort genießen";
+  const reservationDesc = contentData.reservationDesc || "Genieße deine Bowl in gemütlicher Atmosphäre!";
+
   return (
     <div>
       <Hero />
@@ -15,10 +40,10 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-8 md:mb-12">
             <h2 className="font-poppins text-2xl md:text-4xl lg:text-5xl font-bold text-ocean mb-2 md:mb-4" data-testid="text-section-title">
-              Wähle dein Erlebnis
+              {orderTitle}
             </h2>
             <p className="font-lato text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto" data-testid="text-section-subtitle">
-              Ob schnell geliefert, zum Mitnehmen oder gemütlich bei uns – Frische ist garantiert.
+              {orderSubtitle}
             </p>
           </div>
 
@@ -37,10 +62,10 @@ export default function Home() {
                   <Truck className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-ocean" />
                 </div>
                 <h3 className="font-poppins text-lg md:text-xl lg:text-2xl font-bold text-ocean mb-2 md:mb-3" data-testid="text-delivery-title">
-                  Lieferung
+                  {deliveryTitle}
                 </h3>
                 <p className="font-lato text-xs md:text-sm lg:text-base text-muted-foreground mb-3 md:mb-4 lg:mb-6 line-clamp-3" data-testid="text-delivery-description">
-                  Bestell online und spare 10%!
+                  {deliveryDesc}
                 </p>
                 <Button
                   asChild
@@ -62,10 +87,10 @@ export default function Home() {
                   <ShoppingBag className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-ocean" />
                 </div>
                 <h3 className="font-poppins text-lg md:text-xl lg:text-2xl font-bold text-ocean mb-2 md:mb-3" data-testid="text-pickup-title">
-                  Speisekarte & Abholung
+                  {pickupTitle}
                 </h3>
                 <p className="font-lato text-xs md:text-sm lg:text-base text-muted-foreground mb-3 md:mb-4 lg:mb-6 line-clamp-3" data-testid="text-pickup-description">
-                  Online vorbestellen, ohne Wartezeit abholen.
+                  {pickupDesc}
                 </p>
                 <Button
                   asChild
@@ -84,10 +109,10 @@ export default function Home() {
                   <Calendar className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-ocean" />
                 </div>
                 <h3 className="font-poppins text-lg md:text-xl lg:text-2xl font-bold text-ocean mb-2 md:mb-3" data-testid="text-reservation-title">
-                  Vor Ort genießen
+                  {reservationTitle}
                 </h3>
                 <p className="font-lato text-xs md:text-sm lg:text-base text-muted-foreground mb-3 md:mb-4 lg:mb-6 line-clamp-3" data-testid="text-reservation-description">
-                  Genieße deine Bowl in gemütlicher Atmosphäre!
+                  {reservationDesc}
                 </p>
                 <Button
                   asChild
