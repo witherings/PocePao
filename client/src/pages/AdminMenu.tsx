@@ -95,7 +95,7 @@ interface Reservation {
 }
 
 interface DeleteConfirmation {
-  type: "category" | "menuItem" | "ingredient" | "variant" | "order" | "reservation" | null;
+  type: "category" | "menuItem" | "ingredient" | "variant" | null;
   id: string | null;
   name?: string;
 }
@@ -132,21 +132,6 @@ export function AdminMenu() {
   const [editingVariant, setEditingVariant] = useState<ProductVariant | null>(null);
   const [showVariantEditDialog, setShowVariantEditDialog] = useState(false);
   
-  const [pageImages, setPageImages] = useState<any[]>([]);
-  const [selectedPageForImages, setSelectedPageForImages] = useState<string>("startseite");
-  const [showPageImageDialog, setShowPageImageDialog] = useState(false);
-  const [pageImagePreview, setPageImagePreview] = useState<string | null>(null);
-  const [pageImageFile, setPageImageFile] = useState<File | null>(null);
-  const [isUploadingPageImage, setIsUploadingPageImage] = useState(false);
-
-  const pages = [
-    { id: "startseite", label: "Startseite" },
-    { id: "speisekarte", label: "Speisekarte" },
-    { id: "ueber-uns", label: "Über Uns" },
-    { id: "reservierung", label: "Reservierung" },
-    { id: "kontakt", label: "Kontakt" },
-  ];
-
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
@@ -157,14 +142,6 @@ export function AdminMenu() {
 
   const { data: ingredients = [] } = useQuery<Ingredient[]>({
     queryKey: ["/api/ingredients"],
-  });
-
-  const { data: orders = [] } = useQuery<Order[]>({
-    queryKey: ["/api/orders"],
-  });
-
-  const { data: reservations = [] } = useQuery<Reservation[]>({
-    queryKey: ["/api/reservations"],
   });
 
   // Helper function to check if a category is "Wunsch Bowls"
@@ -315,45 +292,6 @@ export function AdminMenu() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/ingredients"] });
       toast({ title: "Zutat gelöscht" });
-    },
-  });
-
-  // Order management mutations
-  const updateOrderStatusMutation = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      return await apiRequest("PUT", `/api/orders/${id}`, { status });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/orders"] });
-      toast({ title: "Bestellung aktualisiert" });
-    },
-    onError: (error: any) => {
-      toast({ 
-        title: "Fehler", 
-        description: error.message || "Bestellung konnte nicht aktualisiert werden",
-        variant: "destructive" 
-      });
-    },
-  });
-
-  const deleteOrderMutation = useMutation({
-    mutationFn: async (id: string) => {
-      return await apiRequest("DELETE", `/api/orders/${id}`, {});
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/orders"] });
-      toast({ title: "Bestellung gelöscht" });
-    },
-  });
-
-  // Reservation management mutations
-  const deleteReservationMutation = useMutation({
-    mutationFn: async (id: string) => {
-      return await apiRequest("DELETE", `/api/reservations/${id}`, {});
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/reservations"] });
-      toast({ title: "Reservierung gelöscht" });
     },
   });
 
@@ -840,9 +778,6 @@ export function AdminMenu() {
           <TabsTrigger value="categories" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Kategorien</TabsTrigger>
           <TabsTrigger value="items" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Gerichte</TabsTrigger>
           <TabsTrigger value="ingredients" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Zutaten</TabsTrigger>
-          <TabsTrigger value="orders" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Bestellungen</TabsTrigger>
-          <TabsTrigger value="reservations" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Reservierungen</TabsTrigger>
-          <TabsTrigger value="pages" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Seiten-Bilder</TabsTrigger>
         </TabsList>
 
         <TabsContent value="categories">
@@ -1703,248 +1638,6 @@ export function AdminMenu() {
             </CardContent>
           </Card>
         </TabsContent>
-
-        <TabsContent value="pages">
-          <Card className="border-2 shadow-lg">
-            <CardHeader>
-              <CardTitle>Seiten-Bilder</CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-6">
-                {/* Page Selection */}
-                <div>
-                  <Label className="text-base font-semibold mb-3 block">Seite wählen</Label>
-                  <Select value={selectedPageForImages} onValueChange={setSelectedPageForImages}>
-                    <SelectTrigger className="h-12">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {pages.map(page => (
-                        <SelectItem key={page.id} value={page.id}>
-                          {page.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Upload Button */}
-                <div>
-                  <Dialog open={showPageImageDialog} onOpenChange={setShowPageImageDialog}>
-                    <DialogTrigger asChild>
-                      <Button className="bg-ocean hover:bg-ocean/90 text-white">
-                        <Plus className="mr-2 h-4 w-4" />
-                        Bild hochladen
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Bild hochladen für {pages.find(p => p.id === selectedPageForImages)?.label}</DialogTitle>
-                      </DialogHeader>
-                      <form onSubmit={handleUploadPageImage} className="space-y-4">
-                        {/* Preview */}
-                        {pageImagePreview ? (
-                          <div className="relative inline-block">
-                            <img 
-                              src={pageImagePreview} 
-                              alt="Preview" 
-                              className="w-full max-w-sm h-48 object-cover rounded-lg border-2 border-gray-200"
-                            />
-                            <Button
-                              type="button"
-                              variant="destructive"
-                              size="sm"
-                              className="absolute top-2 right-2"
-                              onClick={() => {
-                                setPageImageFile(null);
-                                setPageImagePreview(null);
-                              }}
-                            >
-                              <X className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        ) : (
-                          <div className="w-full h-48 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
-                            <p className="text-gray-400">Kein Bild gewählt</p>
-                          </div>
-                        )}
-
-                        {/* File Input */}
-                        <div>
-                          <Input
-                            id="page-image"
-                            type="file"
-                            accept="image/*"
-                            onChange={handlePageImageSelect}
-                            className="hidden"
-                          />
-                          <Label
-                            htmlFor="page-image"
-                            className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                          >
-                            <Upload className="w-4 h-4" />
-                            {pageImageFile ? "Bild ändern" : "Bild wählen"}
-                          </Label>
-                        </div>
-
-                        <Button 
-                          type="submit" 
-                          className="w-full bg-ocean hover:bg-ocean/90"
-                          disabled={isUploadingPageImage}
-                        >
-                          {isUploadingPageImage ? "Wird hochgeladen..." : "Hochladen"}
-                        </Button>
-                      </form>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-
-                {/* Images Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {pageImages.map(image => (
-                    <div key={image.id} className="relative group">
-                      <img 
-                        src={image.url} 
-                        alt={image.alt || "Page image"} 
-                        className="w-full h-48 object-cover rounded-lg border-2 border-gray-200"
-                      />
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                        onClick={() => handleDeletePageImage(image.id)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                      <p className="text-sm text-muted-foreground mt-2">{image.filename}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {pageImages.length === 0 && (
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground">Keine Bilder für diese Seite vorhanden</p>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="orders">
-          <Card className="border-2 shadow-lg">
-            <CardHeader>
-              <CardTitle>Bestellungen ({orders.length})</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {orders.length === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground">Keine Bestellungen vorhanden</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {orders.map((order) => (
-                      <div key={order.id} className="border rounded-lg p-4 bg-card">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1">
-                            <h3 className="font-poppins font-bold text-lg">{order.name}</h3>
-                            <p className="text-sm text-muted-foreground">{order.phone}</p>
-                            <p className="text-sm mt-1">
-                              <span className="font-semibold">
-                                {order.serviceType === "pickup" ? "🥡 Selbstabholung" : "🍽 Im Restaurant"}
-                              </span>
-                              {order.serviceType === "pickup" && order.pickupTime && (
-                                <span className="ml-2">⏰ {order.pickupTime}</span>
-                              )}
-                              {order.serviceType === "dinein" && order.tableNumber && (
-                                <span className="ml-2">🪑 Tisch {order.tableNumber}</span>
-                              )}
-                            </p>
-                            {order.comment && (
-                              <p className="text-sm mt-2 text-muted-foreground italic">💬 {order.comment}</p>
-                            )}
-                          </div>
-                          <div className="text-right">
-                            <p className="font-poppins font-bold text-xl text-ocean">€{order.total}</p>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {new Date(order.createdAt).toLocaleString("de-DE")}
-                            </p>
-                          </div>
-                        </div>
-                        
-                        <div className="flex gap-2 items-center mt-4">
-                          <Select
-                            value={order.status}
-                            onValueChange={(status) => updateOrderStatusMutation.mutate({ id: order.id, status })}
-                          >
-                            <SelectTrigger className="flex-1">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="pending">🟡 Wartend</SelectItem>
-                              <SelectItem value="confirmed">🔵 Bestätigt</SelectItem>
-                              <SelectItem value="ready">✅ Fertig</SelectItem>
-                              <SelectItem value="completed">✔️ Abgeschlossen</SelectItem>
-                              <SelectItem value="cancelled">❌ Storniert</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => setDeleteConfirm({ type: "order", id: order.id, name: order.name })}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="reservations">
-          <Card className="border-2 shadow-lg">
-            <CardHeader>
-              <CardTitle>Reservierungen ({reservations.length})</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {reservations.length === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground">Keine Reservierungen vorhanden</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {reservations.map((reservation) => (
-                      <div key={reservation.id} className="border rounded-lg p-4 bg-card flex items-center justify-between">
-                        <div className="flex-1">
-                          <h3 className="font-poppins font-bold text-lg">{reservation.name}</h3>
-                          <p className="text-sm text-muted-foreground">{reservation.phone}</p>
-                          <div className="flex gap-4 mt-2 text-sm">
-                            <span>📅 {reservation.date}</span>
-                            <span>⏰ {reservation.time}</span>
-                            <span>👥 {reservation.guests} {reservation.guests === 1 ? "Gast" : "Gäste"}</span>
-                          </div>
-                        </div>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => setDeleteConfirm({ type: "reservation", id: reservation.id, name: reservation.name })}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
       </Tabs>
 
       {/* Delete Confirmation Dialog */}
@@ -1956,16 +1649,12 @@ export function AdminMenu() {
               {deleteConfirm.type === "menuItem" && "Gericht löschen?"}
               {deleteConfirm.type === "ingredient" && "Zutat löschen?"}
               {deleteConfirm.type === "variant" && "Variante löschen?"}
-              {deleteConfirm.type === "order" && "Bestellung löschen?"}
-              {deleteConfirm.type === "reservation" && "Reservierung löschen?"}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {deleteConfirm.type === "category" && `Kategorie "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
               {deleteConfirm.type === "menuItem" && `Gericht "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
               {deleteConfirm.type === "ingredient" && `Zutat "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
               {deleteConfirm.type === "variant" && `Variante "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
-              {deleteConfirm.type === "order" && `Bestellung von "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
-              {deleteConfirm.type === "reservation" && `Reservierung von "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex gap-3 justify-end">
@@ -1980,10 +1669,6 @@ export function AdminMenu() {
                   deleteIngredientMutation.mutate(deleteConfirm.id);
                 } else if (deleteConfirm.type === "variant" && deleteConfirm.id) {
                   deleteVariantMutation.mutate(deleteConfirm.id);
-                } else if (deleteConfirm.type === "order" && deleteConfirm.id) {
-                  deleteOrderMutation.mutate(deleteConfirm.id);
-                } else if (deleteConfirm.type === "reservation" && deleteConfirm.id) {
-                  deleteReservationMutation.mutate(deleteConfirm.id);
                 }
                 setDeleteConfirm({ type: null, id: null });
               }}
