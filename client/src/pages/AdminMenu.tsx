@@ -484,7 +484,7 @@ export function AdminMenu() {
     const price = formData.get("price") as string;
     const priceSmall = formData.get("priceSmall") as string;
     const priceStandard = formData.get("priceStandard") as string;
-    const ingredientType = formData.get("type") as string;
+    const ingredientType = selectedIngredientType;
     
     const data: any = {
       name: name,
