@@ -371,26 +371,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/ingredients", async (req, res) => {
-    try {
-      const data = insertIngredientSchema.parse(req.body);
-      const ingredient = await storage.createIngredient(data);
-      res.status(201).json(ingredient);
-    } catch (error: any) {
-      res.status(400).json({ error: error.message || "Failed to create ingredient" });
-    }
-  });
-
   app.put("/api/ingredients/:id", async (req, res) => {
     try {
       const { id } = req.params;
+      console.log("📨 Received ingredient update request for ID:", id);
+      console.log("📨 Update data:", JSON.stringify(req.body, null, 2));
       const data = insertIngredientSchema.partial().parse(req.body);
+      console.log("✅ Data passed validation:", JSON.stringify(data, null, 2));
       const ingredient = await storage.updateIngredient(id, data);
       if (!ingredient) {
         return res.status(404).json({ error: "Ingredient not found" });
       }
       res.json(ingredient);
     } catch (error: any) {
+      console.error("❌ Error updating ingredient:", error.message);
+      console.error("Stack:", error.stack);
       res.status(400).json({ error: error.message || "Failed to update ingredient" });
     }
   });
