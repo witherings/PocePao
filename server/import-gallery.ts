@@ -15,7 +15,7 @@ async function importGalleryImages() {
       return ext === '.jpg' || ext === '.jpeg' || ext === '.png' || ext === '.webp';
     }).filter(file => {
       const lowerFile = file.toLowerCase();
-      return !lowerFile.includes('wunschbowl') && 
+      return !lowerFile.includes('categories') && 
              !lowerFile.includes('drinks') && 
              !lowerFile.includes('acai') &&
              !lowerFile.includes('falafel') &&
