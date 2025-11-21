@@ -345,6 +345,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post("/api/ingredients", async (req, res) => {
+    try {
+      console.log("📨 Received ingredient creation request:", JSON.stringify(req.body, null, 2));
+      const data = insertIngredientSchema.parse(req.body);
+      console.log("✅ Data passed validation:", JSON.stringify(data, null, 2));
+      const ingredient = await storage.createIngredient(data);
+      console.log("✅ Ingredient created successfully:", ingredient);
+      res.json(ingredient);
+    } catch (error: any) {
+      console.error("❌ Error creating ingredient:", error.message);
+      res.status(400).json({ error: error.message || "Failed to create ingredient" });
+    }
+  });
+
   app.get("/api/ingredients/type/:type", async (req, res) => {
     try {
       const { type } = req.params;
