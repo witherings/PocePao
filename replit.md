@@ -4,17 +4,29 @@
 PokePao is a full-stack e-commerce platform for a Hawaiian poke bowl restaurant. It enables customers to browse the menu, manage their cart, make reservations, and learn about the establishment. The platform includes a comprehensive admin panel for managing menu items, orders, reservations, and gallery content. The project is designed for production deployment on platforms like Railway.app, aiming for a robust, scalable, and user-friendly solution in the food service e-commerce market.
 
 ### Recent Changes (November 21, 2025)
-**File Organization & Category-Based Image Management System**
-- ✅ **Complete folder restructuring** — organized `/public/images/` into comprehensive hierarchy:
-  - **Categories**: `Wunsch Bowls`, `Poke Bowls`, `Wraps`, `Vorspeisen`, `Desserts`, `Getränke`
-  - **Pages**: `Startseite`, `Speisekarte`, `Über Uns`, `Reservierung`, `Kontakt`
-  - **Wunsch Bowls nested structure**: `main/` (for hero image 23.jpeg), `zutaten/` (6 ingredient types), `zutaten extra/` (duplicated ingredient types)
-- ✅ **Distributed 102 Wunsch Bowl ingredient files** across 6 ingredient types (protein, fresh, marinade, base, sauce, topping) in both `zutaten` and `zutaten extra` folders
-- ✅ **Updated all 52 ingredient image paths** in `server/data/ingredients.ts` — changed from `/images/wunschbowl/` to `/images/categories/Wunsch Bowls/zutaten/[type]/`
-- ✅ **Enhanced `/api/upload` endpoint** — now supports category-based folder storage with automatic duplication to `zutaten extra` folders
-- ✅ **Updated AdminMenu.tsx** — ingredient uploads now pass `type`, `category`, and `duplicateToExtra` parameters for automatic folder organization
-- ✅ **Created 23.jpeg** — main hero image placeholder in `public/images/categories/Wunsch Bowls/main/`
-- ✅ Server running and all changes hot-reloaded successfully
+**Admin Panel Enhancement: Orders & Reservations Management**
+- ✅ **Orders Management Tab** — added comprehensive order viewing and management in AdminMenu.tsx:
+  - Order list display with customer details, service type (dine-in/takeaway), and pickup/table information
+  - Status management dropdown (pending, confirmed, ready, completed, cancelled)
+  - Delete functionality with confirmation dialog
+  - Real-time updates using React Query
+- ✅ **Reservations Management Tab** — added reservation viewing and management:
+  - Reservation list display with customer name, phone, date, time, and guest count
+  - Delete functionality with confirmation dialog
+  - Clean, organized card-based UI
+- ✅ **API Endpoints** — added new routes in `server/routes.ts`:
+  - `PUT /api/orders/:id` — update order status
+  - `DELETE /api/orders/:id` — delete order (cascade to order_items)
+  - `DELETE /api/reservations/:id` — delete reservation
+- ✅ **Storage Layer** — extended `server/storage.ts` with updateOrder(), deleteOrder(), and deleteReservation() methods
+- ✅ **Unified Delete Confirmation System** — extended DeleteConfirmation dialog to handle all entity types (categories, menu items, ingredients, variants, orders, reservations)
+- ✅ **Railway Deployment Ready** — all systems tested, health checks working, environment variables configured
+
+**Previous: File Organization & Category-Based Image Management System**
+- ✅ **Complete folder restructuring** — organized `/public/images/` into comprehensive hierarchy
+- ✅ **Distributed 102 Wunsch Bowl ingredient files** across 6 ingredient types in both `zutaten` and `zutaten extra` folders
+- ✅ **Updated all 52 ingredient image paths** in `server/data/ingredients.ts`
+- ✅ **Enhanced `/api/upload` endpoint** — supports category-based folder storage with automatic duplication
 
 ### User Preferences
 I prefer iterative development with clear, concise explanations for each step. Please ask for my approval before implementing major changes or architectural shifts. I value clean, readable code and prefer modern JavaScript/TypeScript practices. Do not make changes to the `shared/` folder without explicit instruction.
@@ -39,11 +51,12 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 - **Customer Facing:** Menu browsing, cart management, online ordering, reservation system, restaurant information, and a database-driven gallery.
 - **Admin Panel:**
     - Full CRUD operations for menu categories, items (with variant pricing, ingredients, allergens), and custom ingredients.
-    - Order viewing with detailed customer and item information.
-    - Reservation management with a table view.
+    - **Orders Management:** View all customer orders with status tracking (pending, confirmed, ready, completed, cancelled), update order status in real-time, and delete orders with confirmation dialog.
+    - **Reservations Management:** View all customer reservations with guest count, date/time details, and delete functionality with confirmation.
     - Gallery management (upload, view, and delete photos with disk cleanup).
     - Ingredients management with categorization (Protein, Base, Marinade, Fresh, Sauce, Topping).
     - Snapshot system for restoring menu, gallery, and static content while preserving order history.
+    - Unified delete confirmation system for all entity types ensuring safe data management.
 - **Notifications:** Telegram notifications for new orders and reservations, with flexible bot token configuration.
 - **Data Validation:** Zod schema validation implemented for all CRUD endpoints to ensure data integrity.
 
