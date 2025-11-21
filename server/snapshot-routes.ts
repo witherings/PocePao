@@ -94,6 +94,7 @@ export function registerSnapshotRoutes(app: Express) {
               priceSmall: ing.priceSmall,
               priceStandard: ing.priceStandard,
               available: ing.available,
+              order: ing.order || 0,
               originalIngredientId: ing.id,
             }))
           );
@@ -288,7 +289,7 @@ export function registerSnapshotRoutes(app: Express) {
               id: ing.originalIngredientId, // Use original ID to maintain references
               name: ing.name,
               nameDE: ing.nameDE,
-              type: ing.type,
+              type: ing.ingredientType, // FIXED: Use ingredientType from snapshot
               description: ing.description,
               descriptionDE: ing.descriptionDE,
               image: ing.image,
@@ -296,6 +297,7 @@ export function registerSnapshotRoutes(app: Express) {
               priceSmall: ing.priceSmall,
               priceStandard: ing.priceStandard,
               available: ing.available,
+              order: ing.order || 0, // Add order field if missing
             }))
           );
           console.log(`Restored ${snapshotIngs.length} ingredients`);
