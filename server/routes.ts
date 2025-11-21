@@ -376,7 +376,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { id } = req.params;
       console.log("📨 Received ingredient update request for ID:", id);
       console.log("📨 Update data:", JSON.stringify(req.body, null, 2));
-      const data = insertIngredientSchema.partial().parse(req.body);
+      
+      // Validate using the same schema - all fields should be provided
+      const data = insertIngredientSchema.parse(req.body);
       console.log("✅ Data passed validation:", JSON.stringify(data, null, 2));
       const ingredient = await storage.updateIngredient(id, data);
       if (!ingredient) {
