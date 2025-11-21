@@ -24,12 +24,10 @@ let sessionMiddleware: any;
 
 // Serve menu images from public/images with proper cache headers
 // CRITICAL FOR RAILWAY: Use absolute path resolution for production
+// Express.static will automatically set correct Content-Type based on file extension
 const publicImagesPath = path.join(process.cwd(), "public", "images");
 app.use("/images", (req, res, next) => {
-  res.set({
-    "Cache-Control": "public, max-age=3600",
-    "Content-Type": "image/*"
-  });
+  res.set("Cache-Control", "public, max-age=3600");
   next();
 }, express.static(publicImagesPath));
 

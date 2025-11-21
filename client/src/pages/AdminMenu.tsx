@@ -72,28 +72,6 @@ interface Ingredient {
   available: number;
 }
 
-interface Order {
-  id: string;
-  name: string;
-  phone: string;
-  pickupTime: string | null;
-  tableNumber: string | null;
-  serviceType: string;
-  comment: string | null;
-  total: string;
-  status: string;
-  createdAt: string;
-}
-
-interface Reservation {
-  id: string;
-  name: string;
-  guests: number;
-  phone: string;
-  date: string;
-  time: string;
-}
-
 interface DeleteConfirmation {
   type: "category" | "menuItem" | "ingredient" | "variant" | null;
   id: string | null;
