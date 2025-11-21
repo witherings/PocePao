@@ -1,10 +1,12 @@
 import { getDb } from "./db";
 import { categories as seedCategories, createMenuItems } from "./data/menu";
 import { createIngredients } from "./data/ingredients";
+import { createBaseVariants, createFritzKolaVariants } from "./data/variants";
 import { 
   categories as categoriesTable,
   menuItems as menuItemsTable,
-  ingredients as ingredientsTable
+  ingredients as ingredientsTable,
+  productVariants as productVariantsTable
 } from "@shared/schema";
 
 async function seed() {
@@ -49,11 +51,32 @@ async function seed() {
     const createdIngredients = await db.insert(ingredientsTable).values(ingredientsData).returning();
     console.log(`✅ Created ${createdIngredients.length} ingredients\n`);
 
+    console.log("🎯 Seeding product variants...");
+    const variantsData = [];
+    
+    // Add base variants for bowls with enableBaseSelection
+    const bowlsWithBaseSelection = createdMenuItems.filter(item => item.enableBaseSelection === 1);
+    for (const bowl of bowlsWithBaseSelection) {
+      variantsData.push(...createBaseVariants(bowl.id));
+    }
+    console.log(`   - Adding base variants for ${bowlsWithBaseSelection.length} bowls`);
+    
+    // Add flavor variants for Fritz-Kola
+    const fritzKola = createdMenuItems.find(item => item.nameDE === "Fritz-Kola");
+    if (fritzKola) {
+      variantsData.push(...createFritzKolaVariants(fritzKola.id));
+      console.log(`   - Adding flavor variants for Fritz-Kola`);
+    }
+    
+    const createdVariants = await db.insert(productVariantsTable).values(variantsData).returning();
+    console.log(`✅ Created ${createdVariants.length} product variants\n`);
+
     console.log("✨ Database seeding completed successfully!");
     console.log("\n📊 Summary:");
     console.log(`   - Categories: ${createdCategories.length}`);
     console.log(`   - Menu Items: ${createdMenuItems.length}`);
     console.log(`   - Ingredients: ${createdIngredients.length}`);
+    console.log(`   - Product Variants: ${createdVariants.length}`);
     
   } catch (error) {
     console.error("❌ Error seeding database:", error);
