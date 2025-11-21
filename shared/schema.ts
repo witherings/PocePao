@@ -420,3 +420,10 @@ export const insertAppSettingsSchema = createInsertSchema(appSettings).omit({
 
 export type AppSettings = typeof appSettings.$inferSelect;
 export type InsertAppSettings = z.infer<typeof insertAppSettingsSchema>;
+
+// Session Store (for express-session with connect-pg-simple)
+export const sessions = pgTable("session", {
+  sid: varchar("sid").primaryKey(),
+  sess: text("sess").notNull(), // JSON string
+  expire: timestamp("expire", { precision: 6 }).notNull(),
+});
