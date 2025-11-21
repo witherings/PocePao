@@ -1,0 +1,44 @@
+# CRITICAL EMERGENCY: DATA SYNCHRONIZATION & RESTORE LOST FEATURES
+
+**The Problem:**
+The application is currently fractured.
+1. **Data Mismatch:** The Frontend ("Wunschbowl") is using **hardcoded data** (static arrays), while the Admin Panel connects to a DB that is missing this data.
+2. **Lost Features:** Yesterday, we successfully consolidated duplicate menu items (e.g., Chicken with Rice/Quinoa -> Single "Chicken Bowl" with a Base Selector) and added Flavor Selection for Drinks (Fritz Cola). **These features are currently missing/broken on Railway.**
+
+**YOUR MISSION: SINGLE SOURCE OF TRUTH & FEATURE RESTORATION**
+You must refactor the application so the **Database** is the ONLY source of data, AND restore the consolidation logic.
+
+### STEP 1: DATA MIGRATION (Extract, Consolidate & Seed)
+1.  **Scrape the Frontend:** Go to `BowlBuilderDialog.tsx`, `ingredients.ts`, and `menu-data.ts`.
+2.  **Create a Master Seed (server/init-database.ts):**
+    * **Wunschbowl Ingredients:** Seed **EVERY** ingredient from the frontend (Photos, Prices, Types).
+    * **Menu Consolidation (CRITICAL):**
+        * Scan the menu list. **MERGE** duplicate bowls that only differ by base.
+        * *Example:* Instead of "Chicken Bowl w/ Rice" and "Chicken Bowl w/ Quinoa", create **ONE** item "Chicken Bowl".
+        * **Flag it:** Set `enable_base_selection = true` for these consolidated bowls.
+    * **Drink Variants:**
+        * Find the "Fritz Cola" item.
+        * Ensure it has a flag or configuration (e.g., `enable_flavor_selection = true` or similar logic) to allow choosing 1 of 5 flavors.
+
+### STEP 2: REFACTOR FRONTEND (Kill Hardcode & Restore Logic)
+1.  **Wunschbowl:** Update `BowlBuilderDialog.tsx` to fetch ingredients from the API (`/api/ingredients`) instead of static arrays.
+2.  **Product Modal (Standard Menu):**
+    * **Base Selector:** When a user clicks a dish with `enable_base_selection` (the consolidated bowls), show the **Base Selector** (Reis, Quinoa, Zucchini-Nudeln, Couscous).
+        * *Validation:* User cannot add to cart without picking a base.
+    * **Flavor Selector:** When a user clicks "Fritz Cola", show the **Flavor Selector** (the 5 flavors).
+    * **Cart:** Ensure the selected Base/Flavor is saved as a variation string (e.g., "Base: Quinoa") in the cart item.
+
+### STEP 3: ADMIN PANEL VERIFICATION
+1.  Ensure the Admin Panel displays ALL ingredients (Wunschbowl) with correct photos/prices.
+2.  Ensure the Admin Menu list is clean (6 consolidated bowls instead of 12 duplicates).
+3.  Ensure Admin filters for ingredients work correctly (including "Extra" types).
+
+### EXECUTION COMMANDS
+1.  Rewrite `server/init-database.ts` to populate the DB with the *consolidated* menu and *full* ingredient list.
+2.  Refactor `BowlBuilderDialog.tsx` and `ProductModal.tsx` to use dynamic data and handle selectors.
+3.  Run the initialization script to fix the Railway DB.
+
+**Outcome:**
+The Admin Panel controls everything. The Frontend uses DB data. Duplicate bowls are gone, replaced by the Base Selector. Fritz Cola has flavor selection.
+
+**GO.**
