@@ -72,8 +72,30 @@ interface Ingredient {
   available: number;
 }
 
+interface Order {
+  id: string;
+  name: string;
+  phone: string;
+  pickupTime: string | null;
+  tableNumber: string | null;
+  serviceType: string;
+  comment: string | null;
+  total: string;
+  status: string;
+  createdAt: string;
+}
+
+interface Reservation {
+  id: string;
+  name: string;
+  guests: number;
+  phone: string;
+  date: string;
+  time: string;
+}
+
 interface DeleteConfirmation {
-  type: "category" | "menuItem" | "ingredient" | "variant" | null;
+  type: "category" | "menuItem" | "ingredient" | "variant" | "order" | "reservation" | null;
   id: string | null;
   name?: string;
 }
@@ -135,6 +157,14 @@ export function AdminMenu() {
 
   const { data: ingredients = [] } = useQuery<Ingredient[]>({
     queryKey: ["/api/ingredients"],
+  });
+
+  const { data: orders = [] } = useQuery<Order[]>({
+    queryKey: ["/api/orders"],
+  });
+
+  const { data: reservations = [] } = useQuery<Reservation[]>({
+    queryKey: ["/api/reservations"],
   });
 
   // Helper function to check if a category is "Wunsch Bowls"
@@ -285,6 +315,45 @@ export function AdminMenu() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/ingredients"] });
       toast({ title: "Zutat gelöscht" });
+    },
+  });
+
+  // Order management mutations
+  const updateOrderStatusMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      return await apiRequest("PUT", `/api/orders/${id}`, { status });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/orders"] });
+      toast({ title: "Bestellung aktualisiert" });
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Fehler", 
+        description: error.message || "Bestellung konnte nicht aktualisiert werden",
+        variant: "destructive" 
+      });
+    },
+  });
+
+  const deleteOrderMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await apiRequest("DELETE", `/api/orders/${id}`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/orders"] });
+      toast({ title: "Bestellung gelöscht" });
+    },
+  });
+
+  // Reservation management mutations
+  const deleteReservationMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await apiRequest("DELETE", `/api/reservations/${id}`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/reservations"] });
+      toast({ title: "Reservierung gelöscht" });
     },
   });
 
@@ -767,10 +836,12 @@ export function AdminMenu() {
         </div>
 
       <Tabs defaultValue="categories" className="w-full">
-        <TabsList className="mb-8 p-1.5 bg-white shadow-sm">
+        <TabsList className="mb-8 p-1.5 bg-white shadow-sm flex-wrap">
           <TabsTrigger value="categories" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Kategorien</TabsTrigger>
           <TabsTrigger value="items" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Gerichte</TabsTrigger>
           <TabsTrigger value="ingredients" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Zutaten</TabsTrigger>
+          <TabsTrigger value="orders" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Bestellungen</TabsTrigger>
+          <TabsTrigger value="reservations" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Reservierungen</TabsTrigger>
           <TabsTrigger value="pages" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Seiten-Bilder</TabsTrigger>
         </TabsList>
 
@@ -1759,6 +1830,121 @@ export function AdminMenu() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="orders">
+          <Card className="border-2 shadow-lg">
+            <CardHeader>
+              <CardTitle>Bestellungen ({orders.length})</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {orders.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">Keine Bestellungen vorhanden</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {orders.map((order) => (
+                      <div key={order.id} className="border rounded-lg p-4 bg-card">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <h3 className="font-poppins font-bold text-lg">{order.name}</h3>
+                            <p className="text-sm text-muted-foreground">{order.phone}</p>
+                            <p className="text-sm mt-1">
+                              <span className="font-semibold">
+                                {order.serviceType === "pickup" ? "🥡 Selbstabholung" : "🍽 Im Restaurant"}
+                              </span>
+                              {order.serviceType === "pickup" && order.pickupTime && (
+                                <span className="ml-2">⏰ {order.pickupTime}</span>
+                              )}
+                              {order.serviceType === "dinein" && order.tableNumber && (
+                                <span className="ml-2">🪑 Tisch {order.tableNumber}</span>
+                              )}
+                            </p>
+                            {order.comment && (
+                              <p className="text-sm mt-2 text-muted-foreground italic">💬 {order.comment}</p>
+                            )}
+                          </div>
+                          <div className="text-right">
+                            <p className="font-poppins font-bold text-xl text-ocean">€{order.total}</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {new Date(order.createdAt).toLocaleString("de-DE")}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex gap-2 items-center mt-4">
+                          <Select
+                            value={order.status}
+                            onValueChange={(status) => updateOrderStatusMutation.mutate({ id: order.id, status })}
+                          >
+                            <SelectTrigger className="flex-1">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="pending">🟡 Wartend</SelectItem>
+                              <SelectItem value="confirmed">🔵 Bestätigt</SelectItem>
+                              <SelectItem value="ready">✅ Fertig</SelectItem>
+                              <SelectItem value="completed">✔️ Abgeschlossen</SelectItem>
+                              <SelectItem value="cancelled">❌ Storniert</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => setDeleteConfirm({ type: "order", id: order.id, name: order.name })}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="reservations">
+          <Card className="border-2 shadow-lg">
+            <CardHeader>
+              <CardTitle>Reservierungen ({reservations.length})</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {reservations.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">Keine Reservierungen vorhanden</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {reservations.map((reservation) => (
+                      <div key={reservation.id} className="border rounded-lg p-4 bg-card flex items-center justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-poppins font-bold text-lg">{reservation.name}</h3>
+                          <p className="text-sm text-muted-foreground">{reservation.phone}</p>
+                          <div className="flex gap-4 mt-2 text-sm">
+                            <span>📅 {reservation.date}</span>
+                            <span>⏰ {reservation.time}</span>
+                            <span>👥 {reservation.guests} {reservation.guests === 1 ? "Gast" : "Gäste"}</span>
+                          </div>
+                        </div>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => setDeleteConfirm({ type: "reservation", id: reservation.id, name: reservation.name })}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
 
       {/* Delete Confirmation Dialog */}
@@ -1770,12 +1956,16 @@ export function AdminMenu() {
               {deleteConfirm.type === "menuItem" && "Gericht löschen?"}
               {deleteConfirm.type === "ingredient" && "Zutat löschen?"}
               {deleteConfirm.type === "variant" && "Variante löschen?"}
+              {deleteConfirm.type === "order" && "Bestellung löschen?"}
+              {deleteConfirm.type === "reservation" && "Reservierung löschen?"}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {deleteConfirm.type === "category" && `Kategorie "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
               {deleteConfirm.type === "menuItem" && `Gericht "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
               {deleteConfirm.type === "ingredient" && `Zutat "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
               {deleteConfirm.type === "variant" && `Variante "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
+              {deleteConfirm.type === "order" && `Bestellung von "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
+              {deleteConfirm.type === "reservation" && `Reservierung von "${deleteConfirm.name}" wird gelöscht. Dies kann nicht rückgängig gemacht werden.`}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex gap-3 justify-end">
@@ -1790,6 +1980,10 @@ export function AdminMenu() {
                   deleteIngredientMutation.mutate(deleteConfirm.id);
                 } else if (deleteConfirm.type === "variant" && deleteConfirm.id) {
                   deleteVariantMutation.mutate(deleteConfirm.id);
+                } else if (deleteConfirm.type === "order" && deleteConfirm.id) {
+                  deleteOrderMutation.mutate(deleteConfirm.id);
+                } else if (deleteConfirm.type === "reservation" && deleteConfirm.id) {
+                  deleteReservationMutation.mutate(deleteConfirm.id);
                 }
                 setDeleteConfirm({ type: null, id: null });
               }}

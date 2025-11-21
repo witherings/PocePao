@@ -83,6 +83,8 @@ export interface IStorage {
   getOrderItemsByOrderId(orderId: string): Promise<OrderItem[]>;
   createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem>;
   updateOrderStatus(id: string, status: string): Promise<Order | undefined>;
+  updateOrder(id: string, order: Partial<InsertOrder>): Promise<Order | undefined>;
+  deleteOrder(id: string): Promise<boolean>;
 
   // Static Content
   getAllStaticContent(): Promise<StaticContent[]>;
@@ -333,6 +335,24 @@ class DatabaseStorage implements IStorage {
       .where(eq(ordersTable.id, id))
       .returning();
     return results[0];
+  }
+
+  async updateOrder(id: string, order: Partial<InsertOrder>): Promise<Order | undefined> {
+    const db = await getDb();
+    const results = await db.update(ordersTable)
+      .set(order)
+      .where(eq(ordersTable.id, id))
+      .returning();
+    return results[0];
+  }
+
+  async deleteOrder(id: string): Promise<boolean> {
+    const db = await getDb();
+    // First delete order items
+    await db.delete(orderItemsTable).where(eq(orderItemsTable.orderId, id));
+    // Then delete the order
+    const results = await db.delete(ordersTable).where(eq(ordersTable.id, id)).returning();
+    return results.length > 0;
   }
 
   // Static Content

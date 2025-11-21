@@ -201,6 +201,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.delete("/api/reservations/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await storage.deleteReservation(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Reservation not found" });
+      }
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error('Reservation deletion error:', error);
+      res.status(400).json({ error: error.message || "Failed to delete reservation" });
+    }
+  });
+
   // General image upload endpoint with category support
   app.post("/api/upload", upload.single("image"), async (req, res) => {
     try {
@@ -554,6 +568,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       console.error('Order creation error:', error);
       res.status(500).json({ error: "Failed to create order" });
+    }
+  });
+
+  app.put("/api/orders/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      
+      if (!status) {
+        return res.status(400).json({ error: "Status is required" });
+      }
+      
+      const order = await storage.updateOrderStatus(id, status);
+      if (!order) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+      res.json(order);
+    } catch (error: any) {
+      console.error('Order update error:', error);
+      res.status(400).json({ error: error.message || "Failed to update order" });
+    }
+  });
+
+  app.delete("/api/orders/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await storage.deleteOrder(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error('Order deletion error:', error);
+      res.status(400).json({ error: error.message || "Failed to delete order" });
     }
   });
 
