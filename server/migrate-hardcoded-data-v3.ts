@@ -136,6 +136,22 @@ async function updateImagePath(
         "Bananenchips": "banana-chips.png", "Kapern": "capers.png", "Mandeln": "almonds.png",
         "Kokosraspeln": "coconut-flakes.png", "Ingwer eingelegt": "pickled-ginger.png"
       },
+      "extra_sauce": {
+        "Teriyaki-Sauce": "teriyaki.png", "Trüffel Fusion": "truffle-fusion.png",
+        "Mango-Dill": "mango-dill.png", "Chili Mayo": "chili-mayo.png",
+        "Kimchi Sriracha": "kimchi-sriracha.png", "Soja-Sesam": "soy-sesame.png",
+        "Ingwer-Sauce": "ginger.png"
+      },
+      "extra_topping": {
+        "Sesam": "sesame.png", "Sonnenblumenkerne": "sunflower-seeds.png",
+        "Nori": "nori.png", "Granatapfel": "pomegranate.png", "Frühlingszwiebel": "spring-onions.png",
+        "schwarze Oliven": "black-olives.png", "Kürbiskerne": "pumpkin-seeds.png",
+        "Cashewkerne": "cashew-nuts.png", "Erdnüsse": "peanuts.png",
+        "Kokoschips": "coconut-chips.png", "Geröstete Rote Bete Chips": "roasted-beetroot.png",
+        "Bananenchips": "banana-chips.png", "Kapern": "capers.png", "Mandeln": "almonds.png",
+        "Kokosraspeln": "coconut-flakes.png", "Ingwer eingelegt": "pickled-ginger.png",
+        "gebratene Zwiebeln": "fried-onions.png"
+      },
     };
     
     const typeFolder = ingredientType.replace("extra_", "");
