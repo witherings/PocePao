@@ -1,0 +1,32 @@
+# URGENT: RAILWAY DEPLOYMENT FIX & BUG SCAN
+
+**Context:**
+I have deployed the app to Railway, but the application is failing to show data (Menu, Admin, Ingredients).
+1.  **Database Issue:** Replit uses a specific PostgreSQL setup (often via WebSockets/Neon), but Railway provides a standard PostgreSQL connection. The app seems unable to connect or read data on Railway.
+2.  **Missing Data:** The tables might not exist on the Railway DB yet because migrations didn't run.
+3.  **Code Stability:** I need a full scan to ensure the recent "Wunschbowl" changes didn't break anything logic-wise.
+
+**YOUR TASKS:**
+
+### TASK 1: Database Configuration (Crucial)
+* **Prisma/DB Connection:** Check `schema.prisma` and the database connection logic.
+* **Compatibility:** Ensure the configuration works for **BOTH** Replit (Dev) and Railway (Production).
+    * *Hint:* If using Prisma, ensure we are not enforcing a WebSocket driver if Railway provides a direct TCP connection string. Use standard environment variable handling for `DATABASE_URL`.
+* **Seed Script:** Ensure there is a robust `seed.ts` (or similar) that I can run to populate the initial Admin User and Basic Menu items if the DB is empty.
+
+### TASK 2: Build & Start Commands (package.json)
+* **Migrations on Deploy:** Update the `package.json` scripts. The "start" or "build" command on Railway MUST run `npx prisma migrate deploy` to ensure the database schema is actually created on the production server.
+* **Example:**
+    * `"build": "npx prisma generate && tsc"`
+    * `"start": "npx prisma migrate deploy && node dist/index.js"` (or equivalent).
+
+### TASK 3: Logic & Stability Scan
+* **Do NOT add new features.**
+* **Scan:** Review the "Wunschbowl" logic, the Cart logic, and the Admin logic one last time.
+* **Fix:** If you find any obvious potential crashes (e.g., `undefined` checks, missing generic types), fix them quietly.
+* **Goal:** The app must be bulletproof.
+
+**OUTPUT:**
+1.  Make the code changes (Prisma config, Package.json).
+2.  Explain clearly what "Command" I need to put in Railway settings (if any).
+3.  Tell me how to create the Admin user on the new Railway DB.

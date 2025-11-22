@@ -1,0 +1,344 @@
+2025-11-21T01:17:47.000000000Z [inf]  Starting Container
+2025-11-21T01:17:47.644360787Z [inf]  
+2025-11-21T01:17:47.644365995Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-21T01:17:47.644374009Z [inf]  > rest-express@1.0.0 railway:start
+2025-11-21T01:17:47.644388487Z [inf]  > npm run db:migrate; npm run db:seed; npm run db:create-admin || true; npm run start
+2025-11-21T01:17:47.644396943Z [inf]  
+2025-11-21T01:17:47.738587956Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-21T01:17:47.769225058Z [inf]  
+2025-11-21T01:17:47.769235715Z [inf]  > rest-express@1.0.0 db:migrate
+2025-11-21T01:17:47.769243250Z [inf]  > tsx server/migrate.ts
+2025-11-21T01:17:47.769249779Z [inf]  
+2025-11-21T01:17:48.614556726Z [inf]  🔄 Running database migrations...
+2025-11-21T01:17:48.614561752Z [inf]  
+2025-11-21T01:17:48.618786916Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-21T01:17:51.643310500Z [inf]  🔄 Connection attempt 1/5...
+2025-11-21T01:17:51.643381955Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-21T01:17:51.666992788Z [inf]  ✅ Database connection successful!
+2025-11-21T01:17:51.670176333Z [inf]  📝 Migrating menu_items table...
+2025-11-21T01:17:51.685541270Z [inf]    ✓ price_small exists
+2025-11-21T01:17:51.695335688Z [inf]    ✓ enable_base_selection exists
+2025-11-21T01:17:51.695340871Z [inf]  
+2025-11-21T01:17:51.695345612Z [inf]  📝 Migrating ingredients table...
+2025-11-21T01:17:51.701853157Z [inf]    ✓ price_small exists
+2025-11-21T01:17:51.704856546Z [inf]    ✓ price_standard exists
+2025-11-21T01:17:51.704867202Z [inf]  
+2025-11-21T01:17:51.704874631Z [inf]  📝 Ensuring app_settings table exists...
+2025-11-21T01:17:51.708448775Z [inf]    ✓ app_settings table exists
+2025-11-21T01:17:51.708456561Z [inf]  
+2025-11-21T01:17:51.708461420Z [inf]  🔍 Verifying schema...
+2025-11-21T01:17:51.713323933Z [inf]    ✓ menu_items.price_small
+2025-11-21T01:17:51.718069861Z [inf]    ✓ menu_items.enable_base_selection
+2025-11-21T01:17:51.723315574Z [inf]    ✓ ingredients.price_small
+2025-11-21T01:17:51.731706452Z [inf]    ✓ ingredients.price_standard
+2025-11-21T01:17:51.731706552Z [inf]  ✅ Schema verification passed!
+2025-11-21T01:17:51.731717793Z [inf]  
+2025-11-21T01:17:51.731725482Z [inf]  ✅ All migrations completed successfully!
+2025-11-21T01:17:51.883158646Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-21T01:17:51.916049822Z [inf]  
+2025-11-21T01:17:51.916055992Z [inf]  > rest-express@1.0.0 db:seed
+2025-11-21T01:17:51.916062154Z [inf]  > tsx server/seed.ts
+2025-11-21T01:17:51.916067658Z [inf]  
+2025-11-21T01:17:52.702087551Z [inf]  🌱 Starting database seeding...
+2025-11-21T01:17:52.702096774Z [inf]  
+2025-11-21T01:17:52.702104462Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-21T01:17:55.633892127Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-21T01:17:55.633903338Z [inf]  🔄 Connection attempt 1/5...
+2025-11-21T01:17:55.820959830Z [inf]  ✅ Database connection successful!
+2025-11-21T01:17:55.835859680Z [inf]  ⚠️  Database already has data. Skipping seed to preserve existing data.
+2025-11-21T01:17:55.835865889Z [inf]     Found 6 categories.
+2025-11-21T01:17:55.996557009Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-21T01:17:56.031183083Z [inf]  
+2025-11-21T01:17:56.031189730Z [inf]  > rest-express@1.0.0 db:create-admin
+2025-11-21T01:17:56.031196090Z [inf]  > tsx server/create-admin.ts
+2025-11-21T01:17:56.031202190Z [inf]  
+2025-11-21T01:17:56.803421796Z [inf]  🔐 Creating admin user...
+2025-11-21T01:17:56.803436676Z [inf]  
+2025-11-21T01:17:56.803445334Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-21T01:17:59.803301623Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-21T01:17:59.803313928Z [inf]  🔄 Connection attempt 1/5...
+2025-11-21T01:18:00.003617756Z [inf]  ✅ Database connection successful!
+2025-11-21T01:18:00.017582037Z [inf]  ⚠️  Admin user already exists. Skipping admin creation.
+2025-11-21T01:18:00.017595981Z [inf]     Username: admin
+2025-11-21T01:18:00.200359758Z [err]  npm warn config production Use `--omit=dev` instead.
+2025-11-21T01:18:00.826187265Z [inf]  
+2025-11-21T01:18:00.826193625Z [inf]  > rest-express@1.0.0 start
+2025-11-21T01:18:00.826199986Z [inf]  > NODE_ENV=production tsx server/index.ts
+2025-11-21T01:18:00.826205952Z [inf]  
+2025-11-21T01:18:02.007543879Z [inf]  🚂 Railway environment detected, waiting for private network initialization...
+2025-11-21T01:18:05.011067738Z [inf]  🔌 Attempting database connection to: postgresql://postgres:****@switchback.proxy.rlwy.net:44317/railway
+2025-11-21T01:18:05.011074411Z [inf]  🔄 Connection attempt 1/5...
+2025-11-21T01:18:05.213907347Z [inf]  ✅ Database connection successful!
+2025-11-21T01:18:05.230790158Z [inf]  ✅ Admin user already exists
+2025-11-21T01:18:05.258713315Z [inf]  1:18:05 AM [express] serving on port 8080
+2025-11-21T01:18:07.151011542Z [inf]  1:18:07 AM [express] GET /api/health 200 in 14ms
+2025-11-21T01:18:15.099676188Z [inf]  1:18:15 AM [express] GET /api/settings 304 in 23ms :: {"maintenanceMode":0}
+2025-11-21T01:18:15.099710759Z [inf]  1:18:15 AM [express] GET /api/static-content/home 404 in 24ms :: {"error":"Content not found"}
+2025-11-21T01:18:15.324797328Z [inf]  1:18:15 AM [express] GET /api/gallery 500 in 193ms :: {"error":"Failed to fetch gallery images"}
+2025-11-21T01:18:35.271750912Z [inf]  1:18:32 AM [express] POST /api/admin/login 200 in 154ms :: {"success":true,"user":{"id":"fb0eaa81-c6…
+2025-11-21T01:18:35.271759858Z [inf]  1:18:32 AM [express] GET /api/admin/me 200 in 14ms :: {"id":"fb0eaa81-c657-48bc-b636-964d313d4056","…
+2025-11-21T01:18:35.271766703Z [inf]  1:18:33 AM [express] GET /api/admin/snapshots 200 in 29ms :: [{"id":"bf1b8755-a433-4011-b938-14c4333…
+2025-11-21T01:18:35.271773837Z [inf]  1:18:34 AM [express] DELETE /api/admin/snapshots/bf1b8755-a433-4011-b938-14c4333c716b 200 in 19ms ::…
+2025-11-21T01:18:35.271782181Z [inf]  1:18:34 AM [express] GET /api/admin/snapshots 200 in 16ms :: []
+2025-11-21T01:18:41.142679751Z [err]  Error creating snapshot: error: relation "snapshot_ingredients" does not exist
+2025-11-21T01:18:41.142685588Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:18:41.142690916Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:18:41.142698398Z [err]      at async <anonymous> (/app/server/snapshot-routes.ts:78:9) {
+2025-11-21T01:18:41.142703737Z [err]    length: 119,
+2025-11-21T01:18:41.142709644Z [err]    severity: 'ERROR',
+2025-11-21T01:18:41.142715479Z [err]    code: '42P01',
+2025-11-21T01:18:41.142720643Z [err]    detail: undefined,
+2025-11-21T01:18:41.142729976Z [err]    hint: undefined,
+2025-11-21T01:18:41.142735920Z [err]    position: '13',
+2025-11-21T01:18:41.142741309Z [err]    internalPosition: undefined,
+2025-11-21T01:18:41.142746714Z [err]    internalQuery: undefined,
+2025-11-21T01:18:41.142751814Z [err]    where: undefined,
+2025-11-21T01:18:41.142756954Z [err]    schema: undefined,
+2025-11-21T01:18:41.142762934Z [err]    table: undefined,
+2025-11-21T01:18:41.142772720Z [err]    column: undefined,
+2025-11-21T01:18:41.142777720Z [err]    dataType: undefined,
+2025-11-21T01:18:41.142783042Z [err]    constraint: undefined,
+2025-11-21T01:18:41.142787760Z [err]    file: 'parse_relation.c',
+2025-11-21T01:18:41.142792820Z [err]    line: '1449',
+2025-11-21T01:18:41.142798558Z [err]    routine: 'parserOpenTable'
+2025-11-21T01:18:41.142803783Z [err]  }
+2025-11-21T01:18:41.147875451Z [inf]  1:18:41 AM [express] POST /api/admin/snapshots 400 in 58ms :: {"error":"relation \"snapshot_ingredie…
+2025-11-21T01:18:47.718978858Z [inf]  1:18:47 AM [express] GET /api/gallery 500 in 50ms :: {"error":"Failed to fetch gallery images"}
+2025-11-21T01:18:55.100938452Z [inf]  1:18:55 AM [express] GET /api/categories 200 in 20ms :: [{"id":"98ad7c95-5940-4d69-8b10-13ab682ef305…
+2025-11-21T01:18:55.116600368Z [err]  ❌ Error fetching menu items: error: column "has_variants" does not exist
+2025-11-21T01:18:55.116616055Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:18:55.116621883Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:18:55.116626911Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:18:55.116631940Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+2025-11-21T01:18:55.116636784Z [err]      at async <anonymous> (/app/server/routes.ts:95:25) {
+2025-11-21T01:18:55.116644353Z [err]    length: 113,
+2025-11-21T01:18:55.116650116Z [err]    severity: 'ERROR',
+2025-11-21T01:18:55.116656266Z [err]    code: '42703',
+2025-11-21T01:18:55.116661800Z [err]    detail: undefined,
+2025-11-21T01:18:55.116668678Z [err]    hint: undefined,
+2025-11-21T01:18:55.116673858Z [err]    position: '273',
+2025-11-21T01:18:55.116679099Z [err]    internalPosition: undefined,
+2025-11-21T01:18:55.116683824Z [err]    internalQuery: undefined,
+2025-11-21T01:18:55.116689198Z [err]    where: undefined,
+2025-11-21T01:18:55.116701205Z [err]    schema: undefined,
+2025-11-21T01:18:55.116705613Z [err]    table: undefined,
+2025-11-21T01:18:55.116710786Z [err]    column: undefined,
+2025-11-21T01:18:55.116715222Z [err]    dataType: undefined,
+2025-11-21T01:18:55.116728376Z [err]    constraint: undefined,
+2025-11-21T01:18:55.116733355Z [err]    file: 'parse_relation.c',
+2025-11-21T01:18:55.116738108Z [err]    line: '3716',
+2025-11-21T01:18:55.116743465Z [err]    routine: 'errorMissingColumn'
+2025-11-21T01:18:55.116748244Z [err]  }
+2025-11-21T01:18:55.116755756Z [err]  Stack: error: column "has_variants" does not exist
+2025-11-21T01:18:55.116763423Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:18:55.116769340Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:18:55.119401378Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:18:55.119413358Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+2025-11-21T01:18:55.119421046Z [err]      at async <anonymous> (/app/server/routes.ts:95:25)
+2025-11-21T01:18:55.119427806Z [inf]  1:18:55 AM [express] GET /api/ingredients 200 in 39ms :: [{"id":"3a7bcfba-76e4-4d4a-9098-96885bedd0d…
+2025-11-21T01:18:55.124820005Z [inf]  1:18:55 AM [express] GET /api/menu-items 500 in 41ms :: {"error":"Failed to fetch menu items","detai…
+2025-11-21T01:19:15.124046912Z [inf]  1:19:06 AM [express] GET /api/reservations 200 in 16ms :: []
+2025-11-21T01:19:15.124058762Z [inf]  1:19:09 AM [express] GET /api/static-content/about 200 in 12ms :: {"id":"909c8add-e8a6-448b-ac01-9a9…
+2025-11-21T01:19:35.126010779Z [err]    position: '273',
+2025-11-21T01:19:35.126021359Z [err]    internalPosition: undefined,
+2025-11-21T01:19:35.126028901Z [err]    internalQuery: undefined,
+2025-11-21T01:19:35.126030091Z [err]  ❌ Error fetching menu items: error: column "has_variants" does not exist
+2025-11-21T01:19:35.126035597Z [err]    where: undefined,
+2025-11-21T01:19:35.126042045Z [err]    schema: undefined,
+2025-11-21T01:19:35.126043261Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:19:35.126050984Z [err]    table: undefined,
+2025-11-21T01:19:35.126052831Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:19:35.126061044Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:19:35.126061454Z [err]    column: undefined,
+2025-11-21T01:19:35.126069153Z [err]    dataType: undefined,
+2025-11-21T01:19:35.126070946Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+2025-11-21T01:19:35.126075282Z [err]    constraint: undefined,
+2025-11-21T01:19:35.126079322Z [err]      at async <anonymous> (/app/server/routes.ts:95:25) {
+2025-11-21T01:19:35.126085691Z [err]    file: 'parse_relation.c',
+2025-11-21T01:19:35.126089083Z [err]    length: 113,
+2025-11-21T01:19:35.126093704Z [err]    line: '3716',
+2025-11-21T01:19:35.126096129Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:19:35.126098996Z [err]    severity: 'ERROR',
+2025-11-21T01:19:35.126107355Z [err]    routine: 'errorMissingColumn'
+2025-11-21T01:19:35.126109779Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:19:35.126110260Z [err]    code: '42703',
+2025-11-21T01:19:35.126114370Z [err]  }
+2025-11-21T01:19:35.126120242Z [err]    detail: undefined,
+2025-11-21T01:19:35.126121178Z [err]  Stack: error: column "has_variants" does not exist
+2025-11-21T01:19:35.126127852Z [err]    hint: undefined,
+2025-11-21T01:19:35.129293184Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:19:35.129303296Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+2025-11-21T01:19:35.129310090Z [err]      at async <anonymous> (/app/server/routes.ts:95:25) {
+2025-11-21T01:19:35.129317850Z [err]    length: 113,
+2025-11-21T01:19:35.129321359Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:19:35.129325938Z [err]    severity: 'ERROR',
+2025-11-21T01:19:35.129329816Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+2025-11-21T01:19:35.129334243Z [err]    code: '42703',
+2025-11-21T01:19:35.129338941Z [err]      at async <anonymous> (/app/server/routes.ts:95:25)
+2025-11-21T01:19:35.129342202Z [err]    detail: undefined,
+2025-11-21T01:19:35.129348391Z [err]    hint: undefined,
+2025-11-21T01:19:35.129353897Z [inf]  1:19:31 AM [express] GET /api/menu-items 500 in 17ms :: {"error":"Failed to fetch menu items","detai…
+2025-11-21T01:19:35.129356511Z [err]    position: '273',
+2025-11-21T01:19:35.129396608Z [inf]  1:19:33 AM [express] GET /api/gallery 500 in 49ms :: {"error":"Failed to fetch gallery images"}
+2025-11-21T01:19:35.129404469Z [err]  ❌ Error fetching menu items: error: column "has_variants" does not exist
+2025-11-21T01:19:35.129410900Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:19:35.129416956Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:19:35.129430887Z [err]    internalPosition: undefined,
+2025-11-21T01:19:35.129439381Z [err]    internalQuery: undefined,
+2025-11-21T01:19:35.129449345Z [err]    where: undefined,
+2025-11-21T01:19:35.129464125Z [err]    schema: undefined,
+2025-11-21T01:19:35.129470986Z [err]    table: undefined,
+2025-11-21T01:19:35.129477504Z [err]    column: undefined,
+2025-11-21T01:19:35.131925238Z [err]    dataType: undefined,
+2025-11-21T01:19:35.131933943Z [err]    constraint: undefined,
+2025-11-21T01:19:35.131939223Z [err]    file: 'parse_relation.c',
+2025-11-21T01:19:35.131943781Z [err]    line: '3716',
+2025-11-21T01:19:35.131948359Z [err]    routine: 'errorMissingColumn'
+2025-11-21T01:19:35.131956753Z [err]  }
+2025-11-21T01:19:35.131962431Z [err]  Stack: error: column "has_variants" does not exist
+2025-11-21T01:19:35.131968235Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:19:35.131974280Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:19:35.131980591Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:19:35.131987740Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+2025-11-21T01:19:35.131993203Z [err]      at async <anonymous> (/app/server/routes.ts:95:25)
+2025-11-21T01:19:35.131998435Z [inf]  1:19:34 AM [express] GET /api/menu-items 500 in 170ms :: {"error":"Failed to fetch menu items","deta…
+2025-11-21T01:19:35.132004545Z [err]  ❌ Error fetching product variants: error: relation "product_variants" does not exist
+2025-11-21T01:19:35.132009565Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:19:35.132017828Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:19:35.132023849Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:19:35.132030138Z [err]      at async DatabaseStorage.getAllProductVariants (/app/server/storage.ts:262:12)
+2025-11-21T01:19:35.132037733Z [err]      at async <anonymous> (/app/server/routes.ts:411:24) {
+2025-11-21T01:19:35.132043669Z [err]    length: 115,
+2025-11-21T01:19:35.132049669Z [err]    severity: 'ERROR',
+2025-11-21T01:19:35.132057742Z [err]    code: '42P01',
+2025-11-21T01:19:35.134911322Z [err]    routine: 'parserOpenTable'
+2025-11-21T01:19:35.134923215Z [err]    detail: undefined,
+2025-11-21T01:19:35.134932702Z [err]    hint: undefined,
+2025-11-21T01:19:35.134933496Z [err]  }
+2025-11-21T01:19:35.134942357Z [err]    position: '83',
+2025-11-21T01:19:35.134945065Z [inf]  1:19:34 AM [express] GET /api/product-variants 500 in 176ms :: {"error":"Failed to fetch product var…
+2025-11-21T01:19:35.134948916Z [err]    internalPosition: undefined,
+2025-11-21T01:19:35.134956545Z [err]    internalQuery: undefined,
+2025-11-21T01:19:35.134962712Z [err]    where: undefined,
+2025-11-21T01:19:35.134968448Z [err]    schema: undefined,
+2025-11-21T01:19:35.134973329Z [err]    table: undefined,
+2025-11-21T01:19:35.134978437Z [err]    column: undefined,
+2025-11-21T01:19:35.134984387Z [err]    dataType: undefined,
+2025-11-21T01:19:35.134989978Z [err]    constraint: undefined,
+2025-11-21T01:19:35.134994453Z [err]    file: 'parse_relation.c',
+2025-11-21T01:19:35.135000527Z [err]    line: '1449',
+2025-11-21T01:19:38.194336932Z [inf]  1:19:38 AM [express] GET /api/static-content/reservierung 404 in 31ms :: {"error":"Content not found…
+2025-11-21T01:19:38.795216980Z [inf]  1:19:38 AM [express] GET /api/static-content/contact 200 in 14ms :: {"id":"4ab46f84-cc5d-4be1-8cb7-1…
+2025-11-21T01:19:40.831615878Z [err]      at async DatabaseStorage.getAllProductVariants (/app/server/storage.ts:262:12)
+2025-11-21T01:19:40.831622538Z [err]    position: '83',
+2025-11-21T01:19:40.831625147Z [err]      at async <anonymous> (/app/server/routes.ts:411:24) {
+2025-11-21T01:19:40.831636375Z [err]    length: 115,
+2025-11-21T01:19:40.831637018Z [err]    internalPosition: undefined,
+2025-11-21T01:19:40.831643981Z [err]    schema: undefined,
+2025-11-21T01:19:40.831645198Z [err]  ❌ Error fetching product variants: error: relation "product_variants" does not exist
+2025-11-21T01:19:40.831646831Z [err]    severity: 'ERROR',
+2025-11-21T01:19:40.831647799Z [err]    internalQuery: undefined,
+2025-11-21T01:19:40.831653890Z [err]    code: '42P01',
+2025-11-21T01:19:40.831656202Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:19:40.831656701Z [err]    table: undefined,
+2025-11-21T01:19:40.831659846Z [err]    where: undefined,
+2025-11-21T01:19:40.831668086Z [err]    column: undefined,
+2025-11-21T01:19:40.831668199Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:19:40.831678671Z [err]    dataType: undefined,
+2025-11-21T01:19:40.831679100Z [err]    detail: undefined,
+2025-11-21T01:19:40.831679694Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:19:40.831689151Z [err]    constraint: undefined,
+2025-11-21T01:19:40.831693286Z [err]    hint: undefined,
+2025-11-21T01:19:40.831704569Z [err]    file: 'parse_relation.c',
+2025-11-21T01:19:40.831738872Z [err]    line: '1449',
+2025-11-21T01:19:40.831744984Z [err]    routine: 'parserOpenTable'
+2025-11-21T01:19:40.831749232Z [err]  }
+2025-11-21T01:19:40.831753873Z [err]  ❌ Error fetching menu items: error: column "has_variants" does not exist
+2025-11-21T01:19:40.831758308Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:19:40.834557126Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:19:40.834561161Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:19:40.834565029Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+2025-11-21T01:19:40.834569145Z [err]      at async <anonymous> (/app/server/routes.ts:95:25) {
+2025-11-21T01:19:40.834575661Z [err]    length: 113,
+2025-11-21T01:19:40.834578456Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:19:40.834581309Z [err]    severity: 'ERROR',
+2025-11-21T01:19:40.834585761Z [err]    code: '42703',
+2025-11-21T01:19:40.834587682Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:19:40.834591216Z [err]    detail: undefined,
+2025-11-21T01:19:40.834596823Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:19:40.834597625Z [err]    hint: undefined,
+2025-11-21T01:19:40.834603329Z [err]    position: '273',
+2025-11-21T01:19:40.834609968Z [err]    internalPosition: undefined,
+2025-11-21T01:19:40.834615431Z [err]    internalQuery: undefined,
+2025-11-21T01:19:40.834620573Z [err]    where: undefined,
+2025-11-21T01:19:40.834626880Z [err]    schema: undefined,
+2025-11-21T01:19:40.834632899Z [err]    table: undefined,
+2025-11-21T01:19:40.834638137Z [err]    column: undefined,
+2025-11-21T01:19:40.834642950Z [err]    dataType: undefined,
+2025-11-21T01:19:40.834648718Z [err]    constraint: undefined,
+2025-11-21T01:19:40.834653993Z [err]    file: 'parse_relation.c',
+2025-11-21T01:19:40.834660522Z [err]    line: '3716',
+2025-11-21T01:19:40.834666128Z [err]    routine: 'errorMissingColumn'
+2025-11-21T01:19:40.834671356Z [err]  }
+2025-11-21T01:19:40.834676260Z [err]  Stack: error: column "has_variants" does not exist
+2025-11-21T01:19:40.835310797Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+2025-11-21T01:19:40.835316080Z [err]      at async <anonymous> (/app/server/routes.ts:95:25)
+2025-11-21T01:19:40.835321879Z [inf]  1:19:40 AM [express] GET /api/product-variants 500 in 58ms :: {"error":"Failed to fetch product vari…
+2025-11-21T01:19:40.835328860Z [inf]  1:19:40 AM [express] GET /api/menu-items 500 in 67ms :: {"error":"Failed to fetch menu items","detai…
+2025-11-21T01:19:50.160424773Z [inf]  1:19:50 AM [express] GET /api/gallery 500 in 16ms :: {"error":"Failed to fetch gallery images"}
+2025-11-21T01:19:59.060214610Z [inf]  1:19:58 AM [express] POST /api/admin/login 200 in 126ms :: {"success":true,"user":{"id":"fb0eaa81-c6…
+2025-11-21T01:20:04.077557263Z [err]  Error creating snapshot: error: relation "snapshot_ingredients" does not exist
+2025-11-21T01:20:04.077563206Z [err]    file: 'parse_relation.c',
+2025-11-21T01:20:04.077573572Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:20:04.077577364Z [err]    line: '1449',
+2025-11-21T01:20:04.077582784Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:20:04.077588426Z [err]    routine: 'parserOpenTable'
+2025-11-21T01:20:04.077593356Z [err]      at async <anonymous> (/app/server/snapshot-routes.ts:78:9) {
+2025-11-21T01:20:04.077600288Z [err]  }
+2025-11-21T01:20:04.077609211Z [err]    length: 119,
+2025-11-21T01:20:04.077610750Z [inf]  1:20:03 AM [express] POST /api/admin/snapshots 400 in 89ms :: {"error":"relation \"snapshot_ingredie…
+2025-11-21T01:20:04.077620943Z [err]    severity: 'ERROR',
+2025-11-21T01:20:04.077632592Z [err]    code: '42P01',
+2025-11-21T01:20:04.077651722Z [err]    detail: undefined,
+2025-11-21T01:20:04.077661528Z [err]    hint: undefined,
+2025-11-21T01:20:04.077669342Z [err]    position: '13',
+2025-11-21T01:20:04.077677329Z [err]    internalPosition: undefined,
+2025-11-21T01:20:04.077685876Z [err]    internalQuery: undefined,
+2025-11-21T01:20:04.077694867Z [err]    where: undefined,
+2025-11-21T01:20:04.077704601Z [err]    schema: undefined,
+2025-11-21T01:20:04.077712558Z [err]    table: undefined,
+2025-11-21T01:20:04.077726162Z [err]    column: undefined,
+2025-11-21T01:20:04.077735135Z [err]    dataType: undefined,
+2025-11-21T01:20:04.077742259Z [err]    constraint: undefined,
+2025-11-21T01:20:11.477194581Z [inf]  1:20:11 AM [express] GET /api/gallery 500 in 42ms :: {"error":"Failed to fetch gallery images"}
+2025-11-21T01:20:18.260459726Z [err]  ❌ Error fetching menu items: error: column "has_variants" does not exist
+2025-11-21T01:20:18.260464859Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:20:18.260470256Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:20:18.260474437Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:20:18.260478178Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+2025-11-21T01:20:18.260482038Z [err]      at async <anonymous> (/app/server/routes.ts:95:25) {
+2025-11-21T01:20:18.260486737Z [err]    length: 113,
+2025-11-21T01:20:18.260491154Z [err]    severity: 'ERROR',
+2025-11-21T01:20:18.260496185Z [err]    code: '42703',
+2025-11-21T01:20:18.260501205Z [err]    detail: undefined,
+2025-11-21T01:20:18.260505446Z [err]    hint: undefined,
+2025-11-21T01:20:18.260510124Z [err]    position: '273',
+2025-11-21T01:20:18.260514023Z [err]    internalPosition: undefined,
+2025-11-21T01:20:18.260518819Z [err]    internalQuery: undefined,
+2025-11-21T01:20:18.260522598Z [err]    where: undefined,
+2025-11-21T01:20:18.260526604Z [err]    schema: undefined,
+2025-11-21T01:20:18.260531380Z [err]    table: undefined,
+2025-11-21T01:20:18.260535644Z [err]    column: undefined,
+2025-11-21T01:20:18.260539398Z [err]    dataType: undefined,
+2025-11-21T01:20:18.260543259Z [err]    constraint: undefined,
+2025-11-21T01:20:18.260547524Z [err]    file: 'parse_relation.c',
+2025-11-21T01:20:18.260551788Z [err]    line: '3716',
+2025-11-21T01:20:18.260555708Z [err]    routine: 'errorMissingColumn'
+2025-11-21T01:20:18.260559951Z [err]  }
+2025-11-21T01:20:18.260563727Z [err]  Stack: error: column "has_variants" does not exist
+2025-11-21T01:20:18.260567637Z [err]      at /app/node_modules/pg-pool/index.js:45:11
+2025-11-21T01:20:18.260571826Z [err]      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-11-21T01:20:18.262997674Z [err]      at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+2025-11-21T01:20:18.263002794Z [err]      at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+2025-11-21T01:20:18.263008460Z [err]      at async <anonymous> (/app/server/routes.ts:95:25)
+2025-11-21T01:20:18.294975062Z [inf]  1:20:18 AM [express] GET /api/menu-items 500 in 40ms :: {"error":"Failed to fetch menu items","detai…

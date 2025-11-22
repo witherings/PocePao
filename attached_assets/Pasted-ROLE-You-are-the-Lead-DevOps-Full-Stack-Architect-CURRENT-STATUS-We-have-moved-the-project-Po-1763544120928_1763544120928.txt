@@ -1,0 +1,47 @@
+ROLE: You are the Lead DevOps & Full-Stack Architect. CURRENT STATUS: We have moved the project ("PocePao") to Railway.app (Paid Tier). THE PROBLEM: The deployment is crashing with a Database Connection Error.
+
+1. 🚨 DIAGNOSIS: The Database Error Here is the log from Railway:
+
+Error: connect ECONNREFUSED 10.x.x.x:5432
+Analysis: The app creates a TCP connection to the correct port (5432), but the database rejects it. Root Cause: On Railway, the pg driver often requires explicit SSL configuration, even for internal connections. The current db.ts likely lacks ssl: { rejectUnauthorized: false }.
+
+2. 🛠️ YOUR MISSION: Full Adaptation for Railway You need to refactor the project to work flawlessly on Railway.
+
+A. Database Connection (server/db.ts):
+
+Driver: Use ONLY pg (node-postgres) and drizzle-orm/node-postgres.
+
+SSL: You MUST configure the Pool with:
+
+JavaScript
+
+ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : undefined
+Without this, Railway rejects the connection.
+
+Logic: Remove any complex "auto-detection" or Neon/WebSocket logic. Keep it simple and robust.
+
+B. Deployment Automation (package.json):
+
+I have a paid Railway account, so resources are better, but I still want a foolproof startup.
+
+Create/Update a script called "railway:up" that runs: npm run db:push && npm run db:seed && npm run db:create-admin && npm run start
+
+Ensure dependencies includes pg (version ^8.x).
+
+C. Server Configuration (server/index.ts):
+
+Port: Ensure the app listens on process.env.PORT (Railway injects this variable) or defaults to 5000.
+
+Proxy: Keep app.set("trust proxy", 1); (Railway uses a load balancer, so this is required for sessions).
+
+3. 📋 FUNCTIONALITY CHECK (The "Must-Haves"): While fixing the deployment, verify these promised features are present in the code:
+
+Admin UI: Inputs for "Small Price" vs "Large Price" in the Menu Editor.
+
+Gallery: Working UI to upload/delete images.
+
+Secret Access: The hidden dot in the footer to reach /admin/login.
+
+Snapshots: The snapshot publishing system.
+
+DELIVERABLE: Provide the complete, updated code (especially db.ts, package.json, index.ts). I will perform a "Force Push" to GitHub. The site must build, connect to the DB with SSL, seed data, and go live without crashing.

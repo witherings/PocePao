@@ -1,0 +1,112 @@
+ at async DatabaseStorage.getAllProductVariants (/app/server/storage.ts:262:12)
+  position: '83',
+    at async <anonymous> (/app/server/routes.ts:411:24) {
+  length: 115,
+  internalPosition: undefined,
+  schema: undefined,
+❌ Error fetching product variants: error: relation "product_variants" does not exist
+  severity: 'ERROR',
+  internalQuery: undefined,
+  code: '42P01',
+    at /app/node_modules/pg-pool/index.js:45:11
+  table: undefined,
+  where: undefined,
+  column: undefined,
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+  dataType: undefined,
+  detail: undefined,
+    at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+  constraint: undefined,
+  hint: undefined,
+  file: 'parse_relation.c',
+  line: '1449',
+  routine: 'parserOpenTable'
+}
+❌ Error fetching menu items: error: column "has_variants" does not exist
+    at /app/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+    at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+    at async <anonymous> (/app/server/routes.ts:95:25) {
+  length: 113,
+    at /app/node_modules/pg-pool/index.js:45:11
+  severity: 'ERROR',
+  code: '42703',
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+  detail: undefined,
+    at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+  hint: undefined,
+  position: '273',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3716',
+  routine: 'errorMissingColumn'
+}
+Stack: error: column "has_variants" does not exist
+    at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+    at async <anonymous> (/app/server/routes.ts:95:25)
+1:19:40 AM [express] GET /api/product-variants 500 in 58ms :: {"error":"Failed to fetch product vari…
+1:19:40 AM [express] GET /api/menu-items 500 in 67ms :: {"error":"Failed to fetch menu items","detai…
+1:19:50 AM [express] GET /api/gallery 500 in 16ms :: {"error":"Failed to fetch gallery images"}
+1:19:58 AM [express] POST /api/admin/login 200 in 126ms :: {"success":true,"user":{"id":"fb0eaa81-c6…
+Error creating snapshot: error: relation "snapshot_ingredients" does not exist
+  file: 'parse_relation.c',
+    at /app/node_modules/pg-pool/index.js:45:11
+  line: '1449',
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+  routine: 'parserOpenTable'
+    at async <anonymous> (/app/server/snapshot-routes.ts:78:9) {
+}
+  length: 119,
+1:20:03 AM [express] POST /api/admin/snapshots 400 in 89ms :: {"error":"relation \"snapshot_ingredie…
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '13',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+1:20:11 AM [express] GET /api/gallery 500 in 42ms :: {"error":"Failed to fetch gallery images"}
+❌ Error fetching menu items: error: column "has_variants" does not exist
+    at /app/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+    at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+    at async <anonymous> (/app/server/routes.ts:95:25) {
+  length: 113,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '273',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3716',
+  routine: 'errorMissingColumn'
+}
+Stack: error: column "has_variants" does not exist
+    at /app/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (/app/node_modules/src/node-postgres/session.ts:104:19)
+    at async DatabaseStorage.getAllMenuItems (/app/server/storage.ts:135:12)
+    at async <anonymous> (/app/server/routes.ts:95:25)
