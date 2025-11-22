@@ -3,8 +3,16 @@
 ### Overview
 PokePao is a full-stack e-commerce platform for a Hawaiian poke bowl restaurant. It enables customers to browse the menu, manage their cart, make reservations, and learn about the establishment. The platform includes a comprehensive admin panel for managing menu items, orders, reservations, and gallery content. The project is designed for production deployment on platforms like Railway.app, aiming for a robust, scalable, and user-friendly solution in the food service e-commerce market.
 
-### Recent Changes (November 22, 2025 - FINAL FIXES)
-**Wunsch Bowl Price Calculation Fixed**
+### Recent Changes (November 22, 2025 - IMAGE UPLOAD SYSTEM)
+**Category-Based Image Upload System for Menu Items**
+- ✅ **Smart File Organization:** Images now automatically save to category-specific folders in `/media/pages/Spaisekarte/{категория}/`
+- ✅ **Category Mapping:** Created intelligent mapping system that routes images to correct folders (Poke Bowls, Wraps, Vorspeisen, Desserts, Getränke, Wunsch Bowls)
+- ✅ **Enhanced Upload Endpoint:** `/api/upload` now supports `uploadType="menuItem"` parameter to differentiate between menu items and ingredients
+- ✅ **Automatic Folder Creation:** System automatically creates category folders if they don't exist
+- ✅ **Admin Panel Integration:** Admin menu now sends category information during image upload for proper routing
+- ✅ **Backward Compatibility:** Ingredient uploads continue to work with existing `/media/categories/` structure
+
+**Previous: Wunsch Bowl Price Calculation Fixed**
 - ✅ **Protein Pricing Logic:** Fixed getSizePrice() to correctly use priceSmall (klein) and priceStandard (standard) from ingredients database
 - ✅ **Price Display:** Wunsch Bowl now shows correct price in cart (€9.50 for klein, €14.75+ for standard based on selected protein)
 - ✅ **Menu-to-Cart Flow:** Ensured customPrice parameter flows correctly from BowlBuilderDialog → Menu.tsx → Cart
@@ -42,7 +50,11 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 **Technical Implementations:**
 - **Frontend:** React 18, Vite, Tailwind CSS, `shadcn/ui`, TanStack Query for server state, Zustand for client-side cart state, Wouter for routing.
 - **Backend:** Express.js on Node.js (TypeScript), RESTful API, Drizzle ORM with `node-postgres`, Passport.js for authentication with `express-session` and CSRF protection.
-- **Image Storage:** Organized in `/public/media/` with deterministic slug-based paths. Categories: `/media/categories/{slug}/items/`, Ingredients: `/media/ingredients/{type}/`
+- **Image Storage:** Organized in `/public/media/` with intelligent category-based routing:
+  - Menu items: `/media/pages/Spaisekarte/{category}/` (Poke Bowls, Wraps, Vorspeisen, Desserts, Getränke, Wunsch Bowls)
+  - Ingredients: `/media/categories/Wunsch Bowls/zutaten/{type}/` (protein, base, marinade, fresh, sauce, topping)
+  - Gallery: `/media/pages/startseite/gallery/`
+  - Sliders: `/media/pages/startseite/slider/`
 - **Authentication:** Secure authentication using bcrypt; includes a Replit-specific auto-authentication bypass for development.
 - **Node.js Compatibility:** Ensured compatibility with Node.js 18+ for Railway deployment, addressing `import.meta.dirname` issues.
 
