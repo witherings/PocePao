@@ -19,23 +19,17 @@ interface GalleryImage {
 export function AdminGallery() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [galleryType, setGalleryType] = useState<"slider" | "main">("main");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
-
-  // Fetch both page images (slider) and gallery images (main)
-  const { data: pageImages = [] } = useQuery<any[]>({
-    queryKey: ["/api/page-images/startseite"],
-  });
 
   const { data: galleryImages = [], isLoading, isError, error } = useQuery<GalleryImage[]>({
     queryKey: ["/api/gallery"],
   });
 
   const mainImages = galleryImages.filter(img => img.type === "main");
-  const images = galleryType === "slider" ? pageImages : mainImages;
+  const images = mainImages;
 
   useEffect(() => {
     if (selectedFile) {
@@ -51,30 +45,16 @@ export function AdminGallery() {
     mutationFn: async (file: File) => {
       const formData = new FormData();
       formData.append("file", file);
-      
-      if (galleryType === "slider") {
-        formData.append("page", "startseite");
-        formData.append("alt", "");
-        const response = await fetch("/api/page-images", {
-          method: "POST",
-          body: formData,
-          credentials: "include",
-        });
-        if (!response.ok) throw new Error("Upload failed");
-        return response.json();
-      } else {
-        formData.append("type", "main");
-        const response = await fetch("/api/gallery", {
-          method: "POST",
-          body: formData,
-          credentials: "include",
-        });
-        if (!response.ok) throw new Error("Upload failed");
-        return response.json();
-      }
+      formData.append("type", "main");
+      const response = await fetch("/api/gallery", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Upload failed");
+      return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/page-images/startseite"] });
       queryClient.invalidateQueries({ queryKey: ["/api/gallery"] });
       setSelectedFile(null);
       setPreviewUrl(null);
@@ -97,8 +77,7 @@ export function AdminGallery() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const endpoint = galleryType === "slider" ? `/api/page-images/${id}` : `/api/gallery/${id}`;
-      const response = await fetch(endpoint, {
+      const response = await fetch(`/api/gallery/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -108,7 +87,6 @@ export function AdminGallery() {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/page-images/startseite"] });
       queryClient.invalidateQueries({ queryKey: ["/api/gallery"] });
       toast({
         title: "Erfolgreich",
@@ -147,8 +125,8 @@ export function AdminGallery() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Zurück zum Dashboard
         </Button>
-        <h1 className="text-3xl font-bold mb-2">Startseite</h1>
-        <p className="text-gray-600">Verwaltung von Header-Slider und Galeriebilder</p>
+        <h1 className="text-3xl font-bold mb-2">Galerie</h1>
+        <p className="text-gray-600">Verwaltung der Galeriebilder</p>
       </div>
 
       <Card className="mb-8 border-2">
@@ -159,40 +137,12 @@ export function AdminGallery() {
           <div className="space-y-6">
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">Bereich auswählen:</label>
-                <div className="space-y-3">
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="galleryType"
-                      value="slider"
-                      checked={galleryType === "slider"}
-                      onChange={(e) => setGalleryType(e.target.value as "slider")}
-                      className="mr-2"
-                    />
-                    <span className="text-sm">🎬 <strong>Header-Slider</strong> (3 Fotos oben auf der Startseite)</span>
-                  </label>
-                  <p className="text-xs text-gray-600 ml-6">
-                    Format: JPG/PNG | Größe: 1920x1080px (16:9 Verhältnis) | Max. 5MB | Max. 3 Fotos
-                  </p>
-                  
-                  <div className="border-t border-blue-200 pt-3"></div>
-                  
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="galleryType"
-                      value="main"
-                      checked={galleryType === "main"}
-                      onChange={(e) => setGalleryType(e.target.value as "main")}
-                      className="mr-2"
-                    />
-                    <span className="text-sm">🖼️ <strong>Hauptgalerie</strong> (unten auf der Startseite)</span>
-                  </label>
-                  <p className="text-xs text-gray-600 ml-6">
-                    Format: JPG/PNG | Größe: 800x600px oder größer | Max. 5MB
-                  </p>
-                </div>
+                <p className="text-sm text-gray-700 mb-3">
+                  🖼️ <strong>Hauptgalerie</strong> - Galeriebilder unten auf der Startseite
+                </p>
+                <p className="text-xs text-gray-600">
+                  Format: JPG/PNG | Größe: 800x600px oder größer | Max. 5MB
+                </p>
               </div>
             </div>
             <Input
@@ -263,7 +213,7 @@ export function AdminGallery() {
       <Card>
         <CardHeader>
           <CardTitle>
-            {galleryType === "slider" ? "🎬 Header-Slider" : "🖼️ Hauptgalerie"} ({images.length})
+            🖼️ Hauptgalerie ({images.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
