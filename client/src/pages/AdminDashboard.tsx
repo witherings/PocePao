@@ -76,13 +76,6 @@ export default function AdminDashboard() {
       color: "bg-blue-500",
     },
     {
-      title: "Galerie",
-      description: "Bilder hochladen und verwalten",
-      icon: Images,
-      href: "/admin/gallery",
-      color: "bg-orange-500",
-    },
-    {
       title: "Reservierungen",
       description: "Tischreservierungen verwalten",
       icon: Calendar,
@@ -91,8 +84,8 @@ export default function AdminDashboard() {
     },
     {
       title: "Startseite",
-      description: "Startseite und Hero-Section bearbeiten",
-      icon: Settings,
+      description: "Header-Slider, Galerie und Hero-Section bearbeiten",
+      icon: Images,
       href: "/admin/home",
       color: "bg-cyan-500",
     },
