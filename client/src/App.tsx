@@ -83,8 +83,10 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/menu" component={Menu} />
+      <Route path="/speisekarte" component={Menu} />
       <Route path="/gallery" component={Gallery} />
       <Route path="/about" component={About} />
+      <Route path="/über-uns" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/reservierung" component={Reservierung} />
       <Route component={NotFound} />
