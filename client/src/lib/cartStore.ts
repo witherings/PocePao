@@ -18,6 +18,13 @@ export const useCartStore = create<CartStore>()(
       items: [],
       
       addItem: (item) => {
+        console.log('🛒 cartStore.addItem called with:', {
+          itemId: item.id,
+          price: item.price,
+          hasCustomization: !!item.customization,
+          quantity: item.quantity
+        });
+        
         // For custom bowls, always create a new item (unique ID for each customization)
         // For regular items, composite ID (itemId-size-base) uniquely identifies the cart entry
         const existingItem = item.customization 
@@ -39,8 +46,11 @@ export const useCartStore = create<CartStore>()(
             ? `${item.id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
             : item.id;  // Preserve the composite ID for deduplication
           
+          const cartItem = { ...item, id: finalId, quantity: item.quantity || 1 };
+          console.log('🛒 Adding to cart:', { id: cartItem.id, price: cartItem.price });
+          
           set({
-            items: [...get().items, { ...item, id: finalId, quantity: item.quantity || 1 }],
+            items: [...get().items, cartItem],
           });
         }
       },

@@ -102,6 +102,17 @@ export default function Menu() {
     // Otherwise determine the correct price based on size
     let finalPrice: string | number = customPrice || item.price || "0";
     
+    console.log('📦 handleAddToCart called:', {
+      itemId: item.id,
+      itemIsCustomBowl: item.isCustomBowl,
+      hasSizeOptions: item.hasSizeOptions,
+      customPrice,
+      itemPrice: item.price,
+      itemPriceSmall: item.priceSmall,
+      size,
+      hasCustomization: !!customization
+    });
+    
     // If no custom price provided and item has size options, use size-based pricing
     if (!customPrice && size && item.hasSizeOptions === 1) {
       if (size === "klein" && item.priceSmall) {
@@ -113,6 +124,7 @@ export default function Menu() {
     
     // Ensure finalPrice is always a string for consistency
     finalPrice = String(finalPrice);
+    console.log('📦 finalPrice:', finalPrice);
 
     // If editing, update existing item
     if (editingItemId) {
