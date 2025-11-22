@@ -183,8 +183,8 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 </div>
               )}
 
-              {/* Base Selection */}
-              {item.enableBaseSelection === 1 && baseVariants.length > 0 && (
+              {/* Base Selection - from hasVariants */}
+              {item.hasVariants === 1 && item.variantType === 'base' && baseVariants.length > 0 && (
                 <div>
                   <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Base wählen *</h4>
                   <div className="grid grid-cols-2 gap-2">
@@ -199,6 +199,30 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                             : ""
                         }`}
                         data-testid={`button-base-${variant.nameDE}`}
+                      >
+                        {variant.nameDE}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Base Selection - Legacy from enableBaseSelection */}
+              {item.enableBaseSelection === 1 && item.hasVariants !== 1 && baseVariants.length > 0 && (
+                <div>
+                  <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Base wählen *</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    {baseVariants.map((variant) => (
+                      <Button
+                        key={variant.id}
+                        variant={selectedBase === variant.nameDE ? "default" : "outline"}
+                        onClick={() => setSelectedBase(variant.nameDE)}
+                        className={`font-poppins font-semibold min-h-[44px] text-sm ${
+                          selectedBase === variant.nameDE 
+                            ? "bg-ocean hover:bg-ocean/90 text-white" 
+                            : ""
+                        }`}
+                        data-testid={`button-base-legacy-${variant.nameDE}`}
                       >
                         {variant.nameDE}
                       </Button>
