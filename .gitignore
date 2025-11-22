@@ -1,21 +1,51 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
 node_modules
 dist
-.DS_Store
-server/public
-vite.config.ts.*
-*.tar.gz
-.vercel
+dist-ssr
+*.local
+
+# Environment
 .env
 .env.local
+.env.*.local
+.DS_Store
 
-# Replit
-.replit
-replit.nix
-.cache
-.local
-.upm
-.config
+# Build outputs
+.vite
+.turbo
 
 # IDE
 .vscode
 .idea
+*.swp
+*.swo
+*~
+
+# Database migrations (keep schema.ts)
+*.sql
+migrations/
+
+# Temporary files
+/tmp
+*.tmp
+*.backup
+
+# Uploads directory (exclude from git, keep in railway volume)
+/data/uploads/*
+!data/uploads/.gitkeep
+
+# Cache
+.cache
+.eslintcache
+
+# OS
+Thumbs.db
