@@ -44,7 +44,7 @@ export function AdminGallery() {
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("image", file);
       formData.append("type", "main");
       const response = await fetch("/api/gallery", {
         method: "POST",
