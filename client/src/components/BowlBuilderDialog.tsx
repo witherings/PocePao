@@ -266,28 +266,25 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
   };
 
   const getSizePrice = (size: "klein" | "standard") => {
-    // Get selected protein
+    // Get selected protein from DB
     const selectedProtein = selections.protein 
       ? ingredients.find(ing => ing.id === selections.protein)
       : null;
     
-    // Total Price = Protein_Price_For_Selected_Size + Sum_of_All_Extras
     let totalPrice = 0;
+    const breakdown: { protein: number; extras: Array<{ name?: string; price: number }> } = { protein: 0, extras: [] };
 
-    // Add protein price based on size
+    // Add protein price based on size (from database)
     if (selectedProtein) {
-      // Get the appropriate price - size-specific prices take priority
       let proteinPrice = 0;
       
       if (size === "klein") {
-        // For klein: use priceSmall first, then fallback to price
         proteinPrice = selectedProtein.priceSmall 
           ? parseFloat(String(selectedProtein.priceSmall))
           : selectedProtein.price 
             ? parseFloat(String(selectedProtein.price))
             : 0;
       } else if (size === "standard") {
-        // For standard: use priceStandard first, then fallback to price
         proteinPrice = selectedProtein.priceStandard 
           ? parseFloat(String(selectedProtein.priceStandard))
           : selectedProtein.price 
@@ -295,35 +292,46 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
             : 0;
       }
       
-      totalPrice = proteinPrice;
+      totalPrice += proteinPrice;
+      breakdown.protein = proteinPrice;
     }
 
-    // Add extras pricing - sum actual ingredient prices
+    // Add extras pricing - sum actual ingredient prices from DB
     const extraProteinPrice = (selections.extraProtein || []).reduce((sum, ingredientId) => {
       const ingredient = ingredients.find(ing => ing.id === ingredientId);
-      return sum + (ingredient?.price ? parseFloat(String(ingredient.price)) : 0);
+      const price = ingredient?.price ? parseFloat(String(ingredient.price)) : 0;
+      if (price > 0) breakdown.extras.push({ name: ingredient?.nameDE, price });
+      return sum + price;
     }, 0);
     totalPrice += extraProteinPrice;
     
     const extraFreshPrice = (selections.extraFreshIngredients || []).reduce((sum, ingredientId) => {
       const ingredient = ingredients.find(ing => ing.id === ingredientId);
-      return sum + (ingredient?.price ? parseFloat(String(ingredient.price)) : 0);
+      const price = ingredient?.price ? parseFloat(String(ingredient.price)) : 0;
+      if (price > 0) breakdown.extras.push({ name: ingredient?.nameDE, price });
+      return sum + price;
     }, 0);
     totalPrice += extraFreshPrice;
     
     const extraSaucesPrice = (selections.extraSauces || []).reduce((sum, ingredientId) => {
       const ingredient = ingredients.find(ing => ing.id === ingredientId);
-      return sum + (ingredient?.price ? parseFloat(String(ingredient.price)) : 0);
+      const price = ingredient?.price ? parseFloat(String(ingredient.price)) : 0;
+      if (price > 0) breakdown.extras.push({ name: ingredient?.nameDE, price });
+      return sum + price;
     }, 0);
     totalPrice += extraSaucesPrice;
     
     const extraToppingsPrice = (selections.extraToppings || []).reduce((sum, ingredientId) => {
       const ingredient = ingredients.find(ing => ing.id === ingredientId);
-      return sum + (ingredient?.price ? parseFloat(String(ingredient.price)) : 0);
+      const price = ingredient?.price ? parseFloat(String(ingredient.price)) : 0;
+      if (price > 0) breakdown.extras.push({ name: ingredient?.nameDE, price });
+      return sum + price;
     }, 0);
     totalPrice += extraToppingsPrice;
 
-    return totalPrice.toFixed(2);
+    const finalPrice = totalPrice.toFixed(2);
+    console.log('💰 getSizePrice calculation:', { size, breakdown, finalPrice });
+    return finalPrice;
   };
 
   const getDisplayPrice = () => {
