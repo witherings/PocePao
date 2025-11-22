@@ -244,7 +244,7 @@ export function registerAdminRoutes(app: Express) {
       }
 
       // Delete the file from disk if it exists
-      if (deletedImage.url.startsWith('/images/') || deletedImage.url.startsWith('/uploads/')) {
+      if (deletedImage.url.startsWith('/media/') || deletedImage.url.startsWith('/uploads/')) {
         const filePath = require('path').join(process.cwd(), 'public', deletedImage.url);
         try {
           await require('fs').promises.unlink(filePath);

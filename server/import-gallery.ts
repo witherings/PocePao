@@ -41,7 +41,7 @@ async function importGalleryImages() {
 
     let imported = 0;
     for (const file of imageFiles) {
-      const url = `/images/${file}`;
+      const url = `/media/${file}`;
       
       if (!existingUrls.has(url)) {
         await db.insert(galleryImages).values({

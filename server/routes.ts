@@ -228,17 +228,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // If category and type provided, save to category folder
       if (category && type) {
         const categoryFolder = category.replace(/\s+/g, " "); // Normalize spaces
-        const categoryPath = path.join(process.cwd(), "public", "images", "categories", categoryFolder, "zutaten", type);
+        const categoryPath = path.join(process.cwd(), "public", "media", "categories", categoryFolder, "zutaten", type);
         
         await fs.mkdir(categoryPath, { recursive: true });
         const destPath = path.join(categoryPath, req.file.filename);
         await fs.rename(path.join(uploadDir, req.file.filename), destPath);
-        uploadPath = `/images/categories/${categoryFolder}/zutaten/${type}/${req.file.filename}`;
+        uploadPath = `/media/categories/${categoryFolder}/zutaten/${type}/${req.file.filename}`;
 
         // Duplicate to extra folder if requested
         if (duplicateToExtra === "true") {
           const extraType = `extra ${type}`;
-          const extraPath = path.join(process.cwd(), "public", "images", "categories", categoryFolder, "zutaten extra", extraType);
+          const extraPath = path.join(process.cwd(), "public", "media", "categories", categoryFolder, "zutaten extra", extraType);
           await fs.mkdir(extraPath, { recursive: true });
           const extraDestPath = path.join(extraPath, req.file.filename);
           await fs.copyFile(destPath, extraDestPath);
@@ -298,7 +298,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Delete the file from disk if it exists
-      if (deletedImage.url.startsWith('/images/') || deletedImage.url.startsWith('/uploads/')) {
+      if (deletedImage.url.startsWith('/media/') || deletedImage.url.startsWith('/uploads/')) {
         const filePath = path.join(process.cwd(), 'public', deletedImage.url);
         try {
           await fs.unlink(filePath);
@@ -748,8 +748,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       await db.delete(pageImages).where(eq(pageImages.id, id));
       
-      // Handle both old format (/images/pages/) and new format (/uploads/pages/)
-      if (image[0].url.startsWith('/images/pages/')) {
+      // Handle both old format (/media/pages/) and new format (/uploads/pages/)
+      if (image[0].url.startsWith('/media/pages/')) {
         const filePath = path.join(process.cwd(), 'public', image[0].url);
         try {
           await fs.unlink(filePath);
