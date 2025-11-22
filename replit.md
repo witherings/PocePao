@@ -3,8 +3,19 @@
 ### Overview
 PokePao is a full-stack e-commerce platform for a Hawaiian poke bowl restaurant. It enables customers to browse the menu, manage their cart, make reservations, and learn about the establishment. The platform includes a comprehensive admin panel for managing menu items, orders, reservations, and gallery content. The project is designed for production deployment on platforms like Railway.app, aiming for a robust, scalable, and user-friendly solution in the food service e-commerce market.
 
-### Recent Changes (November 22, 2025 - STARTSEITE ADMIN MANAGEMENT)
-**Startseite Tab in Admin Panel**
+### Recent Changes (November 22, 2025 - URL ENCODING FIX FOR INGREDIENT IMAGES)
+**CRITICAL FIX: URL Encoding for Image Paths with Spaces**
+- ✅ **Root Cause Identified:** Image paths contained unencoded spaces (`/Wunsch Bowls/`)
+- ✅ **Solution Applied:** Updated all 97 ingredient image paths to use `%20` instead of spaces
+- ✅ **Fix Details:** Changed `/media/pages/Spaisekarte/Wunsch Bowls/` → `/media/pages/Spaisekarte/Wunsch%20Bowls/`
+- ✅ **Affected Ingredients Fixed:** All problematic ingredients now display correctly in BowlBuilder
+  - Gurke, Süßkartoffel, süßer Kürbis, Ingwer eingelegt (fresh)
+  - Extra Gurke, Extra Süßkartoffel, Extra süßer Kürbis, Extra Ingwer eingelegt
+  - Extra Rettich eingelegt, Extra Kürbiskerne, Extra Kokosraspeln, Extra gebratene Zwiebeln
+- ✅ **Technical Impact:** Browser now correctly loads images with URL-encoded spaces; HTTP 200 OK verified for all image paths
+- ✅ **Database Verification:** All 97 ingredient paths properly encoded and tested
+
+**Previous: Startseite Tab in Admin Panel**
 - ✅ **New Admin Tab:** Added "Startseite" tab in AdminMenu with two separate management sections (Hero Slider and Gallery)
 - ✅ **Hero Slider Management:** Display, upload, and delete slider images for homepage hero section
   - Shows 3 existing slider images from `/media/pages/startseite/slider/` loaded from database
