@@ -1,0 +1,256 @@
+{
+  "project": "PokePao Restaurant",
+  "migration_date": "2025-01-22",
+  "stack": {
+    "backend": "Node.js + Express + TypeScript",
+    "database": "PostgreSQL (Drizzle ORM)",
+    "frontend": "React 18 + Vite + Tailwind CSS",
+    "note": "Стек НЕ МЕНЯТЬ!"
+  },
+  
+  "current_state": {
+    "total_images": 147,
+    "total_menu_lines": 633,
+    "total_ingredients_lines": 1051,
+    "hardcoded_data": true,
+    "database_populated": "partially (only via seed scripts)"
+  },
+
+  "images_inventory": {
+    "by_category": {
+      "Wunsch Bowls": {
+        "total": 103,
+        "location": "public/images/categories/Wunsch Bowls/",
+        "structure": {
+          "main": 1,
+          "zutaten/protein": 6,
+          "zutaten/base": 4,
+          "zutaten/marinade": 4,
+          "zutaten/fresh": 16,
+          "zutaten/sauce": 7,
+          "zutaten/topping": 14,
+          "zutaten extra/extra protein": 6,
+          "zutaten extra/extra base": 4,
+          "zutaten extra/extra marinade": 4,
+          "zutaten extra/extra fresh": 16,
+          "zutaten extra/extra sauce": 7,
+          "zutaten extra/extra topping": 14
+        },
+        "issues": [
+          "Дубликаты в 'zutaten' и 'zutaten extra' (51 файлов дублированы)",
+          "Опечатка: 'oasted beetroot.png' → должно быть 'roasted'",
+          "Пробел в имени: 'salmon slices .png'",
+          "Пробел в имени: 'peanuts .png'",
+          "Пробел в имени: 'Teriyaki Sauce .png'"
+        ]
+      },
+      "Poke Bowls": {
+        "total": 15,
+        "location": "public/images/categories/Poke Bowls/",
+        "files": [
+          "falafel-freude-quinoa.webp",
+          "falafel-freude-reis.webp",
+          "garnelen-genuss-quinoa.png",
+          "garnelen-genuss-reis.png",
+          "haehnchen-harmonie-quinoa.png",
+          "haehnchen-harmonie-reis.png",
+          "lachs-lust-quinoa.png",
+          "lachs-lust-reis.png",
+          "mittags-bowl-haehnchen.png",
+          "mittags-bowl-tofu.webp",
+          "thunfisch-traum-quinoa.png",
+          "thunfisch-traum-reis.webp",
+          "tofu-triumph-reis.webp",
+          "vitamins-bowl.png"
+        ],
+        "issues": [
+          "Дубликаты с разными базами (reis/quinoa) - нужно объединить",
+          "Смесь форматов: .png и .webp"
+        ]
+      },
+      "Wraps": {
+        "total": 3,
+        "location": "public/images/categories/Wraps/",
+        "files": [
+          "wrap-falafel.webp",
+          "wrap-haehnchen.webp",
+          "wrap-lachs.webp"
+        ],
+        "issues": []
+      },
+      "Vorspeisen": {
+        "total": 6,
+        "location": "public/images/categories/Vorspeisen/",
+        "files": [
+          "fruehlingsrollen.webp",
+          "green-salat.webp",
+          "haehnchen-salat.webp",
+          "haehnchenstreifen.webp",
+          "tofu-salat.webp",
+          "wakame-salat.webp"
+        ],
+        "issues": []
+      },
+      "Desserts": {
+        "total": 4,
+        "location": "public/images/categories/Desserts/",
+        "files": [
+          "acai-bowl.webp",
+          "kokoskugel-deluxe.webp",
+          "kokosnuss-vollmilchschokolade.webp",
+          "mandeln-weisse-schokolade.webp"
+        ],
+        "issues": []
+      },
+      "Getränke": {
+        "total": 16,
+        "location": "public/images/categories/Getränke/",
+        "files": [
+          "10517032025182015_1760608171391.jpg",
+          "15817032025182220_1760608171391.jpg",
+          "22417032025184355_1760608213786.jpg",
+          "33918032025134434_1760608213788.jpg",
+          "42817032025180237_1760608056886.jpg",
+          "56117032025181608_1760608102257.jpg",
+          "59417032025182607_1760608171390.jpg",
+          "67217032025165311_1760608014573.jpg",
+          "69717032025175940_1760608042517.jpg",
+          "69917032025183322_1760608213787.jpg",
+          "89417032025184229_1760608213787.jpg",
+          "91017032025165651_1760608033694.jpg",
+          "93317032025183849_1760608213787.jpg",
+          "96717032025182912_1760608213788.jpg",
+          "beer-peroni.jpg",
+          "image_1760608442538.png"
+        ],
+        "issues": [
+          "Нечитаемые имена файлов (timestamp-based)",
+          "Нужно сопоставление с блюдами из menu.ts"
+        ]
+      }
+    },
+    
+    "other_media": {
+      "slider": {
+        "location": "public/images/pages/Startseite/",
+        "files": ["slider-1.jpg", "slider-2.jpg", "slider-3.jpg"],
+        "total": 3
+      },
+      "uploads": {
+        "location": "uploads/",
+        "files": ["1763661451375-926211445.jpg", "1763676373940-779345315.jpg"],
+        "total": 2,
+        "note": "Временные файлы от пользователей"
+      }
+    }
+  },
+
+  "hardcoded_data_analysis": {
+    "categories": {
+      "file": "server/data/menu.ts",
+      "total": 6,
+      "list": [
+        {"name": "Custom Bowls", "nameDE": "Wunsch Bowls", "icon": "⭐", "order": 0},
+        {"name": "Poke Bowls", "nameDE": "Poke Bowls", "icon": "🥗", "order": 1},
+        {"name": "Wraps", "nameDE": "Wraps", "icon": "🌯", "order": 2},
+        {"name": "Appetizers", "nameDE": "Vorspeisen", "icon": "🥟", "order": 3},
+        {"name": "Desserts", "nameDE": "Desserts", "icon": "🍰", "order": 4},
+        {"name": "Drinks", "nameDE": "Getränke", "icon": "🥤", "order": 5}
+      ]
+    },
+    
+    "menu_items": {
+      "file": "server/data/menu.ts",
+      "total_estimated": 55,
+      "by_category": {
+        "Wunsch Bowls": 1,
+        "Poke Bowls": 10,
+        "Wraps": 4,
+        "Vorspeisen": 6,
+        "Desserts": 4,
+        "Getränke": 30
+      },
+      "critical_fields": [
+        "name", "nameDE", "description", "descriptionDE",
+        "price", "priceSmall", "image", "categoryId",
+        "protein", "marinade", "ingredients", "sauce", "toppings", "allergens",
+        "hasSizeOptions", "isCustomBowl", "hasVariants", "variantType"
+      ]
+    },
+    
+    "ingredients": {
+      "file": "server/data/ingredients.ts",
+      "total_estimated": 115,
+      "by_type": {
+        "protein": 6,
+        "base": 4,
+        "marinade": 4,
+        "fresh": 17,
+        "sauce": 7,
+        "topping": 18,
+        "extra_protein": 6,
+        "extra_fresh": 16,
+        "extra_sauce": 7,
+        "extra_topping": 17
+      },
+      "pricing_logic": {
+        "proteins": {
+          "priceSmall": "9.50 - 9.90",
+          "priceStandard": "14.75 - 15.90",
+          "note": "Цены зависят от типа протеина (Tofu/Falafel/Chicken дешевле, Salmon/Shrimp/Tuna дороже)"
+        },
+        "extras": {
+          "extra_protein": "3.70",
+          "extra_fresh": "1.00",
+          "extra_sauce": "0.80",
+          "extra_topping": "0.60"
+        },
+        "note": "НЕ МЕНЯТЬ эти цены без явного указания!"
+      }
+    }
+  },
+
+  "wunsch_bowl_calculator": {
+    "file": "client/src/hooks/useCustomBowlPrices.ts",
+    "logic": "Динамический расчёт цен на основе выбранного протеина",
+    "formula": {
+      "klein": "priceSmall протеина + (sum of extras)",
+      "standard": "priceStandard протеина + (sum of extras)"
+    },
+    "price_ranges": {
+      "klein": "9.50 - 9.90",
+      "standard": "14.75 - 15.90"
+    },
+    "status": "✅ НЕ ЛОМАТЬ! Логика правильная, только перенести данные в БД"
+  },
+
+  "database_schema": {
+    "file": "shared/schema.ts",
+    "tables": [
+      "categories",
+      "menuItems",
+      "productVariants",
+      "ingredients",
+      "orders",
+      "orderItems",
+      "reservations",
+      "galleryImages",
+      "staticContent",
+      "adminUsers",
+      "snapshots",
+      "snapshotMenuItems",
+      "snapshotIngredients",
+      "snapshotGalleryImages",
+      "snapshotStaticContent"
+    ],
+    "status": "✅ Схема хорошо спроектирована, дополнительных полей не требуется"
+  },
+
+  "migration_plan": {
+    "phase_1": "✅ ЗАВЕРШЕНО - Инвентаризация проекта",
+    "phase_2": "⏳ В ПРОЦЕССЕ - Нормализация изображений",
+    "phase_3": "⏳ ОЖИДАНИЕ - Миграция данных в БД",
+    "phase_4": "⏳ ОЖИДАНИЕ - Рефакторинг админ-панели",
+    "phase_5": "⏳ ОЖИДАНИЕ - Проверка Wunsch Bowl калькулятора"
+  }
+}

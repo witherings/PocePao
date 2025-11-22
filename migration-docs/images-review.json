@@ -1,0 +1,459 @@
+{
+  "review_date": "2025-01-22",
+  "total_images": 147,
+  "classification": {
+    "high_confidence": 44,
+    "medium_confidence": 87,
+    "unknown": 16
+  },
+
+  "high_confidence_mappings": [
+    {
+      "current_path": "public/images/categories/Wraps/wrap-falafel.webp",
+      "dish_name": "Wrap mit Falafel",
+      "new_path": "public/media/categories/wraps/items/wrap-falafel.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Wraps/wrap-haehnchen.webp",
+      "dish_name": "Wrap mit Hähnchen",
+      "new_path": "public/media/categories/wraps/items/wrap-haehnchen.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Wraps/wrap-lachs.webp",
+      "dish_name": "Wrap mit Lachs",
+      "new_path": "public/media/categories/wraps/items/wrap-lachs.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Desserts/acai-bowl.webp",
+      "dish_name": "Açaí Bowl",
+      "new_path": "public/media/categories/desserts/items/acai-bowl.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Desserts/kokoskugel-deluxe.webp",
+      "dish_name": "Kokoskugel Deluxe",
+      "new_path": "public/media/categories/desserts/items/kokoskugel-deluxe.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Desserts/kokosnuss-vollmilchschokolade.webp",
+      "dish_name": "Kokosnuss in Vollmilchschokolade",
+      "new_path": "public/media/categories/desserts/items/kokosnuss-vollmilchschokolade.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Desserts/mandeln-weisse-schokolade.webp",
+      "dish_name": "Mandeln in weißer Schokolade mit Kokos",
+      "new_path": "public/media/categories/desserts/items/mandeln-weisse-schokolade.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Vorspeisen/fruehlingsrollen.webp",
+      "dish_name": "Frühlingsrollen (12 Stück)",
+      "new_path": "public/media/categories/vorspeisen/items/fruehlingsrollen.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Vorspeisen/green-salat.webp",
+      "dish_name": "Green-Salat",
+      "new_path": "public/media/categories/vorspeisen/items/green-salat.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Vorspeisen/haehnchen-salat.webp",
+      "dish_name": "Hähnchen-Salat",
+      "new_path": "public/media/categories/vorspeisen/items/haehnchen-salat.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Vorspeisen/haehnchenstreifen.webp",
+      "dish_name": "Zarte Hähnchenstreifen (150g)",
+      "new_path": "public/media/categories/vorspeisen/items/haehnchenstreifen.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Vorspeisen/tofu-salat.webp",
+      "dish_name": "Tofu-Salat",
+      "new_path": "public/media/categories/vorspeisen/items/tofu-salat.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Vorspeisen/wakame-salat.webp",
+      "dish_name": "Wakame-Salat (100g)",
+      "new_path": "public/media/categories/vorspeisen/items/wakame-salat.webp",
+      "action": "rename_and_move",
+      "confidence": 100
+    },
+    {
+      "current_path": "public/images/categories/Getränke/beer-peroni.jpg",
+      "dish_name": "Peroni Nastro Azzurro / Beck's Blue",
+      "new_path": "public/media/categories/getraenke/items/beer-peroni.webp",
+      "action": "rename_move_convert",
+      "confidence": 100,
+      "note": "Конвертировать в .webp"
+    }
+  ],
+
+  "medium_confidence_mappings": [
+    {
+      "current_path": "public/images/categories/Poke Bowls/thunfisch-traum-reis.webp",
+      "dish_name": "Thunfisch-Traum",
+      "new_path": "public/media/categories/poke-bowls/items/thunfisch-traum.webp",
+      "action": "consolidate_variants",
+      "confidence": 95,
+      "note": "Объединить с thunfisch-traum-quinoa.png - оставить только 1 фото"
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/thunfisch-traum-quinoa.png",
+      "dish_name": "Thunfisch-Traum",
+      "new_path": null,
+      "action": "delete_duplicate",
+      "confidence": 95,
+      "note": "Удалить дубликат, использовать .webp версию"
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/haehnchen-harmonie-reis.png",
+      "dish_name": "Hähnchen-Harmonie",
+      "new_path": "public/media/categories/poke-bowls/items/haehnchen-harmonie.webp",
+      "action": "consolidate_variants_convert",
+      "confidence": 95,
+      "note": "Объединить варианты и конвертировать в .webp"
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/haehnchen-harmonie-quinoa.png",
+      "dish_name": "Hähnchen-Harmonie",
+      "new_path": null,
+      "action": "delete_duplicate",
+      "confidence": 95,
+      "note": "Удалить дубликат"
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/lachs-lust-quinoa.png",
+      "dish_name": "Lachs-Lust",
+      "new_path": "public/media/categories/poke-bowls/items/lachs-lust.webp",
+      "action": "consolidate_variants_convert",
+      "confidence": 95,
+      "note": "Объединить варианты и конвертировать в .webp"
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/lachs-lust-reis.png",
+      "dish_name": "Lachs-Lust",
+      "new_path": null,
+      "action": "delete_duplicate",
+      "confidence": 95
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/falafel-freude-quinoa.webp",
+      "dish_name": "Falafel-Freude",
+      "new_path": "public/media/categories/poke-bowls/items/falafel-freude.webp",
+      "action": "consolidate_variants",
+      "confidence": 95
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/falafel-freude-reis.webp",
+      "dish_name": "Falafel-Freude",
+      "new_path": null,
+      "action": "delete_duplicate",
+      "confidence": 95
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/garnelen-genuss-reis.png",
+      "dish_name": "Garnelen-Genuss",
+      "new_path": "public/media/categories/poke-bowls/items/garnelen-genuss.webp",
+      "action": "consolidate_variants_convert",
+      "confidence": 95
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/garnelen-genuss-quinoa.png",
+      "dish_name": "Garnelen-Genuss",
+      "new_path": null,
+      "action": "delete_duplicate",
+      "confidence": 95
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/tofu-triumph-reis.webp",
+      "dish_name": "Tofu-Triumph",
+      "new_path": "public/media/categories/poke-bowls/items/tofu-triumph.webp",
+      "action": "rename_and_move",
+      "confidence": 95
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/mittags-bowl-haehnchen.png",
+      "dish_name": "Mittags Bowl mit Hähnchen",
+      "new_path": "public/media/categories/poke-bowls/items/mittags-bowl-haehnchen.webp",
+      "action": "rename_move_convert",
+      "confidence": 95
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/mittags-bowl-tofu.webp",
+      "dish_name": "Mittags Bowl mit Tofu",
+      "new_path": "public/media/categories/poke-bowls/items/mittags-bowl-tofu.webp",
+      "action": "rename_and_move",
+      "confidence": 95
+    },
+    {
+      "current_path": "public/images/categories/Poke Bowls/vitamins-bowl.png",
+      "dish_name": "Vitamins Bowl",
+      "new_path": "public/media/categories/poke-bowls/items/vitamins-bowl.webp",
+      "action": "rename_move_convert",
+      "confidence": 95
+    },
+    {
+      "current_path": "public/images/categories/Wunsch Bowls/main/Gemini_Generated_Image_4oapkm4oapkm4oap.png",
+      "dish_name": "Wunsch Bowl",
+      "new_path": "public/media/categories/wunsch-bowls/items/wunsch-bowl.webp",
+      "action": "rename_move_convert",
+      "confidence": 90,
+      "note": "Главное фото конструктора"
+    }
+  ],
+
+  "ingredient_mappings": {
+    "high_confidence": [
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/protein/tofu cubes.png",
+        "ingredient_name": "Tofu",
+        "new_path": "public/media/ingredients/protein/tofu.webp",
+        "action": "rename_move_convert_fix_space",
+        "confidence": 100
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/protein/falafel balls.png",
+        "ingredient_name": "Falafel",
+        "new_path": "public/media/ingredients/protein/falafel.webp",
+        "action": "rename_move_convert_fix_space",
+        "confidence": 100
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/protein/chicken slices.png",
+        "ingredient_name": "Chicken / Hähnchen",
+        "new_path": "public/media/ingredients/protein/chicken.webp",
+        "action": "rename_move_convert_fix_space",
+        "confidence": 100
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/protein/salmon slices .png",
+        "ingredient_name": "Salmon / Lachs",
+        "new_path": "public/media/ingredients/protein/salmon.webp",
+        "action": "rename_move_convert_fix_trailing_space",
+        "confidence": 100,
+        "note": "⚠️ ОПЕЧАТКА: лишний пробел в конце имени файла"
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/protein/shrimp.png",
+        "ingredient_name": "Shrimp / Garnelen",
+        "new_path": "public/media/ingredients/protein/shrimp.webp",
+        "action": "rename_move_convert",
+        "confidence": 100
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/protein/tuna slices.png",
+        "ingredient_name": "Tuna / Thunfisch",
+        "new_path": "public/media/ingredients/protein/tuna.webp",
+        "action": "rename_move_convert_fix_space",
+        "confidence": 100
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/base/white rice.png",
+        "ingredient_name": "Rice / Reis",
+        "new_path": "public/media/ingredients/base/rice.webp",
+        "action": "rename_move_convert_fix_space",
+        "confidence": 100
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/base/cooked couscous.png",
+        "ingredient_name": "Couscous",
+        "new_path": "public/media/ingredients/base/couscous.webp",
+        "action": "rename_move_convert_fix_space",
+        "confidence": 100
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/base/cooked quinoa.png",
+        "ingredient_name": "Quinoa",
+        "new_path": "public/media/ingredients/base/quinoa.webp",
+        "action": "rename_move_convert_fix_space",
+        "confidence": 100
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/base/zucchini spaghetti.png",
+        "ingredient_name": "Zucchini Noodles / Zucchini-Nudeln",
+        "new_path": "public/media/ingredients/base/zucchini-noodles.webp",
+        "action": "rename_move_convert_fix_space",
+        "confidence": 100
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/topping/oasted beetroot.png",
+        "ingredient_name": "Roasted Beet Chips / Geröstete Rote Bete Chips",
+        "new_path": "public/media/ingredients/topping/roasted-beetroot.webp",
+        "action": "rename_move_convert_fix_typo",
+        "confidence": 100,
+        "note": "⚠️ ОПЕЧАТКА: 'oasted' → 'roasted'"
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/topping/peanuts .png",
+        "ingredient_name": "Peanuts / Erdnüsse",
+        "new_path": "public/media/ingredients/topping/peanuts.webp",
+        "action": "rename_move_convert_fix_trailing_space",
+        "confidence": 100,
+        "note": "⚠️ ОПЕЧАТКА: лишний пробел"
+      },
+      {
+        "current_path": "public/images/categories/Wunsch Bowls/zutaten/sauce/Teriyaki Sauce .png",
+        "ingredient_name": "Teriyaki Sauce / Teriyaki-Sauce",
+        "new_path": "public/media/ingredients/sauce/teriyaki.webp",
+        "action": "rename_move_convert_fix_trailing_space",
+        "confidence": 100,
+        "note": "⚠️ ОПЕЧАТКА: лишний пробел"
+      }
+    ],
+    
+    "duplicate_extras_action": {
+      "folder": "public/images/categories/Wunsch Bowls/zutaten extra/",
+      "action": "DELETE_ALL_DUPLICATES",
+      "reason": "Все файлы в 'zutaten extra' - полные дубликаты файлов из 'zutaten'. Extra-ингредиенты используют те же изображения.",
+      "total_files_to_delete": 51,
+      "note": "После удаления дубликатов обновить пути в ingredients.ts для extra_* типов на основные пути"
+    }
+  },
+
+  "unknown_files_need_review": [
+    {
+      "current_path": "public/images/categories/Getränke/10517032025182015_1760608171391.jpg",
+      "possible_dish": "Kaffee",
+      "confidence": 50,
+      "note": "Нужна ручная проверка - по menu.ts Kaffee использует этот путь"
+    },
+    {
+      "current_path": "public/images/categories/Getränke/15817032025182220_1760608171391.jpg",
+      "possible_dish": "Espresso",
+      "confidence": 50,
+      "note": "Нужна ручная проверка"
+    },
+    {
+      "current_path": "public/images/categories/Getränke/22417032025184355_1760608213786.jpg",
+      "possible_dish": "Cappuccino",
+      "confidence": 50
+    },
+    {
+      "current_path": "public/images/categories/Getränke/33918032025134434_1760608213788.jpg",
+      "possible_dish": "Latte Macchiato",
+      "confidence": 50
+    },
+    {
+      "current_path": "public/images/categories/Getränke/42817032025180237_1760608056886.jpg",
+      "possible_dish": "Stilles Wasser",
+      "confidence": 50
+    },
+    {
+      "current_path": "public/images/categories/Getränke/56117032025181608_1760608102257.jpg",
+      "possible_dish": "Vitaminwunder (smoothie) или Sprudel Wasser",
+      "confidence": 30,
+      "note": "Путь используется дважды в menu.ts - КОНФЛИКТ!"
+    },
+    {
+      "current_path": "public/images/categories/Getränke/59417032025182607_1760608171390.jpg",
+      "possible_dish": "Martini Eleganz",
+      "confidence": 50
+    },
+    {
+      "current_path": "public/images/categories/Getränke/67217032025165311_1760608014573.jpg",
+      "possible_dish": "Lila Energieboost или Mandelmagie",
+      "confidence": 30,
+      "note": "Путь используется дважды - КОНФЛИКТ!"
+    },
+    {
+      "current_path": "public/images/categories/Getränke/69717032025175940_1760608042517.jpg",
+      "possible_dish": "Grüner Tropensturm",
+      "confidence": 50
+    },
+    {
+      "current_path": "public/images/categories/Getränke/69917032025183322_1760608213787.jpg",
+      "possible_dish": "Goldene Paradieswelle или Aperol am Meer",
+      "confidence": 30,
+      "note": "КОНФЛИКТ: используется дважды"
+    },
+    {
+      "current_path": "public/images/categories/Getränke/89417032025184229_1760608213787.jpg",
+      "possible_dish": "???",
+      "confidence": 0,
+      "note": "Не найдено совпадение в menu.ts - требуется ручная проверка"
+    },
+    {
+      "current_path": "public/images/categories/Getränke/91017032025165651_1760608033694.jpg",
+      "possible_dish": "???",
+      "confidence": 0
+    },
+    {
+      "current_path": "public/images/categories/Getränke/93317032025183849_1760608213787.jpg",
+      "possible_dish": "???",
+      "confidence": 0
+    },
+    {
+      "current_path": "public/images/categories/Getränke/96717032025182912_1760608213788.jpg",
+      "possible_dish": "???",
+      "confidence": 0
+    },
+    {
+      "current_path": "public/images/categories/Getränke/image_1760608442538.png",
+      "possible_dish": "???",
+      "confidence": 0,
+      "note": "Возможно, загружено через админку, но не привязано к блюду"
+    }
+  ],
+
+  "actions_summary": {
+    "rename_and_move": 13,
+    "rename_move_convert": 10,
+    "consolidate_variants": 7,
+    "delete_duplicate": 7,
+    "fix_typo": 3,
+    "manual_review_required": 16,
+    "delete_extra_duplicates": 51
+  },
+
+  "critical_issues": {
+    "image_path_conflicts": [
+      {
+        "path": "/images/categories/Getränke/56117032025181608_1760608102257.jpg",
+        "used_by": ["Vitaminwunder", "Sprudel Wasser"],
+        "severity": "HIGH",
+        "solution": "Нужно разное фото для каждого блюда"
+      },
+      {
+        "path": "/images/categories/Getränke/67217032025165311_1760608014573.jpg",
+        "used_by": ["Lila Energieboost", "Mandelmagie"],
+        "severity": "HIGH",
+        "solution": "Нужно разное фото для каждого блюда"
+      },
+      {
+        "path": "/images/categories/Getränke/69917032025183322_1760608213787.jpg",
+        "used_by": ["Goldene Paradieswelle", "Aperol am Meer"],
+        "severity": "HIGH",
+        "solution": "Нужно разное фото для каждого блюда"
+      }
+    ],
+    "typos": [
+      "oasted beetroot.png → roasted-beetroot.png",
+      "salmon slices .png → salmon.png (лишний пробел)",
+      "peanuts .png → peanuts.png (лишний пробел)",
+      "Teriyaki Sauce .png → teriyaki.png (лишний пробел)"
+    ],
+    "orphaned_files": 5,
+    "duplicate_files": 58
+  }
+}
