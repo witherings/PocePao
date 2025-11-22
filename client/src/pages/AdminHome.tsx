@@ -5,37 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Save, ArrowLeft, Upload, Trash2, Image as ImageIcon } from "lucide-react";
+import { Save, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
-
-interface PageImage {
-  id: string;
-  page: string;
-  url: string;
-  filename: string;
-  alt: string | null;
-  order: number;
-}
 
 export function AdminHome() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [imageToDelete, setImageToDelete] = useState<string | null>(null);
 
   const { data: content, isLoading } = useQuery({
     queryKey: ["/api/static-content", "home", { locale: "de" }],
@@ -46,71 +24,6 @@ export function AdminHome() {
       if (response.status === 404) return null;
       if (!response.ok) throw new Error("Failed to fetch");
       return response.json();
-    },
-  });
-
-  // Fetch header slider images
-  const { data: headerImages = [], isLoading: imagesLoading } = useQuery<PageImage[]>({
-    queryKey: ["/api/page-images", "startseite"],
-    queryFn: async () => {
-      const response = await fetch("/api/page-images/startseite", {
-        credentials: "include",
-      });
-      if (!response.ok) return [];
-      return response.json();
-    },
-  });
-
-  // Upload header image mutation
-  const uploadImageMutation = useMutation({
-    mutationFn: async (file: File) => {
-      const formData = new FormData();
-      formData.append("file", file);  // Backend expects "file", not "image"
-      formData.append("page", "startseite");
-      formData.append("alt", "");
-      
-      const response = await fetch("/api/page-images", {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
-      
-      if (!response.ok) throw new Error("Upload failed");
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/page-images"] });
-      toast({ title: "✅ Bild hochgeladen" });
-      setUploadingImage(false);
-    },
-    onError: () => {
-      toast({ 
-        title: "❌ Fehler beim Hochladen", 
-        variant: "destructive" 
-      });
-      setUploadingImage(false);
-    },
-  });
-
-  // Delete header image mutation
-  const deleteImageMutation = useMutation({
-    mutationFn: async (imageId: string) => {
-      const response = await fetch(`/api/page-images/${imageId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      
-      if (!response.ok) throw new Error("Delete failed");
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/page-images"] });
-      toast({ title: "✅ Bild gelöscht" });
-    },
-    onError: () => {
-      toast({ 
-        title: "❌ Fehler beim Löschen", 
-        variant: "destructive" 
-      });
     },
   });
 
@@ -161,36 +74,6 @@ export function AdminHome() {
     },
   });
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      toast({ 
-        title: "❌ Ungültige Datei", 
-        description: "Bitte wählen Sie ein Bild aus",
-        variant: "destructive" 
-      });
-      return;
-    }
-
-    setUploadingImage(true);
-    uploadImageMutation.mutate(file);
-    e.target.value = ''; // Reset input
-  };
-
-  const handleImageDelete = (imageId: string) => {
-    setImageToDelete(imageId);
-    setDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = () => {
-    if (imageToDelete) {
-      deleteImageMutation.mutate(imageToDelete);
-      setDeleteDialogOpen(false);
-      setImageToDelete(null);
-    }
-  };
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -331,81 +214,6 @@ export function AdminHome() {
                   </div>
                 </div>
 
-                {/* Header Slider Images */}
-                <div className="bg-gradient-to-r from-amber-50 to-yellow-50 p-6 rounded-lg border border-amber-200">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="font-poppins text-xl font-bold text-ocean">📸 Header Slider Bilder</h2>
-                    <Label
-                      htmlFor="header-image-upload"
-                      className="cursor-pointer inline-flex items-center gap-2 bg-ocean hover:bg-ocean-dark text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-                    >
-                      <Upload className="w-4 h-4" />
-                      {uploadingImage ? "Hochladen..." : "Bild hochladen"}
-                      <Input
-                        id="header-image-upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        disabled={uploadingImage}
-                        className="hidden"
-                      />
-                    </Label>
-                  </div>
-
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Empfohlen: 3 Bilder für den automatischen Slider (1920x1080px, JPG/PNG)
-                  </p>
-
-                  {imagesLoading ? (
-                    <div className="flex items-center justify-center py-12">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-ocean"></div>
-                    </div>
-                  ) : headerImages.length === 0 ? (
-                    <div className="bg-white/50 border-2 border-dashed border-amber-300 rounded-lg p-8 text-center">
-                      <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                      <p className="text-gray-600 font-semibold mb-1">Noch keine Bilder hochgeladen</p>
-                      <p className="text-sm text-gray-500">
-                        Laden Sie 3 Bilder hoch für den Header-Slider
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {headerImages.map((image, index) => (
-                        <div
-                          key={image.id}
-                          className="relative group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow border-2 border-amber-200"
-                        >
-                          <div className="aspect-video relative">
-                            <img
-                              src={image.url}
-                              alt={image.filename}
-                              className="w-full h-full object-cover"
-                            />
-                            <div className="absolute top-2 left-2 bg-ocean text-white px-3 py-1 rounded-full text-sm font-bold">
-                              #{index + 1}
-                            </div>
-                          </div>
-                          <div className="p-3 bg-gradient-to-r from-amber-50 to-yellow-50">
-                            <p className="text-sm font-medium text-gray-700 truncate mb-2">
-                              {image.filename}
-                            </p>
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="destructive"
-                              onClick={() => handleImageDelete(image.id)}
-                              className="w-full"
-                              disabled={deleteImageMutation.isPending}
-                            >
-                              <Trash2 className="w-3 h-3 mr-1" />
-                              Löschen
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
 
                 {/* Order Section */}
                 <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-lg border border-green-200">
@@ -554,28 +362,6 @@ export function AdminHome() {
           </Card>
         )}
 
-        {/* Delete Image Confirmation Dialog */}
-        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Bild löschen?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Möchten Sie dieses Header-Bild wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setImageToDelete(null)}>
-                Abbrechen
-              </AlertDialogCancel>
-              <AlertDialogAction
-                onClick={confirmDelete}
-                className="bg-destructive hover:bg-destructive/90"
-              >
-                Löschen
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
     </div>
   );
