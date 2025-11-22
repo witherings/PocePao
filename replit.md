@@ -3,8 +3,22 @@
 ### Overview
 PokePao is a full-stack e-commerce platform for a Hawaiian poke bowl restaurant. It enables customers to browse the menu, manage their cart, make reservations, and learn about the establishment. The platform includes a comprehensive admin panel for managing menu items, orders, reservations, and gallery content. The project is designed for production deployment on platforms like Railway.app, aiming for a robust, scalable, and user-friendly solution in the food service e-commerce market.
 
-### Recent Changes (November 22, 2025 - IMAGE UPLOAD SYSTEM)
-**Category-Based Image Upload System for Menu Items**
+### Recent Changes (November 22, 2025 - STARTSEITE ADMIN MANAGEMENT)
+**Startseite Tab in Admin Panel**
+- ✅ **New Admin Tab:** Added "Startseite" tab in AdminMenu with two separate management sections (Hero Slider and Gallery)
+- ✅ **Hero Slider Management:** Display, upload, and delete slider images for homepage hero section
+  - Shows 3 existing slider images from `/media/pages/startseite/slider/` loaded from database
+  - Upload new slider images with automatic order assignment
+  - Delete slider images with one-click removal
+  - Uses `createPageImageMutation` and `deletePageImageMutation` for proper cache invalidation
+- ✅ **Gallery Management:** Separate section for managing gallery images (distinct from slider)
+  - Upload gallery images via `/api/gallery` endpoint
+  - Delete gallery images with `deleteGalleryImageMutation`
+  - Automatic query invalidation ensures UI updates immediately
+- ✅ **Production Ready:** All mutations properly wired, error handling in place, tested and verified by architect
+- ✅ **Base Selection Verified:** Confirmed that variant selection (Base wählen) continues to work correctly after changes
+
+**Previous: Category-Based Image Upload System for Menu Items**
 - ✅ **Smart File Organization:** Images now automatically save to category-specific folders in `/media/pages/Spaisekarte/{категория}/`
 - ✅ **Category Mapping:** Created intelligent mapping system that routes images to correct folders (Poke Bowls, Wraps, Vorspeisen, Desserts, Getränke, Wunsch Bowls)
 - ✅ **Enhanced Upload Endpoint:** `/api/upload` now supports `uploadType="menuItem"` parameter to differentiate between menu items and ingredients
@@ -64,6 +78,7 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
     - Full CRUD operations for menu categories, items (with variant pricing, ingredients, allergens), and custom ingredients - all via API
     - **Orders Management:** View all customer orders with status tracking (pending, confirmed, ready, completed, cancelled), update order status in real-time, and delete orders with confirmation dialog.
     - **Reservations Management:** View all customer reservations with guest count, date/time details, and delete functionality with confirmation.
+    - **Startseite Management:** Dedicated tab for managing Hero Slider (3 images) and Gallery separately with upload/delete functionality.
     - Gallery management (upload, view, and delete photos with disk cleanup).
     - Ingredients management with categorization (Protein, Base, Marinade, Fresh, Sauce, Topping, Extra types).
     - Snapshot system for restoring menu, gallery, and static content while preserving order history.
