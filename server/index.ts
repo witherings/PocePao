@@ -31,6 +31,14 @@ app.use("/images", (req, res, next) => {
   next();
 }, express.static(publicImagesPath));
 
+// Serve media files (categories, ingredients, pages) from public/media
+// CRITICAL FOR DATABASE-DRIVEN IMAGES: All menu items and ingredients reference /media/ paths
+const publicMediaPath = path.join(process.cwd(), "public", "media");
+app.use("/media", (req, res, next) => {
+  res.set("Cache-Control", "public, max-age=3600");
+  next();
+}, express.static(publicMediaPath));
+
 // Serve uploaded files from persistent storage
 // Railway: use /data/uploads volume or UPLOAD_DIR env variable
 // Development: use local uploads directory
