@@ -139,6 +139,10 @@ export function AdminMenu() {
     queryKey: ["/api/page-images/startseite"],
   });
 
+  const { data: galleryImages = [] } = useQuery<any[]>({
+    queryKey: ["/api/gallery"],
+  });
+
   // Helper function to check if a category is "Wunsch Bowls"
   const isWunschBowlCategory = (categoryId: string): boolean => {
     const category = categories.find(c => c.id === categoryId);
@@ -369,6 +373,34 @@ export function AdminMenu() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/page-images/startseite"] });
       toast({ title: "Slider gelöscht" });
+    },
+  });
+
+  const createGalleryImageMutation = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const response = await fetch("/api/gallery", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
+      if (!response.ok) throw new Error("Failed to upload");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/gallery"] });
+      setSelectedImage(null);
+      setImagePreview(null);
+      toast({ title: "Galerie-Bild erfolgreich hochgeladen" });
+    },
+  });
+
+  const deleteGalleryImageMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await apiRequest("DELETE", `/api/gallery/${id}`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/gallery"] });
+      toast({ title: "Galerie-Bild gelöscht" });
     },
   });
 
@@ -726,6 +758,7 @@ export function AdminMenu() {
           <TabsTrigger value="categories" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Kategorien</TabsTrigger>
           <TabsTrigger value="items" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Gerichte</TabsTrigger>
           <TabsTrigger value="ingredients" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Zutaten</TabsTrigger>
+          <TabsTrigger value="startseite" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Startseite</TabsTrigger>
         </TabsList>
 
         <TabsContent value="categories">
@@ -1585,6 +1618,214 @@ export function AdminMenu() {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="startseite">
+          <div className="grid gap-6 md:grid-cols-2">
+            {/* Slider Management */}
+            <Card className="border-2 shadow-lg">
+              <CardHeader>
+                <CardTitle>Hero Slider ({headerImages.length})</CardTitle>
+                <p className="text-sm text-muted-foreground">Slider-Bilder für die Startseite Hero-Section</p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Slider Upload */}
+                <div className="border-2 border-dashed rounded-lg p-4 text-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setSliderImageFile(file);
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setSliderImagePreview(reader.result as string);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="hidden"
+                    id="slider-upload"
+                  />
+                  <label htmlFor="slider-upload" className="cursor-pointer">
+                    <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
+                    <p className="mt-2 text-sm text-muted-foreground">Klicken Sie hier, um ein Slider-Bild hochzuladen</p>
+                  </label>
+                  {sliderImagePreview && (
+                    <div className="mt-4">
+                      <img src={sliderImagePreview} alt="Preview" className="max-h-40 mx-auto rounded" />
+                      <div className="flex gap-2 justify-center mt-2">
+                        <Button
+                          onClick={async () => {
+                            if (!sliderImageFile) return;
+                            setIsUploadingSlider(true);
+                            try {
+                              const formData = new FormData();
+                              formData.append("image", sliderImageFile);
+                              formData.append("page", "startseite");
+                              formData.append("order", String(headerImages.length + 1));
+                              await createPageImageMutation.mutateAsync(formData);
+                            } catch (error) {
+                              toast({ title: "Fehler beim Hochladen", variant: "destructive" });
+                            } finally {
+                              setIsUploadingSlider(false);
+                            }
+                          }}
+                          disabled={isUploadingSlider}
+                        >
+                          {isUploadingSlider ? "Hochladen..." : "Speichern"}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setSliderImageFile(null);
+                            setSliderImagePreview(null);
+                          }}
+                        >
+                          Abbrechen
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Current Sliders */}
+                <div className="space-y-3">
+                  {headerImages.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-4">
+                      Keine Slider-Bilder vorhanden
+                    </p>
+                  ) : (
+                    headerImages.map((image) => (
+                      <div
+                        key={image.id}
+                        className="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50"
+                      >
+                        <img
+                          src={image.url}
+                          alt={image.filename}
+                          className="w-24 h-16 object-cover rounded"
+                        />
+                        <div className="flex-1">
+                          <p className="font-medium">{image.filename}</p>
+                          <p className="text-xs text-muted-foreground">Reihenfolge: {image.order}</p>
+                        </div>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => deletePageImageMutation.mutate(image.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Gallery Management */}
+            <Card className="border-2 shadow-lg">
+              <CardHeader>
+                <CardTitle>Galerie ({galleryImages.length})</CardTitle>
+                <p className="text-sm text-muted-foreground">Galerie-Bilder für die Startseite</p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Gallery Upload */}
+                <div className="border-2 border-dashed rounded-lg p-4 text-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setSelectedImage(file);
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setImagePreview(reader.result as string);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="hidden"
+                    id="gallery-upload"
+                  />
+                  <label htmlFor="gallery-upload" className="cursor-pointer">
+                    <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
+                    <p className="mt-2 text-sm text-muted-foreground">Klicken Sie hier, um ein Galerie-Bild hochzuladen</p>
+                  </label>
+                  {imagePreview && (
+                    <div className="mt-4">
+                      <img src={imagePreview} alt="Preview" className="max-h-40 mx-auto rounded" />
+                      <div className="flex gap-2 justify-center mt-2">
+                        <Button
+                          onClick={async () => {
+                            if (!selectedImage) return;
+                            setIsUploading(true);
+                            try {
+                              const formData = new FormData();
+                              formData.append("image", selectedImage);
+                              formData.append("type", "main");
+                              await createGalleryImageMutation.mutateAsync(formData);
+                            } catch (error) {
+                              toast({ title: "Fehler beim Hochladen", variant: "destructive" });
+                            } finally {
+                              setIsUploading(false);
+                            }
+                          }}
+                          disabled={isUploading}
+                        >
+                          {isUploading ? "Hochladen..." : "Speichern"}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setSelectedImage(null);
+                            setImagePreview(null);
+                          }}
+                        >
+                          Abbrechen
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Current Gallery Images */}
+                <div className="space-y-3">
+                  {galleryImages.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-4">
+                      Keine Galerie-Bilder vorhanden
+                    </p>
+                  ) : (
+                    galleryImages.map((image) => (
+                      <div
+                        key={image.id}
+                        className="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50"
+                      >
+                        <img
+                          src={image.url}
+                          alt={image.filename}
+                          className="w-24 h-16 object-cover rounded"
+                        />
+                        <div className="flex-1">
+                          <p className="font-medium">{image.filename}</p>
+                        </div>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => deleteGalleryImageMutation.mutate(image.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
       </Tabs>
 
