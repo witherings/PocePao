@@ -100,15 +100,19 @@ export default function Menu() {
   const handleAddToCart = (item: MenuItem, size?: "klein" | "standard", selectedBase?: string, customization?: CustomBowlSelection, customPrice?: string, selectedVariant?: string, selectedVariantName?: string) => {
     // Use custom price if provided (for bowl builder with dynamic protein pricing)
     // Otherwise determine the correct price based on size
-    let finalPrice = customPrice || item.price;
+    let finalPrice: string | number = customPrice || item.price || "0";
+    
+    // If no custom price provided and item has size options, use size-based pricing
     if (!customPrice && size && item.hasSizeOptions === 1) {
       if (size === "klein" && item.priceSmall) {
         finalPrice = item.priceSmall;
-      } else if (size === "standard") {
-        // Standard size always uses the main price
+      } else if (size === "standard" && item.price) {
         finalPrice = item.price;
       }
     }
+    
+    // Ensure finalPrice is always a string for consistency
+    finalPrice = String(finalPrice);
 
     // If editing, update existing item
     if (editingItemId) {

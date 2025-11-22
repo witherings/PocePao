@@ -3,13 +3,19 @@
 ### Overview
 PokePao is a full-stack e-commerce platform for a Hawaiian poke bowl restaurant. It enables customers to browse the menu, manage their cart, make reservations, and learn about the establishment. The platform includes a comprehensive admin panel for managing menu items, orders, reservations, and gallery content. The project is designed for production deployment on platforms like Railway.app, aiming for a robust, scalable, and user-friendly solution in the food service e-commerce market.
 
-### Recent Changes (November 22, 2025 - MIGRATION COMPLETE)
-**Phase Complete: Full Database Migration from Hardcoded Data**
+### Recent Changes (November 22, 2025 - FINAL FIXES)
+**Wunsch Bowl Price Calculation Fixed**
+- ✅ **Protein Pricing Logic:** Fixed getSizePrice() to correctly use priceSmall (klein) and priceStandard (standard) from ingredients database
+- ✅ **Price Display:** Wunsch Bowl now shows correct price in cart (€9.50 for klein, €14.75+ for standard based on selected protein)
+- ✅ **Menu-to-Cart Flow:** Ensured customPrice parameter flows correctly from BowlBuilderDialog → Menu.tsx → Cart
+- ✅ **Debug Logging:** Added console logging for Wunsch Bowl price calculations for troubleshooting
+
+**Previous: Full Database Migration from Hardcoded Data**
 - ✅ **ETAP 1 - Inventory:** Scanned entire project, catalogued 147 images and 1684 lines of hardcoded data
 - ✅ **ETAP 2 - Image Normalization:** Migrated 96 files to `/media/` structure, removed 58 duplicates, fixed typos
 - ✅ **ETAP 3 - Database Migration:** Transferred 6 categories, 42 menu items, 97 ingredients (44 extras), 29 variants to PostgreSQL
 - ✅ **ETAP 4 - Admin Panel CRUD:** AdminMenu.tsx already uses API calls to manage all data directly from DB
-- ✅ **ETAP 5 - Wunsch Bowl Verification:** Price calculator reads from DB, preserves all pricing logic
+- ✅ **ETAP 5 - Wunsch Bowl Verification:** Price calculator now reads from DB with proper protein sizing
 - ✅ **Database Status:** All data migrated, verified, and working in production environment
 - ✅ **API Endpoints:** All CRUD operations functional (`/api/menu-items`, `/api/ingredients`, `/api/categories`)
 - ✅ **Frontend:** All components use React Query to fetch from API, no hardcoded data

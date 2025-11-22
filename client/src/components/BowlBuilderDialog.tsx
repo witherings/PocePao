@@ -254,6 +254,12 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
       const finalPrice = item.hasSizeOptions === 1 
         ? getSizePrice(selectedSize) 
         : parseFloat(item.price || "0").toFixed(2);
+      console.log('🛒 Adding Wunsch Bowl to cart:', {
+        selectedSize,
+        finalPrice,
+        selectedProtein: selections.protein,
+        protein: selections.protein ? ingredients.find(i => i.id === selections.protein)?.nameDE : 'N/A'
+      });
       onAddToCart(item, selectedSize, undefined, selections, finalPrice);
       onClose();
     }
@@ -270,15 +276,23 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
 
     // Add protein price based on size
     if (selectedProtein) {
-      // Get the appropriate price - check size-specific first, then fallback to regular price
+      // Get the appropriate price - size-specific prices take priority
       let proteinPrice = 0;
       
-      if (size === "klein" && selectedProtein.priceSmall) {
-        proteinPrice = parseFloat(String(selectedProtein.priceSmall));
-      } else if (size === "standard" && selectedProtein.priceStandard) {
-        proteinPrice = parseFloat(String(selectedProtein.priceStandard));
-      } else if (selectedProtein.price) {
-        proteinPrice = parseFloat(String(selectedProtein.price));
+      if (size === "klein") {
+        // For klein: use priceSmall first, then fallback to price
+        proteinPrice = selectedProtein.priceSmall 
+          ? parseFloat(String(selectedProtein.priceSmall))
+          : selectedProtein.price 
+            ? parseFloat(String(selectedProtein.price))
+            : 0;
+      } else if (size === "standard") {
+        // For standard: use priceStandard first, then fallback to price
+        proteinPrice = selectedProtein.priceStandard 
+          ? parseFloat(String(selectedProtein.priceStandard))
+          : selectedProtein.price 
+            ? parseFloat(String(selectedProtein.price))
+            : 0;
       }
       
       totalPrice = proteinPrice;
