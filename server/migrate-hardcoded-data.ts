@@ -304,15 +304,21 @@ async function migrateData() {
     let ingUpdatedCount = 0;
     
     for (const ingredient of ingredientsData) {
-      const { newPath, exists } = await updateImagePath(
-        ingredient.image || "", 
-        ingredient.nameDE, 
-        "", 
-        ingredient.type
-      );
+      // USE PATHS DIRECTLY FROM ingredients.ts - they are already correct!
+      const imagePath = ingredient.image || "";
       
-      if (!exists && newPath !== ingredient.image) {
-        missingFiles.push(`${ingredient.nameDE} (${ingredient.type}) → ${newPath}`);
+      // Just verify file exists, don't recalculate path
+      const fullPath = path.join(process.cwd(), "public", imagePath);
+      let exists = false;
+      try {
+        await access(fullPath, constants.F_OK);
+        exists = true;
+      } catch {
+        exists = false;
+      }
+      
+      if (!exists) {
+        missingFiles.push(`${ingredient.nameDE} (${ingredient.type}) → ${imagePath}`);
       }
       
       const existing = await db.select().from(ingredients)
@@ -321,13 +327,12 @@ async function migrateData() {
       
       if (existing.length > 0) {
         await db.update(ingredients)
-          .set({ ...ingredient, image: newPath })
+          .set({ ...ingredient, image: imagePath })
           .where(eq(ingredients.id, existing[0].id));
         ingUpdatedCount++;
       } else {
-        await db.insert(ingredients).values({ ...ingredient, image: newPath });
+        await db.insert(ingredients).values({ ...ingredient, image: imagePath });
         ingInsertedCount++;
-        console.log(`  ✅ Inserted: ${ingredient.nameDE} (${ingredient.type}) → ${newPath} ${exists ? "✓" : "⚠️  MISSING"}`);
       }
     }
     

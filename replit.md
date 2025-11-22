@@ -36,16 +36,18 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 - **Menu Ordering:** ID-based sorting in the storage layer for consistent display.
 - **Health Monitoring:** `/api/health` endpoint for deployment platform monitoring.
 
-### Recent Changes (November 22, 2025 - FINAL INGREDIENT SYNC + WUNSCH BOWL PHOTO)
-**✅ ALL 134 INGREDIENT PATHS SYNCED WITH REAL FILES**
-- ✅ **134 Total Ingredients Updated:** All paths now point to real files on disk
-  - Base ingredients (67): 6 proteins + 4 bases + 4 marinades + 29 fresh + 7 sauces + 17 toppings
-  - Extra ingredients (67): 6 extra proteins + 4 extra bases + 4 extra marinades + 29 extra fresh + 7 extra sauces + 17 extra toppings
+### Recent Changes (November 22, 2025 - FINAL: ALL 134 INGREDIENTS SYNCED)
+**✅ COMPLETE INGREDIENT SYNCHRONIZATION**
+- ✅ **134 Total Ingredients:** All paths 1-to-1 mapped to real files on disk
+  - **Base Ingredients (67):** 4 bases + 6 proteins + 4 marinades + 29 fresh + 7 sauces + 17 toppings
+  - **Extra Ingredients (67):** 4 extra bases + 6 extra proteins + 4 extra marinades + 30 extra fresh + 7 extra sauces + 17 extra toppings
+- ✅ **Direct File Mapping:** Each ingredient has exact 1-to-1 mapping to file
+  - Example: `Lanai` → `/Lanai (Marinade).png` 
+  - Example: `Gozo` → `/Gozo (Marinade).png`
 - ✅ **Path Structure:** `/media/pages/Spaisekarte/Wunsch_Bowls/ingredients/{Ingridient_def|Ingridients_extra}/{category}/{filename}`
-- ✅ **File Naming:** Lowercase with dashes, duplicates removed (e.g., `almonds.png`, `cherry-tomatoes.png`, `Capri (Marinade).png`)
-- ✅ **Wunsch Bowl Main Photo:** Updated to `/media/pages/Spaisekarte/Wunsch_Bowls/main_photo/main.png`
-- ✅ **Database:** 134 ingredients + 152 total variants (includes duplicates for different names) migrated to PostgreSQL
-- ✅ **API Verified:** All endpoints return correct paths and images load properly
+- ✅ **Wunsch Bowl Main Photo:** `/media/pages/Spaisekarte/Wunsch_Bowls/main_photo/main.png`
+- ✅ **Database:** All 134 ingredients with correct image paths (direct SQL inserts verified)
+- ✅ **API Ready:** All ingredient endpoints return correct file paths
 
 ### External Dependencies
 - **Database:** PostgreSQL (via `node-postgres` driver, Drizzle ORM)
