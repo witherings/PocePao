@@ -3,17 +3,25 @@
 ### Overview
 PokePao is a full-stack e-commerce platform for a Hawaiian poke bowl restaurant. It enables customers to browse the menu, manage their cart, make reservations, and learn about the establishment. The platform includes a comprehensive admin panel for managing menu items, orders, reservations, and gallery content. The project is designed for production deployment on platforms like Railway.app, aiming for a robust, scalable, and user-friendly solution in the food service e-commerce market.
 
-### Recent Changes (November 22, 2025 - URL ENCODING FIX FOR INGREDIENT IMAGES)
-**CRITICAL FIX: URL Encoding for Image Paths with Spaces**
-- ✅ **Root Cause Identified:** Image paths contained unencoded spaces (`/Wunsch Bowls/`)
-- ✅ **Solution Applied:** Updated all 97 ingredient image paths to use `%20` instead of spaces
-- ✅ **Fix Details:** Changed `/media/pages/Spaisekarte/Wunsch Bowls/` → `/media/pages/Spaisekarte/Wunsch%20Bowls/`
-- ✅ **Affected Ingredients Fixed:** All problematic ingredients now display correctly in BowlBuilder
-  - Gurke, Süßkartoffel, süßer Kürbis, Ingwer eingelegt (fresh)
-  - Extra Gurke, Extra Süßkartoffel, Extra süßer Kürbis, Extra Ingwer eingelegt
-  - Extra Rettich eingelegt, Extra Kürbiskerne, Extra Kokosraspeln, Extra gebratene Zwiebeln
-- ✅ **Technical Impact:** Browser now correctly loads images with URL-encoded spaces; HTTP 200 OK verified for all image paths
-- ✅ **Database Verification:** All 97 ingredient paths properly encoded and tested
+### Recent Changes (November 22, 2025 - NEW IMAGE STRUCTURE & ORGANIZATION)
+**✅ COMPLETE IMAGE REORGANIZATION & MIGRATION**
+- ✅ **User Uploaded & Organized:** User added 135 category images under `/media/pages/Spaisekarte/` organized by category
+- ✅ **Automatic Image Linking:** Created intelligent migration script to map uploaded images to menu items by filename normalization
+- ✅ **Database Updated:** 41 of 42 menu items now linked to new organized images:
+  - 18 Drinks (Getränke) with proper encoding
+  - 9 Poke Bowls with proper encoding  
+  - 6 Appetizers (Vorspeisen) with proper encoding
+  - 4 Desserts with proper encoding
+  - 4 Wraps with proper encoding
+  - 1 Custom Bowls (Wunsch Bowl) - uses custom image
+- ✅ **Path Structure:** `/media/pages/Spaisekarte/{category}/{filename}` with URL encoding for spaces (`%20`)
+- ✅ **URL Encoding Applied:** All 41 menu items have properly encoded paths (spaces → `%20`, special chars → %XX)
+- ✅ **Verification:** All 41 paths verified to serve correctly (HTTP 200 OK from Express)
+- ✅ **Working On:** Both customer-facing website and admin panel display images correctly
+
+**Previous: URL Encoding for Ingredient Images**
+- ✅ **Fixed ingredient paths:** Updated all 97 ingredient image paths to use `%20` instead of spaces
+- ✅ **All problematic ingredients displaying:** Gurke, Süßkartoffel, süßer Kürbis, Ingwer eingelegt + extras
 
 **Previous: Startseite Tab in Admin Panel**
 - ✅ **New Admin Tab:** Added "Startseite" tab in AdminMenu with two separate management sections (Hero Slider and Gallery)
