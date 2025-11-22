@@ -98,33 +98,35 @@ export default function Menu() {
     });
 
   const handleAddToCart = (item: MenuItem, size?: "klein" | "standard", selectedBase?: string, customization?: CustomBowlSelection, customPrice?: string, selectedVariant?: string, selectedVariantName?: string) => {
-    // Use custom price if provided (for bowl builder with dynamic protein pricing)
-    // Otherwise determine the correct price based on size
-    let finalPrice: string | number = customPrice || item.price || "0";
+    // Determine price based on priority
+    let finalPrice = "";
     
-    console.log('📦 handleAddToCart called:', {
-      itemId: item.id,
-      itemIsCustomBowl: item.isCustomBowl,
-      hasSizeOptions: item.hasSizeOptions,
-      customPrice,
-      itemPrice: item.price,
-      itemPriceSmall: item.priceSmall,
-      size,
-      hasCustomization: !!customization
-    });
-    
-    // If no custom price provided and item has size options, use size-based pricing
-    if (!customPrice && size && item.hasSizeOptions === 1) {
+    // Priority 1: If custom price is provided AND is valid (not "0")
+    if (customPrice && customPrice !== "0" && parseFloat(customPrice) > 0) {
+      finalPrice = String(customPrice);
+    }
+    // Priority 2: For size-based items without custom price
+    else if (!customization && size && item.hasSizeOptions === 1) {
       if (size === "klein" && item.priceSmall) {
-        finalPrice = item.priceSmall;
+        finalPrice = String(item.priceSmall);
       } else if (size === "standard" && item.price) {
-        finalPrice = item.price;
+        finalPrice = String(item.price);
+      } else {
+        finalPrice = String(item.price || "0");
       }
     }
+    // Priority 3: Use item's regular price as fallback
+    else {
+      finalPrice = String(item.price || "0");
+    }
     
-    // Ensure finalPrice is always a string for consistency
-    finalPrice = String(finalPrice);
-    console.log('📦 finalPrice:', finalPrice);
+    console.log('💳 FINAL PRICE LOGIC:', {
+      customPrice,
+      itemPrice: item.price,
+      size,
+      hasCustomization: !!customization,
+      finalPrice
+    });
 
     // If editing, update existing item
     if (editingItemId) {
@@ -150,7 +152,7 @@ export default function Menu() {
         cartItemId = `${cartItemId}-${selectedVariant}`;
       }
 
-      addItem({
+      const cartItem = {
         id: cartItemId,
         menuItemId: item.id,
         name: item.name,
@@ -162,7 +164,11 @@ export default function Menu() {
         selectedVariant: selectedVariant,
         selectedVariantName: selectedVariantName,
         customization: customization,
-      });
+        quantity: 1,
+      };
+      
+      console.log('📋 Adding to cart with price:', { cartItemId, price: finalPrice, name: item.nameDE });
+      addItem(cartItem);
     }
   };
 

@@ -18,11 +18,14 @@ export const useCartStore = create<CartStore>()(
       items: [],
       
       addItem: (item) => {
-        console.log('🛒 cartStore.addItem called with:', {
-          itemId: item.id,
+        console.log('🛒 cartStore.addItem RECEIVED:', {
+          id: item.id,
+          name: item.nameDE,
           price: item.price,
+          priceType: typeof item.price,
           hasCustomization: !!item.customization,
-          quantity: item.quantity
+          quantity: item.quantity,
+          FULL_ITEM: item
         });
         
         // For custom bowls, always create a new item (unique ID for each customization)
@@ -85,11 +88,14 @@ export const useCartStore = create<CartStore>()(
       },
       
       getTotal: () => {
-        return get().items.reduce((total, item) => {
+        const total = get().items.reduce((total, item) => {
           const price = parseFloat(item.price || "0");
           const quantity = item.quantity || 0;
+          console.log('💰 Calculating item total:', { name: item.nameDE, price, quantity, itemTotal: price * quantity });
           return total + (price * quantity);
         }, 0);
+        console.log('💳 Cart total:', total);
+        return total;
       },
     }),
     {
