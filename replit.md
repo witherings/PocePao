@@ -36,16 +36,16 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 - **Menu Ordering:** ID-based sorting in the storage layer for consistent display.
 - **Health Monitoring:** `/api/health` endpoint for deployment platform monitoring.
 
-### Recent Changes (November 22, 2025 - ALL 134 INGREDIENT PATHS SYNCED WITH REAL FILES)
-**✅ COMPLETE INGREDIENT PATH SYNCHRONIZATION**
+### Recent Changes (November 22, 2025 - FINAL INGREDIENT SYNC + WUNSCH BOWL PHOTO)
+**✅ ALL 134 INGREDIENT PATHS SYNCED WITH REAL FILES**
 - ✅ **134 Total Ingredients Updated:** All paths now point to real files on disk
   - Base ingredients (67): 6 proteins + 4 bases + 4 marinades + 29 fresh + 7 sauces + 17 toppings
   - Extra ingredients (67): 6 extra proteins + 4 extra bases + 4 extra marinades + 29 extra fresh + 7 extra sauces + 17 extra toppings
 - ✅ **Path Structure:** `/media/pages/Spaisekarte/Wunsch_Bowls/ingredients/{Ingridient_def|Ingridients_extra}/{category}/{filename}`
-- ✅ **File Naming:** Lowercase with dashes (e.g., `almonds.png`, `cherry-tomatoes.png`, `Capri (Marinade).png`)
-- ✅ **Database Migration:** All 134 ingredients migrated to PostgreSQL with correct image paths
-- ✅ **API Verified:** `/api/ingredients` endpoint returns all paths correctly
-- ✅ **Categories Include:** proteins, bases, marinades, fresh, sauces, toppings + all extra variants
+- ✅ **File Naming:** Lowercase with dashes, duplicates removed (e.g., `almonds.png`, `cherry-tomatoes.png`, `Capri (Marinade).png`)
+- ✅ **Wunsch Bowl Main Photo:** Updated to `/media/pages/Spaisekarte/Wunsch_Bowls/main_photo/main.png`
+- ✅ **Database:** 134 ingredients + 152 total variants (includes duplicates for different names) migrated to PostgreSQL
+- ✅ **API Verified:** All endpoints return correct paths and images load properly
 
 ### External Dependencies
 - **Database:** PostgreSQL (via `node-postgres` driver, Drizzle ORM)

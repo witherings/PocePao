@@ -50,7 +50,7 @@ export const createMenuItems = (categoryIds: { customBowls: string, bowls: strin
     descriptionDE: "Stelle deinen Wunsch Bowl zusammen: Wähle Protein, Base, Marinade, 4 frische Zutaten, Sauce und 3 Toppings",
     price: "14.75",
     priceSmall: "9.50",
-    image: "/media/categories/Wunsch Bowls/main/Gemini_Generated_Image_4oapkm4oapkm4oap.png",
+    image: "/media/pages/Spaisekarte/Wunsch_Bowls/main_photo/main.png",
     categoryId: categoryIds.customBowls,
     available: 1,
     popular: 1,
