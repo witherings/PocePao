@@ -2,6 +2,16 @@ import { Heart, Users, Award, Leaf } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 
+interface PageImage {
+  id: string;
+  page: string;
+  url: string;
+  filename: string;
+  alt?: string;
+  order: number;
+  uploadedAt: string;
+}
+
 export default function About() {
   const { data: content } = useQuery({
     queryKey: ["/api/static-content", "about", { locale: "de" }],
@@ -12,9 +22,13 @@ export default function About() {
     },
   });
 
+  const { data: pageImages = [] } = useQuery<PageImage[]>({
+    queryKey: ["/api/page-images/ueber-uns"],
+  });
+
   const title = content?.title || "Über Uns";
   const subtitle = content?.subtitle || "Unsere Geschichte und Leidenschaft";
-  const image = content?.image || "/images/vitamins-bowl.png";
+  const image = pageImages.length > 0 ? pageImages[0].url : (content?.image || "/images/vitamins-bowl.png");
   const paragraphs = content?.content?.split('\n\n').filter((p: string) => p.trim()) || [
     "Bei PokePao bringen wir die authentische hawaiianische Poke Bowl-Kultur nach Hamburg. Unsere Reise begann mit der Leidenschaft für frische, gesunde und unglaublich leckere Bowls.",
     "Jede Bowl wird mit Liebe und Sorgfalt zubereitet. Wir verwenden nur die frischesten Zutaten und folgen traditionellen Rezepten, die wir mit modernen Geschmacksnoten verfeinern.",

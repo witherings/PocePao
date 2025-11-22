@@ -3,21 +3,28 @@
 ### Overview
 PokePao is a full-stack e-commerce platform for a Hawaiian poke bowl restaurant. It enables customers to browse the menu, manage their cart, make reservations, and learn about the establishment. The platform includes a comprehensive admin panel for managing menu items, orders, reservations, and gallery content. The project is designed for production deployment on platforms like Railway.app, aiming for a robust, scalable, and user-friendly solution in the food service e-commerce market.
 
-### Recent Changes (November 22, 2025 - NEW IMAGE STRUCTURE & ORGANIZATION)
-**✅ COMPLETE IMAGE REORGANIZATION & MIGRATION**
+### Recent Changes (November 22, 2025 - ÜBER UNS PAGE IMAGE MANAGEMENT)
+**✅ ADDED ÜBER UNS PAGE IMAGE MANAGEMENT**
+- ✅ **Image Added to Database:** Added vitamins-bowl image to page_images table with URL encoding
+- ✅ **Admin Panel Integration:** New "Über Uns" tab in AdminMenu with full image management UI
+  - Upload new page images with automatic ordering
+  - Display current images with delete functionality
+  - Proper mutation cache invalidation for both startseite and ueber-uns pages
+- ✅ **Frontend Integration:** Updated About.tsx to load images from page_images API
+  - Displays first available image from database
+  - Falls back to static image if none exist
+  - Proper TypeScript typing for PageImage interface
+- ✅ **Verification:** Page loads correctly with vitamins-bowl image displayed
+- ✅ **API Response:** `/api/page-images/ueber-uns` returns proper image data with URL encoding
+
+**Previous: Wunsch Bowl Main Photo**
+- ✅ **Updated Wunsch Bowl image:** Now uses `/media/pages/Spaisekarte/Wunsch_Bowls/main_photo/main.png`
+
+**Previous: Complete Image Reorganization & Migration**
 - ✅ **User Uploaded & Organized:** User added 135 category images under `/media/pages/Spaisekarte/` organized by category
 - ✅ **Automatic Image Linking:** Created intelligent migration script to map uploaded images to menu items by filename normalization
-- ✅ **Database Updated:** 41 of 42 menu items now linked to new organized images:
-  - 18 Drinks (Getränke) with proper encoding
-  - 9 Poke Bowls with proper encoding  
-  - 6 Appetizers (Vorspeisen) with proper encoding
-  - 4 Desserts with proper encoding
-  - 4 Wraps with proper encoding
-  - 1 Custom Bowls (Wunsch Bowl) - uses custom image
+- ✅ **Database Updated:** 41 of 42 menu items now linked to new organized images
 - ✅ **Path Structure:** `/media/pages/Spaisekarte/{category}/{filename}` with URL encoding for spaces (`%20`)
-- ✅ **URL Encoding Applied:** All 41 menu items have properly encoded paths (spaces → `%20`, special chars → %XX)
-- ✅ **Verification:** All 41 paths verified to serve correctly (HTTP 200 OK from Express)
-- ✅ **Working On:** Both customer-facing website and admin panel display images correctly
 
 **Previous: URL Encoding for Ingredient Images**
 - ✅ **Fixed ingredient paths:** Updated all 97 ingredient image paths to use `%20` instead of spaces

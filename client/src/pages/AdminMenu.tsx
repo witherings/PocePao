@@ -122,6 +122,9 @@ export function AdminMenu() {
   const [sliderImageFile, setSliderImageFile] = useState<File | null>(null);
   const [sliderImagePreview, setSliderImagePreview] = useState<string | null>(null);
   const [isUploadingSlider, setIsUploadingSlider] = useState(false);
+  const [ueberUnsImageFile, setUeberUnsImageFile] = useState<File | null>(null);
+  const [ueberUnsImagePreview, setUeberUnsImagePreview] = useState<string | null>(null);
+  const [isUploadingUeberUns, setIsUploadingUeberUns] = useState(false);
   
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -137,6 +140,10 @@ export function AdminMenu() {
 
   const { data: headerImages = [] } = useQuery<PageImage[]>({
     queryKey: ["/api/page-images/startseite"],
+  });
+
+  const { data: ueberUnsImages = [] } = useQuery<PageImage[]>({
+    queryKey: ["/api/page-images/ueber-uns"],
   });
 
   const { data: galleryImages = [] } = useQuery<any[]>({
@@ -360,9 +367,12 @@ export function AdminMenu() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/page-images/startseite"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/page-images/ueber-uns"] });
       setSliderImageFile(null);
       setSliderImagePreview(null);
-      toast({ title: "Slider erfolgreich hinzugefügt" });
+      setUeberUnsImageFile(null);
+      setUeberUnsImagePreview(null);
+      toast({ title: "Bild erfolgreich hinzugefügt" });
     },
   });
 
@@ -372,7 +382,8 @@ export function AdminMenu() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/page-images/startseite"] });
-      toast({ title: "Slider gelöscht" });
+      queryClient.invalidateQueries({ queryKey: ["/api/page-images/ueber-uns"] });
+      toast({ title: "Bild gelöscht" });
     },
   });
 
@@ -759,6 +770,7 @@ export function AdminMenu() {
           <TabsTrigger value="items" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Gerichte</TabsTrigger>
           <TabsTrigger value="ingredients" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Zutaten</TabsTrigger>
           <TabsTrigger value="startseite" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Startseite</TabsTrigger>
+          <TabsTrigger value="ueber-uns" className="font-semibold px-6 py-2.5 data-[state=active]:bg-ocean data-[state=active]:text-white">Über Uns</TabsTrigger>
         </TabsList>
 
         <TabsContent value="categories">
@@ -1826,6 +1838,110 @@ export function AdminMenu() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        <TabsContent value="ueber-uns">
+          <Card className="border-2 shadow-lg">
+            <CardHeader>
+              <CardTitle>Über Uns ({ueberUnsImages.length})</CardTitle>
+              <p className="text-sm text-muted-foreground">Bild für die "Über Uns" Seite</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Upload */}
+              <div className="border-2 border-dashed rounded-lg p-4 text-center">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setUeberUnsImageFile(file);
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setUeberUnsImagePreview(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="hidden"
+                  id="ueber-uns-upload"
+                />
+                <label htmlFor="ueber-uns-upload" className="cursor-pointer">
+                  <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
+                  <p className="mt-2 text-sm text-muted-foreground">Klicken Sie hier, um ein Bild hochzuladen</p>
+                </label>
+                {ueberUnsImagePreview && (
+                  <div className="mt-4">
+                    <img src={ueberUnsImagePreview} alt="Preview" className="max-h-40 mx-auto rounded" />
+                    <div className="flex gap-2 justify-center mt-2">
+                      <Button
+                        onClick={async () => {
+                          if (!ueberUnsImageFile) return;
+                          setIsUploadingUeberUns(true);
+                          try {
+                            const formData = new FormData();
+                            formData.append("image", ueberUnsImageFile);
+                            formData.append("page", "ueber-uns");
+                            formData.append("order", String(ueberUnsImages.length + 1));
+                            await createPageImageMutation.mutateAsync(formData);
+                          } catch (error) {
+                            toast({ title: "Fehler beim Hochladen", variant: "destructive" });
+                          } finally {
+                            setIsUploadingUeberUns(false);
+                          }
+                        }}
+                        disabled={isUploadingUeberUns}
+                      >
+                        {isUploadingUeberUns ? "Hochladen..." : "Speichern"}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setUeberUnsImageFile(null);
+                          setUeberUnsImagePreview(null);
+                        }}
+                      >
+                        Abbrechen
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Current Images */}
+              <div className="space-y-3">
+                {ueberUnsImages.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">
+                    Keine Bilder vorhanden
+                  </p>
+                ) : (
+                  ueberUnsImages.map((image) => (
+                    <div
+                      key={image.id}
+                      className="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50"
+                    >
+                      <img
+                        src={image.url}
+                        alt={image.filename}
+                        className="w-24 h-16 object-cover rounded"
+                      />
+                      <div className="flex-1">
+                        <p className="font-medium">{image.filename}</p>
+                        {image.alt && <p className="text-xs text-muted-foreground">{image.alt}</p>}
+                      </div>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => deletePageImageMutation.mutate(image.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 
