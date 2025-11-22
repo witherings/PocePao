@@ -1,0 +1,146 @@
+{
+  "phase_2_completed": "2025-01-22",
+  "status": "SUCCESS",
+  
+  "files_migrated": {
+    "total": 96,
+    "by_category": {
+      "wraps": 3,
+      "vorspeisen": 6,
+      "desserts": 4,
+      "poke-bowls": 9,
+      "wunsch-bowls": 1,
+      "getraenke": 9,
+      "ingredients_protein": 6,
+      "ingredients_base": 4,
+      "ingredients_marinade": 4,
+      "ingredients_fresh": 16,
+      "ingredients_sauce": 7,
+      "ingredients_topping": 14,
+      "slider": 3,
+      "orphans": 7
+    }
+  },
+  
+  "corrections_applied": {
+    "typos_fixed": [
+      {"old": "oasted beetroot.png", "new": "roasted-beetroot.png", "type": "typo"},
+      {"old": "salmon slices .png", "new": "salmon.png", "type": "trailing_space"},
+      {"old": "peanuts .png", "new": "peanuts.png", "type": "trailing_space"},
+      {"old": "Teriyaki Sauce .png", "new": "teriyaki.png", "type": "trailing_space"}
+    ],
+    "spaces_removed": [
+      "tofu cubes.png → tofu.png",
+      "falafel balls.png → falafel.png",
+      "chicken slices.png → chicken.png",
+      "tuna slices.png → tuna.png",
+      "white rice.png → rice.png",
+      "cooked couscous.png → couscous.png",
+      "cooked quinoa.png → quinoa.png",
+      "zucchini spaghetti.png → zucchini-noodles.png",
+      "и ещё ~30 файлов"
+    ],
+    "names_normalized": [
+      "Gurke (Cucumber).png → cucumber.png",
+      "Haus-Kimchi (Top).png → kimchi.png",
+      "diced mango.png → mango.png",
+      "fresh tomato cubes.png → cherry-tomatoes.png",
+      "и другие"
+    ]
+  },
+  
+  "duplicates_removed": {
+    "total": 58,
+    "poke_bowls_variants": {
+      "description": "Объединены дубликаты reis/quinoa - оставлена лучшая версия",
+      "removed": [
+        "thunfisch-traum-quinoa.png (оставлен thunfisch-traum-reis.webp)",
+        "falafel-freude-reis.webp (оставлен falafel-freude-quinoa.webp)",
+        "garnelen-genuss-quinoa.png (оставлен garnelen-genuss-reis.png)",
+        "haehnchen-harmonie-quinoa.png (оставлен haehnchen-harmonie-reis.png)",
+        "lachs-lust-reis.png (оставлен lachs-lust-quinoa.png)"
+      ]
+    },
+    "zutaten_extra_folder": {
+      "description": "ВСЕ файлы из 'zutaten extra/' - полные дубликаты 'zutaten/'",
+      "action": "НЕ перенесены, будут использоваться те же изображения из основной папки",
+      "count": 51
+    }
+  },
+  
+  "needs_manual_upload": [
+    {
+      "reason": "IMAGE_CONFLICT",
+      "path": "/media/orphans/CONFLICT-vitaminwunder-OR-sprudel-wasser.jpg",
+      "dishes": ["Vitaminwunder", "Sprudel Wasser"],
+      "action_required": "Загрузить 2 разных изображения"
+    },
+    {
+      "reason": "IMAGE_CONFLICT",
+      "path": "/media/orphans/CONFLICT-lila-energieboost-OR-mandelmagie.jpg",
+      "dishes": ["Lila Energieboost", "Mandelmagie"],
+      "action_required": "Загрузить 2 разных изображения"
+    },
+    {
+      "reason": "WRONG_IMAGE",
+      "dish": "Wrap mit Tofu",
+      "current_path": "/images/categories/Desserts/acai-bowl.webp",
+      "correct_path": "/media/categories/wraps/items/wrap-tofu.webp",
+      "action_required": "Загрузить правильное фото wrap с tofu"
+    },
+    {
+      "reason": "MISSING_IMAGE",
+      "dish": "Aperol am Meer",
+      "note": "Использует тот же путь что Goldene Paradieswelle",
+      "action_required": "Загрузить уникальное изображение"
+    }
+  ],
+  
+  "orphan_files": {
+    "folder": "/media/orphans/",
+    "files": [
+      {
+        "name": "89417032025184229_1760608213787.jpg",
+        "status": "UNKNOWN",
+        "action": "Проверить вручную: удалить или привязать к блюду"
+      },
+      {
+        "name": "91017032025165651_1760608033694.jpg",
+        "status": "UNKNOWN",
+        "action": "Проверить вручную: удалить или привязать к блюду"
+      },
+      {
+        "name": "93317032025183849_1760608213787.jpg",
+        "status": "UNKNOWN",
+        "action": "Проверить вручную: удалить или привязать к блюду"
+      },
+      {
+        "name": "96717032025182912_1760608213788.jpg",
+        "status": "UNKNOWN",
+        "action": "Проверить вручную: удалить или привязать к блюду"
+      },
+      {
+        "name": "image_1760608442538.png",
+        "status": "UNKNOWN",
+        "action": "Проверить вручную: удалить или привязать к блюду"
+      }
+    ]
+  },
+  
+  "new_structure_verified": {
+    "/media/categories/wraps/items": "3 files ✅",
+    "/media/categories/vorspeisen/items": "6 files ✅",
+    "/media/categories/desserts/items": "4 files ✅",
+    "/media/categories/poke-bowls/items": "9 files ✅",
+    "/media/categories/wunsch-bowls/items": "1 file ✅",
+    "/media/categories/getraenke/items": "9 files ✅",
+    "/media/ingredients/protein": "6 files ✅",
+    "/media/ingredients/base": "4 files ✅",
+    "/media/ingredients/marinade": "4 files ✅",
+    "/media/ingredients/fresh": "16 files ✅",
+    "/media/ingredients/sauce": "7 files ✅",
+    "/media/ingredients/topping": "14 files ✅",
+    "/media/pages/home/slider": "3 files ✅",
+    "/media/orphans": "7 files ⚠️ (требуют проверки)"
+  }
+}
