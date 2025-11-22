@@ -36,18 +36,20 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 - **Menu Ordering:** ID-based sorting in the storage layer for consistent display.
 - **Health Monitoring:** `/api/health` endpoint for deployment platform monitoring.
 
-### Recent Changes (November 22, 2025 - FINAL: ALL 134 INGREDIENTS SYNCED)
-**✅ COMPLETE INGREDIENT SYNCHRONIZATION**
+### Recent Changes (November 22, 2025 - COMPLETE IMAGE SYSTEM SYNC)
+**✅ COMPLETE IMAGE SYSTEM SYNCHRONIZATION**
 - ✅ **134 Total Ingredients:** All paths 1-to-1 mapped to real files on disk
-  - **Base Ingredients (67):** 4 bases + 6 proteins + 4 marinades + 29 fresh + 7 sauces + 17 toppings
+  - **Base Ingredients (67):** 4 bases + 6 proteins + 4 marinades + 30 fresh + 7 sauces + 17 toppings
   - **Extra Ingredients (67):** 4 extra bases + 6 extra proteins + 4 extra marinades + 30 extra fresh + 7 extra sauces + 17 extra toppings
+  - **File Naming:** Extra files prefixed with `extra_` (e.g., `extra_rice.png`, `extra_almonds.png`)
 - ✅ **Direct File Mapping:** Each ingredient has exact 1-to-1 mapping to file
-  - Example: `Lanai` → `/Lanai (Marinade).png` 
-  - Example: `Gozo` → `/Gozo (Marinade).png`
+  - Example: `Lanai` → `/extra_Lanai (Marinade).png` (for extras)
+  - Example: `Gozo` → `/Gozo (Marinade).png` (for base)
 - ✅ **Path Structure:** `/media/pages/Spaisekarte/Wunsch_Bowls/ingredients/{Ingridient_def|Ingridients_extra}/{category}/{filename}`
+- ✅ **41 Menu Items:** All Gerichte photos synced with correct paths in all categories (Poke Bowls, Wraps, Vorspeisen, Desserts, Getränke)
 - ✅ **Wunsch Bowl Main Photo:** `/media/pages/Spaisekarte/Wunsch_Bowls/main_photo/main.png`
-- ✅ **Database:** All 134 ingredients with correct image paths (direct SQL inserts verified)
-- ✅ **API Ready:** All ingredient endpoints return correct file paths
+- ✅ **Database:** All 134 ingredients + 41 menu items with verified image paths
+- ✅ **API Ready:** All endpoints return correct file paths with proper URL encoding
 
 ### External Dependencies
 - **Database:** PostgreSQL (via `node-postgres` driver, Drizzle ORM)
