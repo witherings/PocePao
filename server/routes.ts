@@ -712,12 +712,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Page name required" });
       }
 
-      const pageFolder = path.join(process.cwd(), "public", "images", "pages", page);
+      // Save to persistent uploadDir instead of public/images
+      // This ensures files persist across Railway deployments when using volume
+      const pageFolder = path.join(uploadDir, "pages", page);
       await fs.mkdir(pageFolder, { recursive: true });
       const destPath = path.join(pageFolder, req.file.filename);
       await fs.rename(path.join(uploadDir, req.file.filename), destPath);
       
-      const imageUrl = `/images/pages/${page}/${req.file.filename}`;
+      const imageUrl = `/uploads/pages/${page}/${req.file.filename}`;
       const db = await getDb();
       const validatedData = insertPageImageSchema.parse({
         page: page.toLowerCase(),
@@ -746,8 +748,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       await db.delete(pageImages).where(eq(pageImages.id, id));
       
+      // Handle both old format (/images/pages/) and new format (/uploads/pages/)
       if (image[0].url.startsWith('/images/pages/')) {
         const filePath = path.join(process.cwd(), 'public', image[0].url);
+        try {
+          await fs.unlink(filePath);
+        } catch (err) {
+          console.warn(`Could not delete file: ${filePath}`);
+        }
+      } else if (image[0].url.startsWith('/uploads/pages/')) {
+        const filePath = path.join(uploadDir, 'pages', path.basename(path.dirname(image[0].url)), path.basename(image[0].url));
         try {
           await fs.unlink(filePath);
         } catch (err) {
