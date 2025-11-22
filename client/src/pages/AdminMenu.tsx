@@ -411,6 +411,7 @@ export function AdminMenu() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     
+    const categoryId = formData.get("categoryId") as string;
     let imageUrl = editingMenuItem?.image || null;
 
     // Upload image if selected
@@ -419,6 +420,8 @@ export function AdminMenu() {
       try {
         const uploadFormData = new FormData();
         uploadFormData.append("image", selectedImage);
+        uploadFormData.append("uploadType", "menuItem");
+        uploadFormData.append("categoryId", categoryId);
 
         const response = await fetch("/api/upload", {
           method: "POST",
@@ -446,7 +449,6 @@ export function AdminMenu() {
 
     const name = formData.get("name") as string;
     const description = formData.get("description") as string || "";
-    const categoryId = formData.get("categoryId") as string;
     const priceSmall = formData.get("priceSmall") as string;
     const ingredientsStr = formData.get("ingredients") as string;
     const allergensStr = formData.get("allergens") as string;

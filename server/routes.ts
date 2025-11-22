@@ -215,6 +215,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Category name to folder mapping
+  const getCategoryFolder = (categoryNameDE: string): string => {
+    const folderMap: Record<string, string> = {
+      "Wunsch Bowls": "Wunsch Bowls",
+      "Poke Bowls": "Poke Bowls",
+      "Wraps": "Wraps",
+      "Vorspeisen": "Vorspeisen",
+      "Desserts": "Desserts",
+      "Getränke": "Getränke"
+    };
+    return folderMap[categoryNameDE] || categoryNameDE;
+  };
+
   // General image upload endpoint with category support
   app.post("/api/upload", upload.single("image"), async (req, res) => {
     try {
@@ -222,11 +235,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "No file uploaded" });
       }
 
-      const { type, category, duplicateToExtra } = req.body;
+      const { type, category, duplicateToExtra, categoryId, uploadType } = req.body;
       let uploadPath = `/uploads/${req.file.filename}`;
 
-      // If category and type provided, save to category folder
-      if (category && type) {
+      // For menu item images - save to category folder in Speisekarte
+      if (uploadType === "menuItem" && categoryId) {
+        try {
+          // Get category name from database
+          const categoryData = await storage.getCategoryById(categoryId);
+          if (categoryData) {
+            const categoryFolder = getCategoryFolder(categoryData.nameDE);
+            const categoryPath = path.join(process.cwd(), "public", "media", "pages", "Spaisekarte", categoryFolder);
+            
+            await fs.mkdir(categoryPath, { recursive: true });
+            const destPath = path.join(categoryPath, req.file.filename);
+            await fs.rename(path.join(uploadDir, req.file.filename), destPath);
+            uploadPath = `/media/pages/Spaisekarte/${categoryFolder}/${req.file.filename}`;
+            
+            console.log(`✅ Menu item image saved to: ${uploadPath}`);
+          }
+        } catch (error: any) {
+          console.error("Error saving to category folder:", error);
+          // Fallback to uploads folder if category folder fails
+        }
+      }
+      // For ingredient images - save to ingredients folder structure
+      else if (category && type) {
         const categoryFolder = category.replace(/\s+/g, " "); // Normalize spaces
         const categoryPath = path.join(process.cwd(), "public", "media", "categories", categoryFolder, "zutaten", type);
         
