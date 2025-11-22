@@ -76,19 +76,19 @@ async function seed() {
     const sliderImages = [
       {
         page: "startseite",
-        url: "/media/pages/Startseite/slider-1.jpg",
+        url: "/media/pages/startseite/slider/slider-1.jpg",
         filename: "slider-1.jpg",
         order: 1,
       },
       {
         page: "startseite",
-        url: "/media/pages/Startseite/slider-2.jpg",
+        url: "/media/pages/startseite/slider/slider-2.jpg",
         filename: "slider-2.jpg",
         order: 2,
       },
       {
         page: "startseite",
-        url: "/media/pages/Startseite/slider-3.jpg",
+        url: "/media/pages/startseite/slider/slider-3.jpg",
         filename: "slider-3.jpg",
         order: 3,
       },
