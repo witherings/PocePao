@@ -386,8 +386,8 @@ export default function Menu() {
 
       {/* Cart Widget & Modal */}
       <CartWidget 
-        onOpen={() => setCartModalOpen(true)} 
-        isHidden={bowlBuilderOpen || cartModalOpen}
+        onOpen={() => setCartModalOpen(true)}
+        isHidden={(isMobile && itemDialogOpen) || bowlBuilderOpen || cartModalOpen}
       />
       
       

@@ -6,6 +6,7 @@ import type { MenuItem, ProductVariant } from "@shared/schema";
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MenuItemDialogProps {
   item: MenuItem | null;
@@ -15,10 +16,12 @@ interface MenuItemDialogProps {
 }
 
 export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemDialogProps) {
+  const isMobile = useIsMobile();
   const [selectedSize, setSelectedSize] = useState<"klein" | "standard">("standard");
   const [selectedBase, setSelectedBase] = useState<string>("");
   const [selectedFlavor, setSelectedFlavor] = useState<string>("");
   const [selectedFlavorId, setSelectedFlavorId] = useState<string>("");
+  const [stepIndex, setStepIndex] = useState(0); // 0: initial, 1: size selected on mobile, 2: base selected
   const contentRef = useRef<HTMLDivElement>(null);
 
   // Fetch all variants
@@ -63,6 +66,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
       setSelectedBase("");
       setSelectedFlavor("");
       setSelectedFlavorId("");
+      setStepIndex(0);
     }
   }, [item, isOpen]);
 
@@ -132,103 +136,230 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
               {item.nameDE}
             </h2>
 
-            {/* Description */}
-            {item.descriptionDE && (
+            {/* Description - Hidden on mobile */}
+            {item.descriptionDE && !isMobile && (
               <p className="font-lato text-sm text-muted-foreground mb-4" data-testid="text-dialog-description">
                 {item.descriptionDE}
               </p>
             )}
 
             <div className="space-y-4 flex-grow overflow-y-auto">
-              {/* Size Selection */}
-              {(item.hasSizeOptions === 1 || item.priceSmall) && (
-                <div>
-                  <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Größe wählen</h4>
-                  <div className="flex gap-2">
-                    <Button
-                      variant={selectedSize === "klein" ? "default" : "outline"}
-                      onClick={() => setSelectedSize("klein")}
-                      className={`flex-1 font-poppins font-semibold min-h-[48px] ${
-                        selectedSize === "klein" 
-                          ? "bg-ocean hover:bg-ocean/90 text-white" 
-                          : ""
-                      }`}
-                      data-testid="button-size-klein"
-                    >
-                      <div className="text-center text-sm">
-                        <div>Klein</div>
-                        {item.priceSmall && (
-                          <div className="text-xs font-normal">€{item.priceSmall}</div>
-                        )}
+              {/* MOBILE TWO-STEP LAYOUT */}
+              {isMobile && (item.hasSizeOptions === 1 || item.priceSmall) ? (
+                <>
+                  {/* STEP 1: Size Selection (fills screen) */}
+                  {stepIndex === 0 && (
+                    <div className="space-y-4">
+                      <h3 className="font-poppins font-bold text-lg text-foreground">Schritt 1: Größe wählen</h3>
+                      <div className="flex flex-col gap-3">
+                        <Button
+                          variant={selectedSize === "klein" ? "default" : "outline"}
+                          onClick={() => {
+                            setSelectedSize("klein");
+                            setStepIndex((baseVariants.length > 0 || flavorVariants.length > 0) ? 1 : 2);
+                          }}
+                          className={`w-full font-poppins font-semibold min-h-[64px] text-base ${
+                            selectedSize === "klein" 
+                              ? "bg-ocean hover:bg-ocean/90 text-white" 
+                              : ""
+                          }`}
+                          data-testid="button-size-klein"
+                        >
+                          <div className="text-center w-full">
+                            <div>Klein</div>
+                            {item.priceSmall && (
+                              <div className="text-sm font-normal">€{item.priceSmall}</div>
+                            )}
+                          </div>
+                        </Button>
+                        <Button
+                          variant={selectedSize === "standard" ? "default" : "outline"}
+                          onClick={() => {
+                            setSelectedSize("standard");
+                            setStepIndex((baseVariants.length > 0 || flavorVariants.length > 0) ? 1 : 2);
+                          }}
+                          className={`w-full font-poppins font-semibold min-h-[64px] text-base ${
+                            selectedSize === "standard" 
+                              ? "bg-ocean hover:bg-ocean/90 text-white" 
+                              : ""
+                          }`}
+                          data-testid="button-size-standard"
+                        >
+                          <div className="text-center w-full">
+                            <div>Standard</div>
+                            {item.price && (
+                              <div className="text-sm font-normal">€{item.price}</div>
+                            )}
+                          </div>
+                        </Button>
                       </div>
-                    </Button>
-                    <Button
-                      variant={selectedSize === "standard" ? "default" : "outline"}
-                      onClick={() => setSelectedSize("standard")}
-                      className={`flex-1 font-poppins font-semibold min-h-[48px] ${
-                        selectedSize === "standard" 
-                          ? "bg-ocean hover:bg-ocean/90 text-white" 
-                          : ""
-                      }`}
-                      data-testid="button-size-standard"
-                    >
-                      <div className="text-center text-sm">
-                        <div>Standard</div>
-                        {item.price && (
-                          <div className="text-xs font-normal">€{item.price}</div>
-                        )}
+                    </div>
+                  )}
+
+                  {/* STEP 2: Base/Flavor Selection (horizontal scroll) */}
+                  {stepIndex === 1 && (baseVariants.length > 0 || flavorVariants.length > 0) && (
+                    <div className="space-y-4">
+                      <h3 className="font-poppins font-bold text-lg text-foreground">Schritt 2: Base wählen</h3>
+                      
+                      {/* Base Selection */}
+                      {(baseVariants.length > 0) && (
+                        <div className="overflow-x-auto pb-2">
+                          <div className="flex gap-2 min-w-min">
+                            {baseVariants.map((variant) => (
+                              <Button
+                                key={variant.id}
+                                variant={selectedBase === variant.nameDE ? "default" : "outline"}
+                                onClick={() => {
+                                  setSelectedBase(variant.nameDE);
+                                  setStepIndex(2);
+                                }}
+                                className={`font-poppins font-semibold whitespace-nowrap flex-shrink-0 min-h-[48px] px-4 ${
+                                  selectedBase === variant.nameDE 
+                                    ? "bg-ocean hover:bg-ocean/90 text-white" 
+                                    : ""
+                                }`}
+                                data-testid={`button-base-${variant.nameDE}`}
+                              >
+                                {variant.nameDE}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Flavor Selection */}
+                      {(flavorVariants.length > 0) && (
+                        <div className="space-y-2">
+                          {flavorVariants.map((variant) => (
+                            <Button
+                              key={variant.id}
+                              variant={selectedFlavorId === variant.id ? "default" : "outline"}
+                              onClick={() => {
+                                setSelectedFlavorId(variant.id);
+                                setSelectedFlavor(variant.nameDE);
+                                setStepIndex(2);
+                              }}
+                              className={`w-full font-poppins font-semibold min-h-[44px] text-sm justify-start text-left ${
+                                selectedFlavorId === variant.id 
+                                  ? "bg-ocean hover:bg-ocean/90 text-white" 
+                                  : ""
+                              }`}
+                              data-testid={`button-flavor-${variant.nameDE}`}
+                            >
+                              {variant.nameDE}
+                            </Button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* STEP 3: Summary and Add to Cart */}
+                  {stepIndex === 2 && (
+                    <div className="space-y-4">
+                      <h3 className="font-poppins font-bold text-lg text-foreground">Deine Auswahl:</h3>
+                      <div className="bg-ocean/10 rounded-lg p-3 space-y-2">
+                        <div><span className="font-semibold">Größe:</span> {selectedSize === "klein" ? "Klein" : "Standard"}</div>
+                        {selectedBase && <div><span className="font-semibold">Base:</span> {selectedBase}</div>}
+                        {selectedFlavor && <div><span className="font-semibold">Geschmack:</span> {selectedFlavor}</div>}
                       </div>
-                    </Button>
-                  </div>
-                </div>
-              )}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  {/* DESKTOP: Show all at once */}
+                  {/* Size Selection */}
+                  {(item.hasSizeOptions === 1 || item.priceSmall) && (
+                    <div>
+                      <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Größe wählen</h4>
+                      <div className="flex gap-2">
+                        <Button
+                          variant={selectedSize === "klein" ? "default" : "outline"}
+                          onClick={() => setSelectedSize("klein")}
+                          className={`flex-1 font-poppins font-semibold min-h-[48px] ${
+                            selectedSize === "klein" 
+                              ? "bg-ocean hover:bg-ocean/90 text-white" 
+                              : ""
+                          }`}
+                          data-testid="button-size-klein"
+                        >
+                          <div className="text-center text-sm">
+                            <div>Klein</div>
+                            {item.priceSmall && (
+                              <div className="text-xs font-normal">€{item.priceSmall}</div>
+                            )}
+                          </div>
+                        </Button>
+                        <Button
+                          variant={selectedSize === "standard" ? "default" : "outline"}
+                          onClick={() => setSelectedSize("standard")}
+                          className={`flex-1 font-poppins font-semibold min-h-[48px] ${
+                            selectedSize === "standard" 
+                              ? "bg-ocean hover:bg-ocean/90 text-white" 
+                              : ""
+                          }`}
+                          data-testid="button-size-standard"
+                        >
+                          <div className="text-center text-sm">
+                            <div>Standard</div>
+                            {item.price && (
+                              <div className="text-xs font-normal">€{item.price}</div>
+                            )}
+                          </div>
+                        </Button>
+                      </div>
+                    </div>
+                  )}
 
-              {/* Base Selection - from hasVariants */}
-              {item.hasVariants === 1 && item.variantType === 'base' && baseVariants.length > 0 && (
-                <div>
-                  <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Base wählen *</h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    {baseVariants.map((variant) => (
-                      <Button
-                        key={variant.id}
-                        variant={selectedBase === variant.nameDE ? "default" : "outline"}
-                        onClick={() => setSelectedBase(variant.nameDE)}
-                        className={`font-poppins font-semibold min-h-[44px] text-sm ${
-                          selectedBase === variant.nameDE 
-                            ? "bg-ocean hover:bg-ocean/90 text-white" 
-                            : ""
-                        }`}
-                        data-testid={`button-base-${variant.nameDE}`}
-                      >
-                        {variant.nameDE}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
+                  {/* Base Selection - from hasVariants */}
+                  {item.hasVariants === 1 && item.variantType === 'base' && baseVariants.length > 0 && (
+                    <div>
+                      <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Base wählen *</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {baseVariants.map((variant) => (
+                          <Button
+                            key={variant.id}
+                            variant={selectedBase === variant.nameDE ? "default" : "outline"}
+                            onClick={() => setSelectedBase(variant.nameDE)}
+                            className={`font-poppins font-semibold min-h-[44px] text-sm ${
+                              selectedBase === variant.nameDE 
+                                ? "bg-ocean hover:bg-ocean/90 text-white" 
+                                : ""
+                            }`}
+                            data-testid={`button-base-${variant.nameDE}`}
+                          >
+                            {variant.nameDE}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-              {/* Base Selection - Legacy from enableBaseSelection */}
-              {item.enableBaseSelection === 1 && item.hasVariants !== 1 && baseVariants.length > 0 && (
-                <div>
-                  <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Base wählen *</h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    {baseVariants.map((variant) => (
-                      <Button
-                        key={variant.id}
-                        variant={selectedBase === variant.nameDE ? "default" : "outline"}
-                        onClick={() => setSelectedBase(variant.nameDE)}
-                        className={`font-poppins font-semibold min-h-[44px] text-sm ${
-                          selectedBase === variant.nameDE 
-                            ? "bg-ocean hover:bg-ocean/90 text-white" 
-                            : ""
-                        }`}
-                        data-testid={`button-base-legacy-${variant.nameDE}`}
-                      >
-                        {variant.nameDE}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
+                  {/* Base Selection - Legacy from enableBaseSelection */}
+                  {item.enableBaseSelection === 1 && item.hasVariants !== 1 && baseVariants.length > 0 && (
+                    <div>
+                      <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Base wählen *</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {baseVariants.map((variant) => (
+                          <Button
+                            key={variant.id}
+                            variant={selectedBase === variant.nameDE ? "default" : "outline"}
+                            onClick={() => setSelectedBase(variant.nameDE)}
+                            className={`font-poppins font-semibold min-h-[44px] text-sm ${
+                              selectedBase === variant.nameDE 
+                                ? "bg-ocean hover:bg-ocean/90 text-white" 
+                                : ""
+                            }`}
+                            data-testid={`button-base-legacy-${variant.nameDE}`}
+                          >
+                            {variant.nameDE}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
 
               {/* Flavor Selection (for items like Fritz-Kola) */}
@@ -351,15 +482,28 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                   </span>
                 </div>
                 <div className="flex gap-2 w-full sm:w-auto">
-                  <Button
-                    onClick={onClose}
-                    variant="outline"
-                    className="flex-1 sm:flex-initial bg-red-500 hover:bg-red-600 text-white border-red-500 font-poppins font-bold rounded-full px-4 sm:px-6 min-h-[48px] text-sm sm:text-base shadow-lg hover:shadow-xl transition-all"
-                    data-testid="button-dialog-back"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    <span className="hidden sm:inline ml-1">Zurück</span>
-                  </Button>
+                  {/* Mobile: Back button for two-step process */}
+                  {isMobile && stepIndex > 0 ? (
+                    <Button
+                      onClick={() => setStepIndex(stepIndex - 1)}
+                      variant="outline"
+                      className="flex-1 sm:flex-initial bg-red-500 hover:bg-red-600 text-white border-red-500 font-poppins font-bold rounded-full px-4 sm:px-6 min-h-[48px] text-sm sm:text-base shadow-lg hover:shadow-xl transition-all"
+                      data-testid="button-step-back"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      <span className="ml-1">Zurück</span>
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={onClose}
+                      variant="outline"
+                      className="flex-1 sm:flex-initial bg-red-500 hover:bg-red-600 text-white border-red-500 font-poppins font-bold rounded-full px-4 sm:px-6 min-h-[48px] text-sm sm:text-base shadow-lg hover:shadow-xl transition-all"
+                      data-testid="button-dialog-back"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      <span className="hidden sm:inline ml-1">Zurück</span>
+                    </Button>
+                  )}
                   <Button
                     onClick={() => {
                       onAddToCart(
@@ -373,7 +517,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                       );
                       onClose();
                     }}
-                    disabled={item.available === 0 || (baseVariants.length > 0 && !selectedBase) || (flavorVariants.length > 0 && !selectedFlavorId)}
+                    disabled={item.available === 0 || (baseVariants.length > 0 && !selectedBase) || (flavorVariants.length > 0 && !selectedFlavorId) || (isMobile && stepIndex < 2 && (baseVariants.length > 0 || flavorVariants.length > 0))}
                     className="flex-1 sm:flex-initial bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full px-6 sm:px-8 min-h-[48px] text-sm sm:text-base shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     data-testid="button-dialog-add-to-cart"
                   >

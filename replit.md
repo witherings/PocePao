@@ -36,6 +36,30 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 - **Menu Ordering:** ID-based sorting in the storage layer for consistent display.
 - **Health Monitoring:** `/api/health` endpoint for deployment platform monitoring.
 
+### Recent Changes (November 23, 2025 - MOBILE UX OPTIMIZATION)
+**✅ MOBILE INTERFACE REDESIGNED - TWO-STEP WIZARD + COMPACT LAYOUT**
+- ✅ **Two-Step Mobile Dialog:**
+  - **Step 1:** Large size selection buttons (Klein/Standard) fill screen - more space per button
+  - **Step 2:** Horizontal scrollable base/flavor selection - efficient use of space
+  - **Step 3:** Summary display before adding to cart
+  - Back button on each step for navigation
+  
+- ✅ **Removed Product Description on Mobile:**
+  - Description hidden on mobile views (only shown on desktop)
+  - Saves vertical space for better button/form layouts
+  - Info is already visible at bottom of menu
+
+- ✅ **Cart Widget Hidden on Mobile with Open Dialogs:**
+  - Cart button disappears when MenuItem dialog is open on mobile
+  - Still visible on desktop
+  - Prevents clutter when customer is making selections
+
+- ✅ **Compact Mobile Layout:**
+  - Larger clickable targets for touch interactions
+  - Horizontal scroll for base selection (carousel-style)
+  - Better spacing on small screens
+  - Preserves all functionality in minimal space
+
 ### Recent Changes (November 23, 2025 - TELEGRAM BOT MESSAGING OVERHAUL)
 **✅ TELEGRAM BOT - COMPLETE GERMAN NOTIFICATIONS WITH FULL ORDER DETAILS**
 - ✅ **Complete Telegram Integration:** Restructured `server/notifications.ts` with detailed German messaging
