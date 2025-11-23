@@ -311,11 +311,12 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
 
                   {/* STEP 3: Summary with all details */}
                   {stepIndex === 2 && (
-                    <div className="flex flex-col h-full overflow-y-auto min-h-0">
-                      <h3 className="font-poppins font-bold text-base text-foreground sticky top-0 bg-white dark:bg-gray-800 py-1 mb-2 flex-shrink-0">Deine Auswahl:</h3>
+                    <div className="flex flex-col h-full min-h-0">
+                      <h3 className="font-poppins font-bold text-base text-foreground py-1 mb-2 flex-shrink-0">Deine Auswahl:</h3>
                       
-                      {/* Selected Size & Variant */}
-                      <div className="space-y-2 pb-2 border-b border-gray-200 dark:border-gray-700">
+                      <div className="flex-grow overflow-y-auto min-h-0 space-y-3">
+                        {/* Selected Size & Variant */}
+                        <div className="space-y-2 pb-2 border-b border-gray-200 dark:border-gray-700">
                         {needsSizeSelection && (
                           <div className="flex items-center gap-2">
                             <span className="font-poppins font-semibold text-sm">Größe:</span>
@@ -382,19 +383,20 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                         </div>
                       )}
 
-                      {/* Allergens */}
-                      {item.allergens && item.allergens.length > 0 && (
-                        <div>
-                          <h4 className="font-poppins font-semibold text-sm text-destructive">Allergene</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {item.allergens.map((allergen, idx) => (
-                              <Badge key={idx} variant="destructive" className="font-lato text-xs" data-testid={`badge-allergen-${idx}`}>
-                                {allergen}
-                              </Badge>
-                            ))}
+                        {/* Allergens */}
+                        {item.allergens && item.allergens.length > 0 && (
+                          <div>
+                            <h4 className="font-poppins font-semibold text-sm text-destructive">Allergene</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {item.allergens.map((allergen, idx) => (
+                                <Badge key={idx} variant="destructive" className="font-lato text-xs" data-testid={`badge-allergen-${idx}`}>
+                                  {allergen}
+                                </Badge>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   )}
                 </>
