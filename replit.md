@@ -36,7 +36,22 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 - **Menu Ordering:** ID-based sorting in the storage layer for consistent display.
 - **Health Monitoring:** `/api/health` endpoint for deployment platform monitoring.
 
-### Recent Changes (November 22, 2025 - FINAL: COMPLETE IMAGE SYSTEM SYNC)
+### Recent Changes (November 23, 2025 - TELEGRAM BOT MESSAGING OVERHAUL)
+**✅ TELEGRAM BOT - COMPLETE GERMAN NOTIFICATIONS WITH FULL ORDER DETAILS**
+- ✅ **Complete Telegram Integration:** Restructured `server/notifications.ts` with detailed German messaging
+  - **For Wunsch Bowl (Custom Bowls):** Full customization details (base, protein, marinade, fresh, sauce, toppings + all extras)
+  - **For Standard Menu Items:** Shows selectedVariant/selectedBase and size information
+  - **Price Calculation:** Correctly computes item totals (quantity × price) and order sum
+  - **German Format:** Structured, professional German text with clear sections, no filler content
+  - **Order Info:** Customer name, phone, service type (Abholung/Im Restaurant), time/table, comments
+  - **Extras Breakdown:** Clearly separated extras section with item count and details
+  - **Time Format:** German locale formatting for date/time display
+
+- ✅ **Message Structure:** Clean sections with emoji dividers, easy to read in Telegram
+- ✅ **Price Verification:** Validates totals match, includes item-by-item price breakdown
+- ✅ **Error Handling:** Falls back to console if Telegram not configured, non-blocking for orders
+
+### Recent Changes (November 22, 2025 - COMPLETE IMAGE SYSTEM SYNC)
 **✅ COMPLETE IMAGE SYSTEM SYNCHRONIZATION - VERIFIED & NO DUPLICATES**
 - ✅ **134 Total Ingredients:** All paths 1-to-1 mapped to real files on disk - ZERO DUPLICATES
   - **Base Ingredients (67):** 4 base + 6 protein + 4 marinade + 29 fresh + 7 sauce + 17 topping

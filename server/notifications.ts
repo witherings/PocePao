@@ -1,8 +1,8 @@
-import type { Order, Reservation, OrderItem } from "@shared/schema";
+import type { Order, OrderItem, CustomBowlSelection } from "@shared/schema";
 
 interface NotificationService {
   sendOrderNotification(order: Order, items: OrderItem[]): Promise<void>;
-  sendReservationNotification(reservation: Reservation): Promise<void>;
+  sendReservationNotification(reservation: any): Promise<void>;
 }
 
 class TelegramNotificationService implements NotificationService {
@@ -23,11 +23,11 @@ class TelegramNotificationService implements NotificationService {
 
   private async sendTelegramMessage(message: string, botToken: string, chatId: string, type: string): Promise<void> {
     if (!botToken || !chatId) {
-      console.log(`\n⚠️  Telegram для ${type} не настроен.`);
-      console.log("Настройте переменные окружения:");
-      console.log(`  - Для ${type}: TELEGRAM_${type.toUpperCase()}_BOT_TOKEN и TELEGRAM_${type.toUpperCase()}_CHAT_ID`);
-      console.log("  - Или используйте общие: TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID");
-      console.log(`=== TELEGRAM УВЕДОМЛЕНИЕ ${type.toUpperCase()} (не отправлено) ===`);
+      console.log(`\n⚠️  Telegram für ${type} nicht konfiguriert.`);
+      console.log("Bitte setzen Sie die Umgebungsvariablen:");
+      console.log(`  - Für ${type}: TELEGRAM_${type.toUpperCase()}_BOT_TOKEN und TELEGRAM_${type.toUpperCase()}_CHAT_ID`);
+      console.log("  - Oder verwenden Sie die allgemeinen: TELEGRAM_BOT_TOKEN und TELEGRAM_CHAT_ID");
+      console.log(`=== TELEGRAM BENACHRICHTIGUNG ${type.toUpperCase()} (nicht gesendet) ===`);
       console.log(message);
       console.log("============================================\n");
       return;
@@ -52,57 +52,201 @@ class TelegramNotificationService implements NotificationService {
         throw new Error(`Telegram API error: ${error}`);
       }
 
-      console.log(`✅ Telegram уведомление ${type} отправлено успешно!`);
+      console.log(`✅ Telegram Benachrichtigung ${type} erfolgreich gesendet!`);
     } catch (error) {
-      console.error(`❌ Ошибка отправки Telegram уведомления ${type}:`, error);
+      console.error(`❌ Fehler beim Senden der Telegram Benachrichtigung ${type}:`, error);
       throw error;
     }
   }
 
+  private parseCustomization(customizationJson: string | null): CustomBowlSelection | null {
+    if (!customizationJson) return null;
+    try {
+      return JSON.parse(customizationJson) as CustomBowlSelection;
+    } catch {
+      return null;
+    }
+  }
+
+  private formatCustomization(customization: CustomBowlSelection | null, size?: string | null): string {
+    if (!customization) return "";
+
+    const lines: string[] = [];
+
+    // Base
+    if (customization.base) {
+      lines.push(`   🥬 Base: ${customization.base}`);
+    }
+
+    // Protein
+    if (customization.protein) {
+      lines.push(`   🍗 Protein: ${customization.protein}`);
+    }
+
+    // Marinade
+    if (customization.marinade) {
+      lines.push(`   🧂 Marinade: ${customization.marinade}`);
+    }
+
+    // Fresh Ingredients
+    if (customization.freshIngredients && customization.freshIngredients.length > 0) {
+      lines.push(`   🥕 Frische Zutaten: ${customization.freshIngredients.join(", ")}`);
+    }
+
+    // Sauce
+    if (customization.sauce) {
+      lines.push(`   🌶 Sauce: ${customization.sauce}`);
+    }
+
+    // Toppings
+    if (customization.toppings && customization.toppings.length > 0) {
+      lines.push(`   ✨ Toppings: ${customization.toppings.join(", ")}`);
+    }
+
+    // Extras
+    const hasExtras = 
+      (customization.extraProtein && customization.extraProtein.length > 0) ||
+      (customization.extraFreshIngredients && customization.extraFreshIngredients.length > 0) ||
+      (customization.extraSauces && customization.extraSauces.length > 0) ||
+      (customization.extraToppings && customization.extraToppings.length > 0);
+
+    if (hasExtras) {
+      lines.push(`   <b>➕ Extras:</b>`);
+      
+      if (customization.extraProtein && customization.extraProtein.length > 0) {
+        lines.push(`      • Extra Protein: ${customization.extraProtein.join(", ")}`);
+      }
+      if (customization.extraFreshIngredients && customization.extraFreshIngredients.length > 0) {
+        lines.push(`      • Extra Frische: ${customization.extraFreshIngredients.join(", ")}`);
+      }
+      if (customization.extraSauces && customization.extraSauces.length > 0) {
+        lines.push(`      • Extra Sauces: ${customization.extraSauces.join(", ")}`);
+      }
+      if (customization.extraToppings && customization.extraToppings.length > 0) {
+        lines.push(`      • Extra Toppings: ${customization.extraToppings.join(", ")}`);
+      }
+    }
+
+    return lines.length > 0 ? lines.join("\n") : "";
+  }
+
   async sendOrderNotification(order: Order, items: OrderItem[]): Promise<void> {
-    const itemsList = items
-      .map((item) => `  • ${item.quantity}x ${item.nameDE} - €${item.price}`)
-      .join("\n");
+    // Build detailed order items list
+    const itemsDetails: string[] = [];
+    let calculatedTotal = 0;
 
-    const serviceTypeText = order.serviceType === "pickup" 
-      ? "🥡 <b>Самовывоз</b>" 
-      : "🍽 <b>В ресторане</b>";
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      const itemPrice = parseFloat(item.price || "0");
+      const itemTotal = itemPrice * item.quantity;
+      calculatedTotal += itemTotal;
 
-    const additionalInfo = order.serviceType === "pickup" 
-      ? `⏰ <b>Время самовывоза:</b> ${order.pickupTime}` 
-      : `🪑 <b>Столик №:</b> ${order.tableNumber}`;
+      const quantity = item.quantity || 1;
+      let itemDesc = `<b>${i + 1}. ${item.nameDE}</b> (${quantity}x)`;
+
+      // Add size information if present
+      if (item.size) {
+        itemDesc += ` • <i>Größe: ${item.size}</i>`;
+      }
+
+      // Add selected variant/base if present
+      if (item.selectedVariant && item.selectedVariant.trim()) {
+        itemDesc += ` • <i>Base: ${item.selectedVariant}</i>`;
+      } else if (item.selectedBase && item.selectedBase.trim()) {
+        // Fallback for deprecated selectedBase
+        itemDesc += ` • <i>Base: ${item.selectedBase}</i>`;
+      }
+
+      itemsDetails.push(itemDesc);
+
+      // Add price info
+      if (quantity > 1) {
+        itemsDetails.push(`   💰 ${quantity}x €${itemPrice.toFixed(2)} = €${itemTotal.toFixed(2)}`);
+      } else {
+        itemsDetails.push(`   💰 €${itemPrice.toFixed(2)}`);
+      }
+
+      // Add customization details for Wunsch Bowl (custom bowls)
+      const customization = this.parseCustomization(item.customization);
+      if (customization) {
+        const customDetails = this.formatCustomization(customization, item.size);
+        if (customDetails) {
+          itemsDetails.push(`   <b>📋 Zusammenstellung:</b>`);
+          itemsDetails.push(customDetails);
+        }
+      }
+
+      // Add blank line between items for readability
+      if (i < items.length - 1) {
+        itemsDetails.push("");
+      }
+    }
+
+    // Determine service type display
+    const serviceTypeEmoji = order.serviceType === "pickup" ? "🥡" : "🍽";
+    const serviceTypeText = order.serviceType === "pickup" ? "Abholung" : "Im Restaurant";
+    
+    // Additional info based on service type
+    let additionalInfo = "";
+    if (order.serviceType === "pickup" && order.pickupTime) {
+      additionalInfo = `⏰ <b>Abholzeit:</b> ${order.pickupTime}`;
+    } else if (order.serviceType === "dinein" && order.tableNumber) {
+      additionalInfo = `🪑 <b>Tischnummer:</b> ${order.tableNumber}`;
+    }
+
+    // Format date nicely in German
+    const createdDate = new Date(order.createdAt);
+    const dateStr = createdDate.toLocaleDateString("de-DE", {
+      weekday: "short",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const timeStr = createdDate.toLocaleTimeString("de-DE", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    // Verify totals match
+    const totalMatch = Math.abs(calculatedTotal - parseFloat(order.total)) < 0.01;
+    const totalDisplay = order.total || calculatedTotal.toFixed(2);
 
     const message = `
-🍱 <b>НОВЫЙ ЗАКАЗ!</b>
+🍱 <b>NEUE BESTELLUNG!</b>
 
-${serviceTypeText}
-👤 <b>Имя:</b> ${order.name}
-📞 <b>Телефон:</b> ${order.phone}
+${serviceTypeEmoji} <b>${serviceTypeText}</b>
+👤 <b>Kunde:</b> ${order.name}
+📞 <b>Telefon:</b> ${order.phone}
 ${additionalInfo}
 
-📝 <b>Заказ:</b>
-${itemsList}
+<b>═══════════════════════════════════</b>
+<b>📝 BESTELLDETAILS:</b>
+<b>═══════════════════════════════════</b>
 
-💰 <b>Сумма:</b> €${order.total}
-${order.comment ? `\n💬 <b>Комментарий:</b> ${order.comment}` : ""}
+${itemsDetails.join("\n")}
 
-📅 <b>Время заказа:</b> ${new Date(order.createdAt).toLocaleString("de-DE")}
+<b>═══════════════════════════════════</b>
+💰 <b>SUMME:</b> €${totalDisplay}
+<b>═══════════════════════════════════</b>
+${order.comment ? `\n💬 <b>Anmerkung:</b> ${order.comment}` : ""}
+
+📅 <b>Bestellzeit:</b> ${dateStr} • ${timeStr}
     `.trim();
 
     await this.sendTelegramMessage(message, this.orderBotToken, this.orderChatId, "ORDER");
   }
 
-  async sendReservationNotification(reservation: Reservation): Promise<void> {
+  async sendReservationNotification(reservation: Record<string, any>): Promise<void> {
     const message = `
-🪑 <b>НОВОЕ БРОНИРОВАНИЕ СТОЛИКА!</b>
+🪑 <b>NEUE TISCHRESERVIERUNG!</b>
 
-👤 <b>Имя:</b> ${reservation.name}
-📞 <b>Телефон:</b> ${reservation.phone}
-📅 <b>Дата:</b> ${reservation.date}
-⏰ <b>Время:</b> ${reservation.time}
-👥 <b>Количество гостей:</b> ${reservation.guests}
+👤 <b>Name:</b> ${reservation.name}
+📞 <b>Telefon:</b> ${reservation.phone}
+📅 <b>Datum:</b> ${reservation.date}
+⏰ <b>Uhrzeit:</b> ${reservation.time}
+👥 <b>Gäste:</b> ${reservation.guests}
 
-📅 <b>Время бронирования:</b> ${new Date().toLocaleString("de-DE")}
+📅 <b>Reservierungszeit:</b> ${new Date().toLocaleString("de-DE")}
     `.trim();
 
     await this.sendTelegramMessage(message, this.reservationBotToken, this.reservationChatId, "RESERVATION");
