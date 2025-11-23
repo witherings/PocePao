@@ -66,7 +66,10 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
       setSelectedBase("");
       setSelectedFlavor("");
       setSelectedFlavorId("");
-      setStepIndex(0);
+      
+      // Start at the correct step based on what selections are needed
+      const initialStep = determineNextStep();
+      setStepIndex(initialStep);
     }
   }, [item, isOpen]);
 
@@ -446,8 +449,8 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                     </div>
                   )}
 
-                  {/* Base Selection - from hasVariants */}
-                  {item.hasVariants === 1 && item.variantType === 'base' && baseVariants.length > 0 && (
+                  {/* Base Selection - show if available and no flavor variants */}
+                  {baseVariants.length > 0 && flavorVariants.length === 0 && (
                     <div>
                       <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Base wählen *</h4>
                       <div className="grid grid-cols-2 gap-2">
@@ -470,32 +473,8 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                     </div>
                   )}
 
-                  {/* Base Selection - Legacy from enableBaseSelection */}
-                  {item.enableBaseSelection === 1 && item.hasVariants !== 1 && baseVariants.length > 0 && (
-                    <div>
-                      <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Base wählen *</h4>
-                      <div className="grid grid-cols-2 gap-2">
-                        {baseVariants.map((variant) => (
-                          <Button
-                            key={variant.id}
-                            variant={selectedBase === variant.nameDE ? "default" : "outline"}
-                            onClick={() => setSelectedBase(variant.nameDE)}
-                            className={`font-poppins font-semibold min-h-[44px] text-sm ${
-                              selectedBase === variant.nameDE 
-                                ? "bg-ocean hover:bg-ocean/90 text-white" 
-                                : ""
-                            }`}
-                            data-testid={`button-base-legacy-${variant.nameDE}`}
-                          >
-                            {variant.nameDE}
-                          </Button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
                   {/* Flavor Selection (for items like Fritz-Kola) */}
-                  {item.hasVariants === 1 && item.variantType === 'flavor' && flavorVariants.length > 0 && (
+                  {flavorVariants.length > 0 && (
                     <div>
                       <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Geschmack wählen *</h4>
                       <div className="grid grid-cols-2 gap-2">

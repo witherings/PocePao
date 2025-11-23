@@ -90,6 +90,21 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 - Minimal spacing: `gap-1`, padding `px-2 py-1` for compact layout
 - All buttons use `flex items-center justify-center` for perfect text centering
 
+### Recent Changes (November 23, 2025 - VARIANT SELECTION FIX - ALWAYS SHOWS WHEN ENABLED)
+**✅ PRODUCT VARIANTS NOW ALWAYS VISIBLE WHEN ENABLED IN ADMIN**
+- ✅ **Fixed mobile variant selection display:** Items like Fritz-Kola now show flavor selection immediately when the dialog opens on mobile
+  - Previously: Mobile dialogs could appear blank if item had no size options but HAD variants
+  - Now: Dialog correctly skips size step (if not needed) and goes directly to variant selection
+- ✅ **Removed variant rendering conditions:** Desktop and mobile now show variants whenever they exist in the database
+  - Previously: Variants only showed if `item.hasVariants === 1` AND `item.variantType === 'flavor'`
+  - Now: Variants show if they exist (`flavorVariants.length > 0`), regardless of item flags
+- ✅ **Unified logic across mobile and desktop:** Both views now consistently check for variant existence
+- ✅ **Solution:** Fixed `MenuItemDialog.tsx`:
+  - Step initialization now uses `determineNextStep()` to set correct initial step based on what selections are needed
+  - Flavor variants always render on desktop when `flavorVariants.length > 0`
+  - Base variants always render when available and no flavor variants exist
+  - Mobile variant selection step properly displays and fills available space
+
 ### Recent Changes (November 23, 2025 - TELEGRAM BOT MESSAGING OVERHAUL)
 **✅ TELEGRAM BOT - COMPLETE GERMAN NOTIFICATIONS WITH FULL ORDER DETAILS**
 - ✅ **Complete Telegram Integration:** Restructured `server/notifications.ts` with detailed German messaging
