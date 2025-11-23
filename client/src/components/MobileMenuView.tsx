@@ -207,7 +207,7 @@ export function MobileMenuView({
                   {/* Content */}
                   <div className="flex-1 p-2.5 flex flex-col justify-between min-w-0">
                     <div>
-                      <h3 className="font-poppins font-bold text-sm text-foreground line-clamp-2" data-testid={`text-mobile-menu-item-name-${item.id}`}>
+                      <h3 className="font-poppins font-bold text-sm text-foreground line-clamp-1" data-testid={`text-mobile-menu-item-name-${item.id}`}>
                         {item.nameDE}
                       </h3>
                       {item.protein && (
@@ -215,23 +215,37 @@ export function MobileMenuView({
                           {item.protein}
                         </Badge>
                       )}
+                      {item.descriptionDE && (
+                        <p className="font-lato text-xs text-muted-foreground mt-1 line-clamp-2" data-testid={`text-mobile-menu-item-desc-${item.id}`}>
+                          {item.descriptionDE}
+                        </p>
+                      )}
                     </div>
 
                     {/* Price and Button */}
                     <div className="flex items-center justify-between gap-2 mt-2">
                       <div>
-                        {item.isCustomBowl === 1 && item.hasSizeOptions === 1 ? (
+                        {item.isCustomBowl === 1 ? (
                           <div className="flex flex-col">
                             <span className="font-poppins text-xs font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
-                              ab €{item.priceSmall}-{item.price}
+                              Klein ab €{customBowlPriceRange.kleinMin || "9.50"}
+                            </span>
+                            <span className="font-poppins text-xs font-bold text-ocean">
+                              Standard ab €{customBowlPriceRange.standardMin || "14.75"}
+                            </span>
+                          </div>
+                        ) : item.hasSizeOptions === 1 && item.priceSmall ? (
+                          <div className="flex flex-col">
+                            <span className="font-poppins text-xs font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
+                              Klein €{item.priceSmall}
                             </span>
                             <span className="font-poppins text-xs text-muted-foreground">
-                              Klein/Std
+                              Standard €{item.price}
                             </span>
                           </div>
                         ) : (
                           <span className="font-poppins text-sm font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
-                            {item.hasSizeOptions === 1 && "ab "}€{item.priceSmall || item.price}
+                            €{item.price}
                           </span>
                         )}
                       </div>

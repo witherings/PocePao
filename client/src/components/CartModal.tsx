@@ -420,7 +420,7 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                     )}
                     
                     <p className="font-poppins text-base sm:text-lg font-bold text-ocean mt-1.5 sm:mt-2" data-testid={`text-cart-item-price-${item.id}`}>
-                      €{item.price}
+                      €{parseFloat(String(item.price || "0")).toFixed(2)}
                     </p>
                   </div>
                   <div className="flex flex-col items-end justify-between gap-2">

@@ -159,9 +159,9 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
               {item.nameDE}
             </h2>
 
-            {/* Description - Desktop only, Hidden on mobile */}
-            {item.descriptionDE && !isMobile && (
-              <p className="font-lato text-sm text-muted-foreground mb-4 flex-shrink-0" data-testid="text-dialog-description">
+            {/* Description - Show on both desktop and mobile */}
+            {item.descriptionDE && (
+              <p className={`font-lato ${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground mb-4 flex-shrink-0 ${isMobile ? 'line-clamp-3' : ''}`} data-testid="text-dialog-description">
                 {item.descriptionDE}
               </p>
             )}

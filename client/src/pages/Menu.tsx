@@ -101,32 +101,45 @@ export default function Menu() {
     // Determine price based on priority
     let finalPrice = "";
     
-    // Priority 1: If custom price is provided AND is valid (not "0")
-    if (customPrice && customPrice !== "0" && parseFloat(customPrice) > 0) {
-      finalPrice = String(customPrice);
+    console.log('💳 handleAddToCart INPUTS:', {
+      customPrice,
+      customPriceType: typeof customPrice,
+      customPriceParsed: customPrice ? parseFloat(customPrice) : 'null',
+      itemPrice: item.price,
+      size,
+      hasCustomization: !!customization,
+      item: item.nameDE
+    });
+    
+    // Priority 1: If custom price is provided (for custom bowls)
+    if (customPrice !== undefined && customPrice !== null && customPrice !== "") {
+      const parsedPrice = parseFloat(customPrice);
+      if (!isNaN(parsedPrice) && parsedPrice > 0) {
+        finalPrice = parsedPrice.toFixed(2);
+        console.log('✅ Using custom price:', finalPrice);
+      } else {
+        console.warn('⚠️ Invalid customPrice provided:', customPrice);
+        finalPrice = "0.00";
+      }
     }
     // Priority 2: For size-based items without custom price
     else if (!customization && size && item.hasSizeOptions === 1) {
       if (size === "klein" && item.priceSmall) {
-        finalPrice = String(item.priceSmall);
+        finalPrice = parseFloat(String(item.priceSmall)).toFixed(2);
       } else if (size === "standard" && item.price) {
-        finalPrice = String(item.price);
+        finalPrice = parseFloat(String(item.price)).toFixed(2);
       } else {
-        finalPrice = String(item.price || "0");
+        finalPrice = parseFloat(String(item.price || "0")).toFixed(2);
       }
+      console.log('✅ Using size-based price:', finalPrice);
     }
     // Priority 3: Use item's regular price as fallback
     else {
-      finalPrice = String(item.price || "0");
+      finalPrice = parseFloat(String(item.price || "0")).toFixed(2);
+      console.log('✅ Using item price:', finalPrice);
     }
     
-    console.log('💳 FINAL PRICE LOGIC:', {
-      customPrice,
-      itemPrice: item.price,
-      size,
-      hasCustomization: !!customization,
-      finalPrice
-    });
+    console.log('💳 FINAL PRICE:', finalPrice);
 
     // If editing, update existing item
     if (editingItemId) {
