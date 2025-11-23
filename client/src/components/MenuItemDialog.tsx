@@ -21,7 +21,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
   const [selectedBase, setSelectedBase] = useState<string>("");
   const [selectedFlavor, setSelectedFlavor] = useState<string>("");
   const [selectedFlavorId, setSelectedFlavorId] = useState<string>("");
-  const [stepIndex, setStepIndex] = useState(0); // 0: initial, 1: size selected on mobile, 2: base selected
+  const [stepIndex, setStepIndex] = useState(0); // Mobile steps
   const contentRef = useRef<HTMLDivElement>(null);
 
   // Fetch all variants
@@ -83,6 +83,29 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
     return item.price;
   };
 
+  // Check if item needs size selection
+  const needsSizeSelection = item.hasSizeOptions === 1 || item.priceSmall;
+  
+  // Check if item needs base/variant selection
+  const needsBaseSelection = baseVariants.length > 0;
+  const needsFlavorSelection = flavorVariants.length > 0;
+  const needsVariantSelection = needsBaseSelection || needsFlavorSelection;
+
+  // Determine initial step for mobile
+  const determineNextStep = () => {
+    if (needsSizeSelection) return 0;
+    if (needsVariantSelection) return 1;
+    return 2;
+  };
+
+  // Get summary data for step 3
+  const getSizeName = () => selectedSize === "klein" ? "Klein" : "Standard";
+  const getBaseOrVariantName = () => {
+    if (selectedFlavor) return selectedFlavor;
+    if (selectedBase) return selectedBase;
+    return null;
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent ref={contentRef} className="w-[95dvw] h-[95dvh] max-w-6xl max-h-[95dvh] p-0 overflow-hidden border border-gray-300 dark:border-gray-600 shadow-2xl" data-testid="dialog-menu-item">
@@ -108,9 +131,9 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
             )}
           </div>
 
-          {/* RIGHT: Content (scrollable) */}
-          <div className="flex flex-col overflow-y-auto lg:overflow-y-auto h-full p-6">
-            {/* Mobile Image */}
+          {/* RIGHT: Content */}
+          <div className="flex flex-col overflow-hidden lg:overflow-y-auto h-full p-6">
+            {/* Mobile Image - Fixed */}
             <div className="lg:hidden relative aspect-[4/3] rounded-lg overflow-hidden mb-4 flex-shrink-0">
               <img
                 src={item.image || "/images/default-dish.png"}
@@ -131,138 +154,204 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
               )}
             </div>
 
-            {/* Title */}
-            <h2 className="font-poppins text-2xl font-bold text-foreground mb-2" data-testid="text-dialog-title">
+            {/* Title - Fixed */}
+            <h2 className="font-poppins text-2xl font-bold text-foreground mb-2 flex-shrink-0" data-testid="text-dialog-title">
               {item.nameDE}
             </h2>
 
-            {/* Description - Hidden on mobile */}
+            {/* Description - Desktop only, Hidden on mobile */}
             {item.descriptionDE && !isMobile && (
-              <p className="font-lato text-sm text-muted-foreground mb-4" data-testid="text-dialog-description">
+              <p className="font-lato text-sm text-muted-foreground mb-4 flex-shrink-0" data-testid="text-dialog-description">
                 {item.descriptionDE}
               </p>
             )}
 
-            <div className="space-y-4 flex-grow overflow-y-auto">
-              {/* MOBILE TWO-STEP LAYOUT */}
-              {isMobile && (item.hasSizeOptions === 1 || item.priceSmall) ? (
+            {/* MOBILE & DESKTOP CONTENT - FLEX GROW */}
+            <div className="flex-grow overflow-y-auto space-y-4">
+              {/* MOBILE STEPS */}
+              {isMobile ? (
                 <>
-                  {/* STEP 1: Size Selection (fills screen) */}
-                  {stepIndex === 0 && (
-                    <div className="space-y-4">
-                      <h3 className="font-poppins font-bold text-lg text-foreground">Schritt 1: Größe wählen</h3>
-                      <div className="flex flex-col gap-3">
-                        <Button
-                          variant={selectedSize === "klein" ? "default" : "outline"}
-                          onClick={() => {
-                            setSelectedSize("klein");
-                            setStepIndex((baseVariants.length > 0 || flavorVariants.length > 0) ? 1 : 2);
-                          }}
-                          className={`w-full font-poppins font-semibold min-h-[64px] text-base ${
-                            selectedSize === "klein" 
-                              ? "bg-ocean hover:bg-ocean/90 text-white" 
-                              : ""
-                          }`}
-                          data-testid="button-size-klein"
-                        >
-                          <div className="text-center w-full">
-                            <div>Klein</div>
-                            {item.priceSmall && (
-                              <div className="text-sm font-normal">€{item.priceSmall}</div>
-                            )}
-                          </div>
-                        </Button>
-                        <Button
-                          variant={selectedSize === "standard" ? "default" : "outline"}
-                          onClick={() => {
-                            setSelectedSize("standard");
-                            setStepIndex((baseVariants.length > 0 || flavorVariants.length > 0) ? 1 : 2);
-                          }}
-                          className={`w-full font-poppins font-semibold min-h-[64px] text-base ${
-                            selectedSize === "standard" 
-                              ? "bg-ocean hover:bg-ocean/90 text-white" 
-                              : ""
-                          }`}
-                          data-testid="button-size-standard"
-                        >
-                          <div className="text-center w-full">
-                            <div>Standard</div>
-                            {item.price && (
-                              <div className="text-sm font-normal">€{item.price}</div>
-                            )}
-                          </div>
-                        </Button>
-                      </div>
+                  {/* STEP 1: Size Selection - GIANT BUTTONS */}
+                  {stepIndex === 0 && needsSizeSelection && (
+                    <div className="flex flex-col h-full justify-center gap-4">
+                      <h3 className="font-poppins font-bold text-lg text-foreground mb-2">Schritt 1: Größe wählen</h3>
+                      <button
+                        onClick={() => {
+                          setSelectedSize("klein");
+                          setStepIndex(needsVariantSelection ? 1 : 2);
+                        }}
+                        className={`flex-1 font-poppins font-bold text-xl py-6 px-4 rounded-xl transition-all border-2 ${
+                          selectedSize === "klein" 
+                            ? "bg-ocean text-white border-ocean shadow-lg" 
+                            : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
+                        }`}
+                        data-testid="button-size-klein"
+                      >
+                        <div>Klein</div>
+                        {item.priceSmall && (
+                          <div className="text-base font-normal mt-2">€{item.priceSmall}</div>
+                        )}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSelectedSize("standard");
+                          setStepIndex(needsVariantSelection ? 1 : 2);
+                        }}
+                        className={`flex-1 font-poppins font-bold text-xl py-6 px-4 rounded-xl transition-all border-2 ${
+                          selectedSize === "standard" 
+                            ? "bg-ocean text-white border-ocean shadow-lg" 
+                            : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
+                        }`}
+                        data-testid="button-size-standard"
+                      >
+                        <div>Standard</div>
+                        {item.price && (
+                          <div className="text-base font-normal mt-2">€{item.price}</div>
+                        )}
+                      </button>
                     </div>
                   )}
 
-                  {/* STEP 2: Base/Flavor Selection (horizontal scroll) */}
-                  {stepIndex === 1 && (baseVariants.length > 0 || flavorVariants.length > 0) && (
-                    <div className="space-y-4">
+                  {/* STEP 2: Base/Flavor Selection - VERTICAL LIST */}
+                  {stepIndex === 1 && needsVariantSelection && (
+                    <div className="flex flex-col h-full justify-start gap-3">
                       <h3 className="font-poppins font-bold text-lg text-foreground">Schritt 2: Base wählen</h3>
                       
-                      {/* Base Selection */}
-                      {(baseVariants.length > 0) && (
-                        <div className="overflow-x-auto pb-2">
-                          <div className="flex gap-2 min-w-min">
-                            {baseVariants.map((variant) => (
-                              <Button
-                                key={variant.id}
-                                variant={selectedBase === variant.nameDE ? "default" : "outline"}
-                                onClick={() => {
-                                  setSelectedBase(variant.nameDE);
-                                  setStepIndex(2);
-                                }}
-                                className={`font-poppins font-semibold whitespace-nowrap flex-shrink-0 min-h-[48px] px-4 ${
-                                  selectedBase === variant.nameDE 
-                                    ? "bg-ocean hover:bg-ocean/90 text-white" 
-                                    : ""
-                                }`}
-                                data-testid={`button-base-${variant.nameDE}`}
-                              >
-                                {variant.nameDE}
-                              </Button>
-                            ))}
-                          </div>
+                      {/* Base variants */}
+                      {baseVariants.length > 0 && (
+                        <div className="flex flex-col gap-2 flex-grow">
+                          {baseVariants.map((variant) => (
+                            <button
+                              key={variant.id}
+                              onClick={() => {
+                                setSelectedBase(variant.nameDE);
+                                setStepIndex(2);
+                              }}
+                              className={`font-poppins font-semibold py-3 px-4 rounded-lg border-2 transition-all text-left ${
+                                selectedBase === variant.nameDE 
+                                  ? "bg-ocean text-white border-ocean shadow-md" 
+                                  : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
+                              }`}
+                              data-testid={`button-base-${variant.nameDE}`}
+                            >
+                              {variant.nameDE}
+                            </button>
+                          ))}
                         </div>
                       )}
 
-                      {/* Flavor Selection */}
-                      {(flavorVariants.length > 0) && (
-                        <div className="space-y-2">
+                      {/* Flavor variants */}
+                      {flavorVariants.length > 0 && (
+                        <div className="flex flex-col gap-2 flex-grow">
                           {flavorVariants.map((variant) => (
-                            <Button
+                            <button
                               key={variant.id}
-                              variant={selectedFlavorId === variant.id ? "default" : "outline"}
                               onClick={() => {
                                 setSelectedFlavorId(variant.id);
                                 setSelectedFlavor(variant.nameDE);
                                 setStepIndex(2);
                               }}
-                              className={`w-full font-poppins font-semibold min-h-[44px] text-sm justify-start text-left ${
+                              className={`font-poppins font-semibold py-3 px-4 rounded-lg border-2 transition-all text-left ${
                                 selectedFlavorId === variant.id 
-                                  ? "bg-ocean hover:bg-ocean/90 text-white" 
-                                  : ""
+                                  ? "bg-ocean text-white border-ocean shadow-md" 
+                                  : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
                               }`}
                               data-testid={`button-flavor-${variant.nameDE}`}
                             >
                               {variant.nameDE}
-                            </Button>
+                            </button>
                           ))}
                         </div>
                       )}
                     </div>
                   )}
 
-                  {/* STEP 3: Summary and Add to Cart */}
+                  {/* STEP 3: Summary with all details */}
                   {stepIndex === 2 && (
-                    <div className="space-y-4">
-                      <h3 className="font-poppins font-bold text-lg text-foreground">Deine Auswahl:</h3>
-                      <div className="bg-ocean/10 rounded-lg p-3 space-y-2">
-                        <div><span className="font-semibold">Größe:</span> {selectedSize === "klein" ? "Klein" : "Standard"}</div>
-                        {selectedBase && <div><span className="font-semibold">Base:</span> {selectedBase}</div>}
-                        {selectedFlavor && <div><span className="font-semibold">Geschmack:</span> {selectedFlavor}</div>}
+                    <div className="flex flex-col h-full overflow-y-auto space-y-3">
+                      <h3 className="font-poppins font-bold text-lg text-foreground sticky top-0 bg-white dark:bg-gray-800 py-2">Deine Auswahl:</h3>
+                      
+                      {/* Selected Size & Variant */}
+                      <div className="space-y-2 pb-2 border-b border-gray-200 dark:border-gray-700">
+                        {needsSizeSelection && (
+                          <div className="flex items-center gap-2">
+                            <span className="font-poppins font-semibold text-sm">Größe:</span>
+                            <Badge className="bg-ocean text-white">{getSizeName()}</Badge>
+                          </div>
+                        )}
+                        {getBaseOrVariantName() && (
+                          <div className="flex items-center gap-2">
+                            <span className="font-poppins font-semibold text-sm">Variante:</span>
+                            <Badge className="bg-ocean text-white">{getBaseOrVariantName()}</Badge>
+                          </div>
+                        )}
                       </div>
+
+                      {/* Protein */}
+                      {item.protein && (
+                        <div>
+                          <h4 className="font-poppins font-semibold text-sm text-foreground">Protein</h4>
+                          <p className="font-lato text-sm text-muted-foreground">{item.protein}</p>
+                        </div>
+                      )}
+
+                      {/* Marinade */}
+                      {item.marinade && (
+                        <div>
+                          <h4 className="font-poppins font-semibold text-sm text-foreground">Marinade</h4>
+                          <p className="font-lato text-sm text-muted-foreground">{item.marinade}</p>
+                        </div>
+                      )}
+
+                      {/* Ingredients */}
+                      {item.ingredients && item.ingredients.length > 0 && (
+                        <div>
+                          <h4 className="font-poppins font-semibold text-sm text-foreground">Frische Zutaten</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {item.ingredients.map((ingredient, idx) => (
+                              <Badge key={idx} variant="secondary" className="font-lato text-xs" data-testid={`badge-ingredient-${idx}`}>
+                                {ingredient}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Sauce */}
+                      {item.sauce && (
+                        <div>
+                          <h4 className="font-poppins font-semibold text-sm text-foreground">Sauce</h4>
+                          <p className="font-lato text-sm text-muted-foreground">{item.sauce}</p>
+                        </div>
+                      )}
+
+                      {/* Toppings */}
+                      {item.toppings && item.toppings.length > 0 && (
+                        <div>
+                          <h4 className="font-poppins font-semibold text-sm text-foreground">Toppings</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {item.toppings.map((topping, idx) => (
+                              <Badge key={idx} variant="secondary" className="font-lato text-xs" data-testid={`badge-topping-${idx}`}>
+                                {topping}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Allergens */}
+                      {item.allergens && item.allergens.length > 0 && (
+                        <div>
+                          <h4 className="font-poppins font-semibold text-sm text-destructive">Allergene</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {item.allergens.map((allergen, idx) => (
+                              <Badge key={idx} variant="destructive" className="font-lato text-xs" data-testid={`badge-allergen-${idx}`}>
+                                {allergen}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </>
@@ -270,7 +359,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 <>
                   {/* DESKTOP: Show all at once */}
                   {/* Size Selection */}
-                  {(item.hasSizeOptions === 1 || item.priceSmall) && (
+                  {needsSizeSelection && (
                     <div>
                       <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Größe wählen</h4>
                       <div className="flex gap-2">
@@ -359,122 +448,122 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                       </div>
                     </div>
                   )}
+
+                  {/* Flavor Selection (for items like Fritz-Kola) */}
+                  {item.hasVariants === 1 && item.variantType === 'flavor' && flavorVariants.length > 0 && (
+                    <div>
+                      <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Geschmack wählen *</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {flavorVariants.map((variant) => (
+                          <Button
+                            key={variant.id}
+                            variant={selectedFlavorId === variant.id ? "default" : "outline"}
+                            onClick={() => {
+                              setSelectedFlavorId(variant.id);
+                              setSelectedFlavor(variant.nameDE);
+                            }}
+                            className={`font-poppins font-semibold min-h-[44px] text-sm ${
+                              selectedFlavorId === variant.id 
+                                ? "bg-ocean hover:bg-ocean/90 text-white" 
+                                : ""
+                            }`}
+                            data-testid={`button-flavor-${variant.nameDE}`}
+                          >
+                            {variant.nameDE}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Protein */}
+                  {item.protein && (
+                    <div>
+                      <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Protein</h4>
+                      <Badge variant="secondary" className="font-lato text-xs" data-testid="badge-protein">
+                        {item.protein}
+                      </Badge>
+                    </div>
+                  )}
+
+                  {/* Marinade */}
+                  {item.marinade && (
+                    <div>
+                      <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Marinade</h4>
+                      <div className="border-2 border-ocean/30 rounded-lg p-3 bg-ocean/5">
+                        <p className="font-lato text-xs font-medium text-foreground" data-testid="text-marinade">
+                          {item.marinade}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Ingredients */}
+                  {item.ingredients && item.ingredients.length > 0 && (
+                    <div>
+                      <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Frische Zutaten</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {item.ingredients.map((ingredient, idx) => (
+                          <Badge key={idx} variant="outline" className="font-lato text-xs" data-testid={`badge-ingredient-${idx}`}>
+                            {ingredient}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Sauce */}
+                  {item.sauce && (
+                    <div>
+                      <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Sauce</h4>
+                      <div className="border-2 border-sunset/30 rounded-lg p-3 bg-sunset/5">
+                        <p className="font-lato text-xs font-medium text-foreground" data-testid="text-sauce">
+                          {item.sauce}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Toppings */}
+                  {item.toppings && item.toppings.length > 0 && (
+                    <div>
+                      <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Toppings</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {item.toppings.map((topping, idx) => (
+                          <Badge key={idx} variant="outline" className="font-lato text-xs" data-testid={`badge-topping-${idx}`}>
+                            {topping}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Allergens */}
+                  {item.allergens && item.allergens.length > 0 && (
+                    <div>
+                      <h4 className="font-poppins font-semibold text-sm mb-2 text-destructive">Allergene</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {item.allergens.map((allergen, idx) => (
+                          <Badge key={idx} variant="destructive" className="font-lato text-xs" data-testid={`badge-allergen-${idx}`}>
+                            {allergen}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </>
-              )}
-
-              {/* Flavor Selection (for items like Fritz-Kola) */}
-              {item.hasVariants === 1 && item.variantType === 'flavor' && flavorVariants.length > 0 && (
-                <div>
-                  <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Geschmacksrichtung wählen *</h4>
-                  <div className="space-y-2">
-                    {flavorVariants.map((variant) => (
-                      <Button
-                        key={variant.id}
-                        variant={selectedFlavorId === variant.id ? "default" : "outline"}
-                        onClick={() => {
-                          setSelectedFlavorId(variant.id);
-                          setSelectedFlavor(variant.nameDE);
-                        }}
-                        className={`w-full font-poppins font-semibold min-h-[48px] text-sm justify-start text-left ${
-                          selectedFlavorId === variant.id 
-                            ? "bg-ocean hover:bg-ocean/90 text-white" 
-                            : ""
-                        }`}
-                        data-testid={`button-flavor-${variant.nameDE}`}
-                      >
-                        {variant.nameDE}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Protein */}
-              {item.protein && (
-                <div>
-                  <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Protein</h4>
-                  <Badge variant="secondary" className="font-lato text-xs" data-testid="badge-protein">
-                    {item.protein}
-                  </Badge>
-                </div>
-              )}
-
-              {/* Marinade */}
-              {item.marinade && (
-                <div>
-                  <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Marinade</h4>
-                  <div className="border-2 border-ocean/30 rounded-lg p-3 bg-ocean/5">
-                    <p className="font-lato text-xs font-medium text-foreground" data-testid="text-marinade">
-                      {item.marinade}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Ingredients */}
-              {item.ingredients && item.ingredients.length > 0 && (
-                <div>
-                  <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Frische Zutaten</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {item.ingredients.map((ingredient, idx) => (
-                      <Badge key={idx} variant="outline" className="font-lato text-xs" data-testid={`badge-ingredient-${idx}`}>
-                        {ingredient}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Sauce */}
-              {item.sauce && (
-                <div>
-                  <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Sauce</h4>
-                  <div className="border-2 border-sunset/30 rounded-lg p-3 bg-sunset/5">
-                    <p className="font-lato text-xs font-medium text-foreground" data-testid="text-sauce">
-                      {item.sauce}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Toppings */}
-              {item.toppings && item.toppings.length > 0 && (
-                <div>
-                  <h4 className="font-poppins font-semibold text-sm mb-2 text-foreground">Toppings</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {item.toppings.map((topping, idx) => (
-                      <Badge key={idx} variant="outline" className="font-lato text-xs" data-testid={`badge-topping-${idx}`}>
-                        {topping}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Allergens */}
-              {item.allergens && item.allergens.length > 0 && (
-                <div>
-                  <h4 className="font-poppins font-semibold text-sm mb-2 text-destructive">Allergene</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {item.allergens.map((allergen, idx) => (
-                      <Badge key={idx} variant="destructive" className="font-lato text-xs" data-testid={`badge-allergen-${idx}`}>
-                        {allergen}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
               )}
             </div>
 
             {/* Unavailable message */}
             {item.available === 0 && (
-              <p className="text-center text-sm text-destructive font-semibold mt-4" data-testid="text-dialog-unavailable">
+              <p className="text-center text-sm text-destructive font-semibold mt-4 flex-shrink-0" data-testid="text-dialog-unavailable">
                 Derzeit nicht verfügbar
               </p>
             )}
 
-            {/* Footer: Price & Buttons */}
-            <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
+            {/* Footer: Price & Buttons - Fixed at bottom */}
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div>
                   <span className="font-poppins text-2xl sm:text-3xl font-bold text-ocean" data-testid="text-dialog-price">
