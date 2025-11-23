@@ -609,56 +609,55 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
 
             {/* Footer: Price & Buttons - Fixed at bottom */}
             <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div>
-                  <span className="font-poppins text-2xl sm:text-3xl font-bold text-ocean" data-testid="text-dialog-price">
-                    €{getDisplayPrice()}
-                  </span>
-                </div>
-                <div className="flex gap-2 w-full sm:w-auto">
-                  {/* Mobile: Back button for two-step process */}
-                  {isMobile && stepIndex > 0 ? (
-                    <Button
-                      onClick={() => setStepIndex(stepIndex - 1)}
-                      variant="outline"
-                      className="flex-1 sm:flex-initial bg-red-500 hover:bg-red-600 text-white border-red-500 font-poppins font-bold rounded-full px-4 sm:px-6 min-h-[48px] text-sm sm:text-base shadow-lg hover:shadow-xl transition-all"
-                      data-testid="button-step-back"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                      <span className="ml-1">Zurück</span>
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={onClose}
-                      variant="outline"
-                      className="flex-1 sm:flex-initial bg-red-500 hover:bg-red-600 text-white border-red-500 font-poppins font-bold rounded-full px-4 sm:px-6 min-h-[48px] text-sm sm:text-base shadow-lg hover:shadow-xl transition-all"
-                      data-testid="button-dialog-back"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                      <span className="hidden sm:inline ml-1">Zurück</span>
-                    </Button>
-                  )}
+              <div className="flex items-center justify-between gap-2">
+                {/* Back Button - Mobile: Symbol only, Desktop: With text */}
+                {isMobile && stepIndex > 0 ? (
                   <Button
-                    onClick={() => {
-                      onAddToCart(
-                        item, 
-                        item.hasSizeOptions === 1 ? selectedSize : undefined, 
-                        item.enableBaseSelection === 1 ? selectedBase : undefined,
-                        undefined,
-                        undefined,
-                        item.hasVariants === 1 && item.variantType === 'flavor' ? selectedFlavorId : undefined,
-                        item.hasVariants === 1 && item.variantType === 'flavor' ? selectedFlavor : undefined
-                      );
-                      onClose();
-                    }}
-                    disabled={item.available === 0 || (baseVariants.length > 0 && !selectedBase) || (flavorVariants.length > 0 && !selectedFlavorId) || (isMobile && stepIndex < 2 && (baseVariants.length > 0 || flavorVariants.length > 0))}
-                    className="flex-1 sm:flex-initial bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full px-6 sm:px-8 min-h-[48px] text-sm sm:text-base shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    data-testid="button-dialog-add-to-cart"
+                    onClick={() => setStepIndex(stepIndex - 1)}
+                    variant="outline"
+                    className="bg-red-500 hover:bg-red-600 text-white border-red-500 font-poppins font-bold rounded-full w-12 h-12 p-0 min-h-0 shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+                    data-testid="button-step-back"
                   >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Hinzufügen
+                    <ChevronLeft className="w-5 h-5" />
                   </Button>
-                </div>
+                ) : (
+                  <Button
+                    onClick={onClose}
+                    variant="outline"
+                    className="bg-red-500 hover:bg-red-600 text-white border-red-500 font-poppins font-bold rounded-full sm:px-6 sm:min-h-[48px] w-12 h-12 sm:w-auto sm:h-auto p-0 sm:p-4 min-h-0 sm:min-h-12 shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+                    data-testid="button-dialog-back"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                    <span className="hidden sm:inline ml-2">Zurück</span>
+                  </Button>
+                )}
+
+                {/* Price - Center */}
+                <span className="font-poppins text-xl sm:text-2xl font-bold text-ocean flex-grow text-center" data-testid="text-dialog-price">
+                  €{getDisplayPrice()}
+                </span>
+
+                {/* Add to Cart Button - Mobile: Symbol only, Desktop: With text */}
+                <Button
+                  onClick={() => {
+                    onAddToCart(
+                      item, 
+                      item.hasSizeOptions === 1 ? selectedSize : undefined, 
+                      item.enableBaseSelection === 1 ? selectedBase : undefined,
+                      undefined,
+                      undefined,
+                      item.hasVariants === 1 && item.variantType === 'flavor' ? selectedFlavorId : undefined,
+                      item.hasVariants === 1 && item.variantType === 'flavor' ? selectedFlavor : undefined
+                    );
+                    onClose();
+                  }}
+                  disabled={item.available === 0 || (baseVariants.length > 0 && !selectedBase) || (flavorVariants.length > 0 && !selectedFlavorId) || (isMobile && stepIndex < 2 && (baseVariants.length > 0 || flavorVariants.length > 0))}
+                  className="bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full sm:px-8 sm:min-h-[48px] w-12 h-12 sm:w-auto sm:h-auto p-0 sm:p-4 min-h-0 sm:min-h-12 shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  data-testid="button-dialog-add-to-cart"
+                >
+                  <Plus className="w-5 h-5" />
+                  <span className="hidden sm:inline ml-2">Hinzufügen</span>
+                </Button>
               </div>
             </div>
           </div>
