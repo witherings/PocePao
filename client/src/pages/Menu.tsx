@@ -101,22 +101,11 @@ export default function Menu() {
     // Determine price based on priority
     let finalPrice = "";
     
-    console.log('💳 handleAddToCart INPUTS:', {
-      customPrice,
-      customPriceType: typeof customPrice,
-      customPriceParsed: customPrice ? parseFloat(customPrice) : 'null',
-      itemPrice: item.price,
-      size,
-      hasCustomization: !!customization,
-      item: item.nameDE
-    });
-    
     // Priority 1: If custom price is provided (for custom bowls)
     if (customPrice !== undefined && customPrice !== null && customPrice !== "") {
       const parsedPrice = parseFloat(customPrice);
       if (!isNaN(parsedPrice) && parsedPrice > 0) {
         finalPrice = parsedPrice.toFixed(2);
-        console.log('✅ Using custom price:', finalPrice);
       } else {
         console.warn('⚠️ Invalid customPrice provided:', customPrice);
         finalPrice = "0.00";
@@ -131,15 +120,11 @@ export default function Menu() {
       } else {
         finalPrice = parseFloat(String(item.price || "0")).toFixed(2);
       }
-      console.log('✅ Using size-based price:', finalPrice);
     }
     // Priority 3: Use item's regular price as fallback
     else {
       finalPrice = parseFloat(String(item.price || "0")).toFixed(2);
-      console.log('✅ Using item price:', finalPrice);
     }
-    
-    console.log('💳 FINAL PRICE:', finalPrice);
 
     // If editing, update existing item
     if (editingItemId) {
