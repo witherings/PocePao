@@ -37,17 +37,19 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 - **Health Monitoring:** `/api/health` endpoint for deployment platform monitoring.
 
 ### Recent Changes (November 23, 2025 - MOBILE UX OPTIMIZATION - COMPLETE REDESIGN)
-**✅ MOBILE INTERFACE COMPLETELY REDESIGNED - GIANT SIZE BUTTONS + VERTICAL BASE LIST + FULL DETAILS**
-- ✅ **Step 1: Size Selection - GIANT BUTTONS FILL ENTIRE SPACE**
-  - Klein/Standard buttons take all available height between image & footer buttons
-  - Huge touch targets for mobile users
+**✅ MOBILE INTERFACE COMPLETELY REDESIGNED - RESPONSIVE LAYOUT FITS ANY SCREEN**
+- ✅ **Step 1: Size Selection - FILLS 100% AVAILABLE SPACE**
+  - Klein/Standard buttons use CSS Grid (grid-rows-2) - fills all space between image & footer
+  - Zero gap, minimal padding - maximum space for touch targets
+  - Works perfectly on iPhone SE, iPad, all screen sizes
   - Shows price on each size button
   - Auto-skips if item has no size options
 
-- ✅ **Step 2: Base/Variant Selection - VERTICAL LIST (auto-adjusts to content)**
-  - Vertical buttons fill available space efficiently
-  - Adapts number of items (few bases = larger buttons, many bases = fitted layout)
-  - Clean list from top to bottom
+- ✅ **Step 2: Base/Variant Selection - DYNAMIC GRID (scales to content)**
+  - Vertical buttons use CSS Grid with dynamic row count
+  - Single base/flavor only: full grid for maximum button size
+  - Multiple variants: scales down but no scrolling needed
+  - All buttons visible at once on screen
   - Auto-skips if item has no base/variant selection
 
 - ✅ **Step 3: Beautiful Summary with ALL Details**
@@ -60,8 +62,13 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
     - **Sauce** (text)
     - **Toppings** (tags/badges)
     - **Allergene** (red tags/badges)
-  - No scrolling interruptions - all info visible
+  - This section scrolls if needed (summary is secondary)
   - Perfect information hierarchy
+
+- ✅ **NO SCROLLING on Selection Steps:**
+  - Step 1 (Size): Always fits without scroll (2 buttons = 50% each)
+  - Step 2 (Base): Adapts to number of variants, no scroll
+  - Works on tiny screens (iPhone SE) up to tablets
 
 - ✅ **Removed Product Description on Mobile:**
   - Description only shown on desktop (saves critical space)
@@ -75,6 +82,13 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
   - Items WITHOUT size options skip directly to base selection
   - Items WITHOUT base/variant skip directly to summary
   - Items with neither skip all steps, go straight to add-to-cart
+
+**Technical Implementation:**
+- Uses CSS Grid for precise responsive scaling
+- `min-h-0` on flex containers for proper height distribution
+- Dynamic `gridTemplateRows: repeat(N, 1fr)` for button counts
+- Minimal spacing: `gap-1`, padding `px-2 py-1` for compact layout
+- All buttons use `flex items-center justify-center` for perfect text centering
 
 ### Recent Changes (November 23, 2025 - TELEGRAM BOT MESSAGING OVERHAUL)
 **✅ TELEGRAM BOT - COMPLETE GERMAN NOTIFICATIONS WITH FULL ORDER DETAILS**

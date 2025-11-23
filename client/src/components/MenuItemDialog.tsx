@@ -167,59 +167,61 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
             )}
 
             {/* MOBILE & DESKTOP CONTENT - FLEX GROW */}
-            <div className="flex-grow overflow-y-auto space-y-4">
+            <div className="flex-grow overflow-hidden flex flex-col min-h-0">
               {/* MOBILE STEPS */}
               {isMobile ? (
                 <>
-                  {/* STEP 1: Size Selection - GIANT BUTTONS */}
+                  {/* STEP 1: Size Selection - GIANT BUTTONS FILL ALL SPACE */}
                   {stepIndex === 0 && needsSizeSelection && (
-                    <div className="flex flex-col h-full justify-center gap-4">
-                      <h3 className="font-poppins font-bold text-lg text-foreground mb-2">Schritt 1: Größe wählen</h3>
-                      <button
-                        onClick={() => {
-                          setSelectedSize("klein");
-                          setStepIndex(needsVariantSelection ? 1 : 2);
-                        }}
-                        className={`flex-1 font-poppins font-bold text-xl py-6 px-4 rounded-xl transition-all border-2 ${
-                          selectedSize === "klein" 
-                            ? "bg-ocean text-white border-ocean shadow-lg" 
-                            : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
-                        }`}
-                        data-testid="button-size-klein"
-                      >
-                        <div>Klein</div>
-                        {item.priceSmall && (
-                          <div className="text-base font-normal mt-2">€{item.priceSmall}</div>
-                        )}
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSelectedSize("standard");
-                          setStepIndex(needsVariantSelection ? 1 : 2);
-                        }}
-                        className={`flex-1 font-poppins font-bold text-xl py-6 px-4 rounded-xl transition-all border-2 ${
-                          selectedSize === "standard" 
-                            ? "bg-ocean text-white border-ocean shadow-lg" 
-                            : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
-                        }`}
-                        data-testid="button-size-standard"
-                      >
-                        <div>Standard</div>
-                        {item.price && (
-                          <div className="text-base font-normal mt-2">€{item.price}</div>
-                        )}
-                      </button>
+                    <div className="flex flex-col h-full min-h-0">
+                      <h3 className="font-poppins font-bold text-base text-foreground mb-1 flex-shrink-0">Schritt 1: Größe wählen</h3>
+                      <div className="grid grid-rows-2 gap-1 flex-grow min-h-0">
+                        <button
+                          onClick={() => {
+                            setSelectedSize("klein");
+                            setStepIndex(needsVariantSelection ? 1 : 2);
+                          }}
+                          className={`font-poppins font-bold text-lg px-2 py-1 rounded-lg border-2 transition-all flex flex-col items-center justify-center ${
+                            selectedSize === "klein" 
+                              ? "bg-ocean text-white border-ocean shadow-lg" 
+                              : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
+                          }`}
+                          data-testid="button-size-klein"
+                        >
+                          <div>Klein</div>
+                          {item.priceSmall && (
+                            <div className="text-sm font-normal">€{item.priceSmall}</div>
+                          )}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSelectedSize("standard");
+                            setStepIndex(needsVariantSelection ? 1 : 2);
+                          }}
+                          className={`font-poppins font-bold text-lg px-2 py-1 rounded-lg border-2 transition-all flex flex-col items-center justify-center ${
+                            selectedSize === "standard" 
+                              ? "bg-ocean text-white border-ocean shadow-lg" 
+                              : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
+                          }`}
+                          data-testid="button-size-standard"
+                        >
+                          <div>Standard</div>
+                          {item.price && (
+                            <div className="text-sm font-normal">€{item.price}</div>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   )}
 
-                  {/* STEP 2: Base/Flavor Selection - VERTICAL LIST */}
+                  {/* STEP 2: Base/Flavor Selection - FILL ALL AVAILABLE SPACE */}
                   {stepIndex === 1 && needsVariantSelection && (
-                    <div className="flex flex-col h-full justify-start gap-3">
-                      <h3 className="font-poppins font-bold text-lg text-foreground">Schritt 2: Base wählen</h3>
+                    <div className="flex flex-col h-full min-h-0">
+                      <h3 className="font-poppins font-bold text-base text-foreground mb-1 flex-shrink-0">Schritt 2: Base wählen</h3>
                       
                       {/* Base variants */}
-                      {baseVariants.length > 0 && (
-                        <div className="flex flex-col gap-2 flex-grow">
+                      {baseVariants.length > 0 && flavorVariants.length === 0 && (
+                        <div className={`grid gap-1 flex-grow min-h-0`} style={{ gridTemplateRows: `repeat(${baseVariants.length}, 1fr)` }}>
                           {baseVariants.map((variant) => (
                             <button
                               key={variant.id}
@@ -227,7 +229,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                                 setSelectedBase(variant.nameDE);
                                 setStepIndex(2);
                               }}
-                              className={`font-poppins font-semibold py-3 px-4 rounded-lg border-2 transition-all text-left ${
+                              className={`font-poppins font-semibold px-2 py-1 rounded-lg border-2 transition-all text-left flex items-center justify-center ${
                                 selectedBase === variant.nameDE 
                                   ? "bg-ocean text-white border-ocean shadow-md" 
                                   : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
@@ -241,8 +243,8 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                       )}
 
                       {/* Flavor variants */}
-                      {flavorVariants.length > 0 && (
-                        <div className="flex flex-col gap-2 flex-grow">
+                      {flavorVariants.length > 0 && baseVariants.length === 0 && (
+                        <div className={`grid gap-1 flex-grow min-h-0`} style={{ gridTemplateRows: `repeat(${flavorVariants.length}, 1fr)` }}>
                           {flavorVariants.map((variant) => (
                             <button
                               key={variant.id}
@@ -251,7 +253,48 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                                 setSelectedFlavor(variant.nameDE);
                                 setStepIndex(2);
                               }}
-                              className={`font-poppins font-semibold py-3 px-4 rounded-lg border-2 transition-all text-left ${
+                              className={`font-poppins font-semibold px-2 py-1 rounded-lg border-2 transition-all text-left flex items-center justify-center ${
+                                selectedFlavorId === variant.id 
+                                  ? "bg-ocean text-white border-ocean shadow-md" 
+                                  : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
+                              }`}
+                              data-testid={`button-flavor-${variant.nameDE}`}
+                            >
+                              {variant.nameDE}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Both base and flavor */}
+                      {baseVariants.length > 0 && flavorVariants.length > 0 && (
+                        <div className="flex flex-col gap-1 min-h-0 flex-grow overflow-y-auto">
+                          {baseVariants.map((variant) => (
+                            <button
+                              key={variant.id}
+                              onClick={() => {
+                                setSelectedBase(variant.nameDE);
+                                setStepIndex(2);
+                              }}
+                              className={`font-poppins font-semibold px-2 py-1 rounded-lg border-2 transition-all text-left flex items-center justify-center flex-shrink-0 ${
+                                selectedBase === variant.nameDE 
+                                  ? "bg-ocean text-white border-ocean shadow-md" 
+                                  : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
+                              }`}
+                              data-testid={`button-base-${variant.nameDE}`}
+                            >
+                              {variant.nameDE}
+                            </button>
+                          ))}
+                          {flavorVariants.map((variant) => (
+                            <button
+                              key={variant.id}
+                              onClick={() => {
+                                setSelectedFlavorId(variant.id);
+                                setSelectedFlavor(variant.nameDE);
+                                setStepIndex(2);
+                              }}
+                              className={`font-poppins font-semibold px-2 py-1 rounded-lg border-2 transition-all text-left flex items-center justify-center flex-shrink-0 ${
                                 selectedFlavorId === variant.id 
                                   ? "bg-ocean text-white border-ocean shadow-md" 
                                   : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
@@ -268,8 +311,8 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
 
                   {/* STEP 3: Summary with all details */}
                   {stepIndex === 2 && (
-                    <div className="flex flex-col h-full overflow-y-auto space-y-3">
-                      <h3 className="font-poppins font-bold text-lg text-foreground sticky top-0 bg-white dark:bg-gray-800 py-2">Deine Auswahl:</h3>
+                    <div className="flex flex-col h-full overflow-y-auto min-h-0">
+                      <h3 className="font-poppins font-bold text-base text-foreground sticky top-0 bg-white dark:bg-gray-800 py-1 mb-2 flex-shrink-0">Deine Auswahl:</h3>
                       
                       {/* Selected Size & Variant */}
                       <div className="space-y-2 pb-2 border-b border-gray-200 dark:border-gray-700">
