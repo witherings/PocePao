@@ -433,3 +433,105 @@ export function registerSnapshotRoutes(app: Express) {
     }
   });
 }
+
+  // Download snapshot as ZIP with DB dump and media files
+  app.get("/api/admin/snapshots/:id/download", ensureAuthenticated, async (req, res) => {
+    try {
+      const archiver = await import("archiver");
+      const fs = await import("fs");
+      const path = await import("path");
+      
+      const db = await getDb();
+      const snapshotId = req.params.id;
+      
+      // Verify snapshot exists
+      const [snapshot] = await db
+        .select()
+        .from(snapshots)
+        .where(eq(snapshots.id, snapshotId))
+        .limit(1);
+      
+      if (!snapshot) {
+        return res.status(404).json({ error: "Snapshot not found" });
+      }
+      
+      // Create ZIP archive
+      const archive = archiver.default("zip", { zlib: { level: 9 } });
+      res.setHeader("Content-Type", "application/zip");
+      res.setHeader("Content-Disposition", `attachment; filename="pokepao-snapshot-${snapshotId}.zip"`);
+      
+      archive.pipe(res);
+      
+      // Add database dump
+      try {
+        const snapshotCats = await db
+          .select()
+          .from(snapshotCategories)
+          .where(eq(snapshotCategories.snapshotId, snapshotId));
+        
+        const snapshotIngs = await db
+          .select()
+          .from(snapshotIngredients)
+          .where(eq(snapshotIngredients.snapshotId, snapshotId));
+        
+        const snapshotItems = await db
+          .select()
+          .from(snapshotMenuItems)
+          .where(eq(snapshotMenuItems.snapshotId, snapshotId));
+        
+        const snapshotGallery = await db
+          .select()
+          .from(snapshotGalleryImages)
+          .where(eq(snapshotGalleryImages.snapshotId, snapshotId));
+        
+        const snapshotStatic = await db
+          .select()
+          .from(snapshotStaticContent)
+          .where(eq(snapshotStaticContent.snapshotId, snapshotId));
+        
+        // Generate SQL dump
+        let sqlDump = "-- PokePao Snapshot Export\n";
+        sqlDump += `-- Created: ${new Date().toISOString()}\n\n`;
+        
+        if (snapshotCats.length > 0) {
+          sqlDump += "-- Categories\n";
+          snapshotCats.forEach((cat: any) => {
+            sqlDump += `INSERT INTO categories (id, name, name_de, icon, \`order\`) VALUES ('${cat.originalCategoryId}', '${cat.name}', '${cat.nameDE}', '${cat.icon}', ${cat.order});\n`;
+          });
+          sqlDump += "\n";
+        }
+        
+        if (snapshotIngs.length > 0) {
+          sqlDump += "-- Ingredients\n";
+          snapshotIngs.forEach((ing: any) => {
+            const price = ing.price ? parseFloat(String(ing.price)) : 0;
+            const extraPrice = ing.extraPrice ? parseFloat(String(ing.extraPrice)) : 0;
+            sqlDump += `INSERT INTO ingredients (id, name, name_de, type, price, extra_price) VALUES ('${ing.originalIngredientId}', '${ing.name}', '${ing.nameDE}', '${ing.ingredientType}', ${price}, ${extraPrice});\n`;
+          });
+          sqlDump += "\n";
+        }
+        
+        archive.append(sqlDump, { name: "db_dump.sql" });
+      } catch (err) {
+        console.warn("Could not generate SQL dump:", err);
+      }
+      
+      // Add media files from public/media
+      const mediaPath = path.resolve(process.cwd(), "public", "media");
+      if (fs.existsSync(mediaPath)) {
+        archive.directory(mediaPath, "media");
+      }
+      
+      // Add menu images from public/images
+      const imagesPath = path.resolve(process.cwd(), "public", "images");
+      if (fs.existsSync(imagesPath)) {
+        archive.directory(imagesPath, "images");
+      }
+      
+      archive.finalize();
+      
+    } catch (error: any) {
+      console.error("Error downloading snapshot:", error);
+      res.status(500).json({ error: "Failed to download snapshot" });
+    }
+  });

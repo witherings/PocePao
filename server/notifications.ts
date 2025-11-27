@@ -1,4 +1,4 @@
-import type { Order, OrderItem, CustomBowlSelection } from "@shared/schema";
+import type { Order, OrderItem, CustomBowlSelection, Ingredient } from "@shared/schema";
 
 interface NotificationService {
   sendOrderNotification(order: Order, items: OrderItem[]): Promise<void>;
@@ -68,6 +68,47 @@ class TelegramNotificationService implements NotificationService {
     }
   }
 
+  private formatExtrasWithPrices(customization: CustomBowlSelection | null, ingredients: any[]): string[] {
+    if (!customization) return [];
+    
+    const lines: string[] = [];
+    const createIngredientMap = (ids: string[] | undefined) => {
+      if (!ids || ids.length === 0) return [];
+      return ids.map(id => {
+        const ing = ingredients.find((i: any) => i.name === id);
+        if (ing) {
+          const extraPrice = ing.extraPrice ? parseFloat(String(ing.extraPrice)) : (ing.price ? parseFloat(String(ing.price)) : 0);
+          return `${ing.nameDE}: €${extraPrice.toFixed(2)}`;
+        }
+        return `${id}: €0.00`;
+      });
+    };
+
+    const baseExtras = createIngredientMap(customization.extraBase);
+    const proteinExtras = createIngredientMap(customization.extraProtein);
+    const freshExtras = createIngredientMap(customization.extraFreshIngredients);
+    const sauceExtras = createIngredientMap(customization.extraSauces);
+    const toppingExtras = createIngredientMap(customization.extraToppings);
+
+    if (baseExtras.length > 0) {
+      lines.push(`      • Extra Base: ${baseExtras.join(", ")}`);
+    }
+    if (proteinExtras.length > 0) {
+      lines.push(`      • Extra Protein: ${proteinExtras.join(", ")}`);
+    }
+    if (freshExtras.length > 0) {
+      lines.push(`      • Extra Frisch: ${freshExtras.join(", ")}`);
+    }
+    if (sauceExtras.length > 0) {
+      lines.push(`      • Extra Sauce: ${sauceExtras.join(", ")}`);
+    }
+    if (toppingExtras.length > 0) {
+      lines.push(`      • Extra Topping: ${toppingExtras.join(", ")}`);
+    }
+
+    return lines;
+  }
+
   private formatCustomization(customization: CustomBowlSelection | null, size?: string | null): string {
     if (!customization) return "";
 
@@ -135,6 +176,17 @@ class TelegramNotificationService implements NotificationService {
     const itemsDetails: string[] = [];
     let calculatedTotal = 0;
 
+    // Fetch all ingredients for price calculation (needed for extras breakdown)
+    let allIngredients: Ingredient[] = [];
+    try {
+      const { getDb } = await import("./db");
+      const { ingredients } = await import("@shared/schema");
+      const db = await getDb();
+      allIngredients = await db.select().from(ingredients);
+    } catch (err) {
+      console.warn("Could not fetch ingredients for detailed pricing:", err);
+    }
+
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       const itemPrice = parseFloat(item.price || "0");
@@ -173,6 +225,15 @@ class TelegramNotificationService implements NotificationService {
         if (customDetails) {
           itemsDetails.push(`   <b>📋 Zusammenstellung:</b>`);
           itemsDetails.push(customDetails);
+        }
+        
+        // Add extras price breakdown if available
+        if (allIngredients.length > 0) {
+          const extrasLines = this.formatExtrasWithPrices(customization, allIngredients);
+          if (extrasLines.length > 0) {
+            itemsDetails.push(`   <b>➕ Extras Details:</b>`);
+            itemsDetails.push(extrasLines.join("\n"));
+          }
         }
       }
 
