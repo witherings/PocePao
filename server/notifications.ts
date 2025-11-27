@@ -74,7 +74,7 @@ class TelegramNotificationService implements NotificationService {
     const lines: string[] = [];
     const createIngredientMap = (ids: string[] | undefined) => {
       if (!ids || ids.length === 0) return [];
-      return ids.map(id => {
+      return ids.map((id: string) => {
         const ing = ingredients.find((i: any) => i.name === id);
         if (ing) {
           const extraPrice = ing.extraPrice ? parseFloat(String(ing.extraPrice)) : (ing.price ? parseFloat(String(ing.price)) : 0);
