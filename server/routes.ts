@@ -805,6 +805,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get ingredient image with auto-matching by ingredient name and fallback
+  app.get("/api/ingredients/:id/image", async (req, res) => {
+    try {
+      const db = await getDb();
+      const { id } = req.params;
+
+      // Get ingredient
+      const [ingredient] = await db
+        .select()
+        .from(ingredients)
+        .where(eq(ingredients.id, id));
+
+      if (!ingredient) {
+        return res.status(404).json({ error: "Ingredient not found" });
+      }
+
+      // If ingredient already has an image, return it
+      if (ingredient.image) {
+        return res.json({ imageUrl: ingredient.image });
+      }
+
+      // Try to find image file by ingredient name in uploads directory
+      try {
+        const files = await fs.readdir(uploadDir);
+        const ingredientNameLower = ingredient.name.toLowerCase().replace(/\s+/g, "-");
+        
+        for (const file of files) {
+          const fileLower = file.toLowerCase();
+          if (fileLower.includes(ingredientNameLower)) {
+            const imageUrl = `/uploads/${file}`;
+            console.log(`✅ Found image for ingredient ${ingredient.name}: ${imageUrl}`);
+            return res.json({ imageUrl });
+          }
+        }
+      } catch (err) {
+        console.warn("Could not search uploads directory:", err);
+      }
+
+      // Return fallback placeholder image
+      const placeholderUrl = "/images/vitamins-bowl.png";
+      console.log(`⚠️ No image found for ingredient ${ingredient.name}, using placeholder`);
+      res.json({ imageUrl: placeholderUrl, placeholder: true });
+    } catch (error: any) {
+      console.error("Error fetching ingredient image:", error);
+      res.status(500).json({ error: "Failed to fetch ingredient image" });
+    }
+  });
+
   // Register admin routes
   registerAdminRoutes(app);
   

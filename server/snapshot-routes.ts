@@ -19,6 +19,9 @@ import {
   type GalleryImage,
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
+import archiver from "archiver";
+import path from "path";
+import { promises as fs } from "fs";
 
 export function registerSnapshotRoutes(app: Express) {
   
@@ -430,6 +433,83 @@ export function registerSnapshotRoutes(app: Express) {
     } catch (error: any) {
       console.error("Error deleting snapshot:", error);
       res.status(500).json({ error: "Failed to delete snapshot" });
+    }
+  });
+
+  // Download snapshot as ZIP archive with DB dump and media files
+  app.get("/api/admin/snapshots/:id/download", ensureAuthenticated, async (req, res) => {
+    try {
+      const db = await getDb();
+      const snapshotId = req.params.id;
+
+      // Get snapshot metadata
+      const [snapshot] = await db
+        .select()
+        .from(snapshots)
+        .where(eq(snapshots.id, snapshotId));
+
+      if (!snapshot) {
+        return res.status(404).json({ error: "Snapshot not found" });
+      }
+
+      // Create ZIP archive
+      const archive = archiver("zip", { zlib: { level: 9 } });
+      
+      // Set response headers for download
+      res.setHeader("Content-Type", "application/zip");
+      res.setHeader("Content-Disposition", `attachment; filename="snapshot-${snapshot.name}-${Date.now()}.zip"`);
+
+      archive.pipe(res);
+
+      // Add SQL dump to ZIP
+      const sqlDump = `-- Snapshot: ${snapshot.name}
+-- Created: ${snapshot.createdAt}
+-- ID: ${snapshot.id}
+
+-- Snapshot Categories
+${JSON.stringify(await db.select().from(snapshotCategories).where(eq(snapshotCategories.snapshotId, snapshotId)), null, 2)}
+
+-- Snapshot Menu Items  
+${JSON.stringify(await db.select().from(snapshotMenuItems).where(eq(snapshotMenuItems.snapshotId, snapshotId)), null, 2)}
+
+-- Snapshot Ingredients
+${JSON.stringify(await db.select().from(snapshotIngredients).where(eq(snapshotIngredients.snapshotId, snapshotId)), null, 2)}
+
+-- Snapshot Gallery
+${JSON.stringify(await db.select().from(snapshotGalleryImages).where(eq(snapshotGalleryImages.snapshotId, snapshotId)), null, 2)}
+
+-- Snapshot Static Content
+${JSON.stringify(await db.select().from(snapshotStaticContent).where(eq(snapshotStaticContent.snapshotId, snapshotId)), null, 2)}
+`;
+      
+      archive.append(sqlDump, { name: "snapshot_dump.sql" });
+
+      // Try to add referenced media files
+      const uploadDir = process.env.UPLOAD_DIR || 
+                       (process.env.NODE_ENV === 'production' ? '/data/uploads' : path.join(process.cwd(), "uploads"));
+      
+      try {
+        const files = await fs.readdir(uploadDir, { recursive: true });
+        for (const file of files) {
+          const filePath = path.join(uploadDir, String(file));
+          try {
+            const stat = await fs.stat(filePath);
+            if (stat.isFile()) {
+              const relPath = path.relative(uploadDir, filePath);
+              archive.file(filePath, { name: `media/${relPath}` });
+            }
+          } catch (err) {
+            console.warn(`Could not add file to archive: ${filePath}`);
+          }
+        }
+      } catch (err) {
+        console.warn("Could not read upload directory for media files:", err);
+      }
+
+      await archive.finalize();
+    } catch (error: any) {
+      console.error("Error downloading snapshot:", error);
+      res.status(500).json({ error: "Failed to download snapshot" });
     }
   });
 }
