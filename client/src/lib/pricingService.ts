@@ -77,7 +77,6 @@ export const pricingService = {
       }
     };
 
-    (selections.extraBase || []).forEach(id => addExtraPrice(id, "Extra Base"));
     (selections.extraProtein || []).forEach(id => addExtraPrice(id, "Extra Protein"));
     (selections.extraFreshIngredients || []).forEach(id => addExtraPrice(id, "Extra Frisch"));
     (selections.extraSauces || []).forEach(id => addExtraPrice(id, "Extra Sauce"));

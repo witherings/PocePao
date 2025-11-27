@@ -84,15 +84,11 @@ class TelegramNotificationService implements NotificationService {
       });
     };
 
-    const baseExtras = createIngredientMap(customization.extraBase);
     const proteinExtras = createIngredientMap(customization.extraProtein);
     const freshExtras = createIngredientMap(customization.extraFreshIngredients);
     const sauceExtras = createIngredientMap(customization.extraSauces);
     const toppingExtras = createIngredientMap(customization.extraToppings);
 
-    if (baseExtras.length > 0) {
-      lines.push(`      • Extra Base: ${baseExtras.join(", ")}`);
-    }
     if (proteinExtras.length > 0) {
       lines.push(`      • Extra Protein: ${proteinExtras.join(", ")}`);
     }
