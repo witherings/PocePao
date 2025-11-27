@@ -93,6 +93,7 @@ export function registerSnapshotRoutes(app: Express) {
               price: ing.price,
               priceSmall: ing.priceSmall,
               priceStandard: ing.priceStandard,
+              extraPrice: ing.extraPrice, // Save extra price for extras
               available: ing.available,
               order: ing.order || 0,
               originalIngredientId: ing.id,
@@ -296,6 +297,7 @@ export function registerSnapshotRoutes(app: Express) {
               price: ing.price,
               priceSmall: ing.priceSmall,
               priceStandard: ing.priceStandard,
+              extraPrice: ing.extraPrice, // Restore extra price for extras
               available: ing.available,
               order: ing.order || 0, // Add order field if missing
             }))

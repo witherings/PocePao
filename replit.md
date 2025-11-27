@@ -36,6 +36,29 @@ The application follows a full-stack architecture with a React 18 (TypeScript) f
 - **Menu Ordering:** ID-based sorting in the storage layer for consistent display.
 - **Health Monitoring:** `/api/health` endpoint for deployment platform monitoring.
 
+### Recent Changes (November 27, 2025 - PRICING SERVICE & EXTRA PRICE FIELD)
+**✅ CENTRALIZED PRICING SERVICE WITH SEPARATE BASE/EXTRA PRICES**
+- ✅ **Added `extraPrice` field to ingredients schema:** Separate price field for extras, distinct from base `price` field
+  - Updated `shared/schema.ts` with `extraPrice` column for both `ingredients` and `snapshotIngredients` tables
+  - Schema pushed to PostgreSQL database
+  
+- ✅ **Created centralized pricing service:** `client/src/lib/pricingService.ts`
+  - `getProteinPrice(ingredient, size)`: Returns correct protein price based on bowl size (klein/standard)
+  - `getExtraPrice(ingredient)`: Returns `extraPrice` if set, falls back to `price`
+  - `calculateWunschbowlPrice(selections, size, ingredients)`: Full price breakdown calculation
+  - `getMinProteinPrices(ingredients)`: Gets minimum prices for Klein/Standard sizes
+  - `formatPrice(price)` / `formatPriceWithCurrency(price)`: Consistent formatting utilities
+
+- ✅ **Updated BowlBuilderDialog to use pricing service:**
+  - All price calculations now use centralized `pricingService`
+  - Extra ingredient displays use `pricingService.getExtraPrice()` instead of raw `ingredient.price`
+  - Protein prices use `pricingService.getProteinPrice()` for size-based pricing
+  - Price range calculations use `pricingService.getMinProteinPrices()`
+
+- ✅ **Updated snapshot system for extraPrice:**
+  - `server/snapshot-routes.ts` now saves and restores `extraPrice` field
+  - Snapshots maintain complete fidelity with extra price data
+
 ### Recent Changes (November 23, 2025 - MOBILE UX OPTIMIZATION - COMPLETE REDESIGN)
 **✅ MOBILE INTERFACE COMPLETELY REDESIGNED - RESPONSIVE LAYOUT FITS ANY SCREEN**
 - ✅ **Step 1: Size Selection - FILLS 100% AVAILABLE SPACE**

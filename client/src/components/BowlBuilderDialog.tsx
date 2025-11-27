@@ -10,6 +10,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useCartStore } from "@/lib/cartStore";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import { motion, AnimatePresence } from "framer-motion";
+import { pricingService } from "@/lib/pricingService";
 
 interface BowlBuilderDialogProps {
   item: MenuItem | null;
@@ -266,72 +267,17 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
   };
 
   const getSizePrice = (size: "klein" | "standard") => {
-    // Get selected protein from DB
-    const selectedProtein = selections.protein 
-      ? ingredients.find(ing => ing.id === selections.protein)
-      : null;
+    // Use centralized pricing service for calculation
+    const breakdown = pricingService.calculateWunschbowlPrice(selections, size, ingredients);
     
-    let totalPrice = 0;
-    const breakdown: { protein: number; extras: Array<{ name?: string; price: number }> } = { protein: 0, extras: [] };
-
-    // Add protein price based on size (from database)
-    if (selectedProtein) {
-      let proteinPrice = 0;
-      
-      if (size === "klein") {
-        proteinPrice = selectedProtein.priceSmall 
-          ? parseFloat(String(selectedProtein.priceSmall))
-          : selectedProtein.price 
-            ? parseFloat(String(selectedProtein.price))
-            : 0;
-      } else if (size === "standard") {
-        proteinPrice = selectedProtein.priceStandard 
-          ? parseFloat(String(selectedProtein.priceStandard))
-          : selectedProtein.price 
-            ? parseFloat(String(selectedProtein.price))
-            : 0;
-      }
-      
-      totalPrice += proteinPrice;
-      breakdown.protein = proteinPrice;
-    }
-
-    // Add extras pricing - sum actual ingredient prices from DB
-    const extraProteinPrice = (selections.extraProtein || []).reduce((sum, ingredientId) => {
-      const ingredient = ingredients.find(ing => ing.id === ingredientId);
-      const price = ingredient?.price ? parseFloat(String(ingredient.price)) : 0;
-      if (price > 0) breakdown.extras.push({ name: ingredient?.nameDE, price });
-      return sum + price;
-    }, 0);
-    totalPrice += extraProteinPrice;
+    console.log('💰 getSizePrice calculation:', { 
+      size, 
+      protein: breakdown.protein,
+      extras: breakdown.extras,
+      total: breakdown.total 
+    });
     
-    const extraFreshPrice = (selections.extraFreshIngredients || []).reduce((sum, ingredientId) => {
-      const ingredient = ingredients.find(ing => ing.id === ingredientId);
-      const price = ingredient?.price ? parseFloat(String(ingredient.price)) : 0;
-      if (price > 0) breakdown.extras.push({ name: ingredient?.nameDE, price });
-      return sum + price;
-    }, 0);
-    totalPrice += extraFreshPrice;
-    
-    const extraSaucesPrice = (selections.extraSauces || []).reduce((sum, ingredientId) => {
-      const ingredient = ingredients.find(ing => ing.id === ingredientId);
-      const price = ingredient?.price ? parseFloat(String(ingredient.price)) : 0;
-      if (price > 0) breakdown.extras.push({ name: ingredient?.nameDE, price });
-      return sum + price;
-    }, 0);
-    totalPrice += extraSaucesPrice;
-    
-    const extraToppingsPrice = (selections.extraToppings || []).reduce((sum, ingredientId) => {
-      const ingredient = ingredients.find(ing => ing.id === ingredientId);
-      const price = ingredient?.price ? parseFloat(String(ingredient.price)) : 0;
-      if (price > 0) breakdown.extras.push({ name: ingredient?.nameDE, price });
-      return sum + price;
-    }, 0);
-    totalPrice += extraToppingsPrice;
-
-    const finalPrice = totalPrice.toFixed(2);
-    console.log('💰 getSizePrice calculation:', { size, breakdown, finalPrice });
-    return finalPrice;
+    return pricingService.formatPrice(breakdown.total);
   };
 
   const getDisplayPrice = () => {
@@ -347,29 +293,9 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
 
   // Get price range for protein options (Klein prices)
   const getProteinPriceRange = () => {
-    const proteinIngredients = ingredients.filter(
-      ing => ing.type === "protein" && ing.available === 1
-    );
+    const minPrices = pricingService.getMinProteinPrices(ingredients);
     
-    if (proteinIngredients.length === 0) {
-      return { 
-        min: parseFloat(item.price || "0"), 
-        max: parseFloat(item.price || "0") 
-      };
-    }
-    
-    // Get KLEIN prices (priceSmall) from each ingredient - fallback to price
-    const kleinPrices = proteinIngredients.map(ing => {
-      let price = 0;
-      if (ing.priceSmall) {
-        price = parseFloat(String(ing.priceSmall));
-      } else if (ing.price) {
-        price = parseFloat(String(ing.price));
-      }
-      return price;
-    }).filter(p => p > 0);
-    
-    if (kleinPrices.length === 0) {
+    if (minPrices.kleinMin === 0) {
       return { 
         min: parseFloat(item.price || "0"), 
         max: parseFloat(item.price || "0") 
@@ -377,66 +303,34 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
     }
     
     return {
-      min: Math.min(...kleinPrices),
-      max: Math.max(...kleinPrices)
+      min: minPrices.kleinMin,
+      max: minPrices.kleinMin
     };
   };
 
   // Get Standard prices for Wunsch Bowl menu display
   const getCustomBowlMenuPrices = () => {
-    const proteinIngredients = ingredients.filter(
-      ing => ing.type === "protein" && ing.available === 1
-    );
+    const minPrices = pricingService.getMinProteinPrices(ingredients);
     
-    if (proteinIngredients.length === 0) {
-      return { kleinMin: "0.00", standardMin: "0.00" };
-    }
-    
-    // Get Klein prices (priceSmall)
-    const kleinPrices = proteinIngredients
-      .map(ing => ing.priceSmall ? parseFloat(String(ing.priceSmall)) : (ing.price ? parseFloat(String(ing.price)) : 0))
-      .filter(p => p > 0);
-    
-    // Get Standard prices (priceStandard)
-    const standardPrices = proteinIngredients
-      .map(ing => ing.priceStandard ? parseFloat(String(ing.priceStandard)) : 0)
-      .filter(p => p > 0);
-    
-    const kleinMin = kleinPrices.length > 0 ? Math.min(...kleinPrices).toFixed(2) : "0.00";
-    const standardMin = standardPrices.length > 0 ? Math.min(...standardPrices).toFixed(2) : "0.00";
-    
-    return { kleinMin, standardMin };
+    return { 
+      kleinMin: pricingService.formatPrice(minPrices.kleinMin), 
+      standardMin: pricingService.formatPrice(minPrices.standardMin) 
+    };
   };
 
   const getSizeButtonText = (size: "klein" | "standard") => {
-    const priceRange = getProteinPriceRange();
+    const minPrices = pricingService.getMinProteinPrices(ingredients);
     
     if (selections.protein) {
       // If protein is selected, show exact price
       return `€${getSizePrice(size)}`;
     }
     
-    // Show minimum price only
+    // Show minimum price for selected size
     if (size === "klein") {
-      return `ab €${priceRange.min.toFixed(2)}`;
+      return `ab €${pricingService.formatPrice(minPrices.kleinMin)}`;
     } else {
-      // Get minimum standard price from available proteins
-      const proteinIngredients = ingredients.filter(
-        ing => ing.type === "protein" && ing.available === 1
-      );
-      
-      let minStandardPrice = priceRange.min + 5.25; // Default: min klein price + 5.25
-      
-      // Check if any protein has priceStandard defined
-      const standardPrices = proteinIngredients
-        .map(ing => ing.priceStandard ? parseFloat(String(ing.priceStandard)) : 0)
-        .filter(p => p > 0);
-      
-      if (standardPrices.length > 0) {
-        minStandardPrice = Math.min(...standardPrices);
-      }
-      
-      return `ab €${minStandardPrice.toFixed(2)}`;
+      return `ab €${pricingService.formatPrice(minPrices.standardMin)}`;
     }
   };
 
@@ -553,7 +447,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         </div>
                         <div className="p-2 bg-white">
                           <p className="font-poppins text-sm font-medium text-center mb-1">{ingredient.nameDE}</p>
-                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{(parseFloat(String(ingredient.price || "0"))).toFixed(2)}</p>
+                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{pricingService.formatPrice(pricingService.getExtraPrice(ingredient))}</p>
                           <Button
                             onClick={() => handleExtraSelect(ingredient.id, "protein")}
                             variant={selected ? "default" : "outline"}
@@ -598,7 +492,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         </div>
                         <div className="p-2 bg-white">
                           <p className="font-poppins text-sm font-medium text-center mb-1">{ingredient.nameDE}</p>
-                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{(parseFloat(String(ingredient.price || "0"))).toFixed(2)}</p>
+                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{pricingService.formatPrice(pricingService.getExtraPrice(ingredient))}</p>
                           <Button
                             onClick={() => handleExtraSelect(ingredient.id, "fresh")}
                             variant={selected ? "default" : "outline"}
@@ -643,7 +537,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         </div>
                         <div className="p-2 bg-white">
                           <p className="font-poppins text-sm font-medium text-center mb-1">{ingredient.nameDE}</p>
-                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{(parseFloat(String(ingredient.price || "0"))).toFixed(2)}</p>
+                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{pricingService.formatPrice(pricingService.getExtraPrice(ingredient))}</p>
                           <Button
                             onClick={() => handleExtraSelect(ingredient.id, "sauce")}
                             variant={selected ? "default" : "outline"}
@@ -688,7 +582,7 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                         </div>
                         <div className="p-2 bg-white">
                           <p className="font-poppins text-sm font-medium text-center mb-1">{ingredient.nameDE}</p>
-                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{(parseFloat(String(ingredient.price || "0"))).toFixed(2)}</p>
+                          <p className="font-poppins text-sm text-center text-sunset font-bold mb-2">€{pricingService.formatPrice(pricingService.getExtraPrice(ingredient))}</p>
                           <Button
                             onClick={() => handleExtraSelect(ingredient.id, "topping")}
                             variant={selected ? "default" : "outline"}

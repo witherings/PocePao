@@ -94,9 +94,10 @@ export const ingredients = pgTable("ingredients", {
   description: text("description"),
   descriptionDE: text("description_de"),
   image: text("image"), // Made optional - can be null for extras
-  price: decimal("price", { precision: 10, scale: 2 }), // price for extras or legacy single price
+  price: decimal("price", { precision: 10, scale: 2 }), // Base price for the ingredient
   priceSmall: decimal("price_small", { precision: 10, scale: 2 }), // Price when bowl size is Klein (for proteins)
   priceStandard: decimal("price_standard", { precision: 10, scale: 2 }), // Price when bowl size is Standard (for proteins)
+  extraPrice: decimal("extra_price", { precision: 10, scale: 2 }), // Price when added as an extra (separate from base price)
   available: integer("available").notNull().default(1),
   order: integer("order").notNull().default(0),
 });
@@ -370,6 +371,7 @@ export const snapshotIngredients = pgTable("snapshot_ingredients", {
   price: decimal("price", { precision: 10, scale: 2 }),
   priceSmall: decimal("price_small", { precision: 10, scale: 2 }),
   priceStandard: decimal("price_standard", { precision: 10, scale: 2 }),
+  extraPrice: decimal("extra_price", { precision: 10, scale: 2 }), // Price when added as an extra
   available: integer("available").notNull().default(1),
   originalIngredientId: varchar("original_ingredient_id").notNull(),
 });
