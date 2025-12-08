@@ -107,6 +107,14 @@ export function Header() {
               <Link 
                 key={item.href} 
                 href={item.href}
+                onClick={(e) => {
+                  const isExactMatch = (item.href === "/" && location === "/") || 
+                                       (item.href !== "/" && location === item.href);
+                  if (isExactMatch) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }}
                 className={`relative font-poppins font-semibold text-white transition-colors hover:text-sunset group ${
                   isActive(item.href) ? "text-sunset" : ""
                 }`}
@@ -167,7 +175,15 @@ export function Header() {
                 <Link 
                   key={item.href} 
                   href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    const isExactMatch = (item.href === "/" && location === "/") || 
+                                         (item.href !== "/" && location === item.href);
+                    setMobileMenuOpen(false);
+                    if (isExactMatch) {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }}
                   className={`block py-3 sm:py-4 px-3 sm:px-4 min-h-[48px] sm:min-h-[52px] rounded-lg font-poppins font-semibold transition-all text-sm sm:text-base ${
                     isActive(item.href)
                       ? "bg-ocean text-white"

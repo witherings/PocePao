@@ -315,24 +315,29 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                   {/* STEP 3: Summary with all details */}
                   {stepIndex === 2 && (
                     <div className="flex flex-col h-full min-h-0">
-                      <h3 className="font-poppins font-bold text-base text-foreground py-1 mb-2 flex-shrink-0">Deine Auswahl:</h3>
+                      {/* Only show "Deine Auswahl" header when there are user selections to display */}
+                      {(needsSizeSelection || getBaseOrVariantName()) && (
+                        <>
+                          <h3 className="font-poppins font-bold text-base text-foreground py-1 mb-2 flex-shrink-0">Deine Auswahl:</h3>
+                          
+                          <div className="space-y-2 pb-2 border-b border-gray-200 dark:border-gray-700 mb-3">
+                            {needsSizeSelection && (
+                              <div className="flex items-center gap-2">
+                                <span className="font-poppins font-semibold text-sm">Größe:</span>
+                                <Badge className="bg-ocean text-white">{getSizeName()}</Badge>
+                              </div>
+                            )}
+                            {getBaseOrVariantName() && (
+                              <div className="flex items-center gap-2">
+                                <span className="font-poppins font-semibold text-sm">Variante:</span>
+                                <Badge className="bg-ocean text-white">{getBaseOrVariantName()}</Badge>
+                              </div>
+                            )}
+                          </div>
+                        </>
+                      )}
                       
                       <div className="flex-grow overflow-y-auto min-h-0 space-y-3">
-                        {/* Selected Size & Variant */}
-                        <div className="space-y-2 pb-2 border-b border-gray-200 dark:border-gray-700">
-                        {needsSizeSelection && (
-                          <div className="flex items-center gap-2">
-                            <span className="font-poppins font-semibold text-sm">Größe:</span>
-                            <Badge className="bg-ocean text-white">{getSizeName()}</Badge>
-                          </div>
-                        )}
-                        {getBaseOrVariantName() && (
-                          <div className="flex items-center gap-2">
-                            <span className="font-poppins font-semibold text-sm">Variante:</span>
-                            <Badge className="bg-ocean text-white">{getBaseOrVariantName()}</Badge>
-                          </div>
-                        )}
-                      </div>
 
                       {/* Protein */}
                       {item.protein && (

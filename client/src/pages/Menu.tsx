@@ -212,9 +212,9 @@ export default function Menu() {
   return (
     <div>
       {/* Breadcrumb / Page Header */}
-      <div className="bg-gradient-to-r from-ocean to-ocean-dark text-white py-16 md:py-24">
+      <div className="bg-gradient-to-r from-ocean to-ocean-dark text-white py-8 md:py-12">
         <div className="container mx-auto px-4 md:px-6 text-center">
-          <h1 className="font-poppins text-3xl md:text-5xl font-bold" data-testid="text-page-title">
+          <h1 className="font-poppins text-2xl md:text-3xl font-bold" data-testid="text-page-title">
             Speisekarte
           </h1>
         </div>

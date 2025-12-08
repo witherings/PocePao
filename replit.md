@@ -209,3 +209,18 @@ Preferred communication style: Simple, everyday language.
 **Font Loading:**
 - Google Fonts CDN: Poppins (headings) + Lato (body text)
 - Preconnect optimization for faster font loading
+
+## Recent Changes (December 2024)
+
+### UI/UX Improvements
+1. **Page Headers** - Reduced padding from py-16/py-24 to py-8/py-12 and text from text-3xl/text-5xl to text-2xl/text-3xl for better visual balance on all pages
+2. **Navigation Scroll-to-Top** - Clicking on the current page's navigation link now smoothly scrolls to the top instead of doing nothing (works on both desktop and mobile)
+3. **MenuItemDialog** - "Deine Auswahl:" section now only displays when there are user selections to show (size or variant)
+
+### Database Fixes
+1. **Wunsch Bowl Pricing** - Added prices to protein ingredients (price_small=9.90, price_standard=11.90, extra_price=3.00) and extras (extra_price=1.00) so the calculator shows correct prices
+2. **Admin Password** - Reset to default 'admin123' for testing
+
+### Admin Credentials
+- Username: `admin`
+- Password: `admin123`
