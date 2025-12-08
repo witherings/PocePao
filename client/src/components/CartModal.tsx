@@ -98,7 +98,7 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
         menuItemId: item.menuItemId || null,
         name: item.name,
         nameDE: item.nameDE,
-        price: parseFloat(String(item.price).replace(/[^\d.-]/g, '')) || 0,
+        price: (parseFloat(String(item.price).replace(/[^\d.-]/g, '')) || 0).toFixed(2),
         quantity: parseInt(String(item.quantity)) || 1,
         size: item.size || null,
         selectedBase: item.selectedBase || null,

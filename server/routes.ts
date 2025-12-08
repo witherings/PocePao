@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { getDb } from "./db";
-import { insertReservationSchema, insertGalleryImageSchema, insertOrderSchema, insertOrderItemSchema, insertIngredientSchema, insertCategorySchema, insertMenuItemSchema, insertProductVariantSchema, pageImages, insertPageImageSchema } from "@shared/schema";
+import { insertReservationSchema, insertGalleryImageSchema, insertOrderSchema, insertOrderItemSchema, insertIngredientSchema, insertCategorySchema, insertMenuItemSchema, insertProductVariantSchema, pageImages, insertPageImageSchema, ingredients } from "@shared/schema";
 import { eq, asc } from "drizzle-orm";
 import { notificationService } from "./notifications";
 import { registerAdminRoutes } from "./admin-routes";
@@ -603,7 +603,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const createdItem = await storage.createOrderItem(validatedItem);
             createdItems.push(createdItem);
           } catch (itemError: any) {
-            console.error('❌ Item validation failed for:', item.name, itemError);
+            console.error('❌ Item validation failed for:', item.name);
+            console.error('   Item data:', JSON.stringify(item, null, 2));
+            console.error('   Error details:', itemError.errors || itemError.message);
             // Continue with other items but log the error
           }
         }
