@@ -216,10 +216,16 @@ Preferred communication style: Simple, everyday language.
 1. **Page Headers** - Reduced padding from py-16/py-24 to py-8/py-12 and text from text-3xl/text-5xl to text-2xl/text-3xl for better visual balance on all pages
 2. **Navigation Scroll-to-Top** - Clicking on the current page's navigation link now smoothly scrolls to the top instead of doing nothing (works on both desktop and mobile)
 3. **MenuItemDialog** - "Deine Auswahl:" section now only displays when there are user selections to show (size or variant)
+4. **German Routes** - Added /kontakt route for German localization (in addition to /speisekarte and /über-uns)
 
-### Database Fixes
+### Database & Backend Fixes
 1. **Wunsch Bowl Pricing** - Added prices to protein ingredients (price_small=9.90, price_standard=11.90, extra_price=3.00) and extras (extra_price=1.00) so the calculator shows correct prices
 2. **Admin Password** - Reset to default 'admin123' for testing
+3. **Order Price Validation** - Fixed bug where prices sent as numbers failed validation, preventing order items from saving
+4. **Telegram Notifications German** - All ingredient names now display in German (nameDE) instead of IDs
+   - Updated formatCustomization and formatExtrasWithPrices to lookup ingredients by both name and id
+   - Labels translated: Basis, Protein, Marinade, Frische Zutaten, Soße, Toppings, Extra Zutaten, Extra Soßen, Extra Protein, Extra Toppings
+5. **Seed Data** - Updated seed-data.ts to use admin123 as default password
 
 ### Admin Credentials
 - Username: `admin`
