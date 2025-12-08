@@ -75,7 +75,7 @@ class TelegramNotificationService implements NotificationService {
     const createIngredientMap = (ids: string[] | undefined) => {
       if (!ids || ids.length === 0) return [];
       return ids.map((id: string) => {
-        const ing = ingredients.find((i: any) => i.name === id);
+        const ing = ingredients.find((i: any) => i.name === id || i.id === id);
         if (ing) {
           const extraPrice = ing.extraPrice ? parseFloat(String(ing.extraPrice)) : (ing.price ? parseFloat(String(ing.price)) : 0);
           return `${ing.nameDE}: €${extraPrice.toFixed(2)}`;
@@ -93,51 +93,60 @@ class TelegramNotificationService implements NotificationService {
       lines.push(`      • Extra Protein: ${proteinExtras.join(", ")}`);
     }
     if (freshExtras.length > 0) {
-      lines.push(`      • Extra Frisch: ${freshExtras.join(", ")}`);
+      lines.push(`      • Extra Zutaten: ${freshExtras.join(", ")}`);
     }
     if (sauceExtras.length > 0) {
-      lines.push(`      • Extra Sauce: ${sauceExtras.join(", ")}`);
+      lines.push(`      • Extra Soßen: ${sauceExtras.join(", ")}`);
     }
     if (toppingExtras.length > 0) {
-      lines.push(`      • Extra Topping: ${toppingExtras.join(", ")}`);
+      lines.push(`      • Extra Toppings: ${toppingExtras.join(", ")}`);
     }
 
     return lines;
   }
 
-  private formatCustomization(customization: CustomBowlSelection | null, size?: string | null): string {
+  private formatCustomization(customization: CustomBowlSelection | null, size?: string | null, ingredients: Ingredient[] = []): string {
     if (!customization) return "";
 
     const lines: string[] = [];
+    
+    const getIngredientNameDE = (id: string): string => {
+      const ing = ingredients.find(i => i.name === id || i.id === id);
+      return ing?.nameDE || id;
+    };
+    
+    const mapToGermanNames = (ids: string[]): string => {
+      return ids.map(id => getIngredientNameDE(id)).join(", ");
+    };
 
-    // Base
+    // Basis (Base)
     if (customization.base) {
-      lines.push(`   🥬 Base: ${customization.base}`);
+      lines.push(`   🥬 Basis: ${getIngredientNameDE(customization.base)}`);
     }
 
     // Protein
     if (customization.protein) {
-      lines.push(`   🍗 Protein: ${customization.protein}`);
+      lines.push(`   🍗 Protein: ${getIngredientNameDE(customization.protein)}`);
     }
 
     // Marinade
     if (customization.marinade) {
-      lines.push(`   🧂 Marinade: ${customization.marinade}`);
+      lines.push(`   🧂 Marinade: ${getIngredientNameDE(customization.marinade)}`);
     }
 
-    // Fresh Ingredients
+    // Frische Zutaten (Fresh Ingredients)
     if (customization.freshIngredients && customization.freshIngredients.length > 0) {
-      lines.push(`   🥕 Frische Zutaten: ${customization.freshIngredients.join(", ")}`);
+      lines.push(`   🥕 Frische Zutaten: ${mapToGermanNames(customization.freshIngredients)}`);
     }
 
-    // Sauce
+    // Soße (Sauce)
     if (customization.sauce) {
-      lines.push(`   🌶 Sauce: ${customization.sauce}`);
+      lines.push(`   🌶 Soße: ${getIngredientNameDE(customization.sauce)}`);
     }
 
     // Toppings
     if (customization.toppings && customization.toppings.length > 0) {
-      lines.push(`   ✨ Toppings: ${customization.toppings.join(", ")}`);
+      lines.push(`   ✨ Toppings: ${mapToGermanNames(customization.toppings)}`);
     }
 
     // Extras
@@ -151,16 +160,16 @@ class TelegramNotificationService implements NotificationService {
       lines.push(`   <b>➕ Extras:</b>`);
       
       if (customization.extraProtein && customization.extraProtein.length > 0) {
-        lines.push(`      • Extra Protein: ${customization.extraProtein.join(", ")}`);
+        lines.push(`      • Extra Protein: ${mapToGermanNames(customization.extraProtein)}`);
       }
       if (customization.extraFreshIngredients && customization.extraFreshIngredients.length > 0) {
-        lines.push(`      • Extra Frische: ${customization.extraFreshIngredients.join(", ")}`);
+        lines.push(`      • Extra Zutaten: ${mapToGermanNames(customization.extraFreshIngredients)}`);
       }
       if (customization.extraSauces && customization.extraSauces.length > 0) {
-        lines.push(`      • Extra Sauces: ${customization.extraSauces.join(", ")}`);
+        lines.push(`      • Extra Soßen: ${mapToGermanNames(customization.extraSauces)}`);
       }
       if (customization.extraToppings && customization.extraToppings.length > 0) {
-        lines.push(`      • Extra Toppings: ${customization.extraToppings.join(", ")}`);
+        lines.push(`      • Extra Toppings: ${mapToGermanNames(customization.extraToppings)}`);
       }
     }
 
@@ -199,10 +208,10 @@ class TelegramNotificationService implements NotificationService {
 
       // Add selected variant/base if present
       if (item.selectedVariant && item.selectedVariant.trim()) {
-        itemDesc += ` • <i>Base: ${item.selectedVariant}</i>`;
+        itemDesc += ` • <i>Variante: ${item.selectedVariant}</i>`;
       } else if (item.selectedBase && item.selectedBase.trim()) {
         // Fallback for deprecated selectedBase
-        itemDesc += ` • <i>Base: ${item.selectedBase}</i>`;
+        itemDesc += ` • <i>Variante: ${item.selectedBase}</i>`;
       }
 
       itemsDetails.push(itemDesc);
@@ -217,7 +226,7 @@ class TelegramNotificationService implements NotificationService {
       // Add customization details for Wunsch Bowl (custom bowls)
       const customization = this.parseCustomization(item.customization);
       if (customization) {
-        const customDetails = this.formatCustomization(customization, item.size);
+        const customDetails = this.formatCustomization(customization, item.size, allIngredients);
         if (customDetails) {
           itemsDetails.push(`   <b>📋 Zusammenstellung:</b>`);
           itemsDetails.push(customDetails);
