@@ -2,7 +2,6 @@ import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import { passport } from "./auth";
-import { devBypassAuth } from "./dev-bypass";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { getPool } from "./db";
@@ -110,10 +109,6 @@ async function initializeApp() {
   app.use(sessionMiddleware);
   app.use(passport.initialize());
   app.use(passport.session());
-
-  // Replit Dev mode: Auto-authenticate admin for easier testing (after session is initialized)
-  // Only active when REPLIT_DEV_DOMAIN is set (Replit development environment)
-  app.use(devBypassAuth);
 
   await ensureAdminExists();
   
