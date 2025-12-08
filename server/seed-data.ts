@@ -9,7 +9,7 @@ async function seedDatabase() {
 
     // Create admin user first
     console.log("👤 Creating admin user...");
-    const hashedPassword = await bcrypt.hash("mk509918", 10);
+    const hashedPassword = await bcrypt.hash("admin123", 10);
     
     const existingAdmin = await db.select().from(adminUsers).limit(1);
     if (existingAdmin.length === 0) {
@@ -17,7 +17,7 @@ async function seedDatabase() {
         username: "admin",
         password: hashedPassword,
       });
-      console.log("✅ Admin user created (username: admin, password: mk509918)");
+      console.log("✅ Admin user created (username: admin, password: admin123)");
     } else {
       console.log("✅ Admin user already exists");
     }
