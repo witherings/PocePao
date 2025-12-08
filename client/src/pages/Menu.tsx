@@ -213,11 +213,11 @@ export default function Menu() {
     <div>
       {/* Breadcrumb / Page Header */}
       <div className="bg-gradient-to-r from-ocean to-ocean-dark text-white py-12 md:py-16">
-        <div className="container mx-auto px-4 md:px-6 text-center">
-          <h1 className="font-poppins text-4xl md:text-5xl lg:text-6xl font-bold mb-3" data-testid="text-page-title">
+        <div className="container mx-auto px-4 md:px-6 flex flex-col items-center justify-center text-center">
+          <h1 className="font-poppins text-4xl md:text-5xl lg:text-6xl font-bold mb-3 w-full" data-testid="text-page-title">
             Speisekarte
           </h1>
-          <p className="font-lato text-lg md:text-xl text-white/80 max-w-xl mx-auto leading-relaxed">
+          <p className="font-lato text-lg md:text-xl text-white/80 max-w-xl leading-relaxed">
             Entdecke unsere frischen Poke Bowls und mehr
           </p>
         </div>
