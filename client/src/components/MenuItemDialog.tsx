@@ -592,7 +592,29 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 {/* Back Button - Mobile: Symbol only, Desktop: With text */}
                 {isMobile && stepIndex > 0 ? (
                   <Button
-                    onClick={() => setStepIndex(stepIndex - 1)}
+                    onClick={() => {
+                      // Go back to the correct previous step
+                      if (stepIndex === 2) {
+                        // From summary, go back to variant selection if needed, otherwise size selection
+                        if (needsVariantSelection) {
+                          setStepIndex(1);
+                        } else if (needsSizeSelection) {
+                          setStepIndex(0);
+                        } else {
+                          onClose();
+                        }
+                      } else if (stepIndex === 1) {
+                        // From variant selection, go back to size selection if needed, otherwise close
+                        if (needsSizeSelection) {
+                          setStepIndex(0);
+                        } else {
+                          onClose();
+                        }
+                      } else {
+                        // From size selection, close the dialog
+                        onClose();
+                      }
+                    }}
                     variant="outline"
                     className="bg-red-500 hover:bg-red-600 text-white border-red-500 font-poppins font-bold rounded-full w-12 h-12 p-0 min-h-0 shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
                     data-testid="button-step-back"
