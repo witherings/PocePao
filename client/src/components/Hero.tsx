@@ -177,7 +177,7 @@ export function Hero() {
             onClick={() => {
               const orderSection = document.getElementById('order-options');
               if (orderSection) {
-                orderSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                orderSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
               }
             }}
             className="bg-sunset hover:bg-sunset-dark text-white font-poppins font-bold rounded-full px-8 md:px-10 py-4 md:py-6 text-base md:text-lg tracking-wide uppercase shadow-2xl hover:shadow-sunset/50 transition-all hover:-translate-y-1 animate-fade-in"

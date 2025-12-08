@@ -129,7 +129,7 @@ export function Header() {
                 const handleScroll = () => {
                   const orderSection = document.getElementById('order-options');
                   if (orderSection) {
-                    orderSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    orderSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
                   }
                 };
 
