@@ -26,7 +26,6 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
   const [serviceType, setServiceType] = useState<"pickup" | "dinein">("pickup");
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
-  const [tableNumber, setTableNumber] = useState("");
   const [pickupTime, setPickupTime] = useState("");
   const [comment, setComment] = useState("");
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
@@ -63,7 +62,6 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
       setShowCheckout(false);
       setCustomerName("");
       setCustomerPhone("");
-      setTableNumber("");
       setPickupTime("");
       setComment("");
       onClose();
@@ -79,7 +77,7 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
   });
 
   const handleCheckout = () => {
-    const requiredField = serviceType === "pickup" ? pickupTime : tableNumber;
+    const requiredField = serviceType === "pickup" ? pickupTime : true;
     if (!customerName || !customerPhone || !requiredField) {
       toast({
         title: "Fehlende Angaben",
@@ -93,7 +91,6 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
       name: customerName,
       phone: customerPhone,
       pickupTime: serviceType === "pickup" ? pickupTime : "",
-      tableNumber: serviceType === "dinein" ? tableNumber : "",
       serviceType: serviceType,
       total: getTotal().toFixed(2),
       comment: comment || undefined,
@@ -576,11 +573,11 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                     />
                   </div>
                   
-                  <div>
-                    <Label htmlFor="table-or-time" className="font-poppins font-semibold text-sm">
-                      {serviceType === "pickup" ? "Abholzeit *" : "Tischnummer *"}
-                    </Label>
-                    {serviceType === "pickup" ? (
+                  {serviceType === "pickup" && (
+                    <div>
+                      <Label htmlFor="pickup-time" className="font-poppins font-semibold text-sm">
+                        Abholzeit *
+                      </Label>
                       <Select value={pickupTime} onValueChange={setPickupTime}>
                         <SelectTrigger className="mt-1 min-h-[48px]" data-testid="select-pickup-time">
                           <SelectValue placeholder="Wähle deine Abholzeit" />
@@ -599,21 +596,8 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                           }).filter(Boolean)}
                         </SelectContent>
                       </Select>
-                    ) : (
-                      <Select value={tableNumber} onValueChange={setTableNumber}>
-                        <SelectTrigger className="mt-1 min-h-[48px]" data-testid="select-table-number">
-                          <SelectValue placeholder="Wähle deinen Tisch" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
-                            <SelectItem key={num} value={num.toString()}>
-                              Tisch {num}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  </div>
+                    </div>
+                  )}
                   
                   <div>
                     <Label htmlFor="comment" className="font-poppins font-semibold text-sm">Kommentar (optional)</Label>
