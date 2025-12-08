@@ -149,24 +149,15 @@ export function AdminContent() {
               </div>
 
               <div>
-                <Label htmlFor="content">Inhalt (JSON)</Label>
+                <Label htmlFor="content">Inhalt</Label>
                 <Textarea
                   id="content"
                   name="content"
                   rows={15}
-                  defaultValue={content?.content || JSON.stringify({
-                    hero: {
-                      title: "",
-                      description: ""
-                    },
-                    sections: []
-                  }, null, 2)}
-                  placeholder='{"hero": {"title": "", "description": ""}, "sections": []}'
-                  className="font-mono text-sm"
+                  defaultValue={content?.content || ""}
+                  placeholder="Hauptinhalt der Seite eingeben..."
+                  className="text-sm"
                 />
-                <p className="text-sm text-gray-500 mt-2">
-                  JSON структура: hero (title, description), sections (array of heading, body, mediaUrl, layout)
-                </p>
               </div>
 
               {content?.updatedAt && (

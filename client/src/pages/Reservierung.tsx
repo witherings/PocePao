@@ -18,11 +18,16 @@ export default function Reservierung() {
   return (
     <div>
       {/* Breadcrumb / Page Header */}
-      <div className="bg-gradient-to-r from-ocean to-ocean-dark text-white py-8 md:py-12">
+      <div className="bg-gradient-to-r from-ocean to-ocean-dark text-white py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6 text-center">
-          <h1 className="font-poppins text-2xl md:text-3xl font-bold" data-testid="text-page-title">
+          <h1 className="font-poppins text-4xl md:text-5xl lg:text-6xl font-bold mb-4" data-testid="text-page-title">
             {title}
           </h1>
+          {subtitle && (
+            <p className="font-lato text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
+              {subtitle}
+            </p>
+          )}
         </div>
       </div>
 
