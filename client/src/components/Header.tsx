@@ -3,10 +3,14 @@ import { Link, useLocation } from "wouter";
 import { Menu, X, Phone } from "lucide-react";
 import { FaWhatsapp, FaInstagram, FaTiktok } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function Header() {
   const [location, navigate] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isVisible, isAtTop } = useScrollDirection();
+  const isMobile = useIsMobile();
 
   const navItems = [
     { href: "/", label: "Startseite" },
@@ -22,10 +26,16 @@ export function Header() {
     return false;
   };
 
+  const headerClasses = isMobile 
+    ? `fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-ocean to-ocean-dark transition-transform duration-300 ${
+        isVisible || mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'
+      } ${!isAtTop ? 'shadow-[0_4px_20px_rgba(0,0,0,0.3)]' : 'shadow-[0_8px_30px_rgba(0,0,0,0.4)]'}`
+    : "sticky top-0 z-50 bg-gradient-to-r from-ocean to-ocean-dark shadow-[0_8px_30px_rgba(0,0,0,0.4)]";
+
   return (
-    <header 
-      className="sticky top-0 z-50 bg-gradient-to-r from-ocean to-ocean-dark shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
-    >
+    <>
+      {isMobile && <div className="h-[88px]" />}
+      <header className={headerClasses}>
       {/* Blue background extension above header */}
       <div className="absolute -top-96 left-0 right-0 h-96 bg-gradient-to-r from-ocean to-ocean-dark pointer-events-none" />
       
@@ -173,5 +183,6 @@ export function Header() {
         )}
       </div>
     </header>
+    </>
   );
 }
