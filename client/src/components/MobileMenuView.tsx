@@ -131,15 +131,11 @@ export function MobileMenuView({
         
         {/* Scroll indicator for categories */}
         {canScrollNext && (
-          <motion.div
-            className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none"
-            animate={{ x: [0, 4, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            <div className="bg-gradient-to-l from-white/80 to-transparent pl-8 pr-2 py-2">
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none">
+            <div className="bg-gradient-to-l from-white/80 dark:from-gray-900/80 to-transparent pl-8 pr-2 py-2">
               <ChevronDown className="w-5 h-5 text-ocean rotate-90" />
             </div>
-          </motion.div>
+          </div>
         )}
       </div>
 
@@ -164,12 +160,12 @@ export function MobileMenuView({
           ref={scrollContainerRef}
           className="space-y-3 pb-24"
         >
-          {filteredItems.map((item) => (
+          {filteredItems.map((item, index) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.15, delay: Math.min(index * 0.03, 0.15) }}
             >
               <Card
                 className="overflow-hidden hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition-all duration-200 group cursor-pointer border-2 border-gray-200 dark:border-gray-700 hover:border-ocean/40 bg-card shadow-md"
@@ -244,11 +240,10 @@ export function MobileMenuView({
                       <Button
                         onClick={(e) => onAddButtonClick(e, item)}
                         disabled={item.available === 0}
-                        size="sm"
-                        className="bg-sunset hover:bg-sunset-dark text-white font-poppins font-semibold rounded-full px-2 py-1 text-xs shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                        className="bg-sunset hover:bg-sunset-dark text-white font-poppins font-semibold rounded-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 min-w-[44px] min-h-[44px] w-11 h-11 p-0"
                         data-testid={`button-mobile-add-to-cart-${item.id}`}
                       >
-                        <Plus className="w-3 h-3" />
+                        <Plus className="w-5 h-5" />
                       </Button>
                     </div>
                   </div>
