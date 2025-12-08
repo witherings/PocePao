@@ -38,7 +38,7 @@ export default function About() {
   return (
     <div>
       {/* Breadcrumb / Page Header */}
-      <div className="bg-gradient-to-r from-ocean to-ocean-dark text-white pt-8 pb-4 md:py-8">
+      <div className="bg-gradient-to-r from-ocean to-ocean-dark text-white pt-12 pb-6 md:py-10">
         <div className="container mx-auto px-6 text-center">
           <h1 className="font-poppins text-2xl md:text-3xl font-bold mb-2" data-testid="text-page-title">
             {title}
