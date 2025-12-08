@@ -168,84 +168,82 @@ export function MobileMenuView({
               transition={{ duration: 0.15, delay: Math.min(index * 0.03, 0.15) }}
             >
               <Card
-                className="overflow-hidden hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition-all duration-200 group cursor-pointer border-2 border-gray-200 dark:border-gray-700 hover:border-ocean/40 bg-card shadow-md"
+                className="overflow-hidden hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition-all duration-200 group cursor-pointer border-2 border-gray-200 dark:border-gray-700 hover:border-ocean/40 bg-card shadow-md flex flex-col h-full"
                 data-testid={`card-mobile-menu-item-${item.id}`}
                 onClick={() => onCardClick(item)}
               >
-                <div className="flex gap-3">
-                  {/* Image */}
-                  <div className="relative w-24 h-24 flex-shrink-0 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r-2 border-gray-200 dark:border-gray-700">
-                    <img
-                      src={item.image || defaultBowlImage}
-                      alt={item.nameDE}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      data-testid={`img-mobile-menu-item-${item.id}`}
-                    />
-                    {item.popular === 1 && (
-                      <div className="absolute top-1 right-1" data-testid={`badge-mobile-popular-${item.id}`}>
-                        <div className="relative backdrop-blur-sm bg-gradient-to-br from-yellow-400/90 via-orange-500/90 to-red-500/90 text-white text-xs font-poppins font-bold px-1.5 py-0.5 rounded-full shadow-lg border border-white/30">
-                          ⭐ Beliebt
-                        </div>
+                {/* Image */}
+                <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-b-2 border-gray-200 dark:border-gray-700 w-full flex items-center justify-center">
+                  <img
+                    src={item.image || defaultBowlImage}
+                    alt={item.nameDE}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    data-testid={`img-mobile-menu-item-${item.id}`}
+                  />
+                  {item.popular === 1 && (
+                    <div className="absolute top-3 right-3" data-testid={`badge-mobile-popular-${item.id}`}>
+                      <div className="relative backdrop-blur-sm bg-gradient-to-br from-yellow-400/90 via-orange-500/90 to-red-500/90 text-white text-xs font-poppins font-bold px-3 py-1.5 rounded-full shadow-lg border border-white/30">
+                        <span className="flex items-center gap-1"><span className="animate-pulse-glow">⭐</span>Beliebt</span>
                       </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="p-3 flex flex-col flex-grow">
+                  <div className="flex-grow">
+                    <h3 className="font-poppins font-bold text-sm text-foreground mb-1" data-testid={`text-mobile-menu-item-name-${item.id}`}>
+                      {item.nameDE}
+                    </h3>
+                    {item.protein && (
+                      <Badge variant="secondary" className="mb-2 font-lato text-xs" data-testid={`badge-mobile-protein-${item.id}`}>
+                        {item.protein}
+                      </Badge>
+                    )}
+                    {item.descriptionDE && (
+                      <p className="font-lato text-xs text-muted-foreground line-clamp-2" data-testid={`text-mobile-menu-item-desc-${item.id}`}>
+                        {item.descriptionDE}
+                      </p>
                     )}
                   </div>
 
-                  {/* Content */}
-                  <div className="flex-1 p-2.5 flex flex-col justify-between min-w-0">
+                  {/* Price and Button */}
+                  <div className="flex items-center justify-between gap-2 mt-3">
                     <div>
-                      <h3 className="font-poppins font-bold text-sm text-foreground line-clamp-1" data-testid={`text-mobile-menu-item-name-${item.id}`}>
-                        {item.nameDE}
-                      </h3>
-                      {item.protein && (
-                        <Badge variant="secondary" className="mt-1 font-lato text-xs" data-testid={`badge-mobile-protein-${item.id}`}>
-                          {item.protein}
-                        </Badge>
-                      )}
-                      {item.descriptionDE && (
-                        <p className="font-lato text-xs text-muted-foreground mt-1 line-clamp-2" data-testid={`text-mobile-menu-item-desc-${item.id}`}>
-                          {item.descriptionDE}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Price and Button */}
-                    <div className="flex items-center justify-between gap-2 mt-2">
-                      <div>
-                        {item.isCustomBowl === 1 ? (
-                          <div className="flex flex-col">
-                            <span className="font-poppins text-xs font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
-                              Klein ab €{customBowlPriceRange.kleinMin || "9.50"}
-                            </span>
-                            <span className="font-poppins text-xs font-bold text-ocean">
-                              Standard ab €{customBowlPriceRange.standardMin || "14.75"}
-                            </span>
-                          </div>
-                        ) : item.hasSizeOptions === 1 && item.priceSmall ? (
-                          <div className="flex flex-col">
-                            <span className="font-poppins text-xs font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
-                              Klein €{item.priceSmall}
-                            </span>
-                            <span className="font-poppins text-xs text-muted-foreground">
-                              Standard €{item.price}
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="font-poppins text-sm font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
-                            €{item.price}
+                      {item.isCustomBowl === 1 ? (
+                        <div className="flex flex-col">
+                          <span className="font-poppins text-xs font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
+                            Klein ab €{customBowlPriceRange.kleinMin || "9.50"}
                           </span>
-                        )}
-                      </div>
-
-                      <Button
-                        onClick={(e) => onAddButtonClick(e, item)}
-                        disabled={item.available === 0}
-                        className="bg-sunset hover:bg-sunset-dark text-white font-poppins font-semibold rounded-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 min-w-[44px] min-h-[44px] w-11 h-11 p-0"
-                        data-testid={`button-mobile-add-to-cart-${item.id}`}
-                      >
-                        <Plus className="w-5 h-5" />
-                      </Button>
+                          <span className="font-poppins text-xs font-bold text-ocean">
+                            Standard ab €{customBowlPriceRange.standardMin || "14.75"}
+                          </span>
+                        </div>
+                      ) : item.hasSizeOptions === 1 && item.priceSmall ? (
+                        <div className="flex flex-col">
+                          <span className="font-poppins text-xs font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
+                            Klein €{item.priceSmall}
+                          </span>
+                          <span className="font-poppins text-xs text-muted-foreground">
+                            Standard €{item.price}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="font-poppins text-sm font-bold text-ocean" data-testid={`text-mobile-menu-item-price-${item.id}`}>
+                          €{item.price}
+                        </span>
+                      )}
                     </div>
+
+                    <Button
+                      onClick={(e) => onAddButtonClick(e, item)}
+                      disabled={item.available === 0}
+                      className="bg-sunset hover:bg-sunset-dark text-white font-poppins font-semibold rounded-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 min-w-[44px] min-h-[44px] w-11 h-11 p-0"
+                      data-testid={`button-mobile-add-to-cart-${item.id}`}
+                    >
+                      <Plus className="w-5 h-5" />
+                    </Button>
                   </div>
                 </div>
               </Card>
