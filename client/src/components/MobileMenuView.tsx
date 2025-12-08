@@ -152,7 +152,7 @@ export function MobileMenuView({
         </div>
       )}
 
-      {/* Items Vertical Scroll */}
+      {/* Items List */}
       {filteredItems.length === 0 ? (
         <div className="text-center py-12">
           <p className="font-poppins text-lg text-muted-foreground" data-testid="text-mobile-no-items">
@@ -162,17 +162,8 @@ export function MobileMenuView({
       ) : (
         <div 
           ref={scrollContainerRef}
-          className="space-y-3 max-h-[60vh] overflow-y-auto pb-4 scrollbar-hide"
+          className="space-y-3 pb-24"
         >
-          {/* Scroll indicator at top */}
-          <motion.div
-            className="text-center flex justify-center opacity-50"
-            animate={{ y: [0, 4, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            <ChevronDown className="w-4 h-4 text-ocean" />
-          </motion.div>
-
           {filteredItems.map((item) => (
             <motion.div
               key={item.id}
@@ -265,15 +256,6 @@ export function MobileMenuView({
               </Card>
             </motion.div>
           ))}
-
-          {/* Scroll indicator at bottom */}
-          <motion.div
-            className="text-center flex justify-center opacity-50 pt-2"
-            animate={{ y: [0, -4, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            <ChevronDown className="w-4 h-4 text-ocean rotate-180" />
-          </motion.div>
         </div>
       )}
     </div>

@@ -212,20 +212,20 @@ export default function Menu() {
   return (
     <div>
       {/* Breadcrumb / Page Header */}
-      <div className="bg-gradient-to-r from-ocean to-ocean-dark text-white py-6">
-        <div className="container mx-auto px-6 text-center">
-          <h1 className="font-poppins text-2xl md:text-3xl font-bold mb-2" data-testid="text-page-title">
+      <div className="bg-gradient-to-r from-ocean to-ocean-dark text-white py-4 md:py-6">
+        <div className="container mx-auto px-4 md:px-6 text-center">
+          <h1 className="font-poppins text-xl md:text-3xl font-bold mb-1 md:mb-2" data-testid="text-page-title">
             Speisekarte
           </h1>
-          <p className="font-lato text-sm md:text-base opacity-90" data-testid="text-page-subtitle">
+          <p className="font-lato text-xs md:text-base opacity-90" data-testid="text-page-subtitle">
             Entdecke unsere köstlichen Poke Bowls
           </p>
         </div>
       </div>
 
       {/* Menu Content */}
-      <section className="py-12">
-        <div className="container mx-auto px-6">
+      <section className="py-6 md:py-12">
+        <div className="container mx-auto px-4 md:px-6">
           {isMobile ? (
             // Mobile: Custom Card-based Menu View with Swipe Pagination
             <MobileMenuView
