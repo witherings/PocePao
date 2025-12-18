@@ -62,8 +62,11 @@ class TelegramNotificationService implements NotificationService {
   private parseCustomization(customizationJson: string | null): CustomBowlSelection | null {
     if (!customizationJson) return null;
     try {
-      return JSON.parse(customizationJson) as CustomBowlSelection;
-    } catch {
+      const parsed = JSON.parse(customizationJson) as CustomBowlSelection;
+      console.log('✅ Parsed customization:', JSON.stringify(parsed, null, 2));
+      return parsed;
+    } catch (error) {
+      console.error('❌ Error parsing customization:', error, 'JSON:', customizationJson);
       return null;
     }
   }
@@ -225,8 +228,14 @@ class TelegramNotificationService implements NotificationService {
 
       // Add customization details for Wunsch Bowl (custom bowls)
       const customization = this.parseCustomization(item.customization);
+      console.log('📋 Item customization data:', { 
+        itemName: item.nameDE, 
+        customizationJson: item.customization?.substring(0, 100),
+        parsedCustomization: customization ? 'yes' : 'no'
+      });
       if (customization) {
         const customDetails = this.formatCustomization(customization, item.size, allIngredients);
+        console.log('📋 Formatted custom details:', customDetails);
         if (customDetails) {
           itemsDetails.push(`   <b>📋 Zusammenstellung:</b>`);
           itemsDetails.push(customDetails);
