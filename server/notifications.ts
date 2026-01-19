@@ -19,6 +19,12 @@ class TelegramNotificationService implements NotificationService {
     // Reservations: use specific tokens if available, otherwise fall back to shared tokens
     this.reservationBotToken = process.env.TELEGRAM_RESERVATION_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "";
     this.reservationChatId = process.env.TELEGRAM_RESERVATION_CHAT_ID || process.env.TELEGRAM_CHAT_ID || "";
+
+    console.log("🤖 Telegram Service Initialized:");
+    console.log(`   - Order Bot: ${this.orderBotToken ? "Configured" : "MISSING"}`);
+    console.log(`   - Order Chat: ${this.orderChatId ? "Configured" : "MISSING"}`);
+    console.log(`   - Reservation Bot: ${this.reservationBotToken ? "Configured" : "MISSING"}`);
+    console.log(`   - Reservation Chat: ${this.reservationChatId ? "Configured" : "MISSING"}`);
   }
 
   private async sendTelegramMessage(message: string, botToken: string, chatId: string, type: string): Promise<void> {
@@ -49,22 +55,23 @@ class TelegramNotificationService implements NotificationService {
 
       if (!response.ok) {
         const error = await response.text();
+        console.error(`❌ Telegram API Error (${type}):`, error);
         throw new Error(`Telegram API error: ${error}`);
       }
 
       console.log(`✅ Telegram Benachrichtigung ${type} erfolgreich gesendet!`);
     } catch (error) {
       console.error(`❌ Fehler beim Senden der Telegram Benachrichtigung ${type}:`, error);
-      throw error;
+      // We don't throw here to avoid breaking the main request flow
     }
   }
 
   private parseCustomization(customizationJson: string | null): CustomBowlSelection | null {
     if (!customizationJson) return null;
     try {
-      const parsed = JSON.parse(customizationJson) as CustomBowlSelection;
-      console.log('✅ Parsed customization:', JSON.stringify(parsed, null, 2));
-      return parsed;
+      // It might be a stringified JSON or already an object
+      const parsed = typeof customizationJson === 'string' ? JSON.parse(customizationJson) : customizationJson;
+      return parsed as CustomBowlSelection;
     } catch (error) {
       console.error('❌ Error parsing customization:', error, 'JSON:', customizationJson);
       return null;
@@ -81,9 +88,9 @@ class TelegramNotificationService implements NotificationService {
         const ing = ingredients.find((i: any) => i.name === id || i.id === id);
         if (ing) {
           const extraPrice = ing.extraPrice ? parseFloat(String(ing.extraPrice)) : (ing.price ? parseFloat(String(ing.price)) : 0);
-          return `${ing.nameDE}: €${extraPrice.toFixed(2)}`;
+          return `${ing.nameDE || ing.name} (+€${extraPrice.toFixed(2)})`;
         }
-        return `${id}: €0.00`;
+        return `${id}`;
       });
     };
 
@@ -92,18 +99,10 @@ class TelegramNotificationService implements NotificationService {
     const sauceExtras = createIngredientMap(customization.extraSauces);
     const toppingExtras = createIngredientMap(customization.extraToppings);
 
-    if (proteinExtras.length > 0) {
-      lines.push(`      • Extra Protein: ${proteinExtras.join(", ")}`);
-    }
-    if (freshExtras.length > 0) {
-      lines.push(`      • Extra Zutaten: ${freshExtras.join(", ")}`);
-    }
-    if (sauceExtras.length > 0) {
-      lines.push(`      • Extra Soßen: ${sauceExtras.join(", ")}`);
-    }
-    if (toppingExtras.length > 0) {
-      lines.push(`      • Extra Toppings: ${toppingExtras.join(", ")}`);
-    }
+    if (proteinExtras.length > 0) lines.push(`      • Extra Protein: ${proteinExtras.join(", ")}`);
+    if (freshExtras.length > 0) lines.push(`      • Extra Zutaten: ${freshExtras.join(", ")}`);
+    if (sauceExtras.length > 0) lines.push(`      • Extra Soßen: ${sauceExtras.join(", ")}`);
+    if (toppingExtras.length > 0) lines.push(`      • Extra Toppings: ${toppingExtras.join(", ")}`);
 
     return lines;
   }
@@ -122,37 +121,17 @@ class TelegramNotificationService implements NotificationService {
       return ids.map(id => getIngredientNameDE(id)).join(", ");
     };
 
-    // Basis (Base)
-    if (customization.base) {
-      lines.push(`   🥬 Basis: ${getIngredientNameDE(customization.base)}`);
-    }
-
-    // Protein
-    if (customization.protein) {
-      lines.push(`   🍗 Protein: ${getIngredientNameDE(customization.protein)}`);
-    }
-
-    // Marinade
-    if (customization.marinade) {
-      lines.push(`   🧂 Marinade: ${getIngredientNameDE(customization.marinade)}`);
-    }
-
-    // Frische Zutaten (Fresh Ingredients)
+    if (customization.base) lines.push(`   🥬 Basis: ${getIngredientNameDE(customization.base)}`);
+    if (customization.protein) lines.push(`   🍗 Protein: ${getIngredientNameDE(customization.protein)}`);
+    if (customization.marinade) lines.push(`   🧂 Marinade: ${getIngredientNameDE(customization.marinade)}`);
     if (customization.freshIngredients && customization.freshIngredients.length > 0) {
       lines.push(`   🥕 Frische Zutaten: ${mapToGermanNames(customization.freshIngredients)}`);
     }
-
-    // Soße (Sauce)
-    if (customization.sauce) {
-      lines.push(`   🌶 Soße: ${getIngredientNameDE(customization.sauce)}`);
-    }
-
-    // Toppings
+    if (customization.sauce) lines.push(`   🌶 Soße: ${getIngredientNameDE(customization.sauce)}`);
     if (customization.toppings && customization.toppings.length > 0) {
       lines.push(`   ✨ Toppings: ${mapToGermanNames(customization.toppings)}`);
     }
 
-    // Extras
     const hasExtras = 
       (customization.extraProtein && customization.extraProtein.length > 0) ||
       (customization.extraFreshIngredients && customization.extraFreshIngredients.length > 0) ||
@@ -161,30 +140,17 @@ class TelegramNotificationService implements NotificationService {
 
     if (hasExtras) {
       lines.push(`   <b>➕ Extras:</b>`);
-      
-      if (customization.extraProtein && customization.extraProtein.length > 0) {
-        lines.push(`      • Extra Protein: ${mapToGermanNames(customization.extraProtein)}`);
-      }
-      if (customization.extraFreshIngredients && customization.extraFreshIngredients.length > 0) {
-        lines.push(`      • Extra Zutaten: ${mapToGermanNames(customization.extraFreshIngredients)}`);
-      }
-      if (customization.extraSauces && customization.extraSauces.length > 0) {
-        lines.push(`      • Extra Soßen: ${mapToGermanNames(customization.extraSauces)}`);
-      }
-      if (customization.extraToppings && customization.extraToppings.length > 0) {
-        lines.push(`      • Extra Toppings: ${mapToGermanNames(customization.extraToppings)}`);
-      }
+      const extrasLines = this.formatExtrasWithPrices(customization, ingredients);
+      extrasLines.forEach(line => lines.push(line));
     }
 
-    return lines.length > 0 ? lines.join("\n") : "";
+    return lines.join("\n");
   }
 
   async sendOrderNotification(order: Order, items: OrderItem[]): Promise<void> {
-    // Build detailed order items list
     const itemsDetails: string[] = [];
     let calculatedTotal = 0;
 
-    // Fetch all ingredients for price calculation (needed for extras breakdown)
     let allIngredients: Ingredient[] = [];
     try {
       const { getDb } = await import("./db");
@@ -198,70 +164,32 @@ class TelegramNotificationService implements NotificationService {
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       const itemPrice = parseFloat(item.price || "0");
-      const itemTotal = itemPrice * item.quantity;
+      const itemTotal = itemPrice * (item.quantity || 1);
       calculatedTotal += itemTotal;
 
       const quantity = item.quantity || 1;
-      let itemDesc = `<b>${i + 1}. ${item.nameDE}</b> (${quantity}x)`;
+      let itemDesc = `<b>${i + 1}. ${item.nameDE || item.name}</b> (${quantity}x)`;
 
-      // Add size information if present
-      if (item.size) {
-        itemDesc += ` • <i>Größe: ${item.size}</i>`;
-      }
-
-      // Add selected variant/base if present
-      if (item.selectedVariant && item.selectedVariant.trim()) {
-        itemDesc += ` • <i>Variante: ${item.selectedVariant}</i>`;
-      } else if (item.selectedBase && item.selectedBase.trim()) {
-        // Fallback for deprecated selectedBase
-        itemDesc += ` • <i>Variante: ${item.selectedBase}</i>`;
-      }
+      if (item.size) itemDesc += `\n   📏 Größe: ${item.size === 'klein' ? 'Klein' : 'Standard'}`;
+      if (item.selectedVariant) itemDesc += `\n   🏷️ Variante: ${item.selectedVariant}`;
 
       itemsDetails.push(itemDesc);
+      itemsDetails.push(`   💰 €${itemPrice.toFixed(2)} p.Stk.`);
 
-      // Add price info
-      if (quantity > 1) {
-        itemsDetails.push(`   💰 ${quantity}x €${itemPrice.toFixed(2)} = €${itemTotal.toFixed(2)}`);
-      } else {
-        itemsDetails.push(`   💰 €${itemPrice.toFixed(2)}`);
-      }
-
-      // Add customization details for Wunsch Bowl (custom bowls)
       const customization = this.parseCustomization(item.customization);
-      console.log('📋 Item customization data:', { 
-        itemName: item.nameDE, 
-        customizationJson: item.customization?.substring(0, 100),
-        parsedCustomization: customization ? 'yes' : 'no'
-      });
       if (customization) {
         const customDetails = this.formatCustomization(customization, item.size, allIngredients);
-        console.log('📋 Formatted custom details:', customDetails);
         if (customDetails) {
-          itemsDetails.push(`   <b>📋 Zusammenstellung:</b>`);
-          itemsDetails.push(customDetails);
-        }
-        
-        // Add extras price breakdown if available
-        if (allIngredients.length > 0) {
-          const extrasLines = this.formatExtrasWithPrices(customization, allIngredients);
-          if (extrasLines.length > 0) {
-            itemsDetails.push(`   <b>➕ Extras Details:</b>`);
-            itemsDetails.push(extrasLines.join("\n"));
-          }
+          itemsDetails.push(`   <b>📋 Details:</b>\n${customDetails}`);
         }
       }
 
-      // Add blank line between items for readability
-      if (i < items.length - 1) {
-        itemsDetails.push("");
-      }
+      if (i < items.length - 1) itemsDetails.push("───────────────────");
     }
 
-    // Determine service type display
     const serviceTypeEmoji = order.serviceType === "pickup" ? "🥡" : "🍽";
     const serviceTypeText = order.serviceType === "pickup" ? "Abholung" : "Im Restaurant";
     
-    // Additional info based on service type
     let additionalInfo = "";
     if (order.serviceType === "pickup" && order.pickupTime) {
       additionalInfo = `⏰ <b>Abholzeit:</b> ${order.pickupTime}`;
@@ -269,22 +197,9 @@ class TelegramNotificationService implements NotificationService {
       additionalInfo = `🪑 <b>Tischnummer:</b> ${order.tableNumber}`;
     }
 
-    // Format date nicely in German
-    const createdDate = new Date(order.createdAt);
-    const dateStr = createdDate.toLocaleDateString("de-DE", {
-      weekday: "short",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
-    const timeStr = createdDate.toLocaleTimeString("de-DE", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    // Verify totals match
-    const totalMatch = Math.abs(calculatedTotal - parseFloat(order.total)) < 0.01;
-    const totalDisplay = order.total || calculatedTotal.toFixed(2);
+    const createdDate = new Date(order.createdAt || Date.now());
+    const dateStr = createdDate.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
+    const timeStr = createdDate.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
 
     const message = `
 🍱 <b>NEUE BESTELLUNG!</b>
@@ -301,11 +216,11 @@ ${additionalInfo}
 ${itemsDetails.join("\n")}
 
 <b>═══════════════════════════════════</b>
-💰 <b>SUMME:</b> €${totalDisplay}
+💰 <b>GESAMTSUMME: €${parseFloat(order.total).toFixed(2)}</b>
 <b>═══════════════════════════════════</b>
 ${order.comment ? `\n💬 <b>Anmerkung:</b> ${order.comment}` : ""}
 
-📅 <b>Bestellzeit:</b> ${dateStr} • ${timeStr}
+📅 ${dateStr} • ${timeStr}
     `.trim();
 
     await this.sendTelegramMessage(message, this.orderBotToken, this.orderChatId, "ORDER");
