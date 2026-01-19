@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import type { Order, OrderItem, CustomBowlSelection, Ingredient } from "@shared/schema";
 
 interface NotificationService {
@@ -159,6 +160,23 @@ class TelegramNotificationService implements NotificationService {
       console.warn("Could not fetch ingredients for detailed pricing:", err);
     }
 
+    const getDbInstance = async () => {
+      const { getDb } = await import("./db");
+      return await getDb();
+    };
+
+    const getVariantName = async (variantId: string) => {
+      try {
+        const { productVariants } = await import("@shared/schema");
+        const db = await getDbInstance();
+        const variants = await db.select().from(productVariants).where(eq(productVariants.id, variantId));
+        return variants.length > 0 ? (variants[0].nameDE || variants[0].name) : variantId;
+      } catch (err) {
+        console.warn("Could not fetch variant name:", err);
+        return variantId;
+      }
+    };
+
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       const itemPrice = parseFloat(item.price || "0");
@@ -168,7 +186,13 @@ class TelegramNotificationService implements NotificationService {
       let itemDesc = `<b>${i + 1}. ${item.nameDE || item.name}</b> (${quantity}x)`;
 
       if (item.size) itemDesc += `\n   📏 Größe: ${item.size === 'klein' ? 'Klein' : 'Standard'}`;
-      if (item.selectedVariant) itemDesc += `\n   🏷️ Variante: ${item.selectedVariant}`;
+      
+      let variantDisplay = item.selectedVariant;
+      if (item.selectedVariant && item.selectedVariant.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
+        variantDisplay = await getVariantName(item.selectedVariant);
+      }
+      
+      if (variantDisplay) itemDesc += `\n   🏷️ Variante: ${variantDisplay}`;
 
       itemsDetails.push(itemDesc);
       
