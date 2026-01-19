@@ -26,10 +26,15 @@ export function VariantSelectionDialog({ item, isOpen, onClose, onAddToCart }: V
   const variants = item ? allVariants.filter(v => v.menuItemId === item.id && v.available === 1).sort((a, b) => a.order - b.order) : [];
 
   useEffect(() => {
-    if (isOpen && item) {
-      setSelectedVariantId("");
+    if (isOpen && item && variants.length > 0) {
+      if (variants.length === 1) {
+        onAddToCart(item, variants[0].id, variants[0].nameDE);
+        onClose();
+      } else {
+        setSelectedVariantId("");
+      }
     }
-  }, [isOpen, item]);
+  }, [isOpen, item, variants.length]);
 
   useEffect(() => {
     if (isOpen) {
