@@ -599,6 +599,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const validatedItem = insertOrderItemSchema.parse({
               ...item,
               orderId: order.id,
+              selectedVariant: item.selectedVariant || (item.selectedVariantName ? item.selectedVariantName : null),
             });
             const createdItem = await storage.createOrderItem(validatedItem);
             createdItems.push(createdItem);
