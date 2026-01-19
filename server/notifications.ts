@@ -193,6 +193,11 @@ class TelegramNotificationService implements NotificationService {
       }
       
       if (variantDisplay) itemDesc += `\n   🏷️ Variante: ${variantDisplay}`;
+      
+      // Add legacy selectedBase if present and variantDisplay didn't already cover it
+      if (item.selectedBase && item.selectedBase !== item.selectedVariant) {
+        itemDesc += `\n   🥬 Basis: ${item.selectedBase}`;
+      }
 
       itemsDetails.push(itemDesc);
       
