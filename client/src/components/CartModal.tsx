@@ -203,16 +203,9 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                     )}
                     
                     {/* Base selection for standard menu items */}
-                    {item.selectedBase && (
+                    {(item.selectedBase || item.selectedVariantName) && (
                       <p className="font-lato text-xs text-muted-foreground mb-1" data-testid={`text-cart-item-base-${item.id}`}>
-                        Base: <span className="text-foreground">{item.selectedBase}</span>
-                      </p>
-                    )}
-                    
-                    {/* Flavor selection for items like Fritz-Kola */}
-                    {item.selectedVariantName && (
-                      <p className="font-lato text-xs text-muted-foreground mb-1" data-testid={`text-cart-item-variant-${item.id}`}>
-                        Geschmacksrichtung: <span className="text-foreground">{item.selectedVariantName}</span>
+                        {item.selectedVariantName ? "Geschmacksrichtung" : "Basis"}: <span className="text-foreground font-semibold">{item.selectedVariantName || item.selectedBase}</span>
                       </p>
                     )}
                     

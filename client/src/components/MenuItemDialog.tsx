@@ -68,10 +68,15 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
       setSelectedFlavorId("");
       
       // Start at the correct step based on what selections are needed
-      const initialStep = determineNextStep();
-      setStepIndex(initialStep);
+    const initialStep = determineNextStep();
+    setStepIndex(initialStep);
+    
+    // Auto-select first base if available and only one option exists
+    if (baseVariants.length === 1 && !selectedBase) {
+      setSelectedBase(baseVariants[0].nameDE);
     }
-  }, [item, isOpen]);
+  }
+}, [item, isOpen, baseVariants]);
 
   if (!item) return null;
 

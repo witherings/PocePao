@@ -194,14 +194,10 @@ class TelegramNotificationService implements NotificationService {
       
       if (variantDisplay) itemDesc += `\n   🏷️ Variante: ${variantDisplay}`;
       
-      // Add selectedVariantName if present (for drinks and other products)
-      if ((item as any).selectedVariantName && (item as any).selectedVariantName !== variantDisplay) {
-        itemDesc += `\n   🥤 Geschmacksrichtung: ${(item as any).selectedVariantName}`;
-      }
-      
-      // Add selectedBase if present (ALWAYS show it if it exists)
-      if (item.selectedBase) {
-        itemDesc += `\n   🥬 Basis: ${item.selectedBase}`;
+      const flavorOrBase = (item as any).selectedVariantName || item.selectedBase;
+      if (flavorOrBase && flavorOrBase !== variantDisplay) {
+        const label = (item as any).selectedVariantName ? "🥤 Geschmacksrichtung" : "🥬 Basis";
+        itemDesc += `\n   ${label}: ${flavorOrBase}`;
       }
 
       itemsDetails.push(itemDesc);
