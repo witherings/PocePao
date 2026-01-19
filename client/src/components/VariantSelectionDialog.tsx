@@ -54,7 +54,9 @@ export function VariantSelectionDialog({ item, isOpen, onClose, onAddToCart }: V
     }
   }, [isOpen, onClose]);
 
-  const handleAdd = () => {
+  const handleAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!item || !selectedVariantId) return;
     
     const selectedVariant = variants.find(v => v.id === selectedVariantId);
@@ -109,8 +111,13 @@ export function VariantSelectionDialog({ item, isOpen, onClose, onAddToCart }: V
                   {variants.map((variant) => (
                     <button
                       key={variant.id}
-                      onClick={() => setSelectedVariantId(variant.id)}
-                      className={`font-poppins font-semibold px-4 py-3 rounded-lg border-2 transition-all text-center min-h-[48px] ${
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setSelectedVariantId(variant.id);
+                      }}
+                      className={`font-poppins font-semibold px-4 py-3 rounded-lg border-2 transition-all text-center min-h-[48px] cursor-pointer relative z-[60] ${
                         selectedVariantId === variant.id 
                           ? "bg-ocean text-white border-ocean shadow-md" 
                           : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
@@ -126,9 +133,14 @@ export function VariantSelectionDialog({ item, isOpen, onClose, onAddToCart }: V
                   {variants.map((variant) => (
                     <Button
                       key={variant.id}
+                      type="button"
                       variant={selectedVariantId === variant.id ? "default" : "outline"}
-                      onClick={() => setSelectedVariantId(variant.id)}
-                      className={`font-poppins font-semibold min-h-[48px] text-sm ${
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setSelectedVariantId(variant.id);
+                      }}
+                      className={`font-poppins font-semibold min-h-[48px] text-sm cursor-pointer relative z-[60] ${
                         selectedVariantId === variant.id 
                           ? "bg-ocean hover:bg-ocean/90 text-white" 
                           : ""

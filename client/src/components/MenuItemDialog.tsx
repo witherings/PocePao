@@ -72,11 +72,15 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
     setStepIndex(initialStep);
     
     // Auto-select first base if available and only one option exists
+    // But ONLY if it's not already selected or we are just opening
     if (baseVariants.length === 1 && !selectedBase) {
-      setSelectedBase(baseVariants[0].nameDE);
+      // Small delay to ensure state updates don't conflict
+      setTimeout(() => {
+        if (isOpen) setSelectedBase(baseVariants[0].nameDE);
+      }, 50);
     }
   }
-}, [item, isOpen, baseVariants]);
+}, [item?.id, isOpen]); // Narrow dependencies
 
   if (!item) return null;
 
@@ -231,21 +235,24 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                       {baseVariants.length > 0 && flavorVariants.length === 0 && (
                         <div className={`grid gap-1 flex-grow min-h-0`} style={{ gridTemplateRows: `repeat(${baseVariants.length}, 1fr)` }}>
                           {baseVariants.map((variant) => (
-                            <button
-                              key={variant.id}
-                              onClick={() => {
-                                setSelectedBase(variant.nameDE);
-                                setStepIndex(2);
-                              }}
-                              className={`font-poppins font-semibold px-2 py-1 rounded-lg border-2 transition-all text-left flex items-center justify-center ${
-                                selectedBase === variant.nameDE 
-                                  ? "bg-ocean text-white border-ocean shadow-md" 
-                                  : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
-                              }`}
-                              data-testid={`button-base-${variant.nameDE}`}
-                            >
-                              {variant.nameDE}
-                            </button>
+                        <button
+                          key={variant.id}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setSelectedBase(variant.nameDE);
+                            setStepIndex(2);
+                          }}
+                          className={`font-poppins font-semibold px-2 py-1 rounded-lg border-2 transition-all text-left flex items-center justify-center cursor-pointer relative z-10 ${
+                            selectedBase === variant.nameDE 
+                              ? "bg-ocean text-white border-ocean shadow-md" 
+                              : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
+                          }`}
+                          data-testid={`button-base-${variant.nameDE}`}
+                        >
+                          {variant.nameDE}
+                        </button>
                           ))}
                         </div>
                       )}
@@ -254,22 +261,25 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                       {flavorVariants.length > 0 && baseVariants.length === 0 && (
                         <div className={`grid gap-1 flex-grow min-h-0`} style={{ gridTemplateRows: `repeat(${flavorVariants.length}, 1fr)` }}>
                           {flavorVariants.map((variant) => (
-                            <button
-                              key={variant.id}
-                              onClick={() => {
-                                setSelectedFlavorId(variant.id);
-                                setSelectedFlavor(variant.nameDE);
-                                setStepIndex(2);
-                              }}
-                              className={`font-poppins font-semibold px-2 py-1 rounded-lg border-2 transition-all text-left flex items-center justify-center ${
-                                selectedFlavorId === variant.id 
-                                  ? "bg-ocean text-white border-ocean shadow-md" 
-                                  : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
-                              }`}
-                              data-testid={`button-flavor-${variant.nameDE}`}
-                            >
-                              {variant.nameDE}
-                            </button>
+                        <button
+                          key={variant.id}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setSelectedFlavorId(variant.id);
+                            setSelectedFlavor(variant.nameDE);
+                            setStepIndex(2);
+                          }}
+                          className={`font-poppins font-semibold px-2 py-1 rounded-lg border-2 transition-all text-left flex items-center justify-center cursor-pointer relative z-10 ${
+                            selectedFlavorId === variant.id 
+                              ? "bg-ocean text-white border-ocean shadow-md" 
+                              : "bg-white text-foreground border-gray-300 dark:bg-gray-800 dark:border-gray-600 hover:border-ocean"
+                          }`}
+                          data-testid={`button-flavor-${variant.nameDE}`}
+                        >
+                          {variant.nameDE}
+                        </button>
                           ))}
                         </div>
                       )}
