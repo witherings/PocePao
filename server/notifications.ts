@@ -185,19 +185,21 @@ class TelegramNotificationService implements NotificationService {
 
       let itemDesc = `<b>${i + 1}. ${item.nameDE || item.name}</b> (${quantity}x)`;
 
-      if (item.size) itemDesc += `\n   📏 Größe: ${item.size === 'klein' ? 'Klein' : 'Standard'}`;
-      
-      let variantDisplay = (item as any).selectedVariant;
-      if ((item as any).selectedVariant && (item as any).selectedVariant.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
-        variantDisplay = await getVariantName((item as any).selectedVariant);
-      }
-      
-      if (variantDisplay) itemDesc += `\n   🏷️ Variante: ${variantDisplay}`;
-      
       const flavorOrBase = (item as any).selectedVariantName || item.selectedBase;
-      if (flavorOrBase && flavorOrBase !== variantDisplay) {
-        const label = (item as any).selectedVariantName ? "🥤 Geschmacksrichtung" : "🥬 Basis";
+      const variantDisplay = (item as any).selectedVariant;
+      
+      if (item.size) itemDesc += `\n   📏 <b>Größe:</b> ${item.size === 'klein' ? 'Klein' : 'Standard'}`;
+      
+      if (flavorOrBase) {
+        const label = (item as any).selectedVariantName ? "🥤 <b>Geschmacksrichtung</b>" : "🥬 <b>Basis</b>";
         itemDesc += `\n   ${label}: ${flavorOrBase}`;
+      } else if (variantDisplay) {
+        // Fallback for generic variants if needed
+        let displayVal = variantDisplay;
+        if (variantDisplay.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
+           displayVal = await getVariantName(variantDisplay);
+        }
+        itemDesc += `\n   🏷️ <b>Variante:</b> ${displayVal}`;
       }
 
       itemsDetails.push(itemDesc);

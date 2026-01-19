@@ -31,6 +31,14 @@ export function VariantSelectionDialog({ item, isOpen, onClose, onAddToCart }: V
     }
   }, [isOpen, item]);
 
+  // Handle case where we might need to verify selectedVariantId is valid for the current item
+  useEffect(() => {
+    if (selectedVariantId && variants.length > 0) {
+      const isValid = variants.some(v => v.id === selectedVariantId);
+      if (!isValid) setSelectedVariantId("");
+    }
+  }, [selectedVariantId, variants]);
+
   useEffect(() => {
     if (isOpen) {
       window.history.pushState({ dialogOpen: true }, "");
