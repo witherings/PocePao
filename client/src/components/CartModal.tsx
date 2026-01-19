@@ -206,17 +206,12 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
                     {(item.selectedBase || item.selectedVariantName) && (
                       <p className="font-lato text-xs text-muted-foreground mb-1" data-testid={`text-cart-item-base-${item.id}`}>
                         <span className="flex items-center gap-1.5">
-                          {item.selectedVariantName ? (
-                            <>
-                              <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-ocean/10 text-ocean text-[10px]">🥤</span>
-                              Geschmacksrichtung:
-                            </>
-                          ) : (
-                            <>
-                              <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-ocean/10 text-ocean text-[10px]">🥬</span>
-                              Basis:
-                            </>
-                          )}
+                          <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-ocean/10 text-ocean text-[10px]">
+                            {item.selectedVariantName ? "🥤" : "🥬"}
+                          </span>
+                          <span className="font-semibold text-ocean">
+                            {item.selectedVariantName ? "Geschmacksrichtung" : "Basis"}:
+                          </span>
                           <span className="text-foreground font-semibold">{item.selectedVariantName || item.selectedBase}</span>
                         </span>
                       </p>
