@@ -103,6 +103,7 @@ export function CartModal({ isOpen, onClose, onEditItem }: CartModalProps) {
         size: item.size || null,
         selectedBase: item.selectedBase || null,
         selectedVariant: item.selectedVariant || null,
+        selectedVariantName: item.selectedVariantName || null,
         customization: item.customization ? JSON.stringify(item.customization) : null,
       })),
     };
