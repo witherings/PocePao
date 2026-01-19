@@ -21,10 +21,10 @@ class TelegramNotificationService implements NotificationService {
     this.reservationChatId = process.env.TELEGRAM_RESERVATION_CHAT_ID || process.env.TELEGRAM_CHAT_ID || "";
 
     console.log("🤖 Telegram Service Initialized:");
-    console.log(`   - Order Bot: ${this.orderBotToken ? "Configured" : "MISSING"}`);
-    console.log(`   - Order Chat: ${this.orderChatId ? "Configured" : "MISSING"}`);
-    console.log(`   - Reservation Bot: ${this.reservationBotToken ? "Configured" : "MISSING"}`);
-    console.log(`   - Reservation Chat: ${this.reservationChatId ? "Configured" : "MISSING"}`);
+    console.log(`   - Order Bot Token: ${this.orderBotToken ? (this.orderBotToken.substring(0, 5) + "...") : "MISSING"}`);
+    console.log(`   - Order Chat ID: ${this.orderChatId ? this.orderChatId : "MISSING"}`);
+    console.log(`   - Reservation Bot Token: ${this.reservationBotToken ? (this.reservationBotToken.substring(0, 5) + "...") : "MISSING"}`);
+    console.log(`   - Reservation Chat ID: ${this.reservationChatId ? this.reservationChatId : "MISSING"}`);
   }
 
   private async sendTelegramMessage(message: string, botToken: string, chatId: string, type: string): Promise<void> {
@@ -149,8 +149,8 @@ class TelegramNotificationService implements NotificationService {
 
   async sendOrderNotification(order: Order, items: OrderItem[]): Promise<void> {
     const itemsDetails: string[] = [];
-    let calculatedTotal = 0;
-
+    
+    // Fetch all ingredients for price calculation (needed for extras breakdown)
     let allIngredients: Ingredient[] = [];
     try {
       const { getDb } = await import("./db");
@@ -164,18 +164,16 @@ class TelegramNotificationService implements NotificationService {
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       const itemPrice = parseFloat(item.price || "0");
-      const itemTotal = itemPrice * (item.quantity || 1);
-      calculatedTotal += itemTotal;
-
       const quantity = item.quantity || 1;
+      const itemTotal = itemPrice * quantity;
+
       let itemDesc = `<b>${i + 1}. ${item.nameDE || item.name}</b> (${quantity}x)`;
 
       if (item.size) itemDesc += `\n   📏 Größe: ${item.size === 'klein' ? 'Klein' : 'Standard'}`;
       if (item.selectedVariant) itemDesc += `\n   🏷️ Variante: ${item.selectedVariant}`;
 
       itemsDetails.push(itemDesc);
-      itemsDetails.push(`   💰 €${itemPrice.toFixed(2)} p.Stk.`);
-
+      
       const customization = this.parseCustomization(item.customization);
       if (customization) {
         const customDetails = this.formatCustomization(customization, item.size, allIngredients);
@@ -183,6 +181,8 @@ class TelegramNotificationService implements NotificationService {
           itemsDetails.push(`   <b>📋 Details:</b>\n${customDetails}`);
         }
       }
+      
+      itemsDetails.push(`   💰 €${itemPrice.toFixed(2)} x ${quantity} = <b>€${itemTotal.toFixed(2)}</b>`);
 
       if (i < items.length - 1) itemsDetails.push("───────────────────");
     }
