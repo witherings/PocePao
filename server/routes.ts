@@ -60,7 +60,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const category = await storage.createCategory(data);
       res.status(201).json(category);
     } catch (error: any) {
-      res.status(400).json({ error: error.message || "Failed to create category" });
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ error: "Invalid category data", details: error.errors });
+      }
+      res.status(500).json({ error: error.message || "Failed to create category" });
     }
   });
 
@@ -74,7 +77,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(category);
     } catch (error: any) {
-      res.status(400).json({ error: error.message || "Failed to update category" });
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ error: "Invalid category data", details: error.errors });
+      }
+      res.status(500).json({ error: error.message || "Failed to update category" });
     }
   });
 
@@ -138,7 +144,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const menuItem = await storage.createMenuItem(data);
       res.status(201).json(menuItem);
     } catch (error: any) {
-      res.status(400).json({ error: error.message || "Failed to create menu item" });
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ error: "Invalid menu item data", details: error.errors });
+      }
+      res.status(500).json({ error: error.message || "Failed to create menu item" });
     }
   });
 
@@ -152,7 +161,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(menuItem);
     } catch (error: any) {
-      res.status(400).json({ error: error.message || "Failed to update menu item" });
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ error: "Invalid menu item data", details: error.errors });
+      }
+      res.status(500).json({ error: error.message || "Failed to update menu item" });
     }
   });
 

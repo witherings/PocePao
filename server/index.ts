@@ -51,20 +51,20 @@ app.use("/uploads", (req, res, next) => {
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
+  let bodyJson: any = undefined;
 
   const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
+  res.json = function (json, ...args) {
+    bodyJson = json;
+    return originalResJson.apply(res, [json, ...args]);
   };
 
   res.on("finish", () => {
     const duration = Date.now() - start;
     if (path.startsWith("/api")) {
       let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+      if (bodyJson) {
+        logLine += ` :: ${JSON.stringify(bodyJson)}`;
       }
 
       if (logLine.length > 80) {
