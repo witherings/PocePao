@@ -12,18 +12,16 @@ class TelegramNotificationService implements NotificationService {
   private reservationChatId: string;
 
   constructor() {
-    // Orders: use specific tokens if available, otherwise fall back to shared tokens
-    this.orderBotToken = process.env.TELEGRAM_ORDER_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "";
-    this.orderChatId = process.env.TELEGRAM_ORDER_CHAT_ID || process.env.TELEGRAM_CHAT_ID || "";
+    // Railway compatible mapping based on attached image
+    this.orderBotToken = process.env.TELEGRAM_BOT_TOKEN || "";
+    this.orderChatId = process.env.TELEGRAM_ORDER_CHAT_ID || "";
     
-    // Reservations: use specific tokens if available, otherwise fall back to shared tokens
-    this.reservationBotToken = process.env.TELEGRAM_RESERVATION_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "";
-    this.reservationChatId = process.env.TELEGRAM_RESERVATION_CHAT_ID || process.env.TELEGRAM_CHAT_ID || "";
+    this.reservationBotToken = process.env.TELEGRAM_BOT_TOKEN || "";
+    this.reservationChatId = process.env.TELEGRAM_RESERVATION_CHAT_ID || "";
 
-    console.log("🤖 Telegram Service Initialized:");
-    console.log(`   - Order Bot Token: ${this.orderBotToken ? (this.orderBotToken.substring(0, 5) + "...") : "MISSING"}`);
+    console.log("🤖 Telegram Service Initialized (Railway Config):");
+    console.log(`   - Bot Token: ${this.orderBotToken ? (this.orderBotToken.substring(0, 5) + "...") : "MISSING"}`);
     console.log(`   - Order Chat ID: ${this.orderChatId ? this.orderChatId : "MISSING"}`);
-    console.log(`   - Reservation Bot Token: ${this.reservationBotToken ? (this.reservationBotToken.substring(0, 5) + "...") : "MISSING"}`);
     console.log(`   - Reservation Chat ID: ${this.reservationChatId ? this.reservationChatId : "MISSING"}`);
   }
 
@@ -31,8 +29,7 @@ class TelegramNotificationService implements NotificationService {
     if (!botToken || !chatId) {
       console.log(`\n⚠️  Telegram für ${type} nicht konfiguriert.`);
       console.log("Bitte setzen Sie die Umgebungsvariablen:");
-      console.log(`  - Für ${type}: TELEGRAM_${type.toUpperCase()}_BOT_TOKEN und TELEGRAM_${type.toUpperCase()}_CHAT_ID`);
-      console.log("  - Oder verwenden Sie die allgemeinen: TELEGRAM_BOT_TOKEN und TELEGRAM_CHAT_ID");
+      console.log(`  - Для ${type}: TELEGRAM_BOT_TOKEN и TELEGRAM_${type.toUpperCase()}_CHAT_ID`);
       console.log(`=== TELEGRAM BENACHRICHTIGUNG ${type.toUpperCase()} (nicht gesendet) ===`);
       console.log(message);
       console.log("============================================\n");
@@ -56,24 +53,26 @@ class TelegramNotificationService implements NotificationService {
       if (!response.ok) {
         const error = await response.text();
         console.error(`❌ Telegram API Error (${type}):`, error);
-        throw new Error(`Telegram API error: ${error}`);
+        return;
       }
 
       console.log(`✅ Telegram Benachrichtigung ${type} erfolgreich gesendet!`);
     } catch (error) {
       console.error(`❌ Fehler beim Senden der Telegram Benachrichtigung ${type}:`, error);
-      // We don't throw here to avoid breaking the main request flow
     }
   }
 
-  private parseCustomization(customizationJson: string | null): CustomBowlSelection | null {
+  private parseCustomization(customizationJson: any): CustomBowlSelection | null {
     if (!customizationJson) return null;
     try {
-      // It might be a stringified JSON or already an object
-      const parsed = typeof customizationJson === 'string' ? JSON.parse(customizationJson) : customizationJson;
-      return parsed as CustomBowlSelection;
+      // If it's already an object, return it. If it's a string, parse it.
+      if (typeof customizationJson === 'object') return customizationJson as CustomBowlSelection;
+      if (typeof customizationJson === 'string') {
+        return JSON.parse(customizationJson) as CustomBowlSelection;
+      }
+      return null;
     } catch (error) {
-      console.error('❌ Error parsing customization:', error, 'JSON:', customizationJson);
+      console.error('❌ Error parsing customization:', error, 'Data:', customizationJson);
       return null;
     }
   }
@@ -150,7 +149,6 @@ class TelegramNotificationService implements NotificationService {
   async sendOrderNotification(order: Order, items: OrderItem[]): Promise<void> {
     const itemsDetails: string[] = [];
     
-    // Fetch all ingredients for price calculation (needed for extras breakdown)
     let allIngredients: Ingredient[] = [];
     try {
       const { getDb } = await import("./db");
@@ -178,7 +176,7 @@ class TelegramNotificationService implements NotificationService {
       if (customization) {
         const customDetails = this.formatCustomization(customization, item.size, allIngredients);
         if (customDetails) {
-          itemsDetails.push(`   <b>📋 Details:</b>\n${customDetails}`);
+          itemsDetails.push(`   <b>📋 Zusammenstellung:</b>\n${customDetails}`);
         }
       }
       
@@ -216,11 +214,11 @@ ${additionalInfo}
 ${itemsDetails.join("\n")}
 
 <b>═══════════════════════════════════</b>
-💰 <b>GESAMTSUMME: €${parseFloat(order.total).toFixed(2)}</b>
+💰 <b>SUMME: €${parseFloat(order.total).toFixed(2)}</b>
 <b>═══════════════════════════════════</b>
 ${order.comment ? `\n💬 <b>Anmerkung:</b> ${order.comment}` : ""}
 
-📅 ${dateStr} • ${timeStr}
+📅 <b>Bestellzeit:</b> ${dateStr} • ${timeStr}
     `.trim();
 
     await this.sendTelegramMessage(message, this.orderBotToken, this.orderChatId, "ORDER");
