@@ -194,8 +194,8 @@ class TelegramNotificationService implements NotificationService {
       
       if (variantDisplay) itemDesc += `\n   🏷️ Variante: ${variantDisplay}`;
       
-      // Add selectedBase if present and variantDisplay didn't already cover it
-      if (item.selectedBase && item.selectedBase !== variantDisplay) {
+      // Add selectedBase if present (ALWAYS show it if it exists)
+      if (item.selectedBase) {
         itemDesc += `\n   🥬 Basis: ${item.selectedBase}`;
       }
 
