@@ -63,7 +63,6 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
   // Calculate sheet height based on content complexity
   const hasOptions = needsSizeSelection || needsVariantSelection;
   const sheetHeight = hasOptions ? '65vh' : '40vh';
-  const imageTopPosition = hasOptions ? '18vh' : '35vh';
 
   // Handle drag end - close if dragged down enough
   const handleDragEnd = (event: any, info: PanInfo) => {
@@ -88,26 +87,11 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.1 }}
+                transition={{ duration: 0.08 }}
                 className="absolute inset-0 bg-black/60"
                 onClick={onClose}
                 data-testid="button-backdrop-close"
               />
-              
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.1 }}
-                className="absolute left-1/2 -translate-x-1/2 w-40 h-40 sm:w-48 sm:h-48 z-20 pointer-events-none"
-                style={{ top: imageTopPosition }}
-              >
-                <img 
-                  src={item.image || "/images/default-dish.png"} 
-                  alt={item.nameDE} 
-                  className="w-full h-full object-cover rounded-full shadow-2xl border-4 border-white"
-                />
-              </motion.div>
               
               <motion.div
                 ref={contentRef}
