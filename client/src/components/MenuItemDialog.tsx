@@ -88,7 +88,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
+                transition={{ duration: 0.1 }}
                 className="absolute inset-0 bg-black/60"
                 onClick={onClose}
                 data-testid="button-backdrop-close"
@@ -98,7 +98,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.15 }}
+                transition={{ duration: 0.1 }}
                 className="absolute left-1/2 -translate-x-1/2 w-40 h-40 sm:w-48 sm:h-48 z-20 pointer-events-none"
                 style={{ top: imageTopPosition }}
               >
@@ -114,7 +114,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
-                transition={{ type: "spring", damping: 35, stiffness: 400 }}
+                transition={{ type: "spring", damping: 40, stiffness: 500 }}
                 drag="y"
                 dragListener={false}
                 dragControls={dragControls}
@@ -129,13 +129,6 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                   onPointerDown={(e) => dragControls.start(e)}
                 >
                   <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
-                  <button 
-                    onClick={onClose}
-                    className="absolute top-3 right-4 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover-elevate transition-colors"
-                    data-testid="button-close-dialog"
-                  >
-                    <X className="w-4 h-4 text-gray-500" />
-                  </button>
                 </div>
                 
                 <div className="px-6 pt-2 pb-24 overflow-y-auto" style={{ height: `calc(${sheetHeight} - 56px)` }}>
