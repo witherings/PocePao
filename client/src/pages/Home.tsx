@@ -60,16 +60,58 @@ export default function Home() {
                 <p className="font-lato text-xs md:text-sm lg:text-base text-muted-foreground mb-3 md:mb-4 lg:mb-6 line-clamp-3" data-testid="text-delivery-description">
                   {deliveryDesc}
                 </p>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="font-poppins font-bold rounded-full px-6 min-h-[48px] border-2 border-ocean text-ocean hover:bg-ocean hover:text-white transition-all w-full sm:w-auto"
-                  data-testid="button-delivery"
-                >
-                  <a href="https://www.lieferando.de/speisekarte/poke-pao" target="_blank" rel="noopener noreferrer">
-                    Lieferando & Co.
-                  </a>
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto justify-center">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="font-poppins font-bold rounded-full px-5 min-h-[44px] border-2 border-[#FF8000] hover:bg-[#FF8000]/10 transition-all"
+                    data-testid="button-lieferando"
+                  >
+                    <a 
+                      href="https://www.lieferando.de/speisekarte/poke-pao" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                        if (isMobile) {
+                          e.preventDefault();
+                          window.location.href = "lieferando://restaurant/poke-pao";
+                          setTimeout(() => {
+                            window.location.href = "https://www.lieferando.de/speisekarte/poke-pao";
+                          }, 500);
+                        }
+                      }}
+                      className="text-[#FF8000]"
+                    >
+                      Lieferando
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="font-poppins font-bold rounded-full px-5 min-h-[44px] border-2 border-[#06C167] hover:bg-[#06C167]/10 transition-all"
+                    data-testid="button-ubereats"
+                  >
+                    <a 
+                      href="https://www.ubereats.com/de/store/poke-pao/YdP6D_nYVrC_xuSG8xeAsg" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                        if (isMobile) {
+                          e.preventDefault();
+                          window.location.href = "ubereats://store?storeUUID=YdP6D_nYVrC_xuSG8xeAsg";
+                          setTimeout(() => {
+                            window.location.href = "https://www.ubereats.com/de/store/poke-pao/YdP6D_nYVrC_xuSG8xeAsg";
+                          }, 500);
+                        }
+                      }}
+                      className="text-[#06C167]"
+                    >
+                      Uber Eats
+                    </a>
+                  </Button>
+                </div>
               </div>
             </Card>
 
