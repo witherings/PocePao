@@ -60,9 +60,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
   const needsSizeSelection = item.hasSizeOptions === 1 || item.priceSmall;
   const needsVariantSelection = baseVariants.length > 0 || flavorVariants.length > 0;
 
-  // Calculate sheet height based on content complexity
-  const hasOptions = needsSizeSelection || needsVariantSelection;
-  const sheetHeight = hasOptions ? '65vh' : '40vh';
+  // Sheet height is now auto-calculated based on content
 
   // Handle drag end - close if dragged down enough
   const handleDragEnd = (event: any, info: PanInfo) => {
@@ -106,7 +104,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 dragElastic={{ top: 0, bottom: 0.5 }}
                 onDragEnd={handleDragEnd}
                 className="relative bg-white dark:bg-gray-900 rounded-t-[2rem] shadow-2xl overflow-hidden z-10"
-                style={{ height: sheetHeight }}
+                style={{ maxHeight: '85vh' }}
               >
                 <div 
                   className="flex flex-col items-center pt-3 pb-2 cursor-grab active:cursor-grabbing touch-none"
@@ -115,7 +113,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                   <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
                 </div>
                 
-                <div className="px-6 pt-2 pb-24 overflow-y-auto" style={{ height: `calc(${sheetHeight} - 56px)` }}>
+                <div className="px-6 pt-2 pb-24 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 120px)' }}>
                   <h2 className="font-poppins text-2xl font-bold text-gray-900 dark:text-white mb-1">
                     {item.nameDE}
                   </h2>
