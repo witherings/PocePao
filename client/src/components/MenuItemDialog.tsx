@@ -215,25 +215,6 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                       </div>
                     </div>
                   )}
-                  
-                  {(needsSizeSelection || needsVariantSelection) && (selectedBase || selectedFlavor || selectedSize) && (
-                    <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                      <p className="font-poppins text-xs text-gray-500 dark:text-gray-400 mb-2">Deine Auswahl:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {needsSizeSelection && (
-                          <Badge className="bg-ocean text-white text-xs px-3 py-1">
-                            {selectedSize === "klein" ? "Klein" : "Standard"}
-                          </Badge>
-                        )}
-                        {selectedBase && (
-                          <Badge className="bg-ocean text-white text-xs px-3 py-1">{selectedBase}</Badge>
-                        )}
-                        {selectedFlavor && (
-                          <Badge className="bg-ocean text-white text-xs px-3 py-1">{selectedFlavor}</Badge>
-                        )}
-                      </div>
-                    </div>
-                  )}
                 </div>
                 
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
