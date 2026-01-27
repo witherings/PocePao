@@ -20,11 +20,12 @@ interface BowlBuilderDialogProps {
   editingCartItemId?: string | null;
 }
 
-type BuilderStep = "size" | "protein" | "base" | "marinade" | "fresh" | "sauce" | "topping" | "extras";
+type BuilderStep = "intro" | "size" | "protein" | "base" | "marinade" | "fresh" | "sauce" | "topping" | "extras";
 
-const STEPS: BuilderStep[] = ["size", "protein", "base", "marinade", "fresh", "sauce", "topping", "extras"];
+const STEPS: BuilderStep[] = ["intro", "size", "protein", "base", "marinade", "fresh", "sauce", "topping", "extras"];
 
 const STEP_CONFIG = {
+  intro: { title: "Wunsch Bowl", min: 0, max: 0 },
   size: { title: "Wähle deine Größe", min: 1, max: 1 },
   protein: { title: "Wähle dein Protein", min: 1, max: 1 },
   base: { title: "Wähle deine Base", min: 1, max: 1 },
@@ -335,33 +336,83 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                   </button>
                 </div>
                 
-                {/* Progress */}
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs text-gray-500 font-medium">Schritt {currentStep + 1}/{STEPS.length}</span>
-                  <Progress value={progress} className="h-1.5 flex-1" />
-                </div>
-                
-                {/* Step Title */}
-                <p className={`font-poppins font-bold ${
-                  currentStepType === "fresh" || currentStepType === "topping" || currentStepType === "extras"
-                    ? "text-lg text-sunset"
-                    : "text-base text-sunset"
-                }`}>
-                  {stepConfig.title}
-                </p>
-                
-                {/* Selection Counter */}
-                {(currentStepType === "fresh" || currentStepType === "topping") && (
-                  <p className="text-sm text-gray-500 mt-1">
-                    {currentStepType === "fresh" && `${selections.freshIngredients?.length || 0}/5 ausgewählt`}
-                    {currentStepType === "topping" && `${selections.toppings?.length || 0}/3 ausgewählt`}
-                  </p>
+                {/* Progress - hide on intro */}
+                {currentStepType !== "intro" && (
+                  <>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs text-gray-500 font-medium">Schritt {currentStep}/{STEPS.length - 1}</span>
+                      <Progress value={((currentStep) / (STEPS.length - 1)) * 100} className="h-1.5 flex-1" />
+                    </div>
+                    
+                    {/* Step Title */}
+                    <p className={`font-poppins font-bold ${
+                      currentStepType === "fresh" || currentStepType === "topping" || currentStepType === "extras"
+                        ? "text-lg text-sunset"
+                        : "text-base text-sunset"
+                    }`}>
+                      {stepConfig.title}
+                    </p>
+                    
+                    {/* Selection Counter */}
+                    {(currentStepType === "fresh" || currentStepType === "topping") && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        {currentStepType === "fresh" && `${selections.freshIngredients?.length || 0}/5 ausgewählt`}
+                        {currentStepType === "topping" && `${selections.toppings?.length || 0}/3 ausgewählt`}
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
               
               {/* Scrollable Content */}
               <div ref={mobileScrollRef} className="px-5 pb-28 overflow-y-auto" style={{ maxHeight: 'calc(92vh - 200px)' }}>
                 
+                {/* Intro Step */}
+                {currentStepType === "intro" && (
+                  <div className="flex flex-col items-center text-center pt-2">
+                    {/* Bowl Image */}
+                    <div className="w-48 h-48 mb-4">
+                      <img 
+                        src={item.image || "/media/wunsch-bowl.png"} 
+                        alt={item.nameDE}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    
+                    {/* Description */}
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 px-4">
+                      Stelle deinen Wunsch Bowl zusammen: Wähle Protein, Base, Marinade, 5 frische Zutaten, Sauce und 3 Toppings
+                    </p>
+                    
+                    {/* What's included */}
+                    <div className="w-full text-left">
+                      <h3 className="font-poppins font-bold text-base text-gray-900 dark:text-white mb-3">
+                        Was ist enthalten:
+                      </h3>
+                      <div className="space-y-2">
+                        {[
+                          { label: "1 Protein", desc: "Tofu, Falafel, Hähnchen, Lachs, Garnelen, Thunfisch" },
+                          { label: "1 Base", desc: "Reis, Salat oder gemischt" },
+                          { label: "1 Marinade", desc: "Verschiedene Marinaden zur Auswahl" },
+                          { label: "5 Frische Zutaten", desc: "Aus unserer frischen Auswahl" },
+                          { label: "1 Sauce", desc: "Verschiedene Saucen zur Auswahl" },
+                          { label: "3 Toppings", desc: "Knusprige Toppings für den Crunch" },
+                        ].map((item, idx) => (
+                          <div key={idx} className="flex items-start gap-3 py-2 border-b border-gray-100 dark:border-gray-800 last:border-0">
+                            <div className="w-5 h-5 rounded-full bg-sunset/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                              <Check className="w-3 h-3 text-sunset" />
+                            </div>
+                            <div>
+                              <p className="font-semibold text-sm text-gray-900 dark:text-white">{item.label}</p>
+                              <p className="text-xs text-gray-500">{item.desc}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Size Selection */}
                 {currentStepType === "size" && (
                   <div className="flex gap-3 pt-2">
@@ -579,59 +630,73 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
 
               {/* Fixed Bottom Navigation */}
               <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-5 py-4 safe-area-pb">
-                <div className="flex items-center gap-3">
-                  {currentStep === 0 ? (
-                    <button
-                      onClick={onClose}
-                      className="px-4 py-3 rounded-xl font-poppins font-semibold text-gray-600 bg-gray-100 dark:bg-gray-800 dark:text-gray-300"
-                      data-testid="button-close"
-                    >
-                      Abbrechen
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handlePrev}
-                      className="px-4 py-3 rounded-xl font-poppins font-semibold text-gray-600 bg-gray-100 dark:bg-gray-800 dark:text-gray-300 flex items-center"
-                      data-testid="button-prev"
-                    >
-                      <ChevronLeft className="w-4 h-4 mr-1" />
-                      Zurück
-                    </button>
-                  )}
+                {/* Intro step - full width button */}
+                {currentStepType === "intro" ? (
+                  <button
+                    ref={nextButtonRef}
+                    onClick={handleNext}
+                    className="w-full py-4 rounded-xl bg-sunset text-white font-poppins font-bold shadow-lg flex items-center justify-center text-lg"
+                    data-testid="button-start-builder"
+                  >
+                    Jetzt zusammenstellen
+                    <ChevronRight className="w-5 h-5 ml-2" />
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    {currentStep === 1 ? (
+                      <button
+                        onClick={handlePrev}
+                        className="px-4 py-3 rounded-xl font-poppins font-semibold text-gray-600 bg-gray-100 dark:bg-gray-800 dark:text-gray-300 flex items-center"
+                        data-testid="button-back-to-intro"
+                      >
+                        <ChevronLeft className="w-4 h-4 mr-1" />
+                        Zurück
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handlePrev}
+                        className="px-4 py-3 rounded-xl font-poppins font-semibold text-gray-600 bg-gray-100 dark:bg-gray-800 dark:text-gray-300 flex items-center"
+                        data-testid="button-prev"
+                      >
+                        <ChevronLeft className="w-4 h-4 mr-1" />
+                        Zurück
+                      </button>
+                    )}
 
-                  <div className="flex-1 text-center">
-                    <span className="font-poppins text-lg font-bold text-sunset" data-testid="text-builder-price">
-                      €{getDisplayPrice()}
-                    </span>
+                    <div className="flex-1 text-center">
+                      <span className="font-poppins text-lg font-bold text-sunset" data-testid="text-builder-price">
+                        €{getDisplayPrice()}
+                      </span>
+                    </div>
+
+                    {currentStep < STEPS.length - 1 ? (
+                      <button
+                        ref={nextButtonRef}
+                        onClick={handleNext}
+                        disabled={!isStepComplete()}
+                        className={`px-5 py-3 rounded-xl font-poppins font-bold flex items-center transition-all ${
+                          isStepComplete()
+                            ? "bg-sunset text-white shadow-lg"
+                            : "bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-500"
+                        }`}
+                        data-testid="button-next"
+                      >
+                        Weiter
+                        <ChevronRight className="w-4 h-4 ml-1" />
+                      </button>
+                    ) : (
+                      <button
+                        ref={nextButtonRef}
+                        onClick={handleComplete}
+                        className="flex-1 py-3 rounded-xl bg-sunset text-white font-poppins font-bold shadow-lg flex items-center justify-center"
+                        data-testid="button-complete"
+                      >
+                        In den Warenkorb
+                        <Check className="w-4 h-4 ml-2" />
+                      </button>
+                    )}
                   </div>
-
-                  {currentStep < STEPS.length - 1 ? (
-                    <button
-                      ref={nextButtonRef}
-                      onClick={handleNext}
-                      disabled={!isStepComplete()}
-                      className={`px-5 py-3 rounded-xl font-poppins font-bold flex items-center transition-all ${
-                        isStepComplete()
-                          ? "bg-sunset text-white shadow-lg"
-                          : "bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-500"
-                      }`}
-                      data-testid="button-next"
-                    >
-                      Weiter
-                      <ChevronRight className="w-4 h-4 ml-1" />
-                    </button>
-                  ) : (
-                    <button
-                      ref={nextButtonRef}
-                      onClick={handleComplete}
-                      className="flex-1 py-3 rounded-xl bg-sunset text-white font-poppins font-bold shadow-lg flex items-center justify-center"
-                      data-testid="button-complete"
-                    >
-                      In den Warenkorb
-                      <Check className="w-4 h-4 ml-2" />
-                    </button>
-                  )}
-                </div>
+                )}
               </div>
             </motion.div>
           </div>
@@ -649,27 +714,82 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
           <DialogTitle className="font-poppins text-2xl" data-testid="text-builder-title">
             {item.nameDE}
           </DialogTitle>
-          <DialogDescription asChild>
-            <p className={`font-poppins mt-2 ${
-              currentStepType === "fresh" || currentStepType === "topping"
-                ? "text-2xl font-bold text-sunset"
-                : "text-lg font-semibold text-sunset"
-            }`}>
-              {stepConfig.title}
-            </p>
-          </DialogDescription>
+          {currentStepType !== "intro" && (
+            <DialogDescription asChild>
+              <p className={`font-poppins mt-2 ${
+                currentStepType === "fresh" || currentStepType === "topping"
+                  ? "text-2xl font-bold text-sunset"
+                  : "text-lg font-semibold text-sunset"
+              }`}>
+                {stepConfig.title}
+              </p>
+            </DialogDescription>
+          )}
         </DialogHeader>
 
+        {/* Intro Step - Desktop */}
+        {currentStepType === "intro" && (
+          <div className="flex flex-col items-center py-6">
+            <div className="w-64 h-64 mb-6">
+              <img 
+                src={item.image || "/media/wunsch-bowl.png"} 
+                alt={item.nameDE}
+                className="w-full h-full object-contain"
+              />
+            </div>
+            
+            <p className="text-gray-600 dark:text-gray-400 text-center mb-8 max-w-md">
+              Stelle deinen Wunsch Bowl zusammen: Wähle Protein, Base, Marinade, 5 frische Zutaten, Sauce und 3 Toppings
+            </p>
+            
+            <div className="w-full max-w-lg">
+              <h3 className="font-poppins font-bold text-lg text-gray-900 dark:text-white mb-4 text-center">
+                Was ist enthalten:
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { label: "1 Protein", desc: "Tofu, Falafel, Hähnchen, Lachs, Garnelen, Thunfisch" },
+                  { label: "1 Base", desc: "Reis, Salat oder gemischt" },
+                  { label: "1 Marinade", desc: "Verschiedene Marinaden zur Auswahl" },
+                  { label: "5 Frische Zutaten", desc: "Aus unserer frischen Auswahl" },
+                  { label: "1 Sauce", desc: "Verschiedene Saucen zur Auswahl" },
+                  { label: "3 Toppings", desc: "Knusprige Toppings für den Crunch" },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="w-5 h-5 rounded-full bg-sunset/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-sunset" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm text-gray-900 dark:text-white">{item.label}</p>
+                      <p className="text-xs text-gray-500">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <Button
+              onClick={handleNext}
+              className="mt-8 bg-sunset text-white font-poppins font-bold px-12 py-6 text-lg shadow-lg"
+              data-testid="button-start-builder-desktop"
+            >
+              Jetzt zusammenstellen
+              <ChevronRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
+        )}
+
+        {currentStepType !== "intro" && (
         <div className="grid grid-cols-7 gap-6">
           {/* Main Content */}
           <div className="space-y-6 col-span-5">
           {/* Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm font-poppins text-muted-foreground">
-              <span>Schritt {currentStep + 1} von {STEPS.length}</span>
-              <span>{Math.round(progress)}%</span>
+              <span>Schritt {currentStep} von {STEPS.length - 1}</span>
+              <span>{Math.round(((currentStep) / (STEPS.length - 1)) * 100)}%</span>
             </div>
-            <Progress value={progress} className="h-2" />
+            <Progress value={((currentStep) / (STEPS.length - 1)) * 100} className="h-2" />
           </div>
 
           {/* Size Selection Step */}
@@ -1139,7 +1259,8 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
             </div>
           </div>
         </div>
-        </div>
+        )}
+      </div>
       </DialogContent>
     </Dialog>
   );
