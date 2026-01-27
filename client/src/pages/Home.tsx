@@ -47,7 +47,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-8">
             {/* Delivery Card */}
               <Card className="p-4 md:p-6 lg:p-8 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border-2 border-transparent hover:border-ocean/20" data-testid="card-delivery">
               <div className="flex flex-col items-center text-center">
