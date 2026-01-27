@@ -49,14 +49,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {/* Delivery Card */}
-              <Card className="relative p-4 md:p-6 lg:p-8 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border-2 border-transparent hover:border-ocean/20" data-testid="card-delivery">
-              {/* 10% Rabatt Badge */}
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span className="bg-destructive text-white font-poppins font-bold text-xs sm:text-sm rounded-full px-3 sm:px-4 py-1.5 shadow-lg" data-testid="badge-discount">
-                  10% RABATT
-                </span>
-              </div>
-
+              <Card className="p-4 md:p-6 lg:p-8 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border-2 border-transparent hover:border-ocean/20" data-testid="card-delivery">
               <div className="flex flex-col items-center text-center">
                 <div className="bg-ocean/10 p-3 md:p-4 rounded-full mb-3 md:mb-4 lg:mb-6">
                   <Truck className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-ocean" />
@@ -81,7 +74,13 @@ export default function Home() {
             </Card>
 
             {/* Pickup Card */}
-              <Card className="p-4 md:p-6 lg:p-8 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border-2 border-transparent hover:border-ocean/20" data-testid="card-pickup">
+              <Card className="relative p-4 md:p-6 lg:p-8 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border-2 border-transparent hover:border-ocean/20" data-testid="card-pickup">
+              {/* 10% Rabatt Badge */}
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <span className="bg-destructive text-white font-poppins font-bold text-xs sm:text-sm rounded-full px-3 sm:px-4 py-1.5 shadow-lg" data-testid="badge-discount">
+                  10% RABATT
+                </span>
+              </div>
               <div className="flex flex-col items-center text-center">
                 <div className="bg-ocean/10 p-3 md:p-4 rounded-full mb-3 md:mb-4 lg:mb-6">
                   <ShoppingBag className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-ocean" />
