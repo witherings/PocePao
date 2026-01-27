@@ -97,7 +97,7 @@ export default function Home() {
                   className="font-poppins font-bold rounded-full px-6 min-h-[48px] bg-sunset hover:bg-sunset-dark text-white shadow-lg hover:shadow-xl transition-all w-full sm:w-auto"
                   data-testid="button-pickup"
                 >
-                  <Link href="/menu">Speisekarte ansehen</Link>
+                  <Link href="/speisekarte">Speisekarte ansehen</Link>
                 </Button>
               </div>
             </Card>
