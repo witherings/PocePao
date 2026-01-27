@@ -731,53 +731,55 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
 
         {/* Intro Step - Desktop */}
         {currentStepType === "intro" && (
-          <div className="flex flex-col items-center py-6">
-            <div className="w-64 h-64 mb-6">
+          <div className="grid grid-cols-2 gap-8 py-4">
+            {/* Left - Image */}
+            <div className="flex items-center justify-center bg-gradient-to-br from-sunset/5 to-orange-50 dark:from-sunset/10 dark:to-gray-800 rounded-2xl p-8">
               <img 
                 src={item.image || "/media/wunsch-bowl.png"} 
                 alt={item.nameDE}
-                className="w-full h-full object-contain"
+                className="w-72 h-72 object-contain drop-shadow-xl"
               />
             </div>
             
-            <p className="text-gray-600 dark:text-gray-400 text-center mb-8 max-w-md">
-              Stelle deinen Wunsch Bowl zusammen: Wähle Protein, Base, Marinade, 5 frische Zutaten, Sauce und 3 Toppings
-            </p>
-            
-            <div className="w-full max-w-lg">
-              <h3 className="font-poppins font-bold text-lg text-gray-900 dark:text-white mb-4 text-center">
-                Was ist enthalten:
+            {/* Right - Content */}
+            <div className="flex flex-col justify-center">
+              <p className="text-gray-600 dark:text-gray-400 mb-6 text-base leading-relaxed">
+                Stelle deinen Wunsch Bowl zusammen: Wähle Protein, Base, Marinade, 5 frische Zutaten, Sauce und 3 Toppings
+              </p>
+              
+              <h3 className="font-poppins font-bold text-base text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <span className="w-8 h-0.5 bg-sunset rounded-full"></span>
+                Was ist enthalten
               </h3>
-              <div className="grid grid-cols-2 gap-4">
+              
+              <div className="space-y-2 mb-6">
                 {[
-                  { label: "1 Protein", desc: "Tofu, Falafel, Hähnchen, Lachs, Garnelen, Thunfisch" },
+                  { label: "1 Protein", desc: "Tofu, Falafel, Hähnchen, Lachs..." },
                   { label: "1 Base", desc: "Reis, Salat oder gemischt" },
-                  { label: "1 Marinade", desc: "Verschiedene Marinaden zur Auswahl" },
-                  { label: "5 Frische Zutaten", desc: "Aus unserer frischen Auswahl" },
-                  { label: "1 Sauce", desc: "Verschiedene Saucen zur Auswahl" },
-                  { label: "3 Toppings", desc: "Knusprige Toppings für den Crunch" },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <div className="w-5 h-5 rounded-full bg-sunset/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Check className="w-3 h-3 text-sunset" />
+                  { label: "1 Marinade", desc: "Verschiedene Marinaden" },
+                  { label: "5 Frische Zutaten", desc: "Aus unserer Auswahl" },
+                  { label: "1 Sauce", desc: "Verschiedene Saucen" },
+                  { label: "3 Toppings", desc: "Knusprige Toppings" },
+                ].map((listItem, idx) => (
+                  <div key={idx} className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-sunset flex items-center justify-center flex-shrink-0">
+                      <Check className="w-3 h-3 text-white" />
                     </div>
-                    <div>
-                      <p className="font-semibold text-sm text-gray-900 dark:text-white">{item.label}</p>
-                      <p className="text-xs text-gray-500">{item.desc}</p>
-                    </div>
+                    <span className="font-medium text-sm text-gray-800 dark:text-gray-200">{listItem.label}</span>
+                    <span className="text-xs text-gray-500">— {listItem.desc}</span>
                   </div>
                 ))}
               </div>
+              
+              <Button
+                onClick={handleNext}
+                className="w-full bg-sunset text-white font-poppins font-bold py-6 text-lg shadow-lg rounded-xl"
+                data-testid="button-start-builder-desktop"
+              >
+                Jetzt zusammenstellen
+                <ChevronRight className="w-5 h-5 ml-2" />
+              </Button>
             </div>
-            
-            <Button
-              onClick={handleNext}
-              className="mt-8 bg-sunset text-white font-poppins font-bold px-12 py-6 text-lg shadow-lg"
-              data-testid="button-start-builder-desktop"
-            >
-              Jetzt zusammenstellen
-              <ChevronRight className="w-5 h-5 ml-2" />
-            </Button>
           </div>
         )}
 
