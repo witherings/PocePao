@@ -546,6 +546,11 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                             <p className="font-poppins text-xs font-medium text-gray-900 dark:text-white leading-tight line-clamp-2">
                               {ingredient.nameDE}
                             </p>
+                            {ingredient.price && Number(ingredient.price) > 0 && (
+                              <p className="text-xs text-sunset font-bold mt-0.5">
+                                +€{ingredient.price}
+                              </p>
+                            )}
                           </div>
                         </button>
                       );
