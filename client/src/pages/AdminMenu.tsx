@@ -1389,6 +1389,21 @@ export function AdminMenu() {
                       </div>
                     )}
 
+                    {['base', 'marinade', 'fresh', 'sauce', 'topping'].includes(selectedIngredientType || editingIngredient?.type || '') && (
+                      <div>
+                        <Label htmlFor="ing-price" className="text-base font-semibold mb-2">Preis (€) - optional, Standard: 0</Label>
+                        <Input
+                          id="ing-price"
+                          name="price"
+                          type="number"
+                          step="0.01"
+                          defaultValue={editingIngredient?.price || "0"}
+                          placeholder="z.B. 1.00"
+                          className="h-12 text-base px-4"
+                        />
+                      </div>
+                    )}
+
                     <div>
                       <Label className="mb-3 block">Foto der Zutat</Label>
                       

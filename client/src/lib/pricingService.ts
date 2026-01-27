@@ -3,6 +3,7 @@ import type { Ingredient, CustomBowlSelection } from "@shared/schema";
 export interface PriceBreakdown {
   protein: number;
   base: number;
+  ingredients: Array<{ name: string; price: number; type: string }>;
   extras: Array<{ name: string; price: number; type: string }>;
   total: number;
 }
@@ -39,6 +40,13 @@ export const pricingService = {
     return 0;
   },
 
+  getIngredientPrice(ingredient: Ingredient): number {
+    if (ingredient.price) {
+      return parseFloat(String(ingredient.price));
+    }
+    return 0;
+  },
+
   calculateWunschbowlPrice(
     selections: CustomBowlSelection,
     size: "klein" | "standard",
@@ -48,6 +56,7 @@ export const pricingService = {
     const breakdown: PriceBreakdown = { 
       protein: 0, 
       base: 0,
+      ingredients: [],
       extras: [], 
       total: 0 
     };
@@ -62,6 +71,37 @@ export const pricingService = {
       breakdown.protein = proteinPrice;
     }
 
+    // Helper function to add regular ingredient price
+    const addIngredientPrice = (ingredientId: string | undefined, type: string) => {
+      if (!ingredientId) return;
+      const ingredient = ingredients.find(ing => ing.id === ingredientId);
+      if (ingredient) {
+        const price = this.getIngredientPrice(ingredient);
+        if (price > 0) {
+          breakdown.ingredients.push({ 
+            name: ingredient.nameDE, 
+            price, 
+            type 
+          });
+          totalPrice += price;
+        }
+      }
+    };
+
+    // Helper function to add regular ingredient price from array
+    const addIngredientPrices = (ingredientIds: string[] | undefined, type: string) => {
+      if (!ingredientIds) return;
+      ingredientIds.forEach(id => addIngredientPrice(id, type));
+    };
+
+    // Calculate prices for regular ingredients (base, marinade, sauce, fresh, toppings)
+    addIngredientPrice(selections.base, "Basis");
+    addIngredientPrice(selections.marinade, "Marinade");
+    addIngredientPrice(selections.sauce, "Soße");
+    addIngredientPrices(selections.freshIngredients, "Frische Zutat");
+    addIngredientPrices(selections.toppings, "Topping");
+
+    // Helper function for extra ingredients
     const addExtraPrice = (ingredientId: string, type: string) => {
       const ingredient = ingredients.find(ing => ing.id === ingredientId);
       if (ingredient) {
