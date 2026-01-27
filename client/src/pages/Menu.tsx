@@ -15,7 +15,6 @@ import { CartWidget } from "@/components/CartWidget";
 import { CartModal } from "@/components/CartModal";
 import { MenuItemDialog } from "@/components/MenuItemDialog";
 import { BowlBuilderDialog } from "@/components/BowlBuilderDialog";
-import { BowlInfoDialog } from "@/components/BowlInfoDialog";
 import { MobileMenuView } from "@/components/MobileMenuView";
 import { VariantSelectionDialog } from "@/components/VariantSelectionDialog";
 import { useCartStore } from "@/lib/cartStore";
@@ -42,7 +41,6 @@ export default function Menu() {
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [itemDialogOpen, setItemDialogOpen] = useState(false);
   const [bowlBuilderOpen, setBowlBuilderOpen] = useState(false);
-  const [bowlInfoOpen, setBowlInfoOpen] = useState(false);
   const [variantDialogOpen, setVariantDialogOpen] = useState(false);
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const { addItem, items: cartItems, updateItem } = useCartStore();
@@ -187,7 +185,7 @@ export default function Menu() {
   const handleCardClick = (item: MenuItem) => {
     setSelectedItem(item);
     if (item.isCustomBowl === 1) {
-      setBowlInfoOpen(true);
+      setBowlBuilderOpen(true);
     } else {
       setItemDialogOpen(true);
     }
@@ -197,7 +195,7 @@ export default function Menu() {
     e.stopPropagation();
     if (item.isCustomBowl === 1) {
       setSelectedItem(item);
-      setBowlInfoOpen(true);
+      setBowlBuilderOpen(true);
     } else {
       // Open ItemDialog for all regular items (including those with variants)
       setSelectedItem(item);
@@ -402,15 +400,6 @@ export default function Menu() {
         onClose={() => setItemDialogOpen(false)}
         onAddToCart={handleAddToCart}
       />
-      
-      {/* Bowl Info Dialog */}
-      <BowlInfoDialog
-        item={selectedItem}
-        isOpen={bowlInfoOpen}
-        onClose={() => setBowlInfoOpen(false)}
-        onStartBuilder={() => setBowlBuilderOpen(true)}
-      />
-
       {/* Bowl Builder Dialog */}
       <BowlBuilderDialog
         item={selectedItem}

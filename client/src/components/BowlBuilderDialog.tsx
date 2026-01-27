@@ -143,7 +143,9 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
 
   const isStepComplete = () => {
     const current = currentStepType;
-    if (current === "size") {
+    if (current === "intro") {
+      return true;
+    } else if (current === "size") {
       return !!selectedSize;
     } else if (current === "protein" || current === "base" || current === "marinade" || current === "sauce") {
       const key = current as keyof typeof selections;
