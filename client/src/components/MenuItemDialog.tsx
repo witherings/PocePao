@@ -65,8 +65,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
         {isOpen && (
           <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent 
-              className="fixed inset-0 p-0 border-0 bg-transparent max-w-none w-full h-full flex flex-col justify-end"
-              style={{ maxWidth: '100vw', maxHeight: '100vh' }}
+              className="fixed inset-0 p-0 border-0 bg-transparent max-w-none w-full h-full flex flex-col justify-end !left-0 !top-0 !translate-x-0 !translate-y-0"
             >
               <VisuallyHidden>
                 <DialogTitle>{item.nameDE}</DialogTitle>
