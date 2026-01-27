@@ -94,7 +94,7 @@ export function Header() {
           {/* Logo */}
           <Link href="/" data-testid="link-home" className="flex items-center min-h-[44px]">
             <img
-              src="https://pokepao.de/assets/images/logo_blue.png"
+              src="/media/logo_blue.png"
               alt="PokePao Logo"
               className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
               data-testid="img-logo"
