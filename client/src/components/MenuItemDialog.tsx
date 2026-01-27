@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useDragControls, PanInfo } from "framer-motion";
 
 interface MenuItemDialogProps {
   item: MenuItem | null;
@@ -23,6 +23,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
   const [selectedFlavor, setSelectedFlavor] = useState<string>("");
   const [selectedFlavorId, setSelectedFlavorId] = useState<string>("");
   const contentRef = useRef<HTMLDivElement>(null);
+  const dragControls = useDragControls();
 
   const { data: allVariants = [] } = useQuery<ProductVariant[]>({
     queryKey: ['/api/product-variants'],
@@ -59,9 +60,21 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
   const needsSizeSelection = item.hasSizeOptions === 1 || item.priceSmall;
   const needsVariantSelection = baseVariants.length > 0 || flavorVariants.length > 0;
 
+  // Calculate sheet height based on content complexity
+  const hasOptions = needsSizeSelection || needsVariantSelection;
+  const sheetHeight = hasOptions ? '65vh' : '40vh';
+  const imageTopPosition = hasOptions ? '18vh' : '35vh';
+
+  // Handle drag end - close if dragged down enough
+  const handleDragEnd = (event: any, info: PanInfo) => {
+    if (info.offset.y > 100) {
+      onClose();
+    }
+  };
+
   if (isMobile) {
     return (
-      <AnimatePresence>
+      <AnimatePresence mode="sync">
         {isOpen && (
           <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent 
@@ -75,47 +88,57 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
                 className="absolute inset-0 bg-black/60"
                 onClick={onClose}
                 data-testid="button-backdrop-close"
               />
               
-              <div className="absolute top-0 left-0 right-0 h-[35vh] flex items-center justify-center p-4">
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.8, opacity: 0 }}
-                  transition={{ type: "spring", damping: 25 }}
-                  className="relative w-48 h-48 sm:w-56 sm:h-56"
-                >
-                  <img 
-                    src={item.image || "/images/default-dish.png"} 
-                    alt={item.nameDE} 
-                    className="w-full h-full object-cover rounded-full shadow-2xl border-4 border-white"
-                  />
-                </motion.div>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.15 }}
+                className="absolute left-1/2 -translate-x-1/2 w-40 h-40 sm:w-48 sm:h-48 z-20 pointer-events-none"
+                style={{ top: imageTopPosition }}
+              >
+                <img 
+                  src={item.image || "/images/default-dish.png"} 
+                  alt={item.nameDE} 
+                  className="w-full h-full object-cover rounded-full shadow-2xl border-4 border-white"
+                />
+              </motion.div>
               
               <motion.div
                 ref={contentRef}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
-                transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="relative bg-white dark:bg-gray-900 rounded-t-[2rem] shadow-2xl overflow-hidden"
-                style={{ maxHeight: '70vh' }}
+                transition={{ type: "spring", damping: 35, stiffness: 400 }}
+                drag="y"
+                dragListener={false}
+                dragControls={dragControls}
+                dragConstraints={{ top: 0, bottom: 0 }}
+                dragElastic={{ top: 0, bottom: 0.5 }}
+                onDragEnd={handleDragEnd}
+                className="relative bg-white dark:bg-gray-900 rounded-t-[2rem] shadow-2xl overflow-hidden z-10"
+                style={{ height: sheetHeight }}
               >
-                <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mt-3 mb-2" />
-                
-                <button 
-                  onClick={onClose}
-                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover-elevate transition-colors z-10"
-                  data-testid="button-close-dialog"
+                <div 
+                  className="flex flex-col items-center pt-3 pb-2 cursor-grab active:cursor-grabbing touch-none"
+                  onPointerDown={(e) => dragControls.start(e)}
                 >
-                  <X className="w-4 h-4 text-gray-500" />
-                </button>
+                  <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
+                  <button 
+                    onClick={onClose}
+                    className="absolute top-3 right-4 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover-elevate transition-colors"
+                    data-testid="button-close-dialog"
+                  >
+                    <X className="w-4 h-4 text-gray-500" />
+                  </button>
+                </div>
                 
-                <div className="px-6 pb-6 pt-2 overflow-y-auto" style={{ maxHeight: 'calc(70vh - 80px)' }}>
+                <div className="px-6 pt-2 pb-24 overflow-y-auto" style={{ height: `calc(${sheetHeight} - 56px)` }}>
                   <h2 className="font-poppins text-2xl font-bold text-gray-900 dark:text-white mb-1">
                     {item.nameDE}
                   </h2>
@@ -217,7 +240,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                   )}
                   
                   {(needsSizeSelection || needsVariantSelection) && (selectedBase || selectedFlavor || selectedSize) && (
-                    <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                    <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
                       <p className="font-poppins text-xs text-gray-500 dark:text-gray-400 mb-2">Deine Auswahl:</p>
                       <div className="flex flex-wrap gap-2">
                         {needsSizeSelection && (
@@ -236,7 +259,7 @@ export function MenuItemDialog({ item, isOpen, onClose, onAddToCart }: MenuItemD
                   )}
                 </div>
                 
-                <div className="sticky bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
                   <Button 
                     onClick={handleAddToCart}
                     className="w-full h-14 rounded-2xl bg-sunset text-white font-poppins font-bold text-lg shadow-lg shadow-sunset/30 transition-all duration-200"
