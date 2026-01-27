@@ -649,6 +649,12 @@ export function BowlBuilderDialog({ item, isOpen, onClose, onAddToCart, editingC
                     <div className="p-2 bg-white">
                       <p className="font-poppins text-sm font-medium text-center mb-1" data-testid={`text-ingredient-name-${ingredient.id}`}>
                         {ingredient.nameDE}
+                        {/* Show price for regular ingredients if price > 0 */}
+                        {currentStepType !== "protein" && pricingService.getIngredientPrice(ingredient) > 0 && (
+                          <span className="text-sunset font-bold ml-1">
+                            +€{pricingService.formatPrice(pricingService.getIngredientPrice(ingredient))}
+                          </span>
+                        )}
                       </p>
                       
                       {/* Price for protein */}
