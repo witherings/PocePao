@@ -241,6 +241,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   };
 
   // General image upload endpoint with category support
+  // ALL uploads now go to uploadDir (Volume) for persistence
   app.post("/api/upload", upload.single("image"), async (req, res) => {
     try {
       if (!req.file) {
@@ -250,45 +251,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { type, category, duplicateToExtra, categoryId, uploadType } = req.body;
       let uploadPath = `/uploads/${req.file.filename}`;
 
-      // For menu item images - save to category folder in Speisekarte
+      // For menu item images - save to persistent volume
       if (uploadType === "menuItem" && categoryId) {
         try {
-          // Get category name from database
           const categoryData = await storage.getCategoryById(categoryId);
           if (categoryData) {
             const categoryFolder = getCategoryFolder(categoryData.nameDE);
-            const categoryPath = path.join(process.cwd(), "public", "media", "pages", "Spaisekarte", categoryFolder);
+            const menuPath = path.join(uploadDir, "menu", categoryFolder);
             
-            await fs.mkdir(categoryPath, { recursive: true });
-            const destPath = path.join(categoryPath, req.file.filename);
+            await fs.mkdir(menuPath, { recursive: true });
+            const destPath = path.join(menuPath, req.file.filename);
             await fs.rename(path.join(uploadDir, req.file.filename), destPath);
-            uploadPath = `/media/pages/Spaisekarte/${categoryFolder}/${req.file.filename}`;
+            uploadPath = `/uploads/menu/${categoryFolder}/${req.file.filename}`;
             
             console.log(`✅ Menu item image saved to: ${uploadPath}`);
           }
         } catch (error: any) {
-          console.error("Error saving to category folder:", error);
-          // Fallback to uploads folder if category folder fails
+          console.error("Error saving to menu folder:", error);
+          // Fallback to uploads folder if fails
         }
       }
-      // For ingredient images - save to ingredients folder structure
+      // For ingredient images - save to persistent volume
       else if (category && type) {
         const categoryFolder = category.replace(/\s+/g, " "); // Normalize spaces
-        const categoryPath = path.join(process.cwd(), "public", "media", "categories", categoryFolder, "zutaten", type);
+        const ingredientPath = path.join(uploadDir, "ingredients", categoryFolder, type);
         
-        await fs.mkdir(categoryPath, { recursive: true });
-        const destPath = path.join(categoryPath, req.file.filename);
+        await fs.mkdir(ingredientPath, { recursive: true });
+        const destPath = path.join(ingredientPath, req.file.filename);
         await fs.rename(path.join(uploadDir, req.file.filename), destPath);
-        uploadPath = `/media/categories/${categoryFolder}/zutaten/${type}/${req.file.filename}`;
+        uploadPath = `/uploads/ingredients/${categoryFolder}/${type}/${req.file.filename}`;
 
         // Duplicate to extra folder if requested
         if (duplicateToExtra === "true") {
-          const extraType = `extra ${type}`;
-          const extraPath = path.join(process.cwd(), "public", "media", "categories", categoryFolder, "zutaten extra", extraType);
+          const extraType = `extra_${type}`;
+          const extraPath = path.join(uploadDir, "ingredients", categoryFolder, extraType);
           await fs.mkdir(extraPath, { recursive: true });
           const extraDestPath = path.join(extraPath, req.file.filename);
           await fs.copyFile(destPath, extraDestPath);
         }
+        
+        console.log(`✅ Ingredient image saved to: ${uploadPath}`);
       }
 
       res.status(200).json({
@@ -344,11 +346,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Delete the file from disk if it exists
-      if (deletedImage.url.startsWith('/media/') || deletedImage.url.startsWith('/uploads/')) {
-        const filePath = path.join(process.cwd(), 'public', deletedImage.url);
+      if (deletedImage.url.startsWith('/uploads/')) {
+        // New uploads in persistent volume
+        const filePath = path.join(uploadDir, deletedImage.url.replace('/uploads/', ''));
         try {
           await fs.unlink(filePath);
           console.log(`🗑️ Deleted file: ${filePath}`);
+        } catch (err) {
+          console.warn(`⚠️ Could not delete file ${filePath}:`, err);
+        }
+      } else if (deletedImage.url.startsWith('/media/')) {
+        // Legacy media files in public folder
+        const filePath = path.join(process.cwd(), 'public', deletedImage.url);
+        try {
+          await fs.unlink(filePath);
+          console.log(`🗑️ Deleted legacy file: ${filePath}`);
         } catch (err) {
           console.warn(`⚠️ Could not delete file ${filePath}:`, err);
         }
